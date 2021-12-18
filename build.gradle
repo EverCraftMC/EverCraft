@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = JavaVersion.toVersion(project.java_version)
+targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+archivesBaseName = project.plugin_id
+group = "com.kale_ko"
+version = project.plugin_version
+
+repositories {
+    mavenCentral()
+    maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+}
+
+dependencies {
+    compileOnly "org.spigotmc:spigot-api:${project.minecraft_version}-${project.spigot_version}"
+    compileOnly "org.spigotmc:plugin-annotations:${project.spigot_anotations_version}"
+    annotationProcessor "org.spigotmc:plugin-annotations:${project.spigot_anotations_version}"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+    options.encoding = "UTF-8"
+}
+
+jar {
+	archiveFileName = project.archivesBaseName + "-" + project.version + ".jar"
+    destinationDirectory = file("run\\plugins")
+}
+
+java {
+	withSourcesJar()
+}
