@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
 import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 import org.bukkit.configuration.file.FileConfiguration;
 import com.kale_ko.kales_utilities.commands.KalesUtilities;
+import com.kale_ko.kales_utilities.listeners.SignChange;
 
 @Plugin(name = "kales_utilities", version = "1.0.0")
 @Description("A custom plugin to run on KalesMC")
@@ -46,6 +47,12 @@ public class Main extends JavaPlugin {
         this.getCommand("kalesutilities").setExecutor(new KalesUtilities());
 
         CONSOLE.info("Finished loading commands");
+
+        CONSOLE.info("Loading listeners");
+
+        getServer().getPluginManager().registerEvents(new SignChange(), this);
+
+        CONSOLE.info("Finished loading listeners");
 
         CONSOLE.info("Finished loading");
     }
