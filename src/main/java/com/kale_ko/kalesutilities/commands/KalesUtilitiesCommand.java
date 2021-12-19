@@ -1,7 +1,7 @@
-package com.kale_ko.kales_utilities.commands;
+package com.kale_ko.kalesutilities.commands;
 
-import com.kale_ko.kales_utilities.Main;
-import com.kale_ko.kales_utilities.Util;
+import com.kale_ko.kalesutilities.Main;
+import com.kale_ko.kalesutilities.Util;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommandYamlParser;

@@ -1,6 +1,9 @@
-package com.kale_ko.kales_utilities;
+package com.kale_ko.kalesutilities;
 
-import java.util.logging.Logger;
+import com.kale_ko.kalesutilities.commands.KalesUtilitiesCommand;
+import com.kale_ko.kalesutilities.commands.SeenCommand;
+import com.kale_ko.kalesutilities.listeners.SeenListener;
+import com.kale_ko.kalesutilities.listeners.SignEditorListener;
 import org.bukkit.plugin.PluginLoadOrder;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.annotation.plugin.Plugin;
@@ -12,10 +15,7 @@ import org.bukkit.plugin.java.annotation.permission.Permission;
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
 import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 import org.bukkit.configuration.file.FileConfiguration;
-import com.kale_ko.kales_utilities.commands.KalesUtilitiesCommand;
-import com.kale_ko.kales_utilities.commands.SeenCommand;
-import com.kale_ko.kales_utilities.listeners.SeenListener;
-import com.kale_ko.kales_utilities.listeners.SignEditorListener;
+import java.util.logging.Logger;
 
 @Plugin(name = "KalesUtilities", version = "1.0.0")
 @Description("A custom plugin to run on KalesMC")
@@ -46,8 +46,11 @@ public class Main extends JavaPlugin {
         config.addDefault("config.messageFormat", "&7");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.usage", "Usage: {usage}");
-        config.addDefault("messages.reload", "Config Reloaded");
         config.addDefault("messages.help", "\n{commandList}");
+        config.addDefault("messages.reload", "Config Reloaded");
+        config.addDefault("messages.lastonline", "{player} was last seen {time}!");
+        config.addDefault("messages.playeronline", "{player} is online right now!");
+        config.addDefault("messages.playernotfound", "{player} has never been online");
         config.options().copyDefaults(true);
         this.saveConfig();
 
