@@ -9,18 +9,20 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class SignEditor implements Listener {
+public class SignEditorListener implements Listener {
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
-        event.setLine(0, Util.formatMessage(event.getLine(0)));
-        event.setLine(1, Util.formatMessage(event.getLine(1)));
-        event.setLine(2, Util.formatMessage(event.getLine(2)));
-        event.setLine(3, Util.formatMessage(event.getLine(3)));
+        if (Util.hasPermission(event.getPlayer(), "kalesutilities.colorsigns")) {
+            event.setLine(0, Util.formatMessage(event.getLine(0)));
+            event.setLine(1, Util.formatMessage(event.getLine(1)));
+            event.setLine(2, Util.formatMessage(event.getLine(2)));
+            event.setLine(3, Util.formatMessage(event.getLine(3)));
+        }
     }
 
     @EventHandler
     public void onSignClick(PlayerInteractEvent event) {
-        if (event.getClickedBlock().getType() == Material.OAK_SIGN
+        if (event.getClickedBlock() != null && (event.getClickedBlock().getType() == Material.OAK_SIGN
                 || event.getClickedBlock().getType() == Material.OAK_WALL_SIGN
                 || event.getClickedBlock().getType() == Material.DARK_OAK_SIGN
                 || event.getClickedBlock().getType() == Material.DARK_OAK_WALL_SIGN
@@ -35,8 +37,8 @@ public class SignEditor implements Listener {
                 || event.getClickedBlock().getType() == Material.CRIMSON_SIGN
                 || event.getClickedBlock().getType() == Material.CRIMSON_WALL_SIGN
                 || event.getClickedBlock().getType() == Material.WARPED_SIGN
-                || event.getClickedBlock().getType() == Material.WARPED_WALL_SIGN) {
-            if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().isSneaking() && event.getPlayer().hasPermission("kalesutilities.editsign")) {
+                || event.getClickedBlock().getType() == Material.WARPED_WALL_SIGN)) {
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().isSneaking() && Util.hasPermission(event.getPlayer(), "kalesutilities.editsign")) {
                 Sign sign = (Sign) event.getClickedBlock().getState();
                 sign.setEditable(true);
                 sign.setLine(0, Util.unFormatMessage(sign.getLine(0)));
