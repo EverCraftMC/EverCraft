@@ -2,6 +2,7 @@ package com.kale_ko.kales_utilities;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class Util {
     public static void sendMessage(CommandSender user, String message) {
@@ -31,5 +32,9 @@ public class Util {
 
     public static String defaultStyleMessage(String message) {
         return ChatColor.translateAlternateColorCodes('&', Main.Instance.config.getString("config.messageFormat") + message);
+    }
+
+    public static Boolean hasPermission(Player player, String permission) {
+        return player.hasPermission(permission) || player.isOp();
     }
 }
