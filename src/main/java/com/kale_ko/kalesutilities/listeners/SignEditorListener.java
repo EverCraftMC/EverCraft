@@ -1,6 +1,6 @@
-package com.kale_ko.kales_utilities.listeners;
+package com.kale_ko.kalesutilities.listeners;
 
-import com.kale_ko.kales_utilities.Util;
+import com.kale_ko.kalesutilities.Util;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
