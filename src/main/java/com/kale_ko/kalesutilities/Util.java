@@ -1,4 +1,4 @@
-package com.kale_ko.kales_utilities;
+package com.kale_ko.kalesutilities;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
