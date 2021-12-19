@@ -12,6 +12,19 @@ public class Util {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
+    public static String unFormatMessage(String message) {
+        char[] chars = message.toCharArray();
+
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == ChatColor.COLOR_CHAR && "0123456789AaBbCcDdEeFfKkLlMmNnOoRrXx".indexOf(chars[i + 1]) > -1) {
+                chars[i] = '&';
+                chars[i + 1] = Character.toLowerCase(chars[i + 1]);
+            }
+        }
+
+        return new String(chars);
+    }
+
     public static String styleMessage(String message, String style) {
         return ChatColor.translateAlternateColorCodes('&', style + message);
     }
