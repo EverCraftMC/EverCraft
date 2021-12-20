@@ -21,21 +21,21 @@ public class SeenListener implements Listener {
             dataFolder.mkdir();
         }
 
-        dataFile = Paths.get(dataFolder.getAbsolutePath(), "seen.yml").toFile();
+        dataFile = Paths.get(dataFolder.getAbsolutePath(), "players.yml").toFile();
 
         data = YamlConfiguration.loadConfiguration(dataFile);
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
-        data.set("players." + event.getPlayer().getName(), new Date().getTime());
+        data.set("players." + event.getPlayer().getName() + ".lastOnline", new Date().getTime());
 
         data.save(dataFile);
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) throws IOException {
-        data.set("players." + event.getPlayer().getName(), new Date().getTime());
+        data.set("players." + event.getPlayer().getName() + ".lastOnline", new Date().getTime());
 
         data.save(dataFile);
     }
