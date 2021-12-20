@@ -5,6 +5,7 @@ import com.kale_ko.kalesutilities.commands.SeenCommand;
 import com.kale_ko.kalesutilities.commands.SetSpawnCommand;
 import com.kale_ko.kalesutilities.commands.SpawnCommand;
 import com.kale_ko.kalesutilities.commands.SudoCommand;
+import com.kale_ko.kalesutilities.listeners.ChatFormatListener;
 import com.kale_ko.kalesutilities.listeners.SeenListener;
 import com.kale_ko.kalesutilities.listeners.SignEditorListener;
 import com.kale_ko.kalesutilities.listeners.SpawnListener;
@@ -39,6 +40,8 @@ import java.util.logging.Logger;
 @Permission(name = "kalesutilities.seen", desc = "Use /seen")
 @Permission(name = "kalesutilities.sudo", desc = "Use /sudo")
 
+@Permission(name = "kalesutilities.colorchat", desc = "Color you chat")
+
 @Permission(name = "kalesutilities.colorsigns", desc = "Color signs in the world")
 @Permission(name = "kalesutilities.editsign", desc = "Edit signs in the world")
 public class Main extends JavaPlugin {
@@ -55,6 +58,7 @@ public class Main extends JavaPlugin {
 
         config.addDefault("config.prefix", "&6&l[Kales Utilities]&r");
         config.addDefault("config.messageFormat", "&7");
+        config.addDefault("config.chatFormat", "{prefix}{player} > {message}");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
@@ -86,6 +90,7 @@ public class Main extends JavaPlugin {
 
         CONSOLE.info("Loading listeners");
 
+        getServer().getPluginManager().registerEvents(new ChatFormatListener(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
         getServer().getPluginManager().registerEvents(new SeenListener(), this);
         getServer().getPluginManager().registerEvents(new SignEditorListener(), this);
