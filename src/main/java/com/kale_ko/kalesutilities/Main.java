@@ -30,10 +30,12 @@ import java.util.logging.Logger;
 
 @Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ks" }, usage = "/kalesutilities [help, reload]")
 @Command(name = "spawn", desc = "Go to the spawn", aliases = { "hub", "lobby" }, usage = "/spawn {player (optional)}")
-@Command(name = "setspawn", desc = "Sets the spawn", aliases = { "sethub", "setlobby" }, usage = "/setspawn [here, {x} {y} {z}, {x} {y} {z} {pitch} {yaw}]")
+@Command(name = "setspawn", desc = "Sets the spawn to your location", aliases = { "sethub", "setlobby" }, usage = "/setspawn")
 @Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen" }, usage = "/seen {player}")
 @Command(name = "sudo", desc = "Make a player say something or run a command", aliases = {}, usage = "/sudo {player} {message/command}")
 
+@Permission(name = "kalesutilities.spawn", desc = "Use /spawn")
+@Permission(name = "kalesutilities.setspawn", desc = "Use /setspawn")
 @Permission(name = "kalesutilities.seen", desc = "Use /seen")
 @Permission(name = "kalesutilities.sudo", desc = "Use /sudo")
 
