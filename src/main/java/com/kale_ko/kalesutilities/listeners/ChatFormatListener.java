@@ -10,9 +10,9 @@ public class ChatFormatListener implements Listener {
     @EventHandler
     public void onChatMessage(PlayerChatEvent event) {
         if (Util.hasPermission(event.getPlayer(), "kalesutilities.colorchat")) {
-            event.setFormat(event.getPlayer().getDisplayName() + " > " + Util.formatMessage(event.getMessage()));
-        } else {
-            event.setFormat(event.getPlayer().getDisplayName() + " > " + event.getMessage());
+            event.setMessage(Util.formatMessage(event.getMessage()));
         }
+
+        event.setFormat(event.getPlayer().getDisplayName() + " > " + event.getMessage());
     }
 }

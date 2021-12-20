@@ -22,11 +22,11 @@ public class SeenCommand implements CommandExecutor {
                         dataFolder.mkdir();
                     }
 
-                    File dataFile = Paths.get(dataFolder.getAbsolutePath(), "seen.yml").toFile();
+                    File dataFile = Paths.get(dataFolder.getAbsolutePath(), "players.yml").toFile();
 
                     YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
-                    long lastOnline = data.getLong("players." + args[0]);
+                    long lastOnline = data.getLong("players." + args[0] + ".lastOnline");
 
                     if (lastOnline != 0) {
                         Util.sendMessage(sender, Main.Instance.config.getString("messages.lastonline").replace("{player}", args[0]).replace("{time}", new Date(lastOnline).toString()));
