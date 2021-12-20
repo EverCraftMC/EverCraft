@@ -2,9 +2,12 @@ package com.kale_ko.kalesutilities;
 
 import com.kale_ko.kalesutilities.commands.KalesUtilitiesCommand;
 import com.kale_ko.kalesutilities.commands.SeenCommand;
+import com.kale_ko.kalesutilities.commands.SetSpawnCommand;
+import com.kale_ko.kalesutilities.commands.SpawnCommand;
 import com.kale_ko.kalesutilities.commands.SudoCommand;
 import com.kale_ko.kalesutilities.listeners.SeenListener;
 import com.kale_ko.kalesutilities.listeners.SignEditorListener;
+import com.kale_ko.kalesutilities.listeners.SpawnListener;
 import org.bukkit.plugin.PluginLoadOrder;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.annotation.plugin.Plugin;
@@ -25,9 +28,11 @@ import java.util.logging.Logger;
 @ApiVersion(ApiVersion.Target.v1_17)
 @LoadOrder(PluginLoadOrder.STARTUP)
 
-@Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ks" }, usage = "/kalesutilities [help,reload]")
+@Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ks" }, usage = "/kalesutilities [help, reload]")
+@Command(name = "spawn", desc = "Go to the spawn", aliases = { "hub", "lobby" }, usage = "/spawn {player (optional)}")
+@Command(name = "setspawn", desc = "Sets the spawn", aliases = { "sethub", "setlobby" }, usage = "/setspawn [here, {x} {y} {z}, {x} {y} {z} {pitch} {yaw}]")
 @Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen" }, usage = "/seen {player}")
-@Command(name = "sudo", desc = "Make a player say something or run a command", aliases = { "runas" }, usage = "/sudo {player} {message/command}")
+@Command(name = "sudo", desc = "Make a player say something or run a command", aliases = {}, usage = "/sudo {player} {message/command}")
 
 @Permission(name = "kalesutilities.seen", desc = "Use /seen")
 @Permission(name = "kalesutilities.sudo", desc = "Use /sudo")
@@ -50,6 +55,7 @@ public class Main extends JavaPlugin {
         config.addDefault("config.messageFormat", "&7");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
+        config.addDefault("messages.noconsole", "You can't use that command from the console");
         config.addDefault("messages.playernotfound", "{player} can't be found");
         config.addDefault("messages.usage", "Usage: {usage}");
         config.addDefault("messages.help", "\n{commandList}");
@@ -66,6 +72,8 @@ public class Main extends JavaPlugin {
         CONSOLE.info("Loading commands");
 
         this.getCommand("kalesutilities").setExecutor(new KalesUtilitiesCommand());
+        this.getCommand("spawn").setExecutor(new SpawnCommand());
+        this.getCommand("setspawn").setExecutor(new SetSpawnCommand());
         this.getCommand("seen").setExecutor(new SeenCommand());
         this.getCommand("sudo").setExecutor(new SudoCommand());
 
@@ -73,8 +81,9 @@ public class Main extends JavaPlugin {
 
         CONSOLE.info("Loading listeners");
 
-        getServer().getPluginManager().registerEvents(new SignEditorListener(), this);
+        getServer().getPluginManager().registerEvents(new SpawnListener(), this);
         getServer().getPluginManager().registerEvents(new SeenListener(), this);
+        getServer().getPluginManager().registerEvents(new SignEditorListener(), this);
 
         CONSOLE.info("Finished loading listeners");
 
