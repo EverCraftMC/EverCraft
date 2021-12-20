@@ -62,6 +62,9 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.usage", "Usage: {usage}");
         config.addDefault("messages.help", "\n{commandList}");
         config.addDefault("messages.reload", "Config Reloaded");
+        config.addDefault("messages.spawned", "You have been sent to spawn");
+        config.addDefault("messages.spawnedplayer", "Successfully sent {player} to spawn");
+        config.addDefault("messages.setspawn", "Successfully set the spawn");
         config.addDefault("messages.lastonline", "{player} was last seen {time}!");
         config.addDefault("messages.playeronline", "{player} is online right now!");
         config.addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
