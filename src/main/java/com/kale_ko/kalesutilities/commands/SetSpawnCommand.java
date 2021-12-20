@@ -3,6 +3,7 @@ package com.kale_ko.kalesutilities.commands;
 import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -28,6 +29,12 @@ public class SetSpawnCommand implements CommandExecutor {
                 data.set(player.getWorld() + ".z", player.getLocation().getZ());
                 data.set(player.getWorld() + ".pitch", player.getLocation().getPitch());
                 data.set(player.getWorld() + ".yaw", player.getLocation().getYaw());
+
+                try {
+                    data.save(dataFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else {
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
             }
