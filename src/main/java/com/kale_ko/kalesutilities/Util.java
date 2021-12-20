@@ -37,4 +37,8 @@ public class Util {
     public static Boolean hasPermission(Player player, String permission) {
         return player.hasPermission(permission) || player.isOp();
     }
+
+    public static Boolean hasPermission(CommandSender sender, String permission) {
+        return sender.hasPermission(permission) || sender.isOp();
+    }
 }
