@@ -2,6 +2,7 @@ package com.kale_ko.kalesutilities;
 
 import com.kale_ko.kalesutilities.commands.KalesUtilitiesCommand;
 import com.kale_ko.kalesutilities.commands.SeenCommand;
+import com.kale_ko.kalesutilities.commands.SudoCommand;
 import com.kale_ko.kalesutilities.listeners.SeenListener;
 import com.kale_ko.kalesutilities.listeners.SignEditorListener;
 import org.bukkit.plugin.PluginLoadOrder;
@@ -26,10 +27,13 @@ import java.util.logging.Logger;
 
 @Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ks" }, usage = "/kalesutilities [help,reload]")
 @Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen" }, usage = "/seen {player}")
+@Command(name = "sudo", desc = "Make a player say something or run a command", aliases = { "runas" }, usage = "/sudo {player} {message/command}")
+
+@Permission(name = "kalesutilities.seen", desc = "Use /seen")
+@Permission(name = "kalesutilities.sudo", desc = "Use /sudo")
 
 @Permission(name = "kalesutilities.colorsigns", desc = "Color signs in the world")
 @Permission(name = "kalesutilities.editsign", desc = "Edit signs in the world")
-@Permission(name = "kalesutilities.seen", desc = "Use /seen")
 public class Main extends JavaPlugin {
     public static Main Instance;
 
@@ -45,12 +49,15 @@ public class Main extends JavaPlugin {
         config.addDefault("config.prefix", "&6&l[Kales Utilities]&r");
         config.addDefault("config.messageFormat", "&7");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
+        config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
+        config.addDefault("messages.playernotfound", "{player} can't be found");
         config.addDefault("messages.usage", "Usage: {usage}");
         config.addDefault("messages.help", "\n{commandList}");
         config.addDefault("messages.reload", "Config Reloaded");
         config.addDefault("messages.lastonline", "{player} was last seen {time}!");
         config.addDefault("messages.playeronline", "{player} is online right now!");
-        config.addDefault("messages.playernotfound", "{player} has never been online");
+        config.addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
+        config.addDefault("messages.sudomessage", "Successfully made {player} say {message}");
         config.options().copyDefaults(true);
         this.saveConfig();
 
@@ -60,6 +67,7 @@ public class Main extends JavaPlugin {
 
         this.getCommand("kalesutilities").setExecutor(new KalesUtilitiesCommand());
         this.getCommand("seen").setExecutor(new SeenCommand());
+        this.getCommand("sudo").setExecutor(new SudoCommand());
 
         CONSOLE.info("Finished loading commands");
 

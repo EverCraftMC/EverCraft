@@ -12,29 +12,33 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class SeenCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        if (args.length > 0) {
-            if (Main.Instance.getServer().getPlayer(args[0]) != null) {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.playeronline").replace("{player}", args[0]));
-            } else {
-                File dataFolder = Main.Instance.getDataFolder();
-                if (!dataFolder.exists()) {
-                    dataFolder.mkdir();
-                }
-
-                File dataFile = Paths.get(dataFolder.getAbsolutePath(), "seen.yml").toFile();
-
-                YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
-
-                long lastOnline = data.getLong("players." + args[0]);
-
-                if (lastOnline != 0) {
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.lastonline").replace("{player}", args[0]).replace("{time}", new Date(lastOnline).toString()));
+        if (Util.hasPermission(sender, "kalesutilities.seen")) {
+            if (args.length > 0) {
+                if (Main.Instance.getServer().getPlayer(args[0]) != null) {
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.playeronline").replace("{player}", args[0]));
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
+                    File dataFolder = Main.Instance.getDataFolder();
+                    if (!dataFolder.exists()) {
+                        dataFolder.mkdir();
+                    }
+
+                    File dataFile = Paths.get(dataFolder.getAbsolutePath(), "seen.yml").toFile();
+
+                    YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+
+                    long lastOnline = data.getLong("players." + args[0]);
+
+                    if (lastOnline != 0) {
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.lastonline").replace("{player}", args[0]).replace("{time}", new Date(lastOnline).toString()));
+                    } else {
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
+                    }
                 }
+            } else {
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("seen").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("seen").getUsage()));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.sudo"));
         }
 
         return true;
