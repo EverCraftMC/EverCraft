@@ -25,11 +25,16 @@ public class SpawnCommand implements CommandExecutor {
 
             if (args.length == 0 && sender instanceof Player player) {
                 player.teleport(new Location(player.getWorld(), data.getDouble(player.getWorld().getName() + ".x"), data.getDouble(player.getWorld().getName() + ".y"), data.getDouble(player.getWorld().getName() + ".z"), Float.parseFloat(data.getString(player.getWorld().getName() + ".pitch")), Float.parseFloat(data.getString(player.getWorld().getName() + ".yaw"))));
+
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.spawned"));
             } else if (args.length == 0) {
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
             } else {
                 Player player = Main.Instance.getServer().getPlayer(args[0]);
                 player.teleport(new Location(player.getWorld(), data.getDouble(player.getWorld().getName() + ".x"), data.getDouble(player.getWorld().getName() + ".y"), data.getDouble(player.getWorld().getName() + ".z"), Float.parseFloat(data.getString(player.getWorld().getName() + ".pitch")), Float.parseFloat(data.getString(player.getWorld().getName() + ".yaw"))));
+
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.spawnedplayer").replace("{player}", args[0]));
+                Util.sendMessage(player, Main.Instance.config.getString("messages.spawned"));
             }
         } else {
             Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.spawn"));

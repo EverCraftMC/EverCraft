@@ -32,6 +32,8 @@ public class SetSpawnCommand implements CommandExecutor {
 
                 try {
                     data.save(dataFile);
+                    
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.setspawn"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
