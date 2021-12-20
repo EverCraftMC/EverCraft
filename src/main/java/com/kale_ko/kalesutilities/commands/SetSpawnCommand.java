@@ -24,11 +24,11 @@ public class SetSpawnCommand implements CommandExecutor {
             YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
             if (sender instanceof Player player) {
-                data.set(player.getWorld() + ".x", player.getLocation().getX());
-                data.set(player.getWorld() + ".y", player.getLocation().getY());
-                data.set(player.getWorld() + ".z", player.getLocation().getZ());
-                data.set(player.getWorld() + ".pitch", player.getLocation().getPitch());
-                data.set(player.getWorld() + ".yaw", player.getLocation().getYaw());
+                data.set(player.getWorld().getName() + ".x", player.getLocation().getX());
+                data.set(player.getWorld().getName() + ".y", player.getLocation().getY());
+                data.set(player.getWorld().getName() + ".z", player.getLocation().getZ());
+                data.set(player.getWorld().getName() + ".pitch", player.getLocation().getPitch());
+                data.set(player.getWorld().getName() + ".yaw", player.getLocation().getYaw());
 
                 try {
                     data.save(dataFile);
