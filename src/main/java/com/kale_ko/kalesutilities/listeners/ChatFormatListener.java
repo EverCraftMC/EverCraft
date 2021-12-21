@@ -27,9 +27,17 @@ public class ChatFormatListener implements Listener {
         }
 
         if (data.getString("players." + event.getPlayer().getName() + ".prefix") == null) {
-            event.setFormat(event.getPlayer().getName() + " > " + event.getMessage());
+            if (data.getString("players." + event.getPlayer().getName() + ".nickname") == null) {
+                event.setFormat(event.getPlayer().getName() + " > " + event.getMessage());
+            } else {
+                event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".nickname")) + " > " + event.getMessage());
+            }
         } else {
-            event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix")) + " " + event.getPlayer().getName() + " > " + event.getMessage());
+            if (data.getString("players." + event.getPlayer().getName() + ".nickname") == null) {
+                event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix")) + " " + event.getPlayer().getName() + " > " + event.getMessage());
+            } else {
+                event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix")) + Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".nickname")) + " > " + event.getMessage());
+            }
         }
     }
 }
