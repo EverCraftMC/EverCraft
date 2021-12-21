@@ -11,27 +11,31 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 public class SpawnListener implements Listener {
-    File dataFile;
-    YamlConfiguration data;
-
-    public SpawnListener() {
+    @EventHandler
+    public void onPlayerSpawn(PlayerSpawnLocationEvent event) {
         File dataFolder = Main.Instance.getDataFolder();
         if (!dataFolder.exists()) {
             dataFolder.mkdir();
         }
 
-        dataFile = Paths.get(dataFolder.getAbsolutePath(), "spawn.yml").toFile();
+        File dataFile = Paths.get(dataFolder.getAbsolutePath(), "spawn.yml").toFile();
 
-        data = YamlConfiguration.loadConfiguration(dataFile);
-    }
+        YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
-    @EventHandler
-    public void onPlayerSpawn(PlayerSpawnLocationEvent event) {
         event.setSpawnLocation(new Location(event.getSpawnLocation().getWorld(), data.getDouble(event.getSpawnLocation().getWorld().getName() + ".x"), data.getDouble(event.getSpawnLocation().getWorld().getName() + ".y"), data.getDouble(event.getSpawnLocation().getWorld().getName() + ".z"), Float.parseFloat(data.getString(event.getSpawnLocation().getWorld().getName() + ".pitch")), Float.parseFloat(data.getString(event.getSpawnLocation().getWorld().getName() + ".yaw"))));
     }
 
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
+        File dataFolder = Main.Instance.getDataFolder();
+        if (!dataFolder.exists()) {
+            dataFolder.mkdir();
+        }
+
+        File dataFile = Paths.get(dataFolder.getAbsolutePath(), "spawn.yml").toFile();
+
+        YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+
         event.setRespawnLocation(new Location(event.getRespawnLocation().getWorld(), data.getDouble(event.getRespawnLocation().getWorld().getName() + ".x"), data.getDouble(event.getRespawnLocation().getWorld().getName() + ".y"), data.getDouble(event.getRespawnLocation().getWorld().getName() + ".z"), Float.parseFloat(data.getString(event.getRespawnLocation().getWorld().getName() + ".pitch")), Float.parseFloat(data.getString(event.getRespawnLocation().getWorld().getName() + ".yaw"))));
     }
 }
