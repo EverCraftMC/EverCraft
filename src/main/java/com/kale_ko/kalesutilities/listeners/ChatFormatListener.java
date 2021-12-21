@@ -28,15 +28,15 @@ public class ChatFormatListener implements Listener {
 
         if (data.getString("players." + event.getPlayer().getName() + ".prefix") == null) {
             if (data.getString("players." + event.getPlayer().getName() + ".nickname") == null) {
-                event.setFormat(event.getPlayer().getName() + " > " + event.getMessage());
+                event.setFormat(event.getPlayer().getName() + "&r > " + event.getMessage());
             } else {
-                event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".nickname")) + " > " + event.getMessage());
+                event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".nickname")) + "&r > " + event.getMessage());
             }
         } else {
             if (data.getString("players." + event.getPlayer().getName() + ".nickname") == null) {
-                event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix")) + " " + event.getPlayer().getName() + " > " + event.getMessage());
+                event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix")) + "&r " + event.getPlayer().getName() + "&r > " + event.getMessage());
             } else {
-                event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix")) + Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".nickname")) + " > " + event.getMessage());
+                event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix")) + "&r" + Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".nickname")) + "&r > " + event.getMessage());
             }
         }
     }
