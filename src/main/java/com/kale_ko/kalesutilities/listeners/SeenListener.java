@@ -12,22 +12,17 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class SeenListener implements Listener {
-    File dataFile;
-    YamlConfiguration data;
-
-    public SeenListener() {
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
         File dataFolder = Main.Instance.getDataFolder();
         if (!dataFolder.exists()) {
             dataFolder.mkdir();
         }
 
-        dataFile = Paths.get(dataFolder.getAbsolutePath(), "players.yml").toFile();
+        File dataFile = Paths.get(dataFolder.getAbsolutePath(), "players.yml").toFile();
 
-        data = YamlConfiguration.loadConfiguration(dataFile);
-    }
+        YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
         data.set("players." + event.getPlayer().getName() + ".lastOnline", new Date().getTime());
 
         data.save(dataFile);
@@ -35,6 +30,15 @@ public class SeenListener implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) throws IOException {
+        File dataFolder = Main.Instance.getDataFolder();
+        if (!dataFolder.exists()) {
+            dataFolder.mkdir();
+        }
+
+        File dataFile = Paths.get(dataFolder.getAbsolutePath(), "players.yml").toFile();
+
+        YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+
         data.set("players." + event.getPlayer().getName() + ".lastOnline", new Date().getTime());
 
         data.save(dataFile);
