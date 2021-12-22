@@ -74,6 +74,8 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.noconsole", "You can't use that command from the console");
         config.addDefault("messages.playernotfound", "{player} can't be found");
         config.addDefault("messages.usage", "Usage: {usage}");
+        config.addDefault("messages.joinMessage", "&e{player} &ehas joined the game!");
+        config.addDefault("messages.quitMessage", "&e{player} &ehas left the game");
         config.addDefault("messages.help", "\n{commandList}");
         config.addDefault("messages.reload", "Config Reloaded");
         config.addDefault("messages.spawned", "You have been sent to spawn");
