@@ -6,9 +6,11 @@ import com.kale_ko.kalesutilities.commands.PrefixCommand;
 import com.kale_ko.kalesutilities.commands.SeenCommand;
 import com.kale_ko.kalesutilities.commands.SetSpawnCommand;
 import com.kale_ko.kalesutilities.commands.SpawnCommand;
+import com.kale_ko.kalesutilities.commands.StatusCommand;
 import com.kale_ko.kalesutilities.commands.SudoCommand;
 import com.kale_ko.kalesutilities.listeners.ChatFormatListener;
 import com.kale_ko.kalesutilities.listeners.PlayerListener;
+import com.kale_ko.kalesutilities.listeners.PlayerMoveListener;
 import com.kale_ko.kalesutilities.listeners.SeenListener;
 import com.kale_ko.kalesutilities.listeners.SignEditorListener;
 import com.kale_ko.kalesutilities.listeners.SpawnListener;
@@ -38,6 +40,7 @@ import java.util.logging.Logger;
 @Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen" }, usage = "/seen {player}")
 @Command(name = "nickname", desc = "Sets you nickname", aliases = { "nick" }, usage = "/nickname {nickname}")
 @Command(name = "prefix", desc = "Sets you prefix", aliases = {}, usage = "/prefix {prefix}")
+@Command(name = "status", desc = "Sets you status", aliases = {}, usage = "/status {status}")
 @Command(name = "sudo", desc = "Make a player say something or run a command", aliases = {}, usage = "/sudo {player} {message/command}")
 
 @Permission(name = "kalesutilities.spawn", desc = "Use /spawn")
@@ -45,6 +48,7 @@ import java.util.logging.Logger;
 @Permission(name = "kalesutilities.seen", desc = "Use /seen")
 @Permission(name = "kalesutilities.setnickname", desc = "Use /nickname")
 @Permission(name = "kalesutilities.setprefix", desc = "Use /prefix")
+@Permission(name = "kalesutilities.setstatus", desc = "Use /status")
 @Permission(name = "kalesutilities.sudo", desc = "Use /sudo")
 
 @Permission(name = "kalesutilities.colorchat", desc = "Color you chat")
@@ -79,6 +83,7 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.playeronline", "{player} is online right now!");
         config.addDefault("messages.setnickname", "Successfully set your nickname");
         config.addDefault("messages.setprefix", "Successfully set your prefix");
+        config.addDefault("messages.setstatus", "Successfully set your status");
         config.addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
         config.addDefault("messages.sudomessage", "Successfully made {player} say {message}");
 
@@ -95,6 +100,7 @@ public class Main extends JavaPlugin {
         this.getCommand("seen").setExecutor(new SeenCommand());
         this.getCommand("nickname").setExecutor(new NicknameCommand());
         this.getCommand("prefix").setExecutor(new PrefixCommand());
+        this.getCommand("status").setExecutor(new StatusCommand());
         this.getCommand("sudo").setExecutor(new SudoCommand());
 
         CONSOLE.info("Finished loading commands");
@@ -106,6 +112,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SeenListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new SignEditorListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
 
         CONSOLE.info("Finished loading listeners");
 
