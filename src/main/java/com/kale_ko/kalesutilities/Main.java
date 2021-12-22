@@ -14,6 +14,7 @@ import com.kale_ko.kalesutilities.listeners.PlayerMoveListener;
 import com.kale_ko.kalesutilities.listeners.SeenListener;
 import com.kale_ko.kalesutilities.listeners.SignEditorListener;
 import com.kale_ko.kalesutilities.listeners.SpawnListener;
+import com.kale_ko.kalesutilities.listeners.WelcomeListener;
 import org.bukkit.plugin.PluginLoadOrder;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.annotation.plugin.Plugin;
@@ -110,6 +111,7 @@ public class Main extends JavaPlugin {
         CONSOLE.info("Loading listeners");
 
         getServer().getPluginManager().registerEvents(new ChatFormatListener(), this);
+        getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
         getServer().getPluginManager().registerEvents(new SeenListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
