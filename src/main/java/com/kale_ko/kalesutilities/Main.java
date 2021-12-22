@@ -33,8 +33,8 @@ import java.util.logging.Logger;
 @Command(name = "spawn", desc = "Go to the spawn", aliases = { "hub", "lobby" }, usage = "/spawn {player (optional)}")
 @Command(name = "setspawn", desc = "Sets the spawn to your location", aliases = { "sethub", "setlobby" }, usage = "/setspawn")
 @Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen" }, usage = "/seen {player}")
-@Command(name = "nickname", desc = "Sets you nickname", aliases = { "nick" }, usage = "/nickname {prefix}")
-@Command(name = "prefix", desc = "Sets you prefix", aliases = {}, usage = "/prefix {nickname}")
+@Command(name = "nickname", desc = "Sets you nickname", aliases = { "nick" }, usage = "/nickname {nickname}")
+@Command(name = "prefix", desc = "Sets you prefix", aliases = {}, usage = "/prefix {prefix}")
 @Command(name = "sudo", desc = "Make a player say something or run a command", aliases = {}, usage = "/sudo {player} {message/command}")
 
 @Permission(name = "kalesutilities.spawn", desc = "Use /spawn")
