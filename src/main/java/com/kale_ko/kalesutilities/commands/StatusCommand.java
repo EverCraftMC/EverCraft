@@ -2,13 +2,17 @@ package com.kale_ko.kalesutilities.commands;
 
 import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
+import java.util.List;
+import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
 public class StatusCommand implements CommandExecutor {
     @Override
@@ -24,18 +28,32 @@ public class StatusCommand implements CommandExecutor {
 
                     String statusMessage = statusMessageBuilder.toString();
 
-                    ArmorStand armorstand = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
-                    armorstand.setCustomName(statusMessage);
-                    Main.Instance.CONSOLE.info(statusMessage);
-                    armorstand.setCustomNameVisible(true);
-                    armorstand.teleport(new Location(player.getLocation().getWorld(), player.getLocation().getX(), player.getLocation().getY() + 3.2d, player.getLocation().getZ()));
-                    armorstand.setCollidable(false);
-                    armorstand.setGravity(false);
-                    armorstand.setInvisible(true);
-                    armorstand.setInvulnerable(true);
-                    armorstand.setMarker(true);
-                    armorstand.setPersistent(false);
-                    player.setMetadata("statusEntityUUID", new FixedMetadataValue(Main.Instance, armorstand.getUniqueId().toString()));
+                    List<MetadataValue> statusEntityUUID = player.getMetadata("statusEntityUUID");
+
+                    String found = null;
+                    for (MetadataValue metadata : statusEntityUUID) {
+                        if (metadata.getOwningPlugin() == Main.Instance) {
+                            found = metadata.asString();
+                        }
+                    }
+
+                    if (found == null) {
+                        ArmorStand armorstand = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+                        armorstand.setCustomName(statusMessage);
+                        Main.Instance.CONSOLE.info(statusMessage);
+                        armorstand.setCustomNameVisible(true);
+                        armorstand.teleport(new Location(player.getLocation().getWorld(), player.getLocation().getX(), player.getLocation().getY() + 3.2d, player.getLocation().getZ()));
+                        armorstand.setCollidable(false);
+                        armorstand.setGravity(false);
+                        armorstand.setInvisible(true);
+                        armorstand.setInvulnerable(true);
+                        armorstand.setMarker(true);
+                        armorstand.setPersistent(false);
+                        player.setMetadata("statusEntityUUID", new FixedMetadataValue(Main.Instance, armorstand.getUniqueId().toString()));
+                    } else {
+                        Entity armorstand = Main.Instance.getServer().getEntity(UUID.fromString(found));
+                        armorstand.setCustomName(statusMessage);
+                    }
                 } else {
                     Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
                 }
