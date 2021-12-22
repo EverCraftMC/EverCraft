@@ -88,7 +88,7 @@ public class Util {
     }
 
     public static String getPlayerName(Player player) {
-        return getPlayerNickName(player) + getPlayerPrefix(player);
+        return getPlayerPrefix(player) + getPlayerNickName(player);
     }
 
     public static void updatePlayerName(Player player) {
