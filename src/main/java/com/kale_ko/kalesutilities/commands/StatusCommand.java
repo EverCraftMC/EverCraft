@@ -2,6 +2,7 @@ package com.kale_ko.kalesutilities.commands;
 
 import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
+import org.bukkit.Location;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
@@ -17,23 +18,23 @@ public class StatusCommand implements CommandExecutor {
                 if (sender instanceof Player player) {
                     StringBuilder statusMessageBuilder = new StringBuilder();
 
-                    for (Integer i = 1; i < args.length; i++) {
+                    for (Integer i = 0; i < args.length; i++) {
                         statusMessageBuilder.append(args[i] + " ");
                     }
 
                     String statusMessage = statusMessageBuilder.toString();
 
                     ArmorStand armorstand = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
-                    armorstand.setAI(false);
+                    armorstand.setCustomName(statusMessage);
+                    Main.Instance.CONSOLE.info(statusMessage);
+                    armorstand.setCustomNameVisible(true);
+                    armorstand.teleport(new Location(player.getLocation().getWorld(), player.getLocation().getX(), player.getLocation().getY() + 3.2d, player.getLocation().getZ()));
                     armorstand.setCollidable(false);
                     armorstand.setGravity(false);
                     armorstand.setInvisible(true);
                     armorstand.setInvulnerable(true);
                     armorstand.setMarker(true);
                     armorstand.setPersistent(false);
-                    armorstand.setRemoveWhenFarAway(false);
-                    armorstand.setCustomName(statusMessage);
-                    armorstand.setCustomNameVisible(true);
                     player.setMetadata("statusEntityUUID", new FixedMetadataValue(Main.Instance, armorstand.getUniqueId().toString()));
                 } else {
                     Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
