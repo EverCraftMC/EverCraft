@@ -1,6 +1,8 @@
 package com.kale_ko.kalesutilities;
 
 import com.kale_ko.kalesutilities.commands.KalesUtilitiesCommand;
+import com.kale_ko.kalesutilities.commands.NicknameCommand;
+import com.kale_ko.kalesutilities.commands.PrefixCommand;
 import com.kale_ko.kalesutilities.commands.SeenCommand;
 import com.kale_ko.kalesutilities.commands.SetSpawnCommand;
 import com.kale_ko.kalesutilities.commands.SpawnCommand;
@@ -91,6 +93,8 @@ public class Main extends JavaPlugin {
         this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("setspawn").setExecutor(new SetSpawnCommand());
         this.getCommand("seen").setExecutor(new SeenCommand());
+        this.getCommand("nickname").setExecutor(new NicknameCommand());
+        this.getCommand("prefix").setExecutor(new PrefixCommand());
         this.getCommand("sudo").setExecutor(new SudoCommand());
 
         CONSOLE.info("Finished loading commands");
