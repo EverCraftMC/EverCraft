@@ -14,30 +14,34 @@ public class NicknameCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.setnickname")) {
-            File dataFolder = Main.Instance.getDataFolder();
-            if (!dataFolder.exists()) {
-                dataFolder.mkdir();
-            }
+            if (args.length > 0) {
+                File dataFolder = Main.Instance.getDataFolder();
+                if (!dataFolder.exists()) {
+                    dataFolder.mkdir();
+                }
 
-            File dataFile = Paths.get(dataFolder.getAbsolutePath(), "players.yml").toFile();
+                File dataFile = Paths.get(dataFolder.getAbsolutePath(), "players.yml").toFile();
 
-            YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+                YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
-            if (sender instanceof Player player) {
-                data.set("players." + player.getPlayer().getName() + ".nickname", args[0]);
+                if (sender instanceof Player player) {
+                    data.set("players." + player.getPlayer().getName() + ".nickname", args[0]);
 
-                try {
-                    data.save(dataFile);
+                    try {
+                        data.save(dataFile);
 
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.setnickname"));
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.setnickname"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("nickname").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("nickname").getUsage()));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.setnickname"));
         }
 
         return true;
