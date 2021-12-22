@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 public class Util {
     public static void sendMessage(CommandSender user, String message) {
-        user.sendMessage(defaultStyleMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+        user.sendMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
     }
 
     public static String formatMessage(String message) {
@@ -32,10 +32,6 @@ public class Util {
 
     public static String styleMessage(String message, String style) {
         return ChatColor.translateAlternateColorCodes('&', style + message);
-    }
-
-    public static String defaultStyleMessage(String message) {
-        return ChatColor.translateAlternateColorCodes('&', Main.Instance.config.getString("config.messageFormat") + message);
     }
 
     public static Boolean hasPermission(Player player, String permission) {
