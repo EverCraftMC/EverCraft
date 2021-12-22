@@ -33,11 +33,15 @@ import java.util.logging.Logger;
 @Command(name = "spawn", desc = "Go to the spawn", aliases = { "hub", "lobby" }, usage = "/spawn {player (optional)}")
 @Command(name = "setspawn", desc = "Sets the spawn to your location", aliases = { "sethub", "setlobby" }, usage = "/setspawn")
 @Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen" }, usage = "/seen {player}")
+@Command(name = "nickname", desc = "Sets you nickname", aliases = { "nick" }, usage = "/nickname {prefix}")
+@Command(name = "prefix", desc = "Sets you prefix", aliases = {}, usage = "/prefix {nickname}")
 @Command(name = "sudo", desc = "Make a player say something or run a command", aliases = {}, usage = "/sudo {player} {message/command}")
 
 @Permission(name = "kalesutilities.spawn", desc = "Use /spawn")
 @Permission(name = "kalesutilities.setspawn", desc = "Use /setspawn")
 @Permission(name = "kalesutilities.seen", desc = "Use /seen")
+@Permission(name = "kalesutilities.setnickname", desc = "Use /nickname")
+@Permission(name = "kalesutilities.setprefix", desc = "Use /prefix")
 @Permission(name = "kalesutilities.sudo", desc = "Use /sudo")
 
 @Permission(name = "kalesutilities.colorchat", desc = "Color you chat")
@@ -71,8 +75,11 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.setspawn", "Successfully set the spawn");
         config.addDefault("messages.lastonline", "{player} was last seen {time}!");
         config.addDefault("messages.playeronline", "{player} is online right now!");
+        config.addDefault("messages.setnickname", "Successfully set your nickname");
+        config.addDefault("messages.setprefix", "Successfully set your prefix");
         config.addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
         config.addDefault("messages.sudomessage", "Successfully made {player} say {message}");
+
         config.options().copyDefaults(true);
         this.saveConfig();
 
