@@ -16,6 +16,7 @@ public class PlayerMoveListener implements Listener {
         for (MetadataValue metadata : statusEntityUUID) {
             if (metadata.getOwningPlugin() == Main.Instance) {
                 Main.Instance.getServer().getEntity(UUID.fromString(metadata.asString())).remove();
+                event.getPlayer().removeMetadata("statusEntityUUID", Main.Instance);
             }
         }
     }
