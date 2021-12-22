@@ -31,6 +31,7 @@ public class NicknameCommand implements CommandExecutor {
                         data.save(dataFile);
 
                         Util.sendMessage(sender, Main.Instance.config.getString("messages.setnickname"));
+                        Util.updatePlayerName(player);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
