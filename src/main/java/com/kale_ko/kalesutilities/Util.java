@@ -45,9 +45,8 @@ public class Util {
         return sender.hasPermission(permission) || sender.isOp();
     }
 
-    public static String getPlayerName(Player player) {
+    public static String getPlayerNickName(Player player) {
         String name = player.getName();
-        String prefix = "";
 
         File dataFolder = Main.Instance.getDataFolder();
         if (!dataFolder.exists()) {
@@ -66,11 +65,30 @@ public class Util {
             }
         }
 
+        return name;
+    }
+
+    public static String getPlayerPrefix(Player player) {
+        String prefix = "";
+
+        File dataFolder = Main.Instance.getDataFolder();
+        if (!dataFolder.exists()) {
+            dataFolder.mkdir();
+        }
+
+        File dataFile = Paths.get(dataFolder.getAbsolutePath(), "players.yml").toFile();
+
+        YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+
         if (data.getString("players." + player.getName() + ".prefix") != null && !data.getString("players." + player.getName() + ".prefix").equalsIgnoreCase("") && !data.getString("players." + player.getName() + ".prefix").equalsIgnoreCase(" ")) {
             prefix = Util.formatMessage(data.getString("players." + player.getName() + ".prefix") + "&r") + " ";
         }
 
-        return name + prefix;
+        return prefix;
+    }
+
+    public static String getPlayerName(Player player) {
+        return getPlayerNickName(player) + getPlayerPrefix(player);
     }
 
     public static void updatePlayerName(Player player) {
