@@ -29,9 +29,16 @@ tasks.withType(JavaCompile).configureEach {
 
 jar {
 	archiveFileName = project.archivesBaseName + "-" + project.version + ".jar"
-    destinationDirectory = file("run\\plugins")
+    destinationDirectory = file("\\")
 }
 
 java {
 	withSourcesJar()
+}
+
+tasks.register("buildTest", Copy) {
+    dependsOn tasks.build
+
+    from "\\" + project.archivesBaseName + "-" + project.version + ".jar"
+    into "\\run\\plugins"
 }
