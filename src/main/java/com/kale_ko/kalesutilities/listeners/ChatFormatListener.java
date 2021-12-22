@@ -35,7 +35,7 @@ public class ChatFormatListener implements Listener {
         }
 
         if (data.getString("players." + event.getPlayer().getName() + ".prefix") != null) {
-            prefix = Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix") + "&r");
+            prefix = Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix") + "&r") + " ";
         }
 
         if (Util.hasPermission(event.getPlayer(), "kalesutilities.colorchat")) {
