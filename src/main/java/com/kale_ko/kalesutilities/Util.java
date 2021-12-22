@@ -26,6 +26,10 @@ public class Util {
         return new String(chars);
     }
 
+    public static String stripFormating(String message) {
+        return ChatColor.stripColor(message);
+    }
+
     public static String styleMessage(String message, String style) {
         return ChatColor.translateAlternateColorCodes('&', style + message);
     }

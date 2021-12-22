@@ -26,15 +26,15 @@ public class ChatFormatListener implements Listener {
         String prefix = "";
         String message = event.getMessage();
 
-        if (data.getString("players." + event.getPlayer().getName() + ".nickname") != null) {
-            if (Util.hasPermission(event.getPlayer(), "kalesutilities.nonickstar")) {
+        if (data.getString("players." + event.getPlayer().getName() + ".nickname") != null && !data.getString("players." + event.getPlayer().getName() + ".nickname").equalsIgnoreCase("") && !data.getString("players." + event.getPlayer().getName() + ".nickname").equalsIgnoreCase(" ")) {
+            if (Util.hasPermission(event.getPlayer(), "kalesutilities.nonickstar") || data.getString("players." + event.getPlayer().getName() + ".nickname").equalsIgnoreCase(player) || Util.stripFormating(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".nickname") + "&r")).equalsIgnoreCase(player)) {
                 player = Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".nickname") + "&r");
             } else {
                 player = Util.formatMessage("*" + data.getString("players." + event.getPlayer().getName() + ".nickname") + "&r");
             }
         }
 
-        if (data.getString("players." + event.getPlayer().getName() + ".prefix") != null) {
+        if (data.getString("players." + event.getPlayer().getName() + ".prefix") != null && !data.getString("players." + event.getPlayer().getName() + ".prefix").equalsIgnoreCase("") && !data.getString("players." + event.getPlayer().getName() + ".prefix").equalsIgnoreCase(" ")) {
             prefix = Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix") + "&r") + " ";
         }
 
