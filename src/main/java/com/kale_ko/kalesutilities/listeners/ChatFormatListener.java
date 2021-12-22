@@ -22,30 +22,26 @@ public class ChatFormatListener implements Listener {
 
         YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
-        if (Util.hasPermission(event.getPlayer(), "kalesutilities.colorchat")) {
-            event.setMessage(Util.formatMessage(event.getMessage()));
+        String player = event.getPlayer().getName();
+        String prefix = "";
+        String message = event.getMessage();
+
+        if (data.getString("players." + event.getPlayer().getName() + ".nickname") != null) {
+            if (Util.hasPermission(event.getPlayer(), "kalesutilities.nonickstar")) {
+                player = Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".nickname") + "&r");
+            } else {
+                player = Util.formatMessage("*" + data.getString("players." + event.getPlayer().getName() + ".nickname") + "&r");
+            }
         }
 
-        if (data.getString("players." + event.getPlayer().getName() + ".prefix") == null) {
-            if (data.getString("players." + event.getPlayer().getName() + ".nickname") == null) {
-                event.setFormat(event.getPlayer().getName() + " > " + event.getMessage());
-            } else {
-                if (Util.hasPermission(event.getPlayer(), "kalesutilities.nonickstar")) {
-                    event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".nickname") + "&r") + " > " + event.getMessage());
-                } else {
-                    event.setFormat("*" + Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".nickname") + "&r") + " > " + event.getMessage());
-                }
-            }
-        } else {
-            if (data.getString("players." + event.getPlayer().getName() + ".nickname") == null) {
-                event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix") + "&r") + " " + event.getPlayer().getName() + " > " + event.getMessage());
-            } else {
-                if (Util.hasPermission(event.getPlayer(), "kalesutilities.nonickstar")) {
-                    event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix") + "&r") + " " + Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".nickname") + "&r") + " > " + event.getMessage());
-                } else {
-                    event.setFormat(Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix") + "&r") + " *" + Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".nickname") + "&r") + " > " + event.getMessage());
-                }
-            }
+        if (data.getString("players." + event.getPlayer().getName() + ".prefix") != null) {
+            prefix = Util.formatMessage(data.getString("players." + event.getPlayer().getName() + ".prefix") + "&r");
         }
+
+        if (Util.hasPermission(event.getPlayer(), "kalesutilities.colorchat")) {
+            message = Util.formatMessage(event.getMessage());
+        }
+
+        event.setFormat(Util.formatMessage(Main.Instance.config.getString("config.chatFormat")).replace("{prefix}", prefix).replace("{player}", player).replace("{message}", message));
     }
 }

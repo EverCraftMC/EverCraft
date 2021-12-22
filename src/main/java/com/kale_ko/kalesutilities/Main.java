@@ -63,8 +63,7 @@ public class Main extends JavaPlugin {
         CONSOLE.info("Loading config");
 
         config.addDefault("config.prefix", "&6&l[Kales Utilities]&r");
-        config.addDefault("config.messageFormat", "&7");
-        config.addDefault("config.chatFormat", "{prefix}{player} > {message}");
+        config.addDefault("config.chatFormat", "{prefix}{player} &7> {message}");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
