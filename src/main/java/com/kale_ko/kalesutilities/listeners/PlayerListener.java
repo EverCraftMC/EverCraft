@@ -1,6 +1,7 @@
 package com.kale_ko.kalesutilities.listeners;
 
 import com.kale_ko.kalesutilities.Main;
+import com.kale_ko.kalesutilities.Util;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -30,5 +31,7 @@ public class PlayerListener implements Listener {
         }
 
         data.save(dataFile);
+
+        Util.updatePlayerName(event.getPlayer());
     }
 }
