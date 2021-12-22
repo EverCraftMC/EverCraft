@@ -11,12 +11,14 @@ import org.bukkit.metadata.MetadataValue;
 public class PlayerMoveListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        List<MetadataValue> statusEntityUUID = event.getPlayer().getMetadata("statusEntityUUID");
+        if (Math.abs(event.getTo().getX() - event.getFrom().getX()) > 0 || Math.abs(event.getTo().getY() - event.getFrom().getY()) > 0 || Math.abs(event.getTo().getZ() - event.getFrom().getZ()) > 0) {
+            List<MetadataValue> statusEntityUUID = event.getPlayer().getMetadata("statusEntityUUID");
 
-        for (MetadataValue metadata : statusEntityUUID) {
-            if (metadata.getOwningPlugin() == Main.Instance) {
-                Main.Instance.getServer().getEntity(UUID.fromString(metadata.asString())).remove();
-                event.getPlayer().removeMetadata("statusEntityUUID", Main.Instance);
+            for (MetadataValue metadata : statusEntityUUID) {
+                if (metadata.getOwningPlugin() == Main.Instance) {
+                    Main.Instance.getServer().getEntity(UUID.fromString(metadata.asString())).remove();
+                    event.getPlayer().removeMetadata("statusEntityUUID", Main.Instance);
+                }
             }
         }
     }
