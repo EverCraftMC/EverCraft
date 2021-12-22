@@ -8,6 +8,7 @@ import com.kale_ko.kalesutilities.commands.SetSpawnCommand;
 import com.kale_ko.kalesutilities.commands.SpawnCommand;
 import com.kale_ko.kalesutilities.commands.SudoCommand;
 import com.kale_ko.kalesutilities.listeners.ChatFormatListener;
+import com.kale_ko.kalesutilities.listeners.PlayerListener;
 import com.kale_ko.kalesutilities.listeners.SeenListener;
 import com.kale_ko.kalesutilities.listeners.SignEditorListener;
 import com.kale_ko.kalesutilities.listeners.SpawnListener;
@@ -103,6 +104,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ChatFormatListener(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
         getServer().getPluginManager().registerEvents(new SeenListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new SignEditorListener(), this);
 
         CONSOLE.info("Finished loading listeners");
