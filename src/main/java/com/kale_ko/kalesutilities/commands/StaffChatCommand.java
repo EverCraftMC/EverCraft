@@ -12,7 +12,7 @@ public class StaffChatCommand implements CommandExecutor {
         if (Util.hasPermission(sender, "kalesutilities.staffchat")) {
             StringBuilder messageBuilder = new StringBuilder();
 
-            for (Integer i = 1; i < args.length; i++) {
+            for (Integer i = 0; i < args.length; i++) {
                 messageBuilder.append(args[i] + " ");
             }
 

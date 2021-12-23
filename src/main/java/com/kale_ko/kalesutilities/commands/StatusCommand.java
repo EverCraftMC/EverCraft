@@ -4,7 +4,6 @@ import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
 import java.util.List;
 import java.util.UUID;
-import org.bukkit.Location;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
@@ -40,14 +39,11 @@ public class StatusCommand implements CommandExecutor {
                     if (found == null) {
                         ArmorStand armorstand = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
                         armorstand.setCustomName(statusMessage);
-                        Main.Instance.CONSOLE.info(statusMessage);
                         armorstand.setCustomNameVisible(true);
-                        armorstand.teleport(new Location(player.getLocation().getWorld(), player.getLocation().getX(), player.getLocation().getY() + 3.2d, player.getLocation().getZ()));
                         armorstand.setCollidable(false);
                         armorstand.setGravity(false);
                         armorstand.setInvisible(true);
                         armorstand.setInvulnerable(true);
-                        armorstand.setMarker(true);
                         armorstand.setPersistent(false);
                         player.setMetadata("statusEntityUUID", new FixedMetadataValue(Main.Instance, armorstand.getUniqueId().toString()));
                     } else {
