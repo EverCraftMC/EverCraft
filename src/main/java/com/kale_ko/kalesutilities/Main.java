@@ -47,6 +47,7 @@ import java.util.logging.Logger;
 @Command(name = "prefix", desc = "Sets you prefix", aliases = {}, usage = "/prefix {prefix}")
 @Command(name = "status", desc = "Sets you status", aliases = {}, usage = "/status {status}")
 @Command(name = "sudo", desc = "Make a player say something or run a command", aliases = {}, usage = "/sudo {player} {message/command}")
+@Command(name = "staffchat", desc = "Send a message in the staffchat", aliases = { "sc" }, usage = "/staffchat {message}")
 
 @Permission(name = "kalesutilities.spawn", desc = "Use /spawn")
 @Permission(name = "kalesutilities.setspawn", desc = "Use /setspawn")
