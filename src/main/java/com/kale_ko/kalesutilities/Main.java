@@ -31,7 +31,7 @@ import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.5.1")
+@Plugin(name = "KalesUtilities", version = "1.5.2")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -98,7 +98,7 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.setstatus", "Successfully set your status");
         config.addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
         config.addDefault("messages.sudomessage", "Successfully made {player} say {message}");
-        config.addDefault("messages.staffchat", "&l[Staffchat] &r{player} > {message}");
+        config.addDefault("messages.staffchat", "&l&d[Staffchat] &r{player} > {message}");
 
         config.options().copyDefaults(true);
         this.saveConfig();
