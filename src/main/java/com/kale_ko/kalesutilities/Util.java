@@ -92,6 +92,8 @@ public class Util {
     }
 
     public static void updatePlayerName(Player player) {
+        player.setCustomName(getPlayerName(player));
+        player.setCustomNameVisible(true);
         player.setDisplayName(getPlayerName(player));
         player.setPlayerListName(getPlayerName(player));
     }
