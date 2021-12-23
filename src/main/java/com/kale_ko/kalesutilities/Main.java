@@ -31,7 +31,7 @@ import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.5.2")
+@Plugin(name = "KalesUtilities", version = "1.5.3")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -46,7 +46,7 @@ import java.util.logging.Logger;
 @Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen" }, usage = "/seen {player}")
 @Command(name = "nickname", desc = "Sets you nickname", aliases = { "nick" }, usage = "/nickname {nickname}")
 @Command(name = "prefix", desc = "Sets you prefix", aliases = {}, usage = "/prefix {prefix}")
-@Command(name = "status", desc = "Sets you status", aliases = {}, usage = "/status {status}")
+@Command(name = "status", desc = "Sets you status", aliases = { "afk" }, usage = "/status {status}")
 @Command(name = "sudo", desc = "Make a player say something or run a command", aliases = {}, usage = "/sudo {player} {message/command}")
 @Command(name = "staffchat", desc = "Send a message in the staffchat", aliases = { "sc" }, usage = "/staffchat {message}")
 
