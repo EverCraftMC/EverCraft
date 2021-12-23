@@ -25,8 +25,7 @@ public class SudoCommand implements CommandExecutor {
                             Main.Instance.getServer().dispatchCommand(player, sudoMessage.substring(1));
                         }
 
-                        Util.sendMessage(sender, Main.Instance.config.getString("messages.sudocommand")
-                                .replace("{player}", args[0]).replace("{command}", sudoMessage));
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.sudocommand").replace("{player}", args[0]).replace("{command}", sudoMessage));
                     } else {
                         for (Player player : Main.Instance.getServer().getOnlinePlayers()) {
                             player.chat(sudoMessage);
