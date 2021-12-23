@@ -10,6 +10,7 @@ import com.kale_ko.kalesutilities.commands.SetSpawnCommand;
 import com.kale_ko.kalesutilities.commands.SpawnCommand;
 import com.kale_ko.kalesutilities.commands.StatusCommand;
 import com.kale_ko.kalesutilities.commands.SudoCommand;
+import com.kale_ko.kalesutilities.commands.StaffChatCommand;
 import com.kale_ko.kalesutilities.listeners.ChatFormatListener;
 import com.kale_ko.kalesutilities.listeners.PlayerListener;
 import com.kale_ko.kalesutilities.listeners.PlayerMoveListener;
@@ -30,7 +31,7 @@ import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.4.0")
+@Plugin(name = "KalesUtilities", version = "1.5.0")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -56,6 +57,7 @@ import java.util.logging.Logger;
 @Permission(name = "kalesutilities.setprefix", desc = "Use /prefix")
 @Permission(name = "kalesutilities.setstatus", desc = "Use /status")
 @Permission(name = "kalesutilities.sudo", desc = "Use /sudo")
+@Permission(name = "kalesutilities.staffchat", desc = "Use /staffchat")
 
 @Permission(name = "kalesutilities.colorchat", desc = "Color you chat")
 
@@ -76,7 +78,7 @@ public class Main extends JavaPlugin {
         config.addDefault("config.prefix", "&6&l[Kales Utilities]&r");
         config.addDefault("config.chatFormat", "{prefix}{player} > {message}");
         config.addDefault("config.about", "Kales Minecraft Server!");
-        config.addDefault("config.rules", "1. No Hacking\n2. No Griefing\n3. Be Respectful\n4. No Profanity\n5. Just Don't Be Rude/Annoying.\n\nBreaking rules could result in a kick, ban, or mute");
+        config.addDefault("config.rules", "\n1. No Hacking\n2. No Griefing\n3. Be Respectful\n4. No Profanity\n5. Just Don't Be Rude/Annoying.\n\nBreaking rules could result in a kick, ban, or mute");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
@@ -96,6 +98,7 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.setstatus", "Successfully set your status");
         config.addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
         config.addDefault("messages.sudomessage", "Successfully made {player} say {message}");
+        config.addDefault("messages.staffchat", "&l[Staffchat] &r{player} > {message}");
 
         config.options().copyDefaults(true);
         this.saveConfig();
@@ -114,6 +117,7 @@ public class Main extends JavaPlugin {
         this.getCommand("prefix").setExecutor(new PrefixCommand());
         this.getCommand("status").setExecutor(new StatusCommand());
         this.getCommand("sudo").setExecutor(new SudoCommand());
+        this.getCommand("staffchat").setExecutor(new StaffChatCommand());
 
         CONSOLE.info("Finished loading commands");
 
