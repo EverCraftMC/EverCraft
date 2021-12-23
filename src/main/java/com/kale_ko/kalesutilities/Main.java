@@ -1,8 +1,10 @@
 package com.kale_ko.kalesutilities;
 
+import com.kale_ko.kalesutilities.commands.AboutCommand;
 import com.kale_ko.kalesutilities.commands.KalesUtilitiesCommand;
 import com.kale_ko.kalesutilities.commands.NicknameCommand;
 import com.kale_ko.kalesutilities.commands.PrefixCommand;
+import com.kale_ko.kalesutilities.commands.RulesCommand;
 import com.kale_ko.kalesutilities.commands.SeenCommand;
 import com.kale_ko.kalesutilities.commands.SetSpawnCommand;
 import com.kale_ko.kalesutilities.commands.SpawnCommand;
@@ -36,6 +38,8 @@ import java.util.logging.Logger;
 @LoadOrder(PluginLoadOrder.STARTUP)
 
 @Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ks" }, usage = "/kalesutilities [help, reload]")
+@Command(name = "about", desc = "See the about", aliases = {}, usage = "/about")
+@Command(name = "rules", desc = "See the rules", aliases = {}, usage = "/rules")
 @Command(name = "spawn", desc = "Go to the spawn", aliases = { "hub", "lobby" }, usage = "/spawn {player (optional)}")
 @Command(name = "setspawn", desc = "Sets the spawn to your location", aliases = { "sethub", "setlobby" }, usage = "/setspawn")
 @Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen" }, usage = "/seen {player}")
@@ -69,7 +73,9 @@ public class Main extends JavaPlugin {
         CONSOLE.info("Loading config");
 
         config.addDefault("config.prefix", "&6&l[Kales Utilities]&r");
-        config.addDefault("config.chatFormat", "{prefix}{player} &7> {message}");
+        config.addDefault("config.chatFormat", "{prefix}{player} > {message}");
+        config.addDefault("config.about", "Kales Minecraft Server!");
+        config.addDefault("config.rules", "1. No Hacking\n2. No Griefing\n3. Be Respectful\n4. No Profanity\n5. Just Don't Be Rude/Annoying.\n\nBreaking rules could result in a kick, ban, or mute");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
@@ -98,6 +104,8 @@ public class Main extends JavaPlugin {
         CONSOLE.info("Loading commands");
 
         this.getCommand("kalesutilities").setExecutor(new KalesUtilitiesCommand());
+        this.getCommand("about").setExecutor(new AboutCommand());
+        this.getCommand("rules").setExecutor(new RulesCommand());
         this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("setspawn").setExecutor(new SetSpawnCommand());
         this.getCommand("seen").setExecutor(new SeenCommand());
