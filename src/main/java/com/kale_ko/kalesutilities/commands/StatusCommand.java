@@ -25,7 +25,7 @@ public class StatusCommand implements CommandExecutor {
                         statusMessageBuilder.append(args[i] + " ");
                     }
 
-                    String statusMessage = statusMessageBuilder.toString();
+                    String statusMessage = statusMessageBuilder.toString().substring(0, statusMessageBuilder.length() - 1);
 
                     List<MetadataValue> statusEntityUUID = player.getMetadata("statusEntityUUID");
 
