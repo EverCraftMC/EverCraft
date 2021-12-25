@@ -12,6 +12,14 @@ public class Util {
         user.sendMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
     }
 
+    public static void sendMessage(CommandSender user, String message, Boolean noprefix) {
+        if (!noprefix) {
+            user.sendMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+        } else {
+            user.sendMessage(formatMessage(message));
+        }
+    }
+
     public static String formatMessage(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
