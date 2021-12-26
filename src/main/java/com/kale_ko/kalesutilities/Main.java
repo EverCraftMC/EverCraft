@@ -11,6 +11,7 @@ import com.kale_ko.kalesutilities.commands.SpawnCommand;
 import com.kale_ko.kalesutilities.commands.StatusCommand;
 import com.kale_ko.kalesutilities.commands.SudoCommand;
 import com.kale_ko.kalesutilities.commands.StaffChatCommand;
+import com.kale_ko.kalesutilities.commands.StaffCommand;
 import com.kale_ko.kalesutilities.listeners.ChatFormatListener;
 import com.kale_ko.kalesutilities.listeners.PlayerListener;
 import com.kale_ko.kalesutilities.listeners.PlayerMoveListener;
@@ -31,7 +32,7 @@ import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.5.4")
+@Plugin(name = "KalesUtilities", version = "1.5.5")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -41,6 +42,7 @@ import java.util.logging.Logger;
 @Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ks" }, usage = "/kalesutilities [help, reload]")
 @Command(name = "about", desc = "See the about", aliases = {}, usage = "/about")
 @Command(name = "rules", desc = "See the rules", aliases = {}, usage = "/rules")
+@Command(name = "staff", desc = "See the staff", aliases = {}, usage = "/staff")
 @Command(name = "spawn", desc = "Go to the spawn", aliases = { "hub", "lobby" }, usage = "/spawn {player (optional)}")
 @Command(name = "setspawn", desc = "Sets the spawn to your location", aliases = { "sethub", "setlobby" }, usage = "/setspawn")
 @Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen" }, usage = "/seen {player}")
@@ -50,6 +52,9 @@ import java.util.logging.Logger;
 @Command(name = "sudo", desc = "Make a player say something or run a command", aliases = {}, usage = "/sudo {player} {message/command}")
 @Command(name = "staffchat", desc = "Send a message in the staffchat", aliases = { "sc" }, usage = "/staffchat {message}")
 
+@Permission(name = "kalesutilities.about", desc = "Use /about")
+@Permission(name = "kalesutilities.rules", desc = "Use /rules")
+@Permission(name = "kalesutilities.staff", desc = "Use /staff")
 @Permission(name = "kalesutilities.spawn", desc = "Use /spawn")
 @Permission(name = "kalesutilities.setspawn", desc = "Use /setspawn")
 @Permission(name = "kalesutilities.seen", desc = "Use /seen")
@@ -79,6 +84,7 @@ public class Main extends JavaPlugin {
         config.addDefault("config.chatFormat", "{prefix}{player} > {message}");
         config.addDefault("config.about", "Kales Minecraft Server!");
         config.addDefault("config.rules", "\n1. No Hacking\n2. No Griefing\n3. Be Respectful\n4. No Profanity\n5. Just Don't Be Rude/Annoying.\n\nBreaking rules could result in a kick, ban, or mute");
+        config.addDefault("config.staff", "&4&l[Owner] Kale_Ko\n&1&l[Admin] JMbuilder");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
@@ -110,6 +116,7 @@ public class Main extends JavaPlugin {
         this.getCommand("kalesutilities").setExecutor(new KalesUtilitiesCommand());
         this.getCommand("about").setExecutor(new AboutCommand());
         this.getCommand("rules").setExecutor(new RulesCommand());
+        this.getCommand("staff").setExecutor(new StaffCommand());
         this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("setspawn").setExecutor(new SetSpawnCommand());
         this.getCommand("seen").setExecutor(new SeenCommand());
