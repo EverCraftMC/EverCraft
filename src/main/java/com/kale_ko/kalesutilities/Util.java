@@ -1,6 +1,7 @@
 package com.kale_ko.kalesutilities;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.nio.file.Paths;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -104,5 +105,15 @@ public class Util {
         player.setCustomNameVisible(true);
         player.setDisplayName(getPlayerName(player));
         player.setPlayerListName(getPlayerName(player));
+
+        if (player.getName().startsWith("*")) {
+            try {
+                Field nameField = player.getClass().getField("name");
+                nameField.setAccessible(true);
+                nameField.set(player, player.getName().subSequence(1, player.getName().length() - 1));
+            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
