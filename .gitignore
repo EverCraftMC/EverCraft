@@ -13,5 +13,5 @@ target
 .gradle
 
 run
-todo.txt
+todo.md
 *.jar
