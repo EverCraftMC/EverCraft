@@ -108,7 +108,7 @@ public class Util {
 
         if (player.getName().startsWith("*")) {
             try {
-                Field nameField = player.getClass().getField("name");
+                Field nameField = player.getClass().getSuperclass().getDeclaredField("name");
                 nameField.setAccessible(true);
                 nameField.set(player, player.getName().subSequence(1, player.getName().length() - 1));
             } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
