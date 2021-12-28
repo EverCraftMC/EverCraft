@@ -18,14 +18,20 @@ public class ChatFilterListener implements Listener {
 
         int index = 0;
         for (String word : words) {
-            System.out.println(index + "");
-            if (bannedWords.contains(word)) {
+            if (bannedWords.contains(Util.stripFormating(word).toLowerCase())) {
                 words[index] = Util.formatMessage("&k") + word + Util.formatMessage("&r");
             }
 
             if (index != 0 && index != words.length - 1) {
-                System.out.println(index + "");
-                if (word.length() == 1 && (words[index - 1].length() == 1 || words[index + 1].length() == 1)) {
+                if (Util.stripFormating(word).length() == 1 && (Util.stripFormating(words[index - 1]).length() == 1 || Util.stripFormating(words[index + 1]).length() == 1)) {
+                    words[index] = Util.formatMessage("&k") + word + Util.formatMessage("&r");
+                }
+            } else if (index != 0) {
+                if (Util.stripFormating(word).length() == 1 && Util.stripFormating(words[index - 1]).length() == 1) {
+                    words[index] = Util.formatMessage("&k") + word + Util.formatMessage("&r");
+                }
+            } else if (index != words.length - 1) {
+                if (Util.stripFormating(word).length() == 1 && Util.stripFormating(words[index + 1]).length() == 1) {
                     words[index] = Util.formatMessage("&k") + word + Util.formatMessage("&r");
                 }
             }
