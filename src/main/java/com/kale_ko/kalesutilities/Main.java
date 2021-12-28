@@ -12,6 +12,7 @@ import com.kale_ko.kalesutilities.commands.StatusCommand;
 import com.kale_ko.kalesutilities.commands.SudoCommand;
 import com.kale_ko.kalesutilities.commands.StaffChatCommand;
 import com.kale_ko.kalesutilities.commands.StaffCommand;
+import com.kale_ko.kalesutilities.listeners.ChatFilterListener;
 import com.kale_ko.kalesutilities.listeners.ChatFormatListener;
 import com.kale_ko.kalesutilities.listeners.PlayerListener;
 import com.kale_ko.kalesutilities.listeners.PlayerMoveListener;
@@ -30,9 +31,11 @@ import org.bukkit.plugin.java.annotation.permission.Permission;
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
 import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 import org.bukkit.configuration.file.FileConfiguration;
+
+import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.6.0")
+@Plugin(name = "KalesUtilities", version = "1.7.0")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -85,6 +88,7 @@ public class Main extends JavaPlugin {
         config.addDefault("config.about", "Kales Minecraft Server!");
         config.addDefault("config.rules", "\n1. No Hacking\n2. No Griefing\n3. Be Respectful\n4. No Profanity\n5. Just Don't Be Rude/Annoying.\n\nBreaking rules could result in a kick, ban, or mute");
         config.addDefault("config.staff", "&4&l[Owner] Kale_Ko\n&1&l[Admin] JMbuilder");
+        config.addDefault("config.banned-words", List.of("anal", "anus", "arse", "ass", "ballsack", "balls", "bitch", "biatch", "blowjob", "blow job", "bollock", "bollok", "boner", "boob", "bum", "butt", "buttplug", "clitoris", "cock", "coon", "cunt", "dick", "dildo", "dyke", "fag", "feck", "fellate", "fellatio", "felching", "fuck", "f u c k", "fudgepacker", "fudge packer", "flange", "Goddamn", "God damn", "hell", "homo", "jerk", "jizz", "knobend", "knob end", "labia", "muff", "nigger", "nigga", "penis", "piss", "poop", "pube", "pussy", "queer", "scrotum", "sex", "shit", "s hit", "sh1t", "slut", "smegma", "spunk", "tit", "tosser", "turd", "twat", "vagina", "wank", "whore"));
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
@@ -130,6 +134,7 @@ public class Main extends JavaPlugin {
 
         CONSOLE.info("Loading listeners");
 
+        getServer().getPluginManager().registerEvents(new ChatFilterListener(), this);
         getServer().getPluginManager().registerEvents(new ChatFormatListener(), this);
         getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
