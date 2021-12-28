@@ -14,15 +14,24 @@ public class ChatFilterListener implements Listener {
         List<String> bannedWords = Main.Instance.config.getStringList("config.banned-words");
 
         String message = event.getMessage();
+        String[] words = message.split(" ");
 
-        for (String bannedWord : bannedWords) {
-            int lastFound = 0;
-            while (message.contains(bannedWord)) {
-                message = message.substring(0, message.indexOf(bannedWord, lastFound)) + Util.formatMessage("&k") + message.substring(message.indexOf(bannedWord, lastFound), message.indexOf(bannedWord, lastFound) + bannedWord.length()) + Util.formatMessage("&r") + message.substring(message.indexOf(bannedWord, lastFound) + bannedWord.length(), message.length());
-                lastFound = message.indexOf(bannedWord, lastFound);
+        int index = 0;
+        for (String word : words) {
+            if (bannedWords.contains(word)) {
+                words[index] = Util.formatMessage("&k") + word + Util.formatMessage("&r");
             }
+            index++;
         }
 
-        event.setMessage(message);
+        // for (String bannedWord : bannedWords) {
+        //     int lastFound = 0;
+        //     while (message.contains(bannedWord)) {
+        //         message = message.substring(0, message.indexOf(bannedWord, lastFound)) + Util.formatMessage("&k") + message.substring(message.indexOf(bannedWord, lastFound), message.indexOf(bannedWord, lastFound) + bannedWord.length()) + Util.formatMessage("&r") + message.substring(message.indexOf(bannedWord, lastFound) + bannedWord.length(), message.length());
+        //         lastFound = message.indexOf(bannedWord, lastFound);
+        //     }
+        // }
+
+        event.setMessage(String.join(" ", words));
     }
 }
