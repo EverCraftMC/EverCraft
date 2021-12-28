@@ -35,7 +35,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.7.0")
+@Plugin(name = "KalesUtilities", version = "1.7.1")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
