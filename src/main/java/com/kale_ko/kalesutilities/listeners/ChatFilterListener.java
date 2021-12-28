@@ -16,8 +16,10 @@ public class ChatFilterListener implements Listener {
         String message = event.getMessage();
 
         for (String bannedWord : bannedWords) {
-            if (message.contains(bannedWord)) {
-                message = message.substring(0, message.indexOf(bannedWord)) + Util.formatMessage("&k") + message.substring(message.indexOf(bannedWord), message.indexOf(bannedWord) + bannedWord.length()) + Util.formatMessage("&r") + message.substring(message.indexOf(bannedWord) + bannedWord.length(), message.length());
+            int lastFound = 0;
+            while (message.contains(bannedWord)) {
+                message = message.substring(0, message.indexOf(bannedWord, lastFound)) + Util.formatMessage("&k") + message.substring(message.indexOf(bannedWord, lastFound), message.indexOf(bannedWord, lastFound) + bannedWord.length()) + Util.formatMessage("&r") + message.substring(message.indexOf(bannedWord, lastFound) + bannedWord.length(), message.length());
+                lastFound = message.indexOf(bannedWord, lastFound);
             }
         }
 
