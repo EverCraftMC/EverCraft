@@ -35,7 +35,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.7.3")
+@Plugin(name = "KalesUtilities", version = "1.7.4")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -88,7 +88,7 @@ public class Main extends JavaPlugin {
         config.addDefault("config.about", "Kales Minecraft Server!");
         config.addDefault("config.rules", "\n1. No Hacking\n2. No Griefing\n3. Be Respectful\n4. No Profanity\n5. Just Don't Be Rude/Annoying.\n\nBreaking rules could result in a kick, ban, or mute");
         config.addDefault("config.staff", "&4&l[Owner] Kale_Ko\n&1&l[Admin] JMbuilder");
-        config.addDefault("config.banned-words", List.of("anal", "anus", "arse", "ass", "ballsack", "balls", "bitch", "biatch", "blowjob", "blow job", "bollock", "bollok", "boner", "boob", "bum", "butt", "buttplug", "clitoris", "cock", "coon", "cunt", "dick", "dildo", "dyke", "fag", "feck", "fellate", "fellatio", "felching", "fuck", "f u c k", "fudgepacker", "fudge packer", "flange", "Goddamn", "God damn", "hell", "homo", "jerk", "jizz", "knobend", "knob end", "labia", "muff", "nigger", "nigga", "penis", "piss", "poop", "pube", "pussy", "queer", "scrotum", "sex", "shit", "s hit", "sh1t", "slut", "smegma", "spunk", "tit", "tosser", "turd", "twat", "vagina", "wank", "whore"));
+        config.addDefault("config.banned-words", List.of("anal", "anus", "arse", "ass", "ballsack", "balls", "bitch", "biatch", "blowjob", "bollock", "bollok", "boner", "boob", "bum", "butt", "buttplug", "clitoris", "cock", "coon", "cunt", "dick", "dildo", "dyke", "fag", "feck", "fellate", "fellatio", "felching", "fuck", "fucking", "fudgepacker", "flange", "goddamn", "hell", "homo", "jizz", "knobend", "labia", "muff", "nigger", "nigga", "penis", "piss", "poop", "pube", "pussy", "queer", "scrotum", "sex", "shit", "sh1t", "slut", "smegma", "spunk", "tit", "tosser", "turd", "twat", "vagina", "wank", "whore"));
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
