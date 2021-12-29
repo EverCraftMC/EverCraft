@@ -22,9 +22,9 @@ public class KickCommand implements CommandExecutor {
 
                     String kickMessage = kickMessageBuilder.toString();
 
-                    player.kickPlayer(kickMessage);
+                    player.kickPlayer(Main.Instance.config.getString("messages.kick").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", kickMessage).replace("was", "where"));
 
-                    Util.broadcastMessage(Main.Instance.config.getString("messages.kick").replace("{player}", Util.getPlayerName(player)).replace("{moderator}", Util.getPlayerName(sender)));
+                    Util.broadcastMessage(Main.Instance.config.getString("messages.kick").replace("{player}", Util.getPlayerName(player)).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", kickMessage));
                 } else {
                     Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
                 }
