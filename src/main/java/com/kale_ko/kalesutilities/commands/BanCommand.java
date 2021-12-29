@@ -36,7 +36,7 @@ public class BanCommand implements CommandExecutor {
                     YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
                     data.set("players." + player.getPlayer().getName() + ".banned", true);
-                    data.set("players." + player.getPlayer().getName() + ".banMessage", banMessage);
+                    data.set("players." + player.getPlayer().getName() + ".banMessage", Main.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "where"));
 
                     try {
                         data.save(dataFile);

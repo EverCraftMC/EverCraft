@@ -15,6 +15,7 @@ import com.kale_ko.kalesutilities.commands.SudoCommand;
 import com.kale_ko.kalesutilities.commands.UnbanCommand;
 import com.kale_ko.kalesutilities.commands.StaffChatCommand;
 import com.kale_ko.kalesutilities.commands.StaffCommand;
+import com.kale_ko.kalesutilities.listeners.BannedJoinListener;
 import com.kale_ko.kalesutilities.listeners.ChatFilterListener;
 import com.kale_ko.kalesutilities.listeners.ChatFormatListener;
 import com.kale_ko.kalesutilities.listeners.PlayerListener;
@@ -151,6 +152,7 @@ public class Main extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new ChatFilterListener(), this);
         getServer().getPluginManager().registerEvents(new ChatFormatListener(), this);
+        getServer().getPluginManager().registerEvents(new BannedJoinListener(), this);
         getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
         getServer().getPluginManager().registerEvents(new SeenListener(), this);
