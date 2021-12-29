@@ -14,7 +14,7 @@ public class UnbanCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.unban")) {
-            if (args.length > 1) {
+            if (args.length > 0) {
                 Player player = Main.Instance.getServer().getPlayer(args[0]);
 
                 if (player != null) {
@@ -27,12 +27,13 @@ public class UnbanCommand implements CommandExecutor {
 
                     YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
-                    data.set("players." + player.getPlayer().getName() + ".banned", false);
+                    data.set("players." + player.getPlayer().getName() + ".banned", null);
+                    data.set("players." + player.getPlayer().getName() + ".banMessage", null);
 
                     try {
                         data.save(dataFile);
 
-                        Util.broadcastMessage(Main.Instance.config.getString("messages.unban").replace("{player}", Util.getPlayerName(player)));
+                        Util.broadcastMessage(Main.Instance.config.getString("messages.unban").replace("{player}", Util.getPlayerName(player)).replace("{moderator}", Util.getPlayerName(sender)));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
