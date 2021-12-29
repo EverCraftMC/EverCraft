@@ -1,6 +1,7 @@
 package com.kale_ko.kalesutilities;
 
 import com.kale_ko.kalesutilities.commands.AboutCommand;
+import com.kale_ko.kalesutilities.commands.BanCommand;
 import com.kale_ko.kalesutilities.commands.KalesUtilitiesCommand;
 import com.kale_ko.kalesutilities.commands.KickCommand;
 import com.kale_ko.kalesutilities.commands.NicknameCommand;
@@ -11,6 +12,7 @@ import com.kale_ko.kalesutilities.commands.SetSpawnCommand;
 import com.kale_ko.kalesutilities.commands.SpawnCommand;
 import com.kale_ko.kalesutilities.commands.StatusCommand;
 import com.kale_ko.kalesutilities.commands.SudoCommand;
+import com.kale_ko.kalesutilities.commands.UnbanCommand;
 import com.kale_ko.kalesutilities.commands.StaffChatCommand;
 import com.kale_ko.kalesutilities.commands.StaffCommand;
 import com.kale_ko.kalesutilities.listeners.ChatFilterListener;
@@ -141,6 +143,8 @@ public class Main extends JavaPlugin {
         this.getCommand("sudo").setExecutor(new SudoCommand());
         this.getCommand("staffchat").setExecutor(new StaffChatCommand());
         this.getCommand("kick").setExecutor(new KickCommand());
+        this.getCommand("ban").setExecutor(new BanCommand());
+        this.getCommand("unban").setExecutor(new UnbanCommand());
 
         CONSOLE.info("Finished loading commands");
 
