@@ -34,7 +34,6 @@ import org.bukkit.plugin.java.annotation.permission.Permission;
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
 import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 import org.bukkit.configuration.file.FileConfiguration;
-
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -119,9 +118,9 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.staffchat", "&l&d[Staffchat] &r{player} > {message}");
         config.addDefault("messages.kick", "{player} was kicked by {moderator} for {reason}");
         config.addDefault("messages.ban", "{player} was banned by {moderator} for {reason}");
-        config.addDefault("messages.unban", "{player} was unbanned by {moderator} for {reason}");
+        config.addDefault("messages.unban", "{player} was unbanned by {moderator}");
         config.addDefault("messages.mute", "{player} was muted by {moderator} for {reason}");
-        config.addDefault("messages.unmute", "{player} was unmuted by {moderator} for {reason}");
+        config.addDefault("messages.unmute", "{player} was unmuted by {moderator}");
 
         config.options().copyDefaults(true);
         this.saveConfig();

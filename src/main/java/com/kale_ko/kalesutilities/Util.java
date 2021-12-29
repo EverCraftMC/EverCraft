@@ -22,7 +22,7 @@ public class Util {
     }
 
     public static void broadcastMessage(String message) {
-        Main.Instance.getServer().broadcastMessage(Main.Instance.config.getString("config.prefix") + " " + message);
+        Main.Instance.getServer().broadcastMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
     }
 
     public static void broadcastMessage(String message, Boolean noprefix) {
