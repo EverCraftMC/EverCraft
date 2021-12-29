@@ -2,6 +2,7 @@ package com.kale_ko.kalesutilities;
 
 import com.kale_ko.kalesutilities.commands.AboutCommand;
 import com.kale_ko.kalesutilities.commands.KalesUtilitiesCommand;
+import com.kale_ko.kalesutilities.commands.KickCommand;
 import com.kale_ko.kalesutilities.commands.NicknameCommand;
 import com.kale_ko.kalesutilities.commands.PrefixCommand;
 import com.kale_ko.kalesutilities.commands.RulesCommand;
@@ -35,7 +36,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.7.4")
+@Plugin(name = "KalesUtilities", version = "1.8.0")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -54,6 +55,11 @@ import java.util.logging.Logger;
 @Command(name = "status", desc = "Sets you status", aliases = { "afk" }, usage = "/status {status}")
 @Command(name = "sudo", desc = "Make a player say something or run a command", aliases = {}, usage = "/sudo {player} {message/command}")
 @Command(name = "staffchat", desc = "Send a message in the staffchat", aliases = { "sc" }, usage = "/staffchat {message}")
+@Command(name = "kick", desc = "Kick a player from the server", aliases = { }, usage = "/kick {player} {message}")
+@Command(name = "ban", desc = "Ban a player from the server", aliases = { }, usage = "/ban {player} {message}")
+@Command(name = "unban", desc = "Unban a player from the server", aliases = { }, usage = "/unban {player}")
+@Command(name = "mute", desc = "Mute a player on the server", aliases = { }, usage = "/mute {player} {message}")
+@Command(name = "unmute", desc = "Unmute a player on the server", aliases = { }, usage = "/unmute {player}")
 
 @Permission(name = "kalesutilities.about", desc = "Use /about")
 @Permission(name = "kalesutilities.rules", desc = "Use /rules")
@@ -109,6 +115,11 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
         config.addDefault("messages.sudomessage", "Successfully made {player} say {message}");
         config.addDefault("messages.staffchat", "&l&d[Staffchat] &r{player} > {message}");
+        config.addDefault("messages.kick", "{player} was kicked by {moderator} for {reason}");
+        config.addDefault("messages.ban", "{player} was banned by {moderator} for {reason}");
+        config.addDefault("messages.unban", "{player} was unbanned by {moderator} for {reason}");
+        config.addDefault("messages.mute", "{player} was muted by {moderator} for {reason}");
+        config.addDefault("messages.unmute", "{player} was unmuted by {moderator} for {reason}");
 
         config.options().copyDefaults(true);
         this.saveConfig();
@@ -129,6 +140,7 @@ public class Main extends JavaPlugin {
         this.getCommand("status").setExecutor(new StatusCommand());
         this.getCommand("sudo").setExecutor(new SudoCommand());
         this.getCommand("staffchat").setExecutor(new StaffChatCommand());
+        this.getCommand("kick").setExecutor(new KickCommand());
 
         CONSOLE.info("Finished loading commands");
 

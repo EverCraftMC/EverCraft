@@ -21,6 +21,18 @@ public class Util {
         }
     }
 
+    public static void broadcastMessage(String message) {
+        Main.Instance.getServer().broadcastMessage(Main.Instance.config.getString("config.prefix") + " " + message);
+    }
+
+    public static void broadcastMessage(String message, Boolean noprefix) {
+        if (!noprefix) {
+            Main.Instance.getServer().broadcastMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+        } else {
+            Main.Instance.getServer().broadcastMessage(formatMessage(message));
+        }
+    }
+
     public static String formatMessage(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
@@ -98,6 +110,14 @@ public class Util {
 
     public static String getPlayerName(Player player) {
         return getPlayerPrefix(player) + getPlayerNickName(player);
+    }
+
+    public static String getPlayerName(CommandSender sender) {
+        if (sender instanceof Player player) {
+            return getPlayerName(player);
+        } else {
+            return "CONSOLE";
+        }
     }
 
     public static void updatePlayerName(Player player) {
