@@ -74,6 +74,9 @@ import java.util.logging.Logger;
 @Permission(name = "kalesutilities.setstatus", desc = "Use /status")
 @Permission(name = "kalesutilities.sudo", desc = "Use /sudo")
 @Permission(name = "kalesutilities.staffchat", desc = "Use /staffchat")
+@Permission(name = "kalesutilities.kick", desc = "Use /kick")
+@Permission(name = "kalesutilities.ban", desc = "Use /ban and /unban")
+@Permission(name = "kalesutilities.mute", desc = "Use /mute and /unmute")
 
 @Permission(name = "kalesutilities.colorchat", desc = "Color you chat")
 

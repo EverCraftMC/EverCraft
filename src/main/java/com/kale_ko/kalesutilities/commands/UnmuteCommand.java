@@ -9,10 +9,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class UnbanCommand implements CommandExecutor {
+public class UnmuteCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        if (Util.hasPermission(sender, "kalesutilities.ban")) {
+        if (Util.hasPermission(sender, "kalesutilities.mute")) {
             if (args.length > 0) {
                     File dataFolder = Main.Instance.getDataFolder();
                     if (!dataFolder.exists()) {
@@ -23,21 +23,21 @@ public class UnbanCommand implements CommandExecutor {
 
                     YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
-                    data.set("players." + args[0] + ".banned", null);
-                    data.set("players." + args[0] + ".banMessage", null);
+                    data.set("players." + args[0] + ".muted", null);
+                    data.set("players." + args[0] + ".mutedMessage", null);
 
                     try {
                         data.save(dataFile);
 
-                        Util.broadcastMessage(Main.Instance.config.getString("messages.unban").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)));
+                        Util.broadcastMessage(Main.Instance.config.getString("messages.unmute").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("unban").getUsage()));
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("unmute").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.ban"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.mute"));
         }
 
         return true;
