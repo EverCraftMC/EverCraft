@@ -4,6 +4,7 @@ import com.kale_ko.kalesutilities.commands.AboutCommand;
 import com.kale_ko.kalesutilities.commands.BanCommand;
 import com.kale_ko.kalesutilities.commands.KalesUtilitiesCommand;
 import com.kale_ko.kalesutilities.commands.KickCommand;
+import com.kale_ko.kalesutilities.commands.MuteCommand;
 import com.kale_ko.kalesutilities.commands.NicknameCommand;
 import com.kale_ko.kalesutilities.commands.PrefixCommand;
 import com.kale_ko.kalesutilities.commands.RulesCommand;
@@ -13,11 +14,13 @@ import com.kale_ko.kalesutilities.commands.SpawnCommand;
 import com.kale_ko.kalesutilities.commands.StatusCommand;
 import com.kale_ko.kalesutilities.commands.SudoCommand;
 import com.kale_ko.kalesutilities.commands.UnbanCommand;
+import com.kale_ko.kalesutilities.commands.UnmuteCommand;
 import com.kale_ko.kalesutilities.commands.StaffChatCommand;
 import com.kale_ko.kalesutilities.commands.StaffCommand;
 import com.kale_ko.kalesutilities.listeners.BannedJoinListener;
 import com.kale_ko.kalesutilities.listeners.ChatFilterListener;
 import com.kale_ko.kalesutilities.listeners.ChatFormatListener;
+import com.kale_ko.kalesutilities.listeners.MuteListener;
 import com.kale_ko.kalesutilities.listeners.PlayerListener;
 import com.kale_ko.kalesutilities.listeners.PlayerMoveListener;
 import com.kale_ko.kalesutilities.listeners.SeenListener;
@@ -148,14 +151,17 @@ public class Main extends JavaPlugin {
         this.getCommand("kick").setExecutor(new KickCommand());
         this.getCommand("ban").setExecutor(new BanCommand());
         this.getCommand("unban").setExecutor(new UnbanCommand());
+        this.getCommand("mute").setExecutor(new MuteCommand());
+        this.getCommand("unmute").setExecutor(new UnmuteCommand());
 
         CONSOLE.info("Finished loading commands");
 
         CONSOLE.info("Loading listeners");
 
+        getServer().getPluginManager().registerEvents(new BannedJoinListener(), this);
+        getServer().getPluginManager().registerEvents(new MuteListener(), this);
         getServer().getPluginManager().registerEvents(new ChatFilterListener(), this);
         getServer().getPluginManager().registerEvents(new ChatFormatListener(), this);
-        getServer().getPluginManager().registerEvents(new BannedJoinListener(), this);
         getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
         getServer().getPluginManager().registerEvents(new SeenListener(), this);
