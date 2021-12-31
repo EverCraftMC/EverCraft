@@ -24,7 +24,7 @@ public class WarpCommand implements CommandExecutor {
             YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
             if (sender instanceof Player player) {
-                player.teleport(new Location(Main.Instance.getServer().getWorld(data.getString(args[0] + ".world")), data.getDouble(args[0] + ".x"), data.getDouble(args[0] + ".y"), data.getDouble(args[0] + ".z"), Float.parseFloat(data.getString(args[0] + ".pitch")), Float.parseFloat(data.getString(args[0] + ".yaw"))));
+                player.teleport(new Location(Main.Instance.getServer().getWorld(data.getString(args[0] + ".world")), data.getDouble(args[0] + ".x"), data.getDouble(args[0] + ".y"), data.getDouble(args[0] + ".z"), Float.parseFloat(data.getString(args[0] + ".yaw")), Float.parseFloat(data.getString(args[0] + ".pitch"))));
 
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.warped").replace("{warp}", args[0]));
             } else {
