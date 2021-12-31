@@ -30,10 +30,10 @@ public class KitCommand implements CommandExecutor {
                     List<String> items = data.getStringList(args[0]);
 
                     for (String item : items) {
-                        player.getInventory().addItem(new ItemStack(Material.getMaterial(item), 1));
+                        player.getInventory().addItem(new ItemStack(Material.matchMaterial(item), 1));
                     }
 
-                    Util.sendMessage(player, Main.Instance.config.getString("message.kit"));
+                    Util.sendMessage(player, Main.Instance.config.getString("message.kit").replace("{kit}", args[0]));
                 } else {
                     Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
                 }
