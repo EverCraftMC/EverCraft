@@ -42,7 +42,7 @@ public class SetWarpCommand implements CommandExecutor {
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("setwarp").getUsage()));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.setwarp"));
         }
 
         return true;
