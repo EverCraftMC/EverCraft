@@ -12,12 +12,11 @@ public class ChatFormatListener implements Listener {
     public void onChatMessage(PlayerChatEvent event) {
         String player = Util.getPlayerNickName(event.getPlayer());
         String prefix = Util.getPlayerPrefix(event.getPlayer());
-        String message = event.getMessage();
 
         if (Util.hasPermission(event.getPlayer(), "kalesutilities.colorchat")) {
-            message = Util.formatMessage(event.getMessage());
+            event.setMessage(Util.formatMessage(event.getMessage()));
         }
 
-        event.setFormat(Util.formatMessage(Main.Instance.config.getString("config.chatFormat")).replace("{prefix}", prefix).replace("{player}", player).replace("{message}", message));
+        event.setFormat(Util.formatMessage(Main.Instance.config.getString("config.chatFormat")).replace("{prefix}", prefix).replace("{player}", player).replace("{message}", "%2$s"));
     }
 }
