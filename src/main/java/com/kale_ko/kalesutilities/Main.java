@@ -45,7 +45,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.10.0")
+@Plugin(name = "KalesUtilities", version = "1.10.1")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -136,8 +136,8 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.setstatus", "Successfully set your status");
         config.addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
         config.addDefault("messages.sudomessage", "Successfully made {player} say {message}");
-        config.addDefault("messages.staffchat", "&l&d[Staffchat] &r{player} > {message}");
-        config.addDefault("messages.commandspy", "&l&d[CommandSpy] &r{player} ran {message}");
+        config.addDefault("messages.staffchat", "&l&d[Staffchat] &r{player} &r> {message}");
+        config.addDefault("messages.commandspy", "&l&d[CommandSpy] &r{player} &rran {message}");
         config.addDefault("messages.kick", "{player} was kicked by {moderator} for {reason}");
         config.addDefault("messages.ban", "{player} was banned by {moderator} for {reason}");
         config.addDefault("messages.unban", "{player} was unbanned by {moderator}");
