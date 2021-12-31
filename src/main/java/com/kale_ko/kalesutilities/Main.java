@@ -45,7 +45,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.10.4")
+@Plugin(name = "KalesUtilities", version = "1.10.5")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -65,6 +65,7 @@ import java.util.logging.Logger;
 @Command(name = "nickname", desc = "Sets you nickname", aliases = { "nick" }, usage = "/nickname {nickname}")
 @Command(name = "prefix", desc = "Sets you prefix", aliases = {}, usage = "/prefix {prefix}")
 @Command(name = "status", desc = "Sets you status", aliases = { "afk" }, usage = "/status {status}")
+@Command(name = "gmc", desc = "Sets you gamemode", aliases = { "gms", "gma", "gmsp" }, usage = "/gm(c, s, a, sp)")
 @Command(name = "sudo", desc = "Make a player say something or run a command", aliases = {}, usage = "/sudo {player} {message/command}")
 @Command(name = "staffchat", desc = "Send a message in the staffchat", aliases = { "sc" }, usage = "/staffchat {message}")
 @Command(name = "kick", desc = "Kick a player from the server", aliases = { }, usage = "/kick {player} {message}")
@@ -85,6 +86,7 @@ import java.util.logging.Logger;
 @Permission(name = "kalesutilities.setnickname", desc = "Use /nickname")
 @Permission(name = "kalesutilities.setprefix", desc = "Use /prefix")
 @Permission(name = "kalesutilities.setstatus", desc = "Use /status")
+@Permission(name = "kalesutilities.gamemode", desc = "Use /gm")
 @Permission(name = "kalesutilities.sudo", desc = "Use /sudo")
 @Permission(name = "kalesutilities.staffchat", desc = "Use /staffchat")
 @Permission(name = "kalesutilities.commandspy", desc = "Receive command spy notifications")
