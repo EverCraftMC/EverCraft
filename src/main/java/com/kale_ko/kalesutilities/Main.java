@@ -45,7 +45,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.10.2")
+@Plugin(name = "KalesUtilities", version = "1.10.3")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -141,8 +141,10 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.kick", "{player} was kicked by {moderator} for {reason}");
         config.addDefault("messages.ban", "{player} was banned by {moderator} for {reason}");
         config.addDefault("messages.unban", "{player} was unbanned by {moderator}");
+        config.addDefault("messages.bannedJoin", "{player} tried to join but is banned");
         config.addDefault("messages.mute", "{player} was muted by {moderator} for {reason}");
         config.addDefault("messages.unmute", "{player} was unmuted by {moderator}");
+        config.addDefault("messages.mutedMessage", "{player} tried to say {message}&r but is muted");
 
         config.options().copyDefaults(true);
         this.saveConfig();
