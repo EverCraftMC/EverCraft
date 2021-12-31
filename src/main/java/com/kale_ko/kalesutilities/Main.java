@@ -43,7 +43,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.9.0")
+@Plugin(name = "KalesUtilities", version = "1.9.1")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -121,8 +121,8 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.spawned", "You have been sent to spawn");
         config.addDefault("messages.spawnedplayer", "Successfully sent {player} to spawn");
         config.addDefault("messages.setspawn", "Successfully set the spawn");
-        config.addDefault("messages.warped", "You have been sent to {warp}");
-        config.addDefault("messages.setwarp", "Successfully set {warp}");
+        config.addDefault("messages.warped", "You have warped to {warp}");
+        config.addDefault("messages.setwarp", "Successfully set warp {warp}");
         config.addDefault("messages.lastonline", "{player} was last seen {time}!");
         config.addDefault("messages.playeronline", "{player} is online right now!");
         config.addDefault("messages.setnickname", "Successfully set your nickname");
