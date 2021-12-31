@@ -11,7 +11,7 @@ public class CommandSpyListener implements Listener {
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
         for (Player player : Main.Instance.getServer().getOnlinePlayers()) {
-            if (Util.hasPermission(player, "kalesutilities.commandspy")) {
+            if (player != event.getPlayer() && Util.hasPermission(player, "kalesutilities.commandspy")) {
                 Util.sendMessage(player, Main.Instance.config.getString("messages.commandspy").replace("{player}", Util.getPlayerName(event.getPlayer())).replace("{message}", event.getMessage()), true);
             }
         }
