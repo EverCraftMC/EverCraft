@@ -24,7 +24,7 @@ public class GamemodeCommand implements CommandExecutor {
                     player.setGameMode(GameMode.ADVENTURE);
 
                     Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "adventure"));
-                } else if (label.equalsIgnoreCase("gmsp)")) {
+                } else if (label.equalsIgnoreCase("gmsp")) {
                     player.setGameMode(GameMode.SPECTATOR);
 
                     Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "spectator"));
