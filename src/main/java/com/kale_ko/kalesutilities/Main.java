@@ -2,6 +2,7 @@ package com.kale_ko.kalesutilities;
 
 import com.kale_ko.kalesutilities.commands.AboutCommand;
 import com.kale_ko.kalesutilities.commands.BanCommand;
+import com.kale_ko.kalesutilities.commands.GamemodeCommand;
 import com.kale_ko.kalesutilities.commands.KalesUtilitiesCommand;
 import com.kale_ko.kalesutilities.commands.KickCommand;
 import com.kale_ko.kalesutilities.commands.MuteCommand;
@@ -136,6 +137,7 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.setnickname", "Successfully set your nickname");
         config.addDefault("messages.setprefix", "Successfully set your prefix");
         config.addDefault("messages.setstatus", "Successfully set your status");
+        config.addDefault("messages.gamemode", "Successfully set your gamemode to {gamemode}");
         config.addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
         config.addDefault("messages.sudomessage", "Successfully made {player} say {message}");
         config.addDefault("messages.staffchat", "&l&d[Staffchat] &r{player} &r> {message}");
@@ -168,6 +170,7 @@ public class Main extends JavaPlugin {
         this.getCommand("nickname").setExecutor(new NicknameCommand());
         this.getCommand("prefix").setExecutor(new PrefixCommand());
         this.getCommand("status").setExecutor(new StatusCommand());
+        this.getCommand("gmc").setExecutor(new GamemodeCommand());
         this.getCommand("sudo").setExecutor(new SudoCommand());
         this.getCommand("staffchat").setExecutor(new StaffChatCommand());
         this.getCommand("kick").setExecutor(new KickCommand());
