@@ -10,11 +10,13 @@ import com.kale_ko.kalesutilities.commands.PrefixCommand;
 import com.kale_ko.kalesutilities.commands.RulesCommand;
 import com.kale_ko.kalesutilities.commands.SeenCommand;
 import com.kale_ko.kalesutilities.commands.SetSpawnCommand;
+import com.kale_ko.kalesutilities.commands.SetWarpCommand;
 import com.kale_ko.kalesutilities.commands.SpawnCommand;
 import com.kale_ko.kalesutilities.commands.StatusCommand;
 import com.kale_ko.kalesutilities.commands.SudoCommand;
 import com.kale_ko.kalesutilities.commands.UnbanCommand;
 import com.kale_ko.kalesutilities.commands.UnmuteCommand;
+import com.kale_ko.kalesutilities.commands.WarpCommand;
 import com.kale_ko.kalesutilities.commands.StaffChatCommand;
 import com.kale_ko.kalesutilities.commands.StaffCommand;
 import com.kale_ko.kalesutilities.listeners.BannedJoinListener;
@@ -41,7 +43,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.8.0")
+@Plugin(name = "KalesUtilities", version = "1.9.0")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -54,6 +56,8 @@ import java.util.logging.Logger;
 @Command(name = "staff", desc = "See the staff", aliases = {}, usage = "/staff")
 @Command(name = "spawn", desc = "Go to the spawn", aliases = { "hub", "lobby" }, usage = "/spawn {player (optional)}")
 @Command(name = "setspawn", desc = "Sets the spawn to your location", aliases = { "sethub", "setlobby" }, usage = "/setspawn")
+@Command(name = "warp", desc = "Go to a warp", aliases = { }, usage = "/warp {warp}")
+@Command(name = "setwarp", desc = "Sets a warp at your location", aliases = { }, usage = "/setwarp {warp}")
 @Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen" }, usage = "/seen {player}")
 @Command(name = "nickname", desc = "Sets you nickname", aliases = { "nick" }, usage = "/nickname {nickname}")
 @Command(name = "prefix", desc = "Sets you prefix", aliases = {}, usage = "/prefix {prefix}")
@@ -71,6 +75,8 @@ import java.util.logging.Logger;
 @Permission(name = "kalesutilities.staff", desc = "Use /staff")
 @Permission(name = "kalesutilities.spawn", desc = "Use /spawn")
 @Permission(name = "kalesutilities.setspawn", desc = "Use /setspawn")
+@Permission(name = "kalesutilities.warp", desc = "Use /warp")
+@Permission(name = "kalesutilities.setwarp", desc = "Use /setwarp")
 @Permission(name = "kalesutilities.seen", desc = "Use /seen")
 @Permission(name = "kalesutilities.setnickname", desc = "Use /nickname")
 @Permission(name = "kalesutilities.setprefix", desc = "Use /prefix")
@@ -115,6 +121,8 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.spawned", "You have been sent to spawn");
         config.addDefault("messages.spawnedplayer", "Successfully sent {player} to spawn");
         config.addDefault("messages.setspawn", "Successfully set the spawn");
+        config.addDefault("messages.warped", "You have been sent to {warp}");
+        config.addDefault("messages.setwarp", "Successfully set {warp}");
         config.addDefault("messages.lastonline", "{player} was last seen {time}!");
         config.addDefault("messages.playeronline", "{player} is online right now!");
         config.addDefault("messages.setnickname", "Successfully set your nickname");
@@ -142,6 +150,8 @@ public class Main extends JavaPlugin {
         this.getCommand("staff").setExecutor(new StaffCommand());
         this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("setspawn").setExecutor(new SetSpawnCommand());
+        this.getCommand("warp").setExecutor(new WarpCommand());
+        this.getCommand("setwarp").setExecutor(new SetWarpCommand());
         this.getCommand("seen").setExecutor(new SeenCommand());
         this.getCommand("nickname").setExecutor(new NicknameCommand());
         this.getCommand("prefix").setExecutor(new PrefixCommand());
