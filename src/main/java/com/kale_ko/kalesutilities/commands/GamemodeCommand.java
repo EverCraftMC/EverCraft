@@ -14,12 +14,20 @@ public class GamemodeCommand implements CommandExecutor {
             if (sender instanceof Player player) {
                 if (label.equalsIgnoreCase("gmc")) {
                     player.setGameMode(GameMode.CREATIVE);
+
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "creative"));
                 } else if (label.equalsIgnoreCase("gms")) {
                     player.setGameMode(GameMode.SURVIVAL);
+
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "survival"));
                 } else if (label.equalsIgnoreCase("gma")) {
                     player.setGameMode(GameMode.ADVENTURE);
+
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "adventure"));
                 } else if (label.equalsIgnoreCase("gmsp)")) {
                     player.setGameMode(GameMode.SPECTATOR);
+
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "spectator"));
                 }
             } else {
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
