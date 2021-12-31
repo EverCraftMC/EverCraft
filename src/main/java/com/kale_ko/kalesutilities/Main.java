@@ -5,6 +5,7 @@ import com.kale_ko.kalesutilities.commands.BanCommand;
 import com.kale_ko.kalesutilities.commands.GamemodeCommand;
 import com.kale_ko.kalesutilities.commands.KalesUtilitiesCommand;
 import com.kale_ko.kalesutilities.commands.KickCommand;
+import com.kale_ko.kalesutilities.commands.KitCommand;
 import com.kale_ko.kalesutilities.commands.MuteCommand;
 import com.kale_ko.kalesutilities.commands.NicknameCommand;
 import com.kale_ko.kalesutilities.commands.PrefixCommand;
@@ -46,7 +47,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.10.5")
+@Plugin(name = "KalesUtilities", version = "1.11.0")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -62,6 +63,7 @@ import java.util.logging.Logger;
 @Command(name = "warps", desc = "List all the warps", aliases = { }, usage = "/warps")
 @Command(name = "warp", desc = "Go to a warp", aliases = { }, usage = "/warp {warp}")
 @Command(name = "setwarp", desc = "Sets a warp at your location", aliases = { }, usage = "/setwarp {warp}")
+@Command(name = "kit", desc = "Get a kit", aliases = { "claimkit" }, usage = "/kit {kit}")
 @Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen" }, usage = "/seen {player}")
 @Command(name = "nickname", desc = "Sets you nickname", aliases = { "nick" }, usage = "/nickname {nickname}")
 @Command(name = "prefix", desc = "Sets you prefix", aliases = {}, usage = "/prefix {prefix}")
@@ -83,6 +85,7 @@ import java.util.logging.Logger;
 @Permission(name = "kalesutilities.warps", desc = "Use /warps")
 @Permission(name = "kalesutilities.warp", desc = "Use /warp")
 @Permission(name = "kalesutilities.setwarp", desc = "Use /setwarp")
+@Permission(name = "kalesutilities.kit", desc = "Use /kit")
 @Permission(name = "kalesutilities.seen", desc = "Use /seen")
 @Permission(name = "kalesutilities.setnickname", desc = "Use /nickname")
 @Permission(name = "kalesutilities.setprefix", desc = "Use /prefix")
@@ -132,6 +135,7 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.warps", "\n{warpList}");
         config.addDefault("messages.warped", "You have warped to {warp}");
         config.addDefault("messages.setwarp", "Successfully set warp {warp}");
+        config.addDefault("message.kit", "Successfully received kit {kit}");
         config.addDefault("messages.lastonline", "{player} was last seen {time}!");
         config.addDefault("messages.playeronline", "{player} is online right now!");
         config.addDefault("messages.setnickname", "Successfully set your nickname");
@@ -166,6 +170,7 @@ public class Main extends JavaPlugin {
         this.getCommand("warps").setExecutor(new WarpsCommand());
         this.getCommand("warp").setExecutor(new WarpCommand());
         this.getCommand("setwarp").setExecutor(new SetWarpCommand());
+        this.getCommand("kit").setExecutor(new KitCommand());
         this.getCommand("seen").setExecutor(new SeenCommand());
         this.getCommand("nickname").setExecutor(new NicknameCommand());
         this.getCommand("prefix").setExecutor(new PrefixCommand());
