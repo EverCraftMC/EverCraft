@@ -23,6 +23,7 @@ import com.kale_ko.kalesutilities.commands.StaffCommand;
 import com.kale_ko.kalesutilities.listeners.BannedJoinListener;
 import com.kale_ko.kalesutilities.listeners.ChatFilterListener;
 import com.kale_ko.kalesutilities.listeners.ChatFormatListener;
+import com.kale_ko.kalesutilities.listeners.CommandSpyListener;
 import com.kale_ko.kalesutilities.listeners.MuteListener;
 import com.kale_ko.kalesutilities.listeners.PlayerListener;
 import com.kale_ko.kalesutilities.listeners.PlayerMoveListener;
@@ -44,7 +45,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.9.3")
+@Plugin(name = "KalesUtilities", version = "1.10.0")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -86,6 +87,7 @@ import java.util.logging.Logger;
 @Permission(name = "kalesutilities.setstatus", desc = "Use /status")
 @Permission(name = "kalesutilities.sudo", desc = "Use /sudo")
 @Permission(name = "kalesutilities.staffchat", desc = "Use /staffchat")
+@Permission(name = "kalesutilities.commandspy", desc = "Receive command spy notifications")
 @Permission(name = "kalesutilities.kick", desc = "Use /kick")
 @Permission(name = "kalesutilities.ban", desc = "Use /ban and /unban")
 @Permission(name = "kalesutilities.mute", desc = "Use /mute and /unmute")
@@ -135,6 +137,7 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
         config.addDefault("messages.sudomessage", "Successfully made {player} say {message}");
         config.addDefault("messages.staffchat", "&l&d[Staffchat] &r{player} > {message}");
+        config.addDefault("messages.commandspy", "&l&d[CommandSpy] &r{player} ran {message}");
         config.addDefault("messages.kick", "{player} was kicked by {moderator} for {reason}");
         config.addDefault("messages.ban", "{player} was banned by {moderator} for {reason}");
         config.addDefault("messages.unban", "{player} was unbanned by {moderator}");
@@ -179,6 +182,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ChatFormatListener(), this);
         getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
+        getServer().getPluginManager().registerEvents(new CommandSpyListener(), this);
         getServer().getPluginManager().registerEvents(new SeenListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new SignEditorListener(), this);
