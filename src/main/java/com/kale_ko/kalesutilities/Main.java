@@ -17,6 +17,7 @@ import com.kale_ko.kalesutilities.commands.SudoCommand;
 import com.kale_ko.kalesutilities.commands.UnbanCommand;
 import com.kale_ko.kalesutilities.commands.UnmuteCommand;
 import com.kale_ko.kalesutilities.commands.WarpCommand;
+import com.kale_ko.kalesutilities.commands.WarpsCommand;
 import com.kale_ko.kalesutilities.commands.StaffChatCommand;
 import com.kale_ko.kalesutilities.commands.StaffCommand;
 import com.kale_ko.kalesutilities.listeners.BannedJoinListener;
@@ -43,7 +44,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.9.1")
+@Plugin(name = "KalesUtilities", version = "1.9.3")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale_Ko")
 @LogPrefix("Kales Utilities")
@@ -56,6 +57,7 @@ import java.util.logging.Logger;
 @Command(name = "staff", desc = "See the staff", aliases = {}, usage = "/staff")
 @Command(name = "spawn", desc = "Go to the spawn", aliases = { "hub", "lobby" }, usage = "/spawn {player (optional)}")
 @Command(name = "setspawn", desc = "Sets the spawn to your location", aliases = { "sethub", "setlobby" }, usage = "/setspawn")
+@Command(name = "warps", desc = "List all the warps", aliases = { }, usage = "/warps")
 @Command(name = "warp", desc = "Go to a warp", aliases = { }, usage = "/warp {warp}")
 @Command(name = "setwarp", desc = "Sets a warp at your location", aliases = { }, usage = "/setwarp {warp}")
 @Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen" }, usage = "/seen {player}")
@@ -75,6 +77,7 @@ import java.util.logging.Logger;
 @Permission(name = "kalesutilities.staff", desc = "Use /staff")
 @Permission(name = "kalesutilities.spawn", desc = "Use /spawn")
 @Permission(name = "kalesutilities.setspawn", desc = "Use /setspawn")
+@Permission(name = "kalesutilities.warps", desc = "Use /warps")
 @Permission(name = "kalesutilities.warp", desc = "Use /warp")
 @Permission(name = "kalesutilities.setwarp", desc = "Use /setwarp")
 @Permission(name = "kalesutilities.seen", desc = "Use /seen")
@@ -121,6 +124,7 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.spawned", "You have been sent to spawn");
         config.addDefault("messages.spawnedplayer", "Successfully sent {player} to spawn");
         config.addDefault("messages.setspawn", "Successfully set the spawn");
+        config.addDefault("messages.warps", "\n{warpList}");
         config.addDefault("messages.warped", "You have warped to {warp}");
         config.addDefault("messages.setwarp", "Successfully set warp {warp}");
         config.addDefault("messages.lastonline", "{player} was last seen {time}!");
@@ -150,6 +154,7 @@ public class Main extends JavaPlugin {
         this.getCommand("staff").setExecutor(new StaffCommand());
         this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("setspawn").setExecutor(new SetSpawnCommand());
+        this.getCommand("warps").setExecutor(new WarpsCommand());
         this.getCommand("warp").setExecutor(new WarpCommand());
         this.getCommand("setwarp").setExecutor(new SetWarpCommand());
         this.getCommand("seen").setExecutor(new SeenCommand());

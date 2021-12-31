@@ -31,7 +31,7 @@ public class WarpCommand implements CommandExecutor {
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.spawn"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.warp"));
         }
 
         return true;
