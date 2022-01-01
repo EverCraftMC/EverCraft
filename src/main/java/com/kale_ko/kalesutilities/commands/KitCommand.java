@@ -10,6 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public class KitCommand implements CommandExecutor {
@@ -30,7 +31,13 @@ public class KitCommand implements CommandExecutor {
                     List<String> items = data.getStringList(args[0]);
 
                     for (String item : items) {
-                        player.getInventory().addItem(new ItemStack(Material.matchMaterial(item), 1));
+                        ItemStack itemStack = new ItemStack(Material.matchMaterial(item), 1);
+
+                        if (itemStack.getType().getEquipmentSlot() != EquipmentSlot.HAND && itemStack.getType().getEquipmentSlot() != EquipmentSlot.OFF_HAND && player.getEquipment().getItem(itemStack.getType().getEquipmentSlot()).getType().isAir()) {
+                            player.getEquipment().setItem(itemStack.getType().getEquipmentSlot(), itemStack);
+                        } else {
+                            player.getInventory().addItem(itemStack);
+                        }
                     }
 
                     Util.sendMessage(player, Main.Instance.config.getString("message.kit").replace("{kit}", args[0]));
