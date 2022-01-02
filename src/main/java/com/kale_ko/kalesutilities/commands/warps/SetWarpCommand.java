@@ -1,10 +1,8 @@
 package com.kale_ko.kalesutilities.commands.warps;
 
-import com.kale_ko.kalesutilities.KalesUtilities;
+import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
+import com.kale_ko.kalesutilities.Config;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,14 +12,8 @@ public class SetWarpCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.setwarp")) {
-            File dataFolder = KalesUtilities.Instance.getDataFolder();
-            if (!dataFolder.exists()) {
-                dataFolder.mkdir();
-            }
-
-            File dataFile = Paths.get(dataFolder.getAbsolutePath(), "warps.yml").toFile();
-
-            YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+            Config config = Config.load("warps.yml");
+            YamlConfiguration data = config.getConfig();
 
             if (sender instanceof Player player) {
                 data.set(args[0] + ".world", player.getLocation().getWorld().getName());
@@ -31,18 +23,15 @@ public class SetWarpCommand implements CommandExecutor {
                 data.set(args[0] + ".pitch", player.getLocation().getPitch());
                 data.set(args[0] + ".yaw", player.getLocation().getYaw());
 
-                try {
-                    data.save(dataFile);
+                config.save();
 
-                    Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.setwarp").replace("{warp}", args[0]));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.setwarp").replace("{warp}", args[0]));
             } else {
-                Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noconsole"));
+                Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noconsole"));
             }
         } else {
-            Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.setwarp"));
+            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms")
+                    .replace("{permission}", "kalesutilities.setwarp"));
         }
 
         return true;

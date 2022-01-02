@@ -1,10 +1,8 @@
 package com.kale_ko.kalesutilities.commands.moderation;
 
-import com.kale_ko.kalesutilities.KalesUtilities;
+import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
+import com.kale_ko.kalesutilities.Config;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,30 +12,20 @@ public class UnbanCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.ban")) {
             if (args.length > 0) {
-                    File dataFolder = KalesUtilities.Instance.getDataFolder();
-                    if (!dataFolder.exists()) {
-                        dataFolder.mkdir();
-                    }
+                Config config = Config.load("players.yml");
+                YamlConfiguration data = config.getConfig();
 
-                    File dataFile = Paths.get(dataFolder.getAbsolutePath(), "players.yml").toFile();
+                data.set("players." + args[0] + ".banned", null);
+                data.set("players." + args[0] + ".banMessage", null);
 
-                    YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+                config.save();
 
-                    data.set("players." + args[0] + ".banned", null);
-                    data.set("players." + args[0] + ".banMessage", null);
-
-                    try {
-                        data.save(dataFile);
-
-                        Util.broadcastMessage(KalesUtilities.Instance.config.getString("messages.unban").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                Util.broadcastMessage(Main.Instance.config.getConfig().getString("messages.unban").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)));
             } else {
-                Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.usage").replace("{usage}", KalesUtilities.Instance.getCommand("unban").getUsage()));
+                Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.usage").replace("{usage}", Main.Instance.getCommand("unban").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.ban"));
+            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.ban"));
         }
 
         return true;

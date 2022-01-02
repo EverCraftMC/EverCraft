@@ -1,9 +1,8 @@
 package com.kale_ko.kalesutilities.commands.warps;
 
-import com.kale_ko.kalesutilities.KalesUtilities;
+import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
-import java.io.File;
-import java.nio.file.Paths;
+import com.kale_ko.kalesutilities.Config;
 import java.util.Set;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,14 +12,7 @@ public class WarpsCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.warps")) {
-            File dataFolder = KalesUtilities.Instance.getDataFolder();
-            if (!dataFolder.exists()) {
-                dataFolder.mkdir();
-            }
-
-            File dataFile = Paths.get(dataFolder.getAbsolutePath(), "warps.yml").toFile();
-
-            YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+            YamlConfiguration data = Config.load("warps.yml").getConfig();
 
             StringBuilder warps = new StringBuilder();
 
@@ -29,9 +21,9 @@ public class WarpsCommand implements CommandExecutor {
                 warps.append(key + "\n");
             }
             
-            Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.warps").replace("{warpList}", warps.toString()));
+            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.warps").replace("{warpList}", warps.toString()));
         } else {
-            Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.warps"));
+            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.warps"));
         }
 
         return true;
