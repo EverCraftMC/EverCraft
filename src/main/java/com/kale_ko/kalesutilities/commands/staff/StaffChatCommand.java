@@ -1,6 +1,6 @@
 package com.kale_ko.kalesutilities.commands.staff;
 
-import com.kale_ko.kalesutilities.KalesUtilities;
+import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,19 +17,19 @@ public class StaffChatCommand implements CommandExecutor {
             }
 
             String message = messageBuilder.toString();
-            
+
             String senderName = "CONSOLE";
             if (sender instanceof Player player) {
                 senderName = Util.getPlayerName(player);
             }
 
-            for (Player player : KalesUtilities.Instance.getServer().getOnlinePlayers()) {
+            for (Player player : Main.Instance.getServer().getOnlinePlayers()) {
                 if (Util.hasPermission(player, "kalesutilities.staffchat")) {
-                    Util.sendMessage(player, KalesUtilities.Instance.config.getString("messages.staffchat").replace("{player}", senderName).replace("{message}", message), true);
+                    Util.sendMessage(player, Main.Instance.config.getConfig().getString("messages.staffchat").replace("{player}", senderName).replace("{message}", message), true);
                 }
             }
         } else {
-            Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.staffchat"));
+            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.staffchat"));
         }
 
         return true;

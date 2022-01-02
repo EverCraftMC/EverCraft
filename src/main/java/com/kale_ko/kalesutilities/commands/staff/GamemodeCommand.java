@@ -1,6 +1,6 @@
 package com.kale_ko.kalesutilities.commands.staff;
 
-import com.kale_ko.kalesutilities.KalesUtilities;
+import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandExecutor;
@@ -15,25 +15,25 @@ public class GamemodeCommand implements CommandExecutor {
                 if (label.equalsIgnoreCase("gmc")) {
                     player.setGameMode(GameMode.CREATIVE);
 
-                    Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.gamemode").replace("{gamemode}", "creative"));
+                    Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.gamemode").replace("{gamemode}", "creative"));
                 } else if (label.equalsIgnoreCase("gms")) {
                     player.setGameMode(GameMode.SURVIVAL);
 
-                    Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.gamemode").replace("{gamemode}", "survival"));
+                    Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.gamemode").replace("{gamemode}", "survival"));
                 } else if (label.equalsIgnoreCase("gma")) {
                     player.setGameMode(GameMode.ADVENTURE);
 
-                    Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.gamemode").replace("{gamemode}", "adventure"));
+                    Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.gamemode").replace("{gamemode}", "adventure"));
                 } else if (label.equalsIgnoreCase("gmsp")) {
                     player.setGameMode(GameMode.SPECTATOR);
 
-                    Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.gamemode").replace("{gamemode}", "spectator"));
+                    Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.gamemode").replace("{gamemode}", "spectator"));
                 }
             } else {
-                Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noconsole"));
+                Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noconsole"));
             }
         } else {
-            Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.gamemode"));
+            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.gamemode"));
         }
 
         return true;
