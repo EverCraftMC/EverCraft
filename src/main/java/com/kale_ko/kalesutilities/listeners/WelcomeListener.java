@@ -10,11 +10,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class WelcomeListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        event.setJoinMessage(Util.formatMessage(Main.Instance.config.getString("messages.joinMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))));
+        event.setJoinMessage(Util.formatMessage(Main.Instance.config.getConfig().getString("messages.joinMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))));
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        event.setQuitMessage(Util.formatMessage(Main.Instance.config.getString("messages.quitMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))));
+        event.setQuitMessage(Util.formatMessage(Main.Instance.config.getConfig().getString("messages.quitMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))));
     }
 }

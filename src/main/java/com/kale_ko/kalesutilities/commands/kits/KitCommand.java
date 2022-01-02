@@ -1,6 +1,6 @@
-package com.kale_ko.kalesutilities.commands;
+package com.kale_ko.kalesutilities.commands.kits;
 
-import com.kale_ko.kalesutilities.Main;
+import com.kale_ko.kalesutilities.KalesUtilities;
 import com.kale_ko.kalesutilities.Util;
 import java.io.File;
 import java.nio.file.Paths;
@@ -18,7 +18,7 @@ public class KitCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.kit")) {
             if (args.length > 0) {
-                File dataFolder = Main.Instance.getDataFolder();
+                File dataFolder = KalesUtilities.Instance.getDataFolder();
                 if (!dataFolder.exists()) {
                     dataFolder.mkdir();
                 }
@@ -40,15 +40,15 @@ public class KitCommand implements CommandExecutor {
                         }
                     }
 
-                    Util.sendMessage(player, Main.Instance.config.getString("message.kit").replace("{kit}", args[0]));
+                    Util.sendMessage(player, KalesUtilities.Instance.config.getString("message.kit").replace("{kit}", args[0]));
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+                    Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noconsole"));
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("kit").getUsage()));
+                Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.usage").replace("{usage}", KalesUtilities.Instance.getCommand("kit").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.kit"));
+            Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.kit"));
         }
 
         return true;
