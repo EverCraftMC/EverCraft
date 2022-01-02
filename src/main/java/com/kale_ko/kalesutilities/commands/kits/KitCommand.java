@@ -1,9 +1,8 @@
 package com.kale_ko.kalesutilities.commands.kits;
 
-import com.kale_ko.kalesutilities.KalesUtilities;
+import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
-import java.io.File;
-import java.nio.file.Paths;
+import com.kale_ko.kalesutilities.Config;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
@@ -18,14 +17,7 @@ public class KitCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.kit")) {
             if (args.length > 0) {
-                File dataFolder = KalesUtilities.Instance.getDataFolder();
-                if (!dataFolder.exists()) {
-                    dataFolder.mkdir();
-                }
-
-                File dataFile = Paths.get(dataFolder.getAbsolutePath(), "kits.yml").toFile();
-
-                YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+                YamlConfiguration data = Config.load("players.yml").getConfig();
 
                 if (sender instanceof Player player) {
                     List<String> items = data.getStringList(args[0]);
@@ -40,15 +32,15 @@ public class KitCommand implements CommandExecutor {
                         }
                     }
 
-                    Util.sendMessage(player, KalesUtilities.Instance.config.getString("message.kit").replace("{kit}", args[0]));
+                    Util.sendMessage(player, Main.Instance.config.getConfig().getString("message.kit").replace("{kit}", args[0]));
                 } else {
-                    Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noconsole"));
+                    Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noconsole"));
                 }
             } else {
-                Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.usage").replace("{usage}", KalesUtilities.Instance.getCommand("kit").getUsage()));
+                Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.usage").replace("{usage}", Main.Instance.getCommand("kit").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.kit"));
+            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.kit"));
         }
 
         return true;
