@@ -1,10 +1,7 @@
 package com.kale_ko.kalesutilities.listeners;
 
-import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
+import com.kale_ko.kalesutilities.Config;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,15 +9,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerListener implements Listener {
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
-        File dataFolder = Main.Instance.getDataFolder();
-        if (!dataFolder.exists()) {
-            dataFolder.mkdir();
-        }
-
-        File dataFile = Paths.get(dataFolder.getAbsolutePath(), "players.yml").toFile();
-
-        YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Config config = Config.load("players.yml");
+        YamlConfiguration data = config.getConfig();
 
         if (data.getString("players." + event.getPlayer().getName() + ".nickname") == null) {
             data.set("players." + event.getPlayer().getName() + ".nickname", event.getPlayer().getName());
@@ -30,7 +21,7 @@ public class PlayerListener implements Listener {
             data.set("players." + event.getPlayer().getName() + ".prefix", "");
         }
 
-        data.save(dataFile);
+        config.save();
 
         Util.updatePlayerName(event.getPlayer());
     }

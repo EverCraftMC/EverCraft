@@ -1,6 +1,6 @@
-package com.kale_ko.kalesutilities.commands;
+package com.kale_ko.kalesutilities.commands.moderation;
 
-import com.kale_ko.kalesutilities.Main;
+import com.kale_ko.kalesutilities.KalesUtilities;
 import com.kale_ko.kalesutilities.Util;
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ public class BanCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.ban")) {
             if (args.length > 1) {
-                Player player = Main.Instance.getServer().getPlayer(args[0]);
+                Player player = KalesUtilities.Instance.getServer().getPlayer(args[0]);
 
                 if (player != null) {
                     StringBuilder banMessageBuilder = new StringBuilder();
@@ -26,7 +26,7 @@ public class BanCommand implements CommandExecutor {
 
                     String banMessage = banMessageBuilder.toString();
 
-                    File dataFolder = Main.Instance.getDataFolder();
+                    File dataFolder = KalesUtilities.Instance.getDataFolder();
                     if (!dataFolder.exists()) {
                         dataFolder.mkdir();
                     }
@@ -36,25 +36,25 @@ public class BanCommand implements CommandExecutor {
                     YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
                     data.set("players." + player.getPlayer().getName() + ".banned", true);
-                    data.set("players." + player.getPlayer().getName() + ".banMessage", Main.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "are"));
+                    data.set("players." + player.getPlayer().getName() + ".banMessage", KalesUtilities.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "are"));
 
                     try {
                         data.save(dataFile);
 
-                        player.kickPlayer(Main.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "where"));
+                        player.kickPlayer(KalesUtilities.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "where"));
 
-                        Util.broadcastMessage(Main.Instance.config.getString("messages.ban").replace("{player}", Util.getPlayerName(player)).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage));
+                        Util.broadcastMessage(KalesUtilities.Instance.config.getString("messages.ban").replace("{player}", Util.getPlayerName(player)).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
+                    Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("ban").getUsage()));
+                Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.usage").replace("{usage}", KalesUtilities.Instance.getCommand("ban").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.ban"));
+            Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.ban"));
         }
 
         return true;

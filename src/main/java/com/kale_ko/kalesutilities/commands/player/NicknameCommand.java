@@ -1,6 +1,6 @@
-package com.kale_ko.kalesutilities.commands;
+package com.kale_ko.kalesutilities.commands.player;
 
-import com.kale_ko.kalesutilities.Main;
+import com.kale_ko.kalesutilities.KalesUtilities;
 import com.kale_ko.kalesutilities.Util;
 import java.io.File;
 import java.io.IOException;
@@ -10,12 +10,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-public class PrefixCommand implements CommandExecutor {
+public class NicknameCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        if (Util.hasPermission(sender, "kalesutilities.setprefix")) {
+        if (Util.hasPermission(sender, "kalesutilities.setnickname")) {
             if (args.length > 0) {
-                File dataFolder = Main.Instance.getDataFolder();
+                File dataFolder = KalesUtilities.Instance.getDataFolder();
                 if (!dataFolder.exists()) {
                     dataFolder.mkdir();
                 }
@@ -25,24 +25,24 @@ public class PrefixCommand implements CommandExecutor {
                 YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
                 if (sender instanceof Player player) {
-                    data.set("players." + player.getPlayer().getName() + ".prefix", args[0]);
+                    data.set("players." + player.getPlayer().getName() + ".nickname", args[0]);
 
                     try {
                         data.save(dataFile);
 
-                        Util.sendMessage(sender, Main.Instance.config.getString("messages.setprefix"));
+                        Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.setnickname"));
                         Util.updatePlayerName(player);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+                    Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noconsole"));
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("prefix").getUsage()));
+                Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.usage").replace("{usage}", KalesUtilities.Instance.getCommand("nickname").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.setprefix"));
+            Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.setnickname"));
         }
 
         return true;
