@@ -1,6 +1,6 @@
-package com.kale_ko.kalesutilities.commands;
+package com.kale_ko.kalesutilities.commands.player;
 
-import com.kale_ko.kalesutilities.Main;
+import com.kale_ko.kalesutilities.KalesUtilities;
 import com.kale_ko.kalesutilities.Util;
 import java.util.List;
 import java.util.UUID;
@@ -31,7 +31,7 @@ public class StatusCommand implements CommandExecutor {
 
                     String found = null;
                     for (MetadataValue metadata : statusEntityUUID) {
-                        if (metadata.getOwningPlugin() == Main.Instance) {
+                        if (metadata.getOwningPlugin() == KalesUtilities.Instance) {
                             found = metadata.asString();
                         }
                     }
@@ -45,19 +45,19 @@ public class StatusCommand implements CommandExecutor {
                         armorstand.setInvisible(true);
                         armorstand.setInvulnerable(true);
                         armorstand.setPersistent(false);
-                        player.setMetadata("statusEntityUUID", new FixedMetadataValue(Main.Instance, armorstand.getUniqueId().toString()));
+                        player.setMetadata("statusEntityUUID", new FixedMetadataValue(KalesUtilities.Instance, armorstand.getUniqueId().toString()));
                     } else {
-                        Entity armorstand = Main.Instance.getServer().getEntity(UUID.fromString(found));
+                        Entity armorstand = KalesUtilities.Instance.getServer().getEntity(UUID.fromString(found));
                         armorstand.setCustomName(statusMessage);
                     }
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+                    Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noconsole"));
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("status").getUsage()));
+                Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.usage").replace("{usage}", KalesUtilities.Instance.getCommand("status").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.setstatus"));
+            Util.sendMessage(sender, KalesUtilities.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.setstatus"));
         }
 
         return true;

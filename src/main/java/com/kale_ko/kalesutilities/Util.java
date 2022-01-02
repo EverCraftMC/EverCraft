@@ -1,32 +1,31 @@
 package com.kale_ko.kalesutilities;
 
-import java.io.File;
-import java.nio.file.Paths;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class Util {
     public static void sendMessage(CommandSender user, String message) {
-        user.sendMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+        user.sendMessage(formatMessage(Main.Instance.config.getConfig().getString("config.prefix") + " " + message));
     }
 
     public static void sendMessage(CommandSender user, String message, Boolean noprefix) {
         if (!noprefix) {
-            user.sendMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+            user.sendMessage(formatMessage(Main.Instance.config.getConfig().getString("config.prefix") + " " + message));
         } else {
             user.sendMessage(formatMessage(message));
         }
     }
 
     public static void broadcastMessage(String message) {
-        Main.Instance.getServer().broadcastMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+        Main.Instance.getServer().broadcastMessage(formatMessage(Main.Instance.config.getConfig().getString("config.prefix") + " " + message));
     }
 
     public static void broadcastMessage(String message, Boolean noprefix) {
         if (!noprefix) {
-            Main.Instance.getServer().broadcastMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+            Main.Instance.getServer().broadcastMessage(formatMessage(Main.Instance.config.getConfig().getString("config.prefix") + " " + message));
         } else {
             Main.Instance.getServer().broadcastMessage(formatMessage(message));
         }
@@ -40,9 +39,8 @@ public class Util {
         char[] chars = message.toCharArray();
 
         for (int i = 0; i < chars.length; i++) {
-            if (chars[i] == ChatColor.COLOR_CHAR && "0123456789AaBbCcDdEeFfKkLlMmNnOoRrXx".indexOf(chars[i + 1]) > -1) {
+            if (chars[i] == ChatColor.COLOR_CHAR && "0123456789abcdefklmnorx".indexOf(chars[i + 1]) > -1) {
                 chars[i] = '&';
-                chars[i + 1] = Character.toLowerCase(chars[i + 1]);
             }
         }
 
@@ -53,29 +51,22 @@ public class Util {
         return ChatColor.stripColor(message);
     }
 
-    public static String styleMessage(String message, String style) {
-        return ChatColor.translateAlternateColorCodes('&', style + message);
-    }
-
     public static Boolean hasPermission(Player player, String permission) {
         return player.hasPermission(permission) || player.isOp();
     }
 
     public static Boolean hasPermission(CommandSender sender, String permission) {
-        return sender.hasPermission(permission) || sender.isOp();
+        if (sender instanceof ConsoleCommandSender) {
+            return true;
+        } else {
+            return sender.hasPermission(permission) || sender.isOp();
+        }
     }
 
     public static String getPlayerNickName(Player player) {
         String name = player.getName();
 
-        File dataFolder = Main.Instance.getDataFolder();
-        if (!dataFolder.exists()) {
-            dataFolder.mkdir();
-        }
-
-        File dataFile = Paths.get(dataFolder.getAbsolutePath(), "players.yml").toFile();
-
-        YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+        YamlConfiguration data = Config.load("players.yml").getConfig();
 
         if (data.getString("players." + player.getName() + ".nickname") != null && !data.getString("players." + player.getName() + ".nickname").equalsIgnoreCase("") && !data.getString("players." + player.getName() + ".nickname").equalsIgnoreCase(" ")) {
             if (Util.hasPermission(player, "kalesutilities.nonickstar") || data.getString("players." + player.getName() + ".nickname").equalsIgnoreCase(name) || Util.stripFormating(Util.formatMessage(data.getString("players." + player.getName() + ".nickname") + "&r")).equalsIgnoreCase(name)) {
@@ -91,14 +82,7 @@ public class Util {
     public static String getPlayerPrefix(Player player) {
         String prefix = "";
 
-        File dataFolder = Main.Instance.getDataFolder();
-        if (!dataFolder.exists()) {
-            dataFolder.mkdir();
-        }
-
-        File dataFile = Paths.get(dataFolder.getAbsolutePath(), "players.yml").toFile();
-
-        YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+        YamlConfiguration data = Config.load("players.yml").getConfig();
 
         if (data.getString("players." + player.getName() + ".prefix") != null && !data.getString("players." + player.getName() + ".prefix").equalsIgnoreCase("") && !data.getString("players." + player.getName() + ".prefix").equalsIgnoreCase(" ")) {
             prefix = Util.formatMessage(data.getString("players." + player.getName() + ".prefix") + "&r") + " ";

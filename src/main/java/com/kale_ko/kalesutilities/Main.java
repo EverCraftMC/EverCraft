@@ -1,27 +1,27 @@
 package com.kale_ko.kalesutilities;
 
-import com.kale_ko.kalesutilities.commands.AboutCommand;
-import com.kale_ko.kalesutilities.commands.BanCommand;
-import com.kale_ko.kalesutilities.commands.GamemodeCommand;
-import com.kale_ko.kalesutilities.commands.KalesUtilitiesCommand;
-import com.kale_ko.kalesutilities.commands.KickCommand;
-import com.kale_ko.kalesutilities.commands.KitCommand;
-import com.kale_ko.kalesutilities.commands.MuteCommand;
-import com.kale_ko.kalesutilities.commands.NicknameCommand;
-import com.kale_ko.kalesutilities.commands.PrefixCommand;
-import com.kale_ko.kalesutilities.commands.RulesCommand;
-import com.kale_ko.kalesutilities.commands.SeenCommand;
-import com.kale_ko.kalesutilities.commands.SetSpawnCommand;
-import com.kale_ko.kalesutilities.commands.SetWarpCommand;
-import com.kale_ko.kalesutilities.commands.SpawnCommand;
-import com.kale_ko.kalesutilities.commands.StatusCommand;
-import com.kale_ko.kalesutilities.commands.SudoCommand;
-import com.kale_ko.kalesutilities.commands.UnbanCommand;
-import com.kale_ko.kalesutilities.commands.UnmuteCommand;
-import com.kale_ko.kalesutilities.commands.WarpCommand;
-import com.kale_ko.kalesutilities.commands.WarpsCommand;
-import com.kale_ko.kalesutilities.commands.StaffChatCommand;
-import com.kale_ko.kalesutilities.commands.StaffCommand;
+import com.kale_ko.kalesutilities.commands.info.AboutCommand;
+import com.kale_ko.kalesutilities.commands.info.KalesUtilitiesCommand;
+import com.kale_ko.kalesutilities.commands.info.RulesCommand;
+import com.kale_ko.kalesutilities.commands.info.StaffCommand;
+import com.kale_ko.kalesutilities.commands.kits.KitCommand;
+import com.kale_ko.kalesutilities.commands.moderation.BanCommand;
+import com.kale_ko.kalesutilities.commands.moderation.KickCommand;
+import com.kale_ko.kalesutilities.commands.moderation.MuteCommand;
+import com.kale_ko.kalesutilities.commands.moderation.UnbanCommand;
+import com.kale_ko.kalesutilities.commands.moderation.UnmuteCommand;
+import com.kale_ko.kalesutilities.commands.player.NicknameCommand;
+import com.kale_ko.kalesutilities.commands.player.PrefixCommand;
+import com.kale_ko.kalesutilities.commands.player.SeenCommand;
+import com.kale_ko.kalesutilities.commands.player.StatusCommand;
+import com.kale_ko.kalesutilities.commands.staff.GamemodeCommand;
+import com.kale_ko.kalesutilities.commands.staff.StaffChatCommand;
+import com.kale_ko.kalesutilities.commands.staff.SudoCommand;
+import com.kale_ko.kalesutilities.commands.warps.SetSpawnCommand;
+import com.kale_ko.kalesutilities.commands.warps.SetWarpCommand;
+import com.kale_ko.kalesutilities.commands.warps.SpawnCommand;
+import com.kale_ko.kalesutilities.commands.warps.WarpCommand;
+import com.kale_ko.kalesutilities.commands.warps.WarpsCommand;
 import com.kale_ko.kalesutilities.listeners.BannedJoinListener;
 import com.kale_ko.kalesutilities.listeners.ChatFilterListener;
 import com.kale_ko.kalesutilities.listeners.ChatFormatListener;
@@ -33,6 +33,8 @@ import com.kale_ko.kalesutilities.listeners.SeenListener;
 import com.kale_ko.kalesutilities.listeners.SignEditorListener;
 import com.kale_ko.kalesutilities.listeners.SpawnListener;
 import com.kale_ko.kalesutilities.listeners.WelcomeListener;
+import java.util.List;
+import java.util.logging.Logger;
 import org.bukkit.plugin.PluginLoadOrder;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.annotation.plugin.Plugin;
@@ -43,15 +45,12 @@ import org.bukkit.plugin.java.annotation.command.Command;
 import org.bukkit.plugin.java.annotation.permission.Permission;
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
 import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
-import org.bukkit.configuration.file.FileConfiguration;
-import java.util.List;
-import java.util.logging.Logger;
 
-@Plugin(name = "KalesUtilities", version = "1.11.1")
+@Plugin(name = "KalesUtilities", version = "2.0.0")
 @Description("A custom plugin to run on KalesMC")
-@Author("Kale_Ko")
+@Author("Kale Ko")
 @LogPrefix("Kales Utilities")
-@ApiVersion(ApiVersion.Target.v1_17)
+@ApiVersion(ApiVersion.Target.v1_18)
 @LoadOrder(PluginLoadOrder.STARTUP)
 
 @Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ks" }, usage = "/kalesutilities [help, reload]")
@@ -106,7 +105,7 @@ public class Main extends JavaPlugin {
     public static Main Instance;
 
     public final Logger CONSOLE = getLogger();
-    public FileConfiguration config = getConfig();
+    public Config config = new Config("config.yml");
 
     @Override
     public void onEnable() {
@@ -114,48 +113,48 @@ public class Main extends JavaPlugin {
 
         CONSOLE.info("Loading config");
 
-        config.addDefault("config.prefix", "&6&l[Kales Utilities]&r");
-        config.addDefault("config.chatFormat", "{prefix}{player} > {message}");
-        config.addDefault("config.about", "Kales Minecraft Server!");
-        config.addDefault("config.rules", "\n1. No Hacking\n2. No Griefing\n3. Be Respectful\n4. No Profanity\n5. Just Don't Be Rude/Annoying.\n\nBreaking rules could result in a kick, ban, or mute");
-        config.addDefault("config.staff", "&4&l[Owner] Kale_Ko\n&1&l[Admin] JMbuilder");
-        config.addDefault("config.banned-words", List.of("anal", "anus", "arse", "ass", "ballsack", "balls", "bitch", "biatch", "blowjob", "bollock", "bollok", "boner", "boob", "bum", "butt", "buttplug", "clitoris", "cock", "coon", "cunt", "dick", "dildo", "dyke", "fag", "feck", "fellate", "fellatio", "felching", "fuck", "fucking", "fudgepacker", "flange", "goddamn", "hell", "homo", "jizz", "knobend", "labia", "muff", "nigger", "nigga", "penis", "piss", "poop", "pube", "pussy", "queer", "scrotum", "sex", "shit", "sh1t", "slut", "smegma", "spunk", "tit", "tosser", "turd", "twat", "vagina", "wank", "whore"));
-        config.addDefault("messages.invalidCommand", "{command} is not a command");
-        config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
-        config.addDefault("messages.noconsole", "You can't use that command from the console");
-        config.addDefault("messages.playernotfound", "{player} can't be found");
-        config.addDefault("messages.usage", "Usage: {usage}");
-        config.addDefault("messages.joinMessage", "&e{player} &ehas joined the game!");
-        config.addDefault("messages.quitMessage", "&e{player} &ehas left the game");
-        config.addDefault("messages.help", "\n{commandList}");
-        config.addDefault("messages.reload", "Config Reloaded");
-        config.addDefault("messages.spawned", "You have been sent to spawn");
-        config.addDefault("messages.spawnedplayer", "Successfully sent {player} to spawn");
-        config.addDefault("messages.setspawn", "Successfully set the spawn");
-        config.addDefault("messages.warps", "\n{warpList}");
-        config.addDefault("messages.warped", "You have warped to {warp}");
-        config.addDefault("messages.setwarp", "Successfully set warp {warp}");
-        config.addDefault("message.kit", "Successfully received kit {kit}");
-        config.addDefault("messages.lastonline", "{player} was last seen {time}!");
-        config.addDefault("messages.playeronline", "{player} is online right now!");
-        config.addDefault("messages.setnickname", "Successfully set your nickname");
-        config.addDefault("messages.setprefix", "Successfully set your prefix");
-        config.addDefault("messages.setstatus", "Successfully set your status");
-        config.addDefault("messages.gamemode", "Successfully set your gamemode to {gamemode}");
-        config.addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
-        config.addDefault("messages.sudomessage", "Successfully made {player} say {message}");
-        config.addDefault("messages.staffchat", "&l&d[Staffchat] &r{player} &r> {message}");
-        config.addDefault("messages.commandspy", "&l&d[CommandSpy] &r{player} &rran {message}");
-        config.addDefault("messages.kick", "{player} was kicked by {moderator} for {reason}");
-        config.addDefault("messages.ban", "{player} was banned by {moderator} for {reason}");
-        config.addDefault("messages.unban", "{player} was unbanned by {moderator}");
-        config.addDefault("messages.bannedJoin", "{player} tried to join but is banned");
-        config.addDefault("messages.mute", "{player} was muted by {moderator} for {reason}");
-        config.addDefault("messages.unmute", "{player} was unmuted by {moderator}");
-        config.addDefault("messages.mutedMessage", "{player} tried to say {message}&r but is muted");
+        config.getConfig().addDefault("config.prefix", "&6&l[Kales Utilities]&r");
+        config.getConfig().addDefault("config.chatFormat", "{prefix}{player} > {message}");
+        config.getConfig().addDefault("config.about", "Kales Minecraft Server!");
+        config.getConfig().addDefault("config.rules", "\n1. No Hacking\n2. No Griefing\n3. Be Respectful\n4. No Profanity\n5. Just Don't Be Rude/Annoying.\n\nBreaking rules could result in a kick, ban, or mute");
+        config.getConfig().addDefault("config.staff", "&4&l[Owner] Kale_Ko\n&1&l[Admin] JMbuilder");
+        config.getConfig().addDefault("config.banned-words", List.of("anal", "anus", "arse", "ass", "ballsack", "balls", "bitch", "biatch", "blowjob", "bollock", "bollok", "boner", "boob", "bum", "butt", "buttplug", "clitoris", "cock", "coon", "cunt", "dick", "dildo", "dyke", "fag", "feck", "fellate", "fellatio", "felching", "fuck", "fucking", "fudgepacker", "flange", "goddamn", "hell", "homo", "jizz", "knobend", "labia", "muff", "nigger", "nigga", "penis", "piss", "poop", "pube", "pussy", "queer", "scrotum", "sex", "shit", "sh1t", "slut", "smegma", "spunk", "tit", "tosser", "turd", "twat", "vagina", "wank", "whore"));
+        config.getConfig().addDefault("messages.invalidCommand", "{command} is not a command");
+        config.getConfig().addDefault("messages.noperms", "You need the permission {permission} to run that command");
+        config.getConfig().addDefault("messages.noconsole", "You can't use that command from the console");
+        config.getConfig().addDefault("messages.playernotfound", "{player} can't be found");
+        config.getConfig().addDefault("messages.usage", "Usage: {usage}");
+        config.getConfig().addDefault("messages.joinMessage", "&e{player} &ehas joined the game!");
+        config.getConfig().addDefault("messages.quitMessage", "&e{player} &ehas left the game");
+        config.getConfig().addDefault("messages.help", "\n{commandList}");
+        config.getConfig().addDefault("messages.reload", "Config Reloaded");
+        config.getConfig().addDefault("messages.spawned", "You have been sent to spawn");
+        config.getConfig().addDefault("messages.spawnedplayer", "Successfully sent {player} to spawn");
+        config.getConfig().addDefault("messages.setspawn", "Successfully set the spawn");
+        config.getConfig().addDefault("messages.warps", "\n{warpList}");
+        config.getConfig().addDefault("messages.warped", "You have warped to {warp}");
+        config.getConfig().addDefault("messages.setwarp", "Successfully set warp {warp}");
+        config.getConfig().addDefault("message.kit", "Successfully received kit {kit}");
+        config.getConfig().addDefault("messages.lastonline", "{player} was last seen {time}!");
+        config.getConfig().addDefault("messages.playeronline", "{player} is online right now!");
+        config.getConfig().addDefault("messages.setnickname", "Successfully set your nickname");
+        config.getConfig().addDefault("messages.setprefix", "Successfully set your prefix");
+        config.getConfig().addDefault("messages.setstatus", "Successfully set your status");
+        config.getConfig().addDefault("messages.gamemode", "Successfully set your gamemode to {gamemode}");
+        config.getConfig().addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
+        config.getConfig().addDefault("messages.sudomessage", "Successfully made {player} say {message}");
+        config.getConfig().addDefault("messages.staffchat", "&l&d[Staffchat] &r{player} &r> {message}");
+        config.getConfig().addDefault("messages.commandspy", "&l&d[CommandSpy] &r{player} &rran {message}");
+        config.getConfig().addDefault("messages.kick", "{player} was kicked by {moderator} for {reason}");
+        config.getConfig().addDefault("messages.ban", "{player} was banned by {moderator} for {reason}");
+        config.getConfig().addDefault("messages.unban", "{player} was unbanned by {moderator}");
+        config.getConfig().addDefault("messages.bannedJoin", "{player} tried to join but is banned");
+        config.getConfig().addDefault("messages.mute", "{player} was muted by {moderator} for {reason}");
+        config.getConfig().addDefault("messages.unmute", "{player} was unmuted by {moderator}");
+        config.getConfig().addDefault("messages.mutedMessage", "{player} tried to say {message}&r but is muted");
 
-        config.options().copyDefaults(true);
-        this.saveConfig();
+        config.getConfig().options().copyDefaults(true);
+        config.save();
 
         CONSOLE.info("Finished loading config");
 
