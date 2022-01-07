@@ -2,11 +2,9 @@ package com.kale_ko.kalesutilities.commands.player;
 
 import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
-import com.kale_ko.kalesutilities.Config;
 import java.util.Date;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class SeenCommand implements CommandExecutor {
     @Override
@@ -16,9 +14,7 @@ public class SeenCommand implements CommandExecutor {
                 if (Main.Instance.getServer().getPlayer(args[0]) != null) {
                     Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.playeronline").replace("{player}", args[0]));
                 } else {
-                    YamlConfiguration data = Config.load("players.yml").getConfig();
-
-                    long lastOnline = data.getLong("players." + args[0] + ".lastOnline");
+                    long lastOnline = Main.Instance.players.getConfig().getLong("players." + args[0] + ".lastOnline");
 
                     if (lastOnline != 0) {
                         Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.lastonline").replace("{player}", args[0]).replace("{time}", new Date(lastOnline).toString()));

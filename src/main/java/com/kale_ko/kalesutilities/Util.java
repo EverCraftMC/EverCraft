@@ -3,7 +3,6 @@ package com.kale_ko.kalesutilities;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class Util {
@@ -66,13 +65,11 @@ public class Util {
     public static String getPlayerNickName(Player player) {
         String name = player.getName();
 
-        YamlConfiguration data = Config.load("players.yml").getConfig();
-
-        if (data.getString("players." + player.getName() + ".nickname") != null && !data.getString("players." + player.getName() + ".nickname").equalsIgnoreCase("") && !data.getString("players." + player.getName() + ".nickname").equalsIgnoreCase(" ")) {
-            if (Util.hasPermission(player, "kalesutilities.nonickstar") || data.getString("players." + player.getName() + ".nickname").equalsIgnoreCase(name) || Util.stripFormating(Util.formatMessage(data.getString("players." + player.getName() + ".nickname") + "&r")).equalsIgnoreCase(name)) {
-                name = Util.formatMessage(data.getString("players." + player.getName() + ".nickname") + "&r");
+        if (Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname") != null && !Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname").equalsIgnoreCase("") && !Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname").equalsIgnoreCase(" ")) {
+            if (Util.hasPermission(player, "kalesutilities.nonickstar") || Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname").equalsIgnoreCase(name) || Util.stripFormating(Util.formatMessage(Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname") + "&r")).equalsIgnoreCase(name)) {
+                name = Util.formatMessage(Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname") + "&r");
             } else {
-                name = Util.formatMessage("*" + data.getString("players." + player.getName() + ".nickname") + "&r");
+                name = Util.formatMessage("*" + Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname") + "&r");
             }
         }
 
@@ -82,10 +79,8 @@ public class Util {
     public static String getPlayerPrefix(Player player) {
         String prefix = "";
 
-        YamlConfiguration data = Config.load("players.yml").getConfig();
-
-        if (data.getString("players." + player.getName() + ".prefix") != null && !data.getString("players." + player.getName() + ".prefix").equalsIgnoreCase("") && !data.getString("players." + player.getName() + ".prefix").equalsIgnoreCase(" ")) {
-            prefix = Util.formatMessage(data.getString("players." + player.getName() + ".prefix") + "&r") + " ";
+        if (Main.Instance.players.getConfig().getString("players." + player.getName() + ".prefix") != null && !Main.Instance.players.getConfig().getString("players." + player.getName() + ".prefix").equalsIgnoreCase("") && !Main.Instance.players.getConfig().getString("players." + player.getName() + ".prefix").equalsIgnoreCase(" ")) {
+            prefix = Util.formatMessage(Main.Instance.players.getConfig().getString("players." + player.getName() + ".prefix") + "&r") + " ";
         }
 
         return prefix;
@@ -104,10 +99,6 @@ public class Util {
     }
 
     public static void updatePlayerName(Player player) {
-        if (player.getName().startsWith("*")) {
-            // Remove * from name
-        }
-
         player.setCustomName(getPlayerName(player));
         player.setCustomNameVisible(true);
         player.setDisplayName(getPlayerName(player));
