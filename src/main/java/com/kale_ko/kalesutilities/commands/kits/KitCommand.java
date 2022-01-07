@@ -2,12 +2,10 @@ package com.kale_ko.kalesutilities.commands.kits;
 
 import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
-import com.kale_ko.kalesutilities.Config;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -17,10 +15,8 @@ public class KitCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.kit")) {
             if (args.length > 0) {
-                YamlConfiguration data = Config.load("players.yml").getConfig();
-
                 if (sender instanceof Player player) {
-                    List<String> items = data.getStringList(args[0]);
+                    List<String> items = Main.Instance.kits.getConfig().getStringList(args[0]);
 
                     for (String item : items) {
                         ItemStack itemStack = new ItemStack(Material.matchMaterial(item), 1);
