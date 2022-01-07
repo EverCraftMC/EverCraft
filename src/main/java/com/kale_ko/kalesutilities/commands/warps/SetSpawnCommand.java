@@ -11,6 +11,8 @@ public class SetSpawnCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.setspawn")) {
             if (sender instanceof Player player) {
+                if (Main.Instance.spawn.getConfig().get("overidespawn") == null) Main.Instance.spawn.getConfig().set("overidespawn", true);
+
                 Main.Instance.spawn.getConfig().set(player.getWorld().getName() + ".x", player.getLocation().getX());
                 Main.Instance.spawn.getConfig().set(player.getWorld().getName() + ".y", player.getLocation().getY());
                 Main.Instance.spawn.getConfig().set(player.getWorld().getName() + ".z", player.getLocation().getZ());

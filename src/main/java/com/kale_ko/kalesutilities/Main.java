@@ -47,7 +47,7 @@ import org.bukkit.plugin.java.annotation.permission.Permission;
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
 import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 
-@Plugin(name = "KalesUtilities", version = "2.0.1")
+@Plugin(name = "KalesUtilities", version = "2.0.0")
 @Description("A custom plugin to run on KalesMC")
 @Author("Kale Ko")
 @LogPrefix("Kales Utilities")
