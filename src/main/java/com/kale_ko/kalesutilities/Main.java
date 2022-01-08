@@ -164,7 +164,6 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.mutedMessage", "{player} tried to say {message}&r but is muted");
 
         config.copyDefaults();
-        config.save();
 
         Console.info("Finished loading config");
 
@@ -217,5 +216,15 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         Console.info("Disabled");
+    }
+
+    public void reload() {
+        Console.info("Reloading..");
+
+        this.onDisable();
+
+        this.onEnable();
+
+        Console.info("Finished reloading..");
     }
 }

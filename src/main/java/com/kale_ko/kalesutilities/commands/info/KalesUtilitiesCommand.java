@@ -19,7 +19,7 @@ public class KalesUtilitiesCommand implements CommandExecutor {
 
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.help").replace("{commandList}", help.toString()));
             } else if (args[0].equalsIgnoreCase("reload")) {
-                Main.Instance.reloadConfig();
+                Main.Instance.reload();
 
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.reload"));
             } else {
