@@ -11,7 +11,7 @@ public class WarpCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.warp")) {
             if (sender instanceof Player player) {
-                player.teleport(Main.Instance.spawn.getLocation(args[0]));
+                player.teleport(Main.Instance.warps.getLocation(args[0]));
 
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.warped").replace("{warp}", args[0]));
             } else {

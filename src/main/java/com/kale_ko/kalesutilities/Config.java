@@ -11,14 +11,26 @@ import org.bukkit.util.Vector;
 
 public class Config {
     private String fileName;
+    private String filePath;
+    private File file;
     private YamlConfiguration config;
 
     public Config(String fileName) {
         this.fileName = fileName;
-    }
 
-    public String getFileName() {
-        return this.fileName;
+        File dataFolder = Main.Instance.getDataFolder();
+        if (!dataFolder.exists()) {
+            dataFolder.mkdir();
+        }
+
+        this.filePath = Paths.get(dataFolder.getAbsolutePath(), this.fileName).toString();
+        this.file = new File(this.filePath);
+        Main.Instance.Console.info(this.filePath);
+        try {
+            this.file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Object getObject(String key) {
@@ -99,25 +111,13 @@ public class Config {
     }
 
     public void reload() {
-        File dataFolder = Main.Instance.getDataFolder();
-        if (!dataFolder.exists()) {
-            dataFolder.mkdir();
-        }
-
-        File dataFile = Paths.get(dataFolder.getAbsolutePath(), this.getFileName()).toFile();
-        try {
-            dataFile.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+        YamlConfiguration data = YamlConfiguration.loadConfiguration(this.file);
         this.config = data;
     }
 
     public void save() {
         try {
-            this.config.save(this.fileName);
+            this.config.save(this.filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
