@@ -51,13 +51,13 @@ public class StatusCommand implements CommandExecutor {
                         armorstand.setCustomName(statusMessage);
                     }
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noconsole"));
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.usage").replace("{usage}", Main.Instance.getCommand("status").getUsage()));
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("status").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.setstatus"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.setstatus"));
         }
 
         return true;

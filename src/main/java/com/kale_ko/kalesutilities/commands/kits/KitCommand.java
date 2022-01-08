@@ -16,7 +16,7 @@ public class KitCommand implements CommandExecutor {
         if (Util.hasPermission(sender, "kalesutilities.kit")) {
             if (args.length > 0) {
                 if (sender instanceof Player player) {
-                    List<String> items = Main.Instance.kits.getConfig().getStringList(args[0]);
+                    List<String> items = Main.Instance.kits.getStringList(args[0]);
 
                     for (String item : items) {
                         ItemStack itemStack = new ItemStack(Material.matchMaterial(item), 1);
@@ -28,15 +28,15 @@ public class KitCommand implements CommandExecutor {
                         }
                     }
 
-                    Util.sendMessage(player, Main.Instance.config.getConfig().getString("message.kit").replace("{kit}", args[0]));
+                    Util.sendMessage(player, Main.Instance.config.getString("message.kit").replace("{kit}", args[0]));
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noconsole"));
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.usage").replace("{usage}", Main.Instance.getCommand("kit").getUsage()));
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("kit").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.kit"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.kit"));
         }
 
         return true;

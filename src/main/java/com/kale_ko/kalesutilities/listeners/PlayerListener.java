@@ -9,12 +9,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (Main.Instance.players.getConfig().getString("players." + event.getPlayer().getName() + ".nickname") == null) {
-            Main.Instance.players.getConfig().set("players." + event.getPlayer().getName() + ".nickname", event.getPlayer().getName());
+        if (Main.Instance.players.getString("players." + event.getPlayer().getName() + ".nickname") == null) {
+            Main.Instance.players.set("players." + event.getPlayer().getName() + ".nickname", event.getPlayer().getName());
         }
 
-        if (Main.Instance.players.getConfig().getString("players." + event.getPlayer().getName() + ".prefix") == null) {
-            Main.Instance.players.getConfig().set("players." + event.getPlayer().getName() + ".prefix", "");
+        if (Main.Instance.players.getString("players." + event.getPlayer().getName() + ".prefix") == null) {
+            Main.Instance.players.set("players." + event.getPlayer().getName() + ".prefix", "");
         }
 
         Main.Instance.players.save();

@@ -12,21 +12,21 @@ public class SeenCommand implements CommandExecutor {
         if (Util.hasPermission(sender, "kalesutilities.seen")) {
             if (args.length > 0) {
                 if (Main.Instance.getServer().getPlayer(args[0]) != null) {
-                    Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.playeronline").replace("{player}", args[0]));
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.playeronline").replace("{player}", args[0]));
                 } else {
-                    long lastOnline = Main.Instance.players.getConfig().getLong("players." + args[0] + ".lastOnline");
+                    long lastOnline = Main.Instance.players.getLong("players." + args[0] + ".lastOnline");
 
                     if (lastOnline != 0) {
-                        Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.lastonline").replace("{player}", args[0]).replace("{time}", new Date(lastOnline).toString()));
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.lastonline").replace("{player}", args[0]).replace("{time}", new Date(lastOnline).toString()));
                     } else {
-                        Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.playernotfound").replace("{player}", args[0]));
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
                     }
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.usage").replace("{usage}", Main.Instance.getCommand("seen").getUsage()));
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("seen").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.seen"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.seen"));
         }
 
         return true;
