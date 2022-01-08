@@ -12,20 +12,20 @@ public class PrefixCommand implements CommandExecutor {
         if (Util.hasPermission(sender, "kalesutilities.setprefix")) {
             if (args.length > 0) {
                 if (sender instanceof Player player) {
-                    Main.Instance.players.getConfig().set("players." + player.getPlayer().getName() + ".prefix", args[0]);
+                    Main.Instance.players.set("players." + player.getPlayer().getName() + ".prefix", args[0]);
 
                     Main.Instance.players.save();
 
-                    Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.setprefix"));
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.setprefix"));
                     Util.updatePlayerName(player);
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noconsole"));
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.usage").replace("{usage}", Main.Instance.getCommand("prefix").getUsage()));
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("prefix").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.setprefix"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.setprefix"));
         }
 
         return true;

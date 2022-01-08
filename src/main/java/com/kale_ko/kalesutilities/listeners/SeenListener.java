@@ -10,14 +10,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class SeenListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Main.Instance.players.getConfig().set("players." + event.getPlayer().getName() + ".lastOnline", new Date().getTime());
+        Main.Instance.players.set("players." + event.getPlayer().getName() + ".lastOnline", new Date().getTime());
 
         Main.Instance.players.save();
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-        Main.Instance.players.getConfig().set("players." + event.getPlayer().getName() + ".lastOnline", new Date().getTime());
+        Main.Instance.players.set("players." + event.getPlayer().getName() + ".lastOnline", new Date().getTime());
 
         Main.Instance.players.save();
     }

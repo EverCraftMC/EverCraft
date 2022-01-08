@@ -25,11 +25,11 @@ public class StaffChatCommand implements CommandExecutor {
 
             for (Player player : Main.Instance.getServer().getOnlinePlayers()) {
                 if (Util.hasPermission(player, "kalesutilities.staffchat")) {
-                    Util.sendMessage(player, Main.Instance.config.getConfig().getString("messages.staffchat").replace("{player}", senderName).replace("{message}", message), true);
+                    Util.sendMessage(player, Main.Instance.config.getString("messages.staffchat").replace("{player}", senderName).replace("{message}", message), true);
                 }
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.staffchat"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.staffchat"));
         }
 
         return true;

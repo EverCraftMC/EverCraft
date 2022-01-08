@@ -17,6 +17,6 @@ public class ChatFormatListener implements Listener {
             event.setMessage(Util.formatMessage(event.getMessage()));
         }
 
-        event.setFormat(Util.formatMessage(Main.Instance.config.getConfig().getString("config.chatFormat")).replace("{prefix}", prefix).replace("{player}", player).replace("{message}", "%2$s"));
+        event.setFormat(Util.formatMessage(Main.Instance.config.getString("config.chatFormat")).replace("{prefix}", prefix).replace("{player}", player).replace("{message}", "%2$s"));
     }
 }
