@@ -12,20 +12,20 @@ public class NicknameCommand implements CommandExecutor {
         if (Util.hasPermission(sender, "kalesutilities.setnickname")) {
             if (args.length > 0) {
                 if (sender instanceof Player player) {
-                    Main.Instance.players.getConfig().set("players." + player.getPlayer().getName() + ".nickname", args[0]);
+                    Main.Instance.players.set("players." + player.getPlayer().getName() + ".nickname", args[0]);
 
                     Main.Instance.players.save();
 
-                    Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.setnickname"));
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.setnickname"));
                     Util.updatePlayerName(player);
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noconsole"));
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.usage").replace("{usage}", Main.Instance.getCommand("nickname").getUsage()));
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("nickname").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.setnickname"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.setnickname"));
         }
 
         return true;

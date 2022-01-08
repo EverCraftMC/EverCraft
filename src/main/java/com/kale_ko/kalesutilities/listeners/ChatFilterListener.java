@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerChatEvent;
 public class ChatFilterListener implements Listener {
     @EventHandler
     public void onChatMessage(PlayerChatEvent event) {
-        List<String> bannedWords = Main.Instance.config.getConfig().getStringList("config.banned-words");
+        List<String> bannedWords = Main.Instance.config.getStringList("config.banned-words");
 
         String message = event.getMessage().trim().replaceAll(" +", " ");
         String[] words = message.split(" ");

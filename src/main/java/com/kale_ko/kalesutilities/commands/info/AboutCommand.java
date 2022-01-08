@@ -9,9 +9,9 @@ public class AboutCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.about")) {
-            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("config.about"));
+            Util.sendMessage(sender, Main.Instance.config.getString("config.about"));
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.about"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.about"));
         }
 
         return true;

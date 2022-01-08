@@ -11,22 +11,18 @@ public class SetSpawnCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.setspawn")) {
             if (sender instanceof Player player) {
-                if (Main.Instance.spawn.getConfig().get("overidespawn") == null) Main.Instance.spawn.getConfig().set("overidespawn", true);
+                if (Main.Instance.spawn.getObject("overidespawn") == null) Main.Instance.spawn.set("overidespawn", true);
 
-                Main.Instance.spawn.getConfig().set(player.getWorld().getName() + ".x", player.getLocation().getX());
-                Main.Instance.spawn.getConfig().set(player.getWorld().getName() + ".y", player.getLocation().getY());
-                Main.Instance.spawn.getConfig().set(player.getWorld().getName() + ".z", player.getLocation().getZ());
-                Main.Instance.spawn.getConfig().set(player.getWorld().getName() + ".pitch", player.getLocation().getPitch());
-                Main.Instance.spawn.getConfig().set(player.getWorld().getName() + ".yaw", player.getLocation().getYaw());
+                Main.Instance.spawn.set(player.getWorld().getName(), player.getLocation());
 
                 Main.Instance.spawn.save();
 
-                Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.setspawn"));
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.setspawn"));
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noconsole"));
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.usage").replace("{usage}", Main.Instance.getCommand("setspawn").getUsage()));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("setspawn").getUsage()));
         }
 
         return true;

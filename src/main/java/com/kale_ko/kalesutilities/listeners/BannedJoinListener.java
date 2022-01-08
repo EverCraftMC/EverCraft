@@ -11,13 +11,13 @@ import org.bukkit.event.player.PlayerLoginEvent.Result;
 public class BannedJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerLoginEvent event) {
-        if (Main.Instance.players.getConfig().getBoolean("players." + event.getPlayer().getName() + ".banned")) {
-            event.setKickMessage(Main.Instance.players.getConfig().getString("players." + event.getPlayer().getName() + ".banMessage"));
-            event.disallow(Result.KICK_BANNED, Main.Instance.players.getConfig().getString("players." + event.getPlayer().getName() + ".banMessage"));
+        if (Main.Instance.players.getBoolean("players." + event.getPlayer().getName() + ".banned")) {
+            event.setKickMessage(Main.Instance.players.getString("players." + event.getPlayer().getName() + ".banMessage"));
+            event.disallow(Result.KICK_BANNED, Main.Instance.players.getString("players." + event.getPlayer().getName() + ".banMessage"));
 
             for (Player player : Main.Instance.getServer().getOnlinePlayers()) {
                 if (player != event.getPlayer() && Util.hasPermission(player, "kalesutilities.ban")) {
-                    Util.sendMessage(player, Main.Instance.config.getConfig().getString("messages.bannedJoin").replace("{player}", Util.getPlayerName(event.getPlayer())));
+                    Util.sendMessage(player, Main.Instance.config.getString("messages.bannedJoin").replace("{player}", Util.getPlayerName(event.getPlayer())));
                 }
             }
         }

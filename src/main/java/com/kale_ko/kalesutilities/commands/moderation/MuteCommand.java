@@ -21,19 +21,19 @@ public class MuteCommand implements CommandExecutor {
 
                 String muteMessage = muteMessageBuilder.toString();
 
-                Main.Instance.players.getConfig().set("players." + player.getPlayer().getName() + ".muted", true);
-                Main.Instance.players.getConfig().set("players." + player.getPlayer().getName() + ".mutedMessage", Main.Instance.config.getConfig().getString("messages.mute").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage).replace("was", "are"));
+                Main.Instance.players.set("players." + player.getPlayer().getName() + ".muted", true);
+                Main.Instance.players.set("players." + player.getPlayer().getName() + ".mutedMessage", Main.Instance.config.getString("messages.mute").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage).replace("was", "are"));
 
                 Main.Instance.players.save();
 
                 if (Main.Instance.getServer().getPlayer(args[0]) != null) {
-                    Util.broadcastMessage(Main.Instance.config.getConfig().getString("messages.mute").replace("{player}", Util.getPlayerName(Main.Instance.getServer().getPlayer(args[0]))).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage));
+                    Util.broadcastMessage(Main.Instance.config.getString("messages.mute").replace("{player}", Util.getPlayerName(Main.Instance.getServer().getPlayer(args[0]))).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage));
                 } else {
-                    Util.broadcastMessage(Main.Instance.config.getConfig().getString("messages.mute").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage));
+                    Util.broadcastMessage(Main.Instance.config.getString("messages.mute").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage));
                 }
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.mute"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.mute"));
         }
 
         return true;

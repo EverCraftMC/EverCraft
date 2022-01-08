@@ -7,24 +7,24 @@ import org.bukkit.entity.Player;
 
 public class Util {
     public static void sendMessage(CommandSender user, String message) {
-        user.sendMessage(formatMessage(Main.Instance.config.getConfig().getString("config.prefix") + " " + message));
+        user.sendMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
     }
 
     public static void sendMessage(CommandSender user, String message, Boolean noprefix) {
         if (!noprefix) {
-            user.sendMessage(formatMessage(Main.Instance.config.getConfig().getString("config.prefix") + " " + message));
+            user.sendMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
         } else {
             user.sendMessage(formatMessage(message));
         }
     }
 
     public static void broadcastMessage(String message) {
-        Main.Instance.getServer().broadcastMessage(formatMessage(Main.Instance.config.getConfig().getString("config.prefix") + " " + message));
+        Main.Instance.getServer().broadcastMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
     }
 
     public static void broadcastMessage(String message, Boolean noprefix) {
         if (!noprefix) {
-            Main.Instance.getServer().broadcastMessage(formatMessage(Main.Instance.config.getConfig().getString("config.prefix") + " " + message));
+            Main.Instance.getServer().broadcastMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
         } else {
             Main.Instance.getServer().broadcastMessage(formatMessage(message));
         }
@@ -65,11 +65,11 @@ public class Util {
     public static String getPlayerNickName(Player player) {
         String name = player.getName();
 
-        if (Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname") != null && !Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname").equalsIgnoreCase("") && !Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname").equalsIgnoreCase(" ")) {
-            if (Util.hasPermission(player, "kalesutilities.nonickstar") || Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname").equalsIgnoreCase(name) || Util.stripFormating(Util.formatMessage(Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname") + "&r")).equalsIgnoreCase(name)) {
-                name = Util.formatMessage(Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname") + "&r");
+        if (Main.Instance.players.getString("players." + player.getName() + ".nickname") != null && !Main.Instance.players.getString("players." + player.getName() + ".nickname").equalsIgnoreCase("") && !Main.Instance.players.getString("players." + player.getName() + ".nickname").equalsIgnoreCase(" ")) {
+            if (Util.hasPermission(player, "kalesutilities.nonickstar") || Main.Instance.players.getString("players." + player.getName() + ".nickname").equalsIgnoreCase(name) || Util.stripFormating(Util.formatMessage(Main.Instance.players.getString("players." + player.getName() + ".nickname") + "&r")).equalsIgnoreCase(name)) {
+                name = Util.formatMessage(Main.Instance.players.getString("players." + player.getName() + ".nickname") + "&r");
             } else {
-                name = Util.formatMessage("*" + Main.Instance.players.getConfig().getString("players." + player.getName() + ".nickname") + "&r");
+                name = Util.formatMessage("*" + Main.Instance.players.getString("players." + player.getName() + ".nickname") + "&r");
             }
         }
 
@@ -79,8 +79,8 @@ public class Util {
     public static String getPlayerPrefix(Player player) {
         String prefix = "";
 
-        if (Main.Instance.players.getConfig().getString("players." + player.getName() + ".prefix") != null && !Main.Instance.players.getConfig().getString("players." + player.getName() + ".prefix").equalsIgnoreCase("") && !Main.Instance.players.getConfig().getString("players." + player.getName() + ".prefix").equalsIgnoreCase(" ")) {
-            prefix = Util.formatMessage(Main.Instance.players.getConfig().getString("players." + player.getName() + ".prefix") + "&r") + " ";
+        if (Main.Instance.players.getString("players." + player.getName() + ".prefix") != null && !Main.Instance.players.getString("players." + player.getName() + ".prefix").equalsIgnoreCase("") && !Main.Instance.players.getString("players." + player.getName() + ".prefix").equalsIgnoreCase(" ")) {
+            prefix = Util.formatMessage(Main.Instance.players.getString("players." + player.getName() + ".prefix") + "&r") + " ";
         }
 
         return prefix;

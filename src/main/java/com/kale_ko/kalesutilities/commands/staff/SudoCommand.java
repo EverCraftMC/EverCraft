@@ -25,13 +25,13 @@ public class SudoCommand implements CommandExecutor {
                             Main.Instance.getServer().dispatchCommand(player, sudoMessage.substring(1));
                         }
 
-                        Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.sudocommand").replace("{player}", args[0]).replace("{command}", sudoMessage));
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.sudocommand").replace("{player}", args[0]).replace("{command}", sudoMessage));
                     } else {
                         for (Player player : Main.Instance.getServer().getOnlinePlayers()) {
                             player.chat(sudoMessage);
                         }
 
-                        Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.sudomessage").replace("{player}", args[0]).replace("{message}", sudoMessage));
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.sudomessage").replace("{player}", args[0]).replace("{message}", sudoMessage));
                     }
                 } else {
                     Player sudoedPlayer = Main.Instance.getServer().getPlayer(args[0]);
@@ -48,21 +48,21 @@ public class SudoCommand implements CommandExecutor {
                         if (sudoMessage.startsWith("/")) {
                             Main.Instance.getServer().dispatchCommand(sudoedPlayer, sudoMessage.substring(1));
 
-                            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.sudocommand").replace("{player}", args[0]).replace("{command}", sudoMessage));
+                            Util.sendMessage(sender, Main.Instance.config.getString("messages.sudocommand").replace("{player}", args[0]).replace("{command}", sudoMessage));
                         } else {
                             sudoedPlayer.chat(sudoMessage);
 
-                            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.sudomessage").replace("{player}", args[0]).replace("{message}", sudoMessage));
+                            Util.sendMessage(sender, Main.Instance.config.getString("messages.sudomessage").replace("{player}", args[0]).replace("{message}", sudoMessage));
                         }
                     } else {
-                        Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.playernotfound").replace("{player}", args[0]));
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
                     }
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.usage").replace("{usage}", Main.Instance.getCommand("sudo").getUsage()));
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("sudo").getUsage()));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getConfig().getString("messages.noperms").replace("{permission}", "kalesutilities.sudo"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.sudo"));
         }
 
         return true;
