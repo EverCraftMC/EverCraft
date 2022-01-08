@@ -21,6 +21,7 @@ import com.kale_ko.kalesutilities.commands.warps.SetSpawnCommand;
 import com.kale_ko.kalesutilities.commands.warps.SetWarpCommand;
 import com.kale_ko.kalesutilities.commands.warps.SpawnCommand;
 import com.kale_ko.kalesutilities.commands.warps.WarpCommand;
+import com.kale_ko.kalesutilities.commands.warps.WarpsCommand;
 import com.kale_ko.kalesutilities.listeners.BannedJoinListener;
 import com.kale_ko.kalesutilities.listeners.BedwarsListener;
 import com.kale_ko.kalesutilities.listeners.ChatFilterListener;
@@ -60,6 +61,7 @@ import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 @Command(name = "staff", desc = "See the staff", aliases = {}, usage = "/staff")
 @Command(name = "spawn", desc = "Go to the spawn", aliases = { "hub", "lobby" }, usage = "/spawn {player (optional)}")
 @Command(name = "setspawn", desc = "Sets the spawn to your location", aliases = { "sethub", "setlobby" }, usage = "/setspawn")
+@Command(name = "warps", desc = "List the warps", aliases = {}, usage = "/warps")
 @Command(name = "warp", desc = "Go to a warp", aliases = {}, usage = "/warp {warp}")
 @Command(name = "setwarp", desc = "Sets a warp at your location", aliases = {}, usage = "/setwarp {warp}")
 @Command(name = "kit", desc = "Get a kit", aliases = {}, usage = "/kit {kit}")
@@ -128,7 +130,7 @@ public class Main extends JavaPlugin {
         config.addDefault("config.about", "Kales Minecraft Server!");
         config.addDefault("config.rules", "\n1. No Hacking\n2. No Griefing\n3. Be Respectful\n4. No Profanity\n5. Just Don't Be Rude/Annoying.\n\nBreaking rules could result in a kick, ban, or mute");
         config.addDefault("config.staff", "&4&l[Owner] Kale_Ko\n&1&l[Admin] JMbuilder");
-        config.addDefault("config.banned-words", List.of("anal", "anus", "arse", "ass", "ballsack", "balls", "bitch", "biatch", "blowjob", "bollock", "bollok", "boner", "boob", "bum", "butt", "buttplug", "clitoris", "cock", "coon", "cunt", "dick", "dildo", "dyke", "fag", "feck", "fellate", "fellatio", "felching", "fuck", "fucking", "fudgepacker", "flange", "goddamn", "hell", "homo", "jizz", "knobend", "labia", "muff", "nigger", "nigga", "penis", "piss", "poop", "pube", "pussy", "queer", "scrotum", "sex", "shit", "sh1t", "slut", "smegma", "spunk", "tit", "tosser", "turd", "twat", "vagina", "wank", "whore"));
+        config.addDefault("config.banned-words", List.of("bedwars", "anal", "anus", "arse", "ass", "ballsack", "balls", "bitch", "biatch", "blowjob", "bollock", "bollok", "boner", "boob", "bum", "butt", "buttplug", "clitoris", "cock", "coon", "cunt", "dick", "dildo", "dyke", "fag", "feck", "fellate", "fellatio", "felching", "fuck", "fucking", "fudgepacker", "flange", "goddamn", "hell", "homo", "jizz", "knobend", "labia", "muff", "nigger", "nigga", "penis", "piss", "poop", "pube", "pussy", "queer", "scrotum", "sex", "shit", "sh1t", "slut", "smegma", "spunk", "tit", "tosser", "turd", "twat", "vagina", "wank", "whore"));
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
@@ -175,6 +177,7 @@ public class Main extends JavaPlugin {
         this.getCommand("staff").setExecutor(new StaffCommand());
         this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("setspawn").setExecutor(new SetSpawnCommand());
+        this.getCommand("warps").setExecutor(new WarpsCommand());
         this.getCommand("warp").setExecutor(new WarpCommand());
         this.getCommand("setwarp").setExecutor(new SetWarpCommand());
         this.getCommand("kit").setExecutor(new KitCommand());
