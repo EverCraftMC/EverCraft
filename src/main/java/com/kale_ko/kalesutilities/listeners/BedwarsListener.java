@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerChatEvent;
 public class BedwarsListener implements Listener {
     @EventHandler
     public void onChatMessage(PlayerChatEvent event) {
-        if (event.getMessage().contains("bedwars")) {
+        if (event.getMessage().contains("bed") || event.getMessage().contains("beb") || event.getMessage().contains("wars")) {
             Main.Instance.getServer().dispatchCommand(event.getPlayer(), "kick " + event.getPlayer().getName() + " Bedwars");
         }
     }
