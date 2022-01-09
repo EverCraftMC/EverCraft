@@ -36,6 +36,8 @@ import com.kale_ko.kalesutilities.listeners.SpawnListener;
 import com.kale_ko.kalesutilities.listeners.WelcomeListener;
 import java.util.List;
 import java.util.logging.Logger;
+
+import org.bukkit.event.HandlerList;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginLoadOrder;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -218,16 +220,26 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        Console.info("Disabled");
+        Console.info("Removing listeners");
+
+        HandlerList.unregisterAll(Main.Instance);
+        
+        Console.info("Finished removing listeners");
+
+        Console.info("Finished disabling");
     }
 
     public void reload() {
-        Console.info("Reloading..");
+        Console.info("Reloading");
+
+        Console.info("Disabling");
 
         this.onDisable();
 
+        Console.info("Enabling");
+
         this.onEnable();
 
-        Console.info("Finished reloading..");
+        Console.info("Finished reloading");
     }
 }

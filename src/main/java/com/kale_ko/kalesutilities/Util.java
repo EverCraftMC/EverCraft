@@ -50,6 +50,10 @@ public class Util {
         return ChatColor.stripColor(message);
     }
 
+    public static String getNoPermmisionMessage(String permission) {
+        return Main.Instance.config.getString("messages.noperms").replace("{permission}", permission);
+    }
+
     public static Boolean hasPermission(Player player, String permission) {
         return player.hasPermission(permission) || player.isOp();
     }
