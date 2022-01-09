@@ -42,7 +42,7 @@ public class StatusCommand implements CommandExecutor {
                         armorstand.setCustomNameVisible(true);
                         armorstand.setCollidable(false);
                         armorstand.setGravity(false);
-                        armorstand.setInvisible(true);
+                        armorstand.setVisible(false);
                         armorstand.setInvulnerable(true);
                         armorstand.setPersistent(false);
                         player.setMetadata("statusEntityUUID", new FixedMetadataValue(Main.Instance, armorstand.getUniqueId().toString()));
