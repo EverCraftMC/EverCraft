@@ -36,7 +36,6 @@ import com.kale_ko.kalesutilities.listeners.SpawnListener;
 import com.kale_ko.kalesutilities.listeners.WelcomeListener;
 import java.util.List;
 import java.util.logging.Logger;
-
 import org.bukkit.event.HandlerList;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginLoadOrder;
