@@ -198,15 +198,15 @@ public class Main extends JavaPlugin {
 
         Console.info("Loading listeners");
 
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new BannedJoinListener(), this);
+        getServer().getPluginManager().registerEvents(new SpawnListener(), this);
+        getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
         getServer().getPluginManager().registerEvents(new MuteListener(), this);
         getServer().getPluginManager().registerEvents(new ChatFilterListener(), this);
         getServer().getPluginManager().registerEvents(new ChatFormatListener(), this);
-        getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
-        getServer().getPluginManager().registerEvents(new SpawnListener(), this);
-        getServer().getPluginManager().registerEvents(new CommandSpyListener(), this);
         getServer().getPluginManager().registerEvents(new SeenListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new CommandSpyListener(), this);
         getServer().getPluginManager().registerEvents(new SignEditorListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
 
