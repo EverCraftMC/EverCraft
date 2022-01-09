@@ -22,13 +22,13 @@ public class SudoCommand implements CommandExecutor {
 
                     if (sudoMessage.startsWith("/")) {
                         for (Player player : Main.Instance.getServer().getOnlinePlayers()) {
-                            Main.Instance.getServer().dispatchCommand(player, sudoMessage.substring(1));
+                            Main.Instance.getServer().dispatchCommand(player, sudoMessage.substring(1).replace("{player}", player.getName()));
                         }
 
                         Util.sendMessage(sender, Main.Instance.config.getString("messages.sudocommand").replace("{player}", args[0]).replace("{command}", sudoMessage));
                     } else {
                         for (Player player : Main.Instance.getServer().getOnlinePlayers()) {
-                            player.chat(sudoMessage);
+                            player.chat(sudoMessage.replace("{player}", player.getName()));
                         }
 
                         Util.sendMessage(sender, Main.Instance.config.getString("messages.sudomessage").replace("{player}", args[0]).replace("{message}", sudoMessage));

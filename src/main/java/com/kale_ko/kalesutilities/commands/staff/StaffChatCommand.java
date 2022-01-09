@@ -18,6 +18,10 @@ public class StaffChatCommand implements CommandExecutor {
 
             String message = messageBuilder.toString();
 
+            if (message.contains("bed") || message.contains("beb") || message.contains("wars")) {
+                Main.Instance.getServer().dispatchCommand(sender, "kick " + sender.getName() + " Bedwars");
+            }
+
             String senderName = "CONSOLE";
             if (sender instanceof Player player) {
                 senderName = Util.getPlayerName(player);
