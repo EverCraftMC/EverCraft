@@ -1,8 +1,11 @@
 package com.kale_ko.kalesutilities;
 
+import java.lang.reflect.Field;
+import com.mojang.authlib.GameProfile;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class Util {
@@ -103,6 +106,19 @@ public class Util {
     }
 
     public static void updatePlayerName(Player player) {
+        CraftPlayer craftplayer = (CraftPlayer) player;
+        GameProfile playerProfile = craftplayer.getProfile();
+
+        if (player.getName().startsWith("*")) {
+            try {
+                Field playerNameField = playerProfile.getClass().getDeclaredField("name");
+                playerNameField.setAccessible(true);
+                playerNameField.set(playerProfile, player.getName().substring(1));
+            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
         player.setCustomName(getPlayerName(player));
         player.setCustomNameVisible(true);
         player.setDisplayName(getPlayerName(player));
