@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     compileOnly "org.spigotmc:spigot-api:${project.minecraft_version}-${project.spigot_version}"
-    compileOnly name: "spigot-${project.minecraft_version}"
+    // compileOnly name: "spigot-${project.minecraft_version}"
     compileOnly "org.spigotmc:plugin-annotations:${project.spigot_anotations_version}"
     annotationProcessor "org.spigotmc:plugin-annotations:${project.spigot_anotations_version}"
 }
