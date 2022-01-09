@@ -24,7 +24,6 @@ public class Config {
 
         this.filePath = Paths.get(dataFolder.getAbsolutePath(), this.fileName).toString();
         this.file = new File(this.filePath);
-        Main.Instance.Console.info(this.filePath);
         try {
             this.file.createNewFile();
         } catch (IOException e) {
