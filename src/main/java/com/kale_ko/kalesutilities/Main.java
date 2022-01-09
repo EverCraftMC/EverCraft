@@ -23,7 +23,6 @@ import com.kale_ko.kalesutilities.commands.warps.SpawnCommand;
 import com.kale_ko.kalesutilities.commands.warps.WarpCommand;
 import com.kale_ko.kalesutilities.commands.warps.WarpsCommand;
 import com.kale_ko.kalesutilities.listeners.BannedJoinListener;
-import com.kale_ko.kalesutilities.listeners.BedwarsListener;
 import com.kale_ko.kalesutilities.listeners.ChatFilterListener;
 import com.kale_ko.kalesutilities.listeners.ChatFormatListener;
 import com.kale_ko.kalesutilities.listeners.CommandSpyListener;
@@ -203,7 +202,6 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MuteListener(), this);
         getServer().getPluginManager().registerEvents(new ChatFilterListener(), this);
         getServer().getPluginManager().registerEvents(new ChatFormatListener(), this);
-        getServer().getPluginManager().registerEvents(new BedwarsListener(), this);
         getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
         getServer().getPluginManager().registerEvents(new CommandSpyListener(), this);
