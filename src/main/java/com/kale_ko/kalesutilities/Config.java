@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
-import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 public class Config {
     private String fileName;
@@ -90,16 +88,8 @@ public class Config {
         return this.config.getBooleanList(key);
     }
 
-    public ItemStack getItemStack(String key) {
-        return this.config.getItemStack(key);
-    }
-
-    public Location getLocation(String key) {
-        return this.config.getLocation(key);
-    }
-
-    public Vector getVector(String key) {
-        return this.config.getVector(key);
+    public <T extends ConfigurationSerializable> T getSerializable(String key, Class<T> clazz) {
+        return this.config.getSerializable(key, clazz);
     }
 
     public void set(String key, Object value) {
