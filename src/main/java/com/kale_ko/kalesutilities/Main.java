@@ -55,7 +55,7 @@ import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 @Author("Kale Ko")
 @LogPrefix("Kales Utilities")
 @ApiVersion(ApiVersion.Target.v1_18)
-@LoadOrder(PluginLoadOrder.STARTUP)
+@LoadOrder(PluginLoadOrder.POSTWORLD)
 
 @Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ks" }, usage = "/kalesutilities [help, reload]")
 @Command(name = "about", desc = "See the about", aliases = { "info" }, usage = "/about")
