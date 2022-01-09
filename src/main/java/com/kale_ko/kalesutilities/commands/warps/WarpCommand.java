@@ -2,6 +2,7 @@ package com.kale_ko.kalesutilities.commands.warps;
 
 import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
+import org.bukkit.Location;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,7 +12,7 @@ public class WarpCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.warp")) {
             if (sender instanceof Player player) {
-                player.teleport(Main.Instance.warps.getLocation(args[0]));
+                player.teleport(Main.Instance.warps.getSerializable(args[0], Location.class));
 
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.warped").replace("{warp}", args[0]));
             } else {
