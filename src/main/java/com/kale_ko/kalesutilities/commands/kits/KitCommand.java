@@ -21,7 +21,7 @@ public class KitCommand implements CommandExecutor {
                     for (String item : items) {
                         ItemStack itemStack = new ItemStack(Material.matchMaterial(item), 1);
 
-                        if (itemStack.getType().getEquipmentSlot() != EquipmentSlot.HAND && itemStack.getType().getEquipmentSlot() != EquipmentSlot.OFF_HAND && player.getEquipment().getItem(itemStack.getType().getEquipmentSlot()).getType().isAir()) {
+                        if (itemStack.getType().getEquipmentSlot() != EquipmentSlot.HAND && itemStack.getType().getEquipmentSlot() != EquipmentSlot.OFF_HAND && (player.getEquipment().getItem(itemStack.getType().getEquipmentSlot()) == null || player.getEquipment().getItem(itemStack.getType().getEquipmentSlot()).getType().isAir())) {
                             player.getEquipment().setItem(itemStack.getType().getEquipmentSlot(), itemStack);
                         } else {
                             player.getInventory().addItem(itemStack);
