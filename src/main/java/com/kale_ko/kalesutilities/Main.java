@@ -3,7 +3,7 @@ package com.kale_ko.kalesutilities;
 import com.kale_ko.kalesutilities.commands.info.AboutCommand;
 import com.kale_ko.kalesutilities.commands.info.KalesUtilitiesCommand;
 import com.kale_ko.kalesutilities.commands.info.RulesCommand;
-import com.kale_ko.kalesutilities.commands.info.StaffCommand;
+// import com.kale_ko.kalesutilities.commands.info.StaffCommand;
 import com.kale_ko.kalesutilities.commands.kits.KitCommand;
 import com.kale_ko.kalesutilities.commands.moderation.BanCommand;
 import com.kale_ko.kalesutilities.commands.moderation.KickCommand;
@@ -177,7 +177,7 @@ public class Main extends JavaPlugin {
         this.getCommand("kalesutilities").setExecutor(new KalesUtilitiesCommand());
         this.getCommand("about").setExecutor(new AboutCommand());
         this.getCommand("rules").setExecutor(new RulesCommand());
-        this.getCommand("staff").setExecutor(new StaffCommand());
+        // this.getCommand("staff").setExecutor(new StaffCommand());
         this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("setspawn").setExecutor(new SetSpawnCommand());
         this.getCommand("warps").setExecutor(new WarpsCommand());
@@ -199,7 +199,7 @@ public class Main extends JavaPlugin {
 
         Console.info("Finished loading commands");
 
-        Console.info("Loading event listeners../");
+        Console.info("Loading event listeners..");
 
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new BannedJoinListener(), this);
