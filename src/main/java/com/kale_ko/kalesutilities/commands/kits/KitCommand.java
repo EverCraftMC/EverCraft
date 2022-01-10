@@ -14,7 +14,7 @@ public class KitCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.kit")) {
-            if (args.length > 0) {
+            if (args.length > 1) {
                 if (sender instanceof Player player) {
                     List<String> items = Main.Instance.kits.getStringList(args[0]);
 
@@ -31,6 +31,26 @@ public class KitCommand implements CommandExecutor {
                     Util.sendMessage(player, Main.Instance.config.getString("message.kit").replace("{kit}", args[0]));
                 } else {
                     Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+                }
+            } else if (args.length > 0) {
+                Player player = Main.Instance.getServer().getPlayer(args[0]);
+
+                if (player != null) {
+                    List<String> items = Main.Instance.kits.getStringList(args[1]);
+
+                    for (String item : items) {
+                        ItemStack itemStack = new ItemStack(Material.matchMaterial(item), 1);
+
+                        if (itemStack.getType().getEquipmentSlot() != EquipmentSlot.HAND && itemStack.getType().getEquipmentSlot() != EquipmentSlot.OFF_HAND && (player.getEquipment().getItem(itemStack.getType().getEquipmentSlot()) == null || player.getEquipment().getItem(itemStack.getType().getEquipmentSlot()).getType().isAir())) {
+                            player.getEquipment().setItem(itemStack.getType().getEquipmentSlot(), itemStack);
+                        } else {
+                            player.getInventory().addItem(itemStack);
+                        }
+                    }
+
+                    Util.sendMessage(player, Main.Instance.config.getString("message.kit").replace("{kit}", args[0]));
+                } else {
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
                 }
             } else {
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("kit").getUsage()));

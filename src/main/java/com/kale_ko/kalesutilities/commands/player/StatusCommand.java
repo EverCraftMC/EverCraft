@@ -37,7 +37,7 @@ public class StatusCommand implements CommandExecutor {
                     }
 
                     if (found == null) {
-                        ArmorStand armorstand = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+                        ArmorStand armorstand = (ArmorStand) player.getWorld().spawnEntity(player.getLocation().add(0, 0.1, 0), EntityType.ARMOR_STAND);
                         armorstand.setCustomName(statusMessage);
                         armorstand.setCustomNameVisible(true);
                         armorstand.setCollidable(false);
