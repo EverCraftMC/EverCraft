@@ -10,7 +10,24 @@ public class NicknameCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.setnickname")) {
-            if (args.length > 0) {
+            if (args.length > 1) {
+                if (Util.hasPermission(sender, "kalesutilities.sudo")) {
+                    Player player = Main.Instance.getServer().getPlayer(args[0]);
+
+                    if (player != null) {
+                        Main.Instance.players.set("players." + player.getPlayer().getName() + ".nickname", args[1]);
+
+                        Main.Instance.players.save();
+
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.setnickname"));
+                        Util.updatePlayerName(player);
+                    } else {
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
+                    }
+                } else {
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.sudo"));
+                }
+            } else if (args.length > 0) {
                 if (sender instanceof Player player) {
                     Main.Instance.players.set("players." + player.getPlayer().getName() + ".nickname", args[0]);
 

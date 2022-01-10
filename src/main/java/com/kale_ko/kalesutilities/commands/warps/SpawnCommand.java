@@ -18,11 +18,20 @@ public class SpawnCommand implements CommandExecutor {
             } else if (args.length == 0) {
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
             } else {
-                Player player = Main.Instance.getServer().getPlayer(args[0]);
-                player.teleport(Main.Instance.spawn.getSerializable(player.getWorld().getName(), Location.class));
+                if (Util.hasPermission(sender, "kalesutilities.sudo")) {
+                    Player player = Main.Instance.getServer().getPlayer(args[0]);
 
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.spawnedplayer").replace("{player}", args[0]));
-                Util.sendMessage(player, Main.Instance.config.getString("messages.spawned"));
+                    if (player != null) {
+                        player.teleport(Main.Instance.spawn.getSerializable(player.getWorld().getName(), Location.class));
+
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.spawnedplayer").replace("{player}", args[0]));
+                        Util.sendMessage(player, Main.Instance.config.getString("messages.spawned"));
+                    } else {
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
+                    }
+                } else {
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.sudo"));
+                }
             }
         } else {
             Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.spawn"));

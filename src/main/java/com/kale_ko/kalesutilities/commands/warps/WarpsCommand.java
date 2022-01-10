@@ -5,6 +5,7 @@ import com.kale_ko.kalesutilities.Util;
 import java.util.Set;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class WarpsCommand implements CommandExecutor {
     @Override
@@ -17,7 +18,21 @@ public class WarpsCommand implements CommandExecutor {
                 warps.append(key + "\n");
             }
 
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.warps").replace("{warpList}", warps.toString()));
+            if (args.length == 0) {
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.warps").replace("{warpList}", warps.toString()));
+            } else {
+                if (Util.hasPermission(sender, "kalesutilities.sudo")) {
+                    Player player = Main.Instance.getServer().getPlayer(args[0]);
+
+                    if (player != null) {
+                        Util.sendMessage(player, Main.Instance.config.getString("messages.warps").replace("{warpList}", warps.toString()));
+                    } else {
+                        Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
+                    }
+                } else {
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.sudo"));
+                }
+            }
         } else {
             Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.warps"));
         }

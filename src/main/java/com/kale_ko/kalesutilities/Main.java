@@ -48,28 +48,28 @@ import org.bukkit.plugin.java.annotation.permission.Permission;
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
 import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 
-@Plugin(name = "KalesUtilities", version = "2.0.0")
+@Plugin(name = "KalesUtilities", version = "3.0.0")
 @Description("A custom plugin to run on KalesMC")
-@Author("Kale Ko")
+@Author("Kale Ko (contact@kaleko.ga)")
 @LogPrefix("Kales Utilities")
 @ApiVersion(ApiVersion.Target.v1_18)
 @LoadOrder(PluginLoadOrder.POSTWORLD)
 
-@Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ks" }, usage = "/kalesutilities [help, reload]")
-@Command(name = "about", desc = "See the about", aliases = { "info" }, usage = "/about")
-@Command(name = "rules", desc = "See the rules", aliases = {}, usage = "/rules")
-@Command(name = "staff", desc = "See the staff", aliases = {}, usage = "/staff")
+@Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ku", "ks" }, usage = "/kalesutilities [help, reload]")
+@Command(name = "about", desc = "See the about", aliases = { "info" }, usage = "/about {player (optional)}")
+@Command(name = "rules", desc = "See the rules", aliases = { "ruleslist" }, usage = "/rules {player (optional)}")
+// @Command(name = "staff", desc = "See the staff", aliases = { "stafflist" }, usage = "/staff {player (optional)}")
 @Command(name = "spawn", desc = "Go to the spawn", aliases = { "hub", "lobby" }, usage = "/spawn {player (optional)}")
 @Command(name = "setspawn", desc = "Sets the spawn to your location", aliases = { "sethub", "setlobby" }, usage = "/setspawn")
-@Command(name = "warps", desc = "List the warps", aliases = {}, usage = "/warps")
-@Command(name = "warp", desc = "Go to a warp", aliases = {}, usage = "/warp {warp}")
+@Command(name = "warps", desc = "List the warps", aliases = { "listwarps", "warpslist" }, usage = "/warps {player (optional)}")
+@Command(name = "warp", desc = "Go to a warp", aliases = {}, usage = "/warp {player (optional)} {warp}")
 @Command(name = "setwarp", desc = "Sets a warp at your location", aliases = {}, usage = "/setwarp {warp}")
-@Command(name = "kit", desc = "Get a kit", aliases = {}, usage = "/kit {kit}")
-@Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen" }, usage = "/seen {player}")
-@Command(name = "nickname", desc = "Sets you nickname", aliases = { "nick" }, usage = "/nickname {nickname}")
-@Command(name = "prefix", desc = "Sets you prefix", aliases = {}, usage = "/prefix {prefix}")
-@Command(name = "status", desc = "Sets you status", aliases = { "afk" }, usage = "/status {status}")
-@Command(name = "gmc", desc = "Sets you gamemode", aliases = { "gms", "gma", "gmsp" }, usage = "/gm(c, s, a, sp)")
+@Command(name = "kit", desc = "Get a kit", aliases = { "getkit" }, usage = "/kit {player (optional)} {kit}")
+@Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen", "online", "lastonline" }, usage = "/seen {player}")
+@Command(name = "nickname", desc = "Sets you nickname", aliases = { "nick", "setnickname", "setnick" }, usage = "/nickname {player (optional)} {nickname}")
+@Command(name = "prefix", desc = "Sets you prefix", aliases = { "setprefix" }, usage = "/prefix {player (optional)} {prefix}")
+@Command(name = "status", desc = "Sets you status", aliases = { "setstatus" }, usage = "/status {status}")
+@Command(name = "gmc", desc = "Sets you gamemode", aliases = { "gms", "gma", "gmsp" }, usage = "/gm(c, s, a, sp) {player (optional)}")
 @Command(name = "sudo", desc = "Make a player say something or run a command", aliases = {}, usage = "/sudo {player} {message/command}")
 @Command(name = "staffchat", desc = "Send a message in the staffchat", aliases = { "sc" }, usage = "/staffchat {message}")
 @Command(name = "kick", desc = "Kick a player from the server", aliases = {}, usage = "/kick {player} {message}")
@@ -106,6 +106,7 @@ import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 
 public class Main extends JavaPlugin {
     public static Main Instance;
+
     public final Logger Console = getLogger();
 
     public Config config;
@@ -117,13 +118,14 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         Main.Instance = this;
+
+        Console.info("Loading config..");
+
         config = Config.load("config.yml");
         players = Config.load("players.yml");
         spawn = Config.load("spawn.yml");
         warps = Config.load("warps.yml");
         kits = Config.load("kits.yml");
-
-        Console.info("Loading config");
 
         config.addDefault("config.prefix", "&6&l[Kales Utilities]&r");
         config.addDefault("config.chatFormat", "{prefix}{player} > {message}");
@@ -145,6 +147,7 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.setspawn", "Successfully set the spawn");
         config.addDefault("messages.warps", "\n{warpList}");
         config.addDefault("messages.warped", "You have warped to {warp}");
+        config.addDefault("messages.spawnedplayer", "Successfully sent {player} to {warp}");
         config.addDefault("messages.setwarp", "Successfully set warp {warp}");
         config.addDefault("message.kit", "Successfully received kit {kit}");
         config.addDefault("messages.lastonline", "{player} was last seen {time}!");
@@ -169,7 +172,7 @@ public class Main extends JavaPlugin {
 
         Console.info("Finished loading config");
 
-        Console.info("Loading commands");
+        Console.info("Loading commands..");
 
         this.getCommand("kalesutilities").setExecutor(new KalesUtilitiesCommand());
         this.getCommand("about").setExecutor(new AboutCommand());
@@ -196,7 +199,7 @@ public class Main extends JavaPlugin {
 
         Console.info("Finished loading commands");
 
-        Console.info("Loading listeners");
+        Console.info("Loading event listeners../");
 
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new BannedJoinListener(), this);
@@ -210,30 +213,30 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SignEditorListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
 
-        Console.info("Finished loading listeners");
+        Console.info("Finished loading event listeners");
 
-        Console.info("Finished loading");
+        Console.info("Finished enabling");
     }
 
     @Override
     public void onDisable() {
-        Console.info("Removing listeners");
+        Console.info("Removing event listeners..");
 
         HandlerList.unregisterAll(Main.Instance);
         
-        Console.info("Finished removing listeners");
+        Console.info("Finished removing event listeners");
 
         Console.info("Finished disabling");
     }
 
     public void reload() {
-        Console.info("Reloading");
+        Console.info("Reloading..");
 
-        Console.info("Disabling");
+        Console.info("Disabling..");
 
         this.onDisable();
 
-        Console.info("Enabling");
+        Console.info("Enabling..");
 
         this.onEnable();
 

@@ -53,7 +53,7 @@ public class Util {
         return ChatColor.stripColor(message);
     }
 
-    public static String getNoPermmisionMessage(String permission) {
+    public static String getNoPermissionMessage(String permission) {
         return Main.Instance.config.getString("messages.noperms").replace("{permission}", permission);
     }
 
