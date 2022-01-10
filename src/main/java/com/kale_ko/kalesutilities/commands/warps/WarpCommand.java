@@ -11,11 +11,11 @@ public class WarpCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.warp")) {
-            if (args.length == 0 && sender instanceof Player player) {
+            if (args.length == 1 && sender instanceof Player player) {
                 player.teleport(Main.Instance.warps.getSerializable(args[0], Location.class));
 
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.warped"));
-            } else if (args.length == 0) {
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.warped").replace("{warp}", args[0]));
+            } else if (args.length == 1) {
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
             } else {
                 if (Util.hasPermission(sender, "kalesutilities.sudo")) {
