@@ -5,6 +5,7 @@ import com.kale_ko.kalesutilities.commands.info.KalesUtilitiesCommand;
 import com.kale_ko.kalesutilities.commands.info.RulesCommand;
 // import com.kale_ko.kalesutilities.commands.info.StaffCommand;
 import com.kale_ko.kalesutilities.commands.kits.KitCommand;
+import com.kale_ko.kalesutilities.commands.kits.KitsCommand;
 import com.kale_ko.kalesutilities.commands.moderation.BanCommand;
 import com.kale_ko.kalesutilities.commands.moderation.KickCommand;
 import com.kale_ko.kalesutilities.commands.moderation.MuteCommand;
@@ -64,6 +65,7 @@ import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 @Command(name = "warps", desc = "List the warps", aliases = { "listwarps", "warpslist" }, usage = "/warps {player (optional)}")
 @Command(name = "warp", desc = "Go to a warp", aliases = {}, usage = "/warp {player (optional)} {warp}")
 @Command(name = "setwarp", desc = "Sets a warp at your location", aliases = {}, usage = "/setwarp {warp}")
+@Command(name = "kits", desc = "List the kits", aliases = { "listkits", "kitslist" }, usage = "/kits {player (optional)}")
 @Command(name = "kit", desc = "Get a kit", aliases = { "getkit" }, usage = "/kit {player (optional)} {kit}")
 @Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen", "online", "lastonline" }, usage = "/seen {player}")
 @Command(name = "nickname", desc = "Sets you nickname", aliases = { "nick", "setnickname", "setnick" }, usage = "/nickname {player (optional)} {nickname}")
@@ -86,6 +88,7 @@ import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 @Permission(name = "kalesutilities.warps", desc = "Use /warps", defaultValue = PermissionDefault.TRUE)
 @Permission(name = "kalesutilities.warp", desc = "Use /warp", defaultValue = PermissionDefault.TRUE)
 @Permission(name = "kalesutilities.setwarp", desc = "Use /setwarp", defaultValue = PermissionDefault.OP)
+@Permission(name = "kalesutilities.kits", desc = "Use /kits", defaultValue = PermissionDefault.TRUE)
 @Permission(name = "kalesutilities.kit", desc = "Use /kit", defaultValue = PermissionDefault.TRUE)
 @Permission(name = "kalesutilities.seen", desc = "Use /seen", defaultValue = PermissionDefault.TRUE)
 @Permission(name = "kalesutilities.setnickname", desc = "Use /nickname", defaultValue = PermissionDefault.TRUE)
@@ -147,9 +150,10 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.setspawn", "Successfully set the spawn");
         config.addDefault("messages.warps", "\n{warpList}");
         config.addDefault("messages.warped", "You have warped to {warp}");
-        config.addDefault("messages.spawnedplayer", "Successfully sent {player} to {warp}");
+        config.addDefault("messages.warpedplayer", "Successfully sent {player} to {warp}");
         config.addDefault("messages.setwarp", "Successfully set warp {warp}");
-        config.addDefault("message.kit", "Successfully received kit {kit}");
+        config.addDefault("messages.kits", "\n{kitList}");
+        config.addDefault("messages.kit", "Successfully received kit {kit}");
         config.addDefault("messages.lastonline", "{player} was last seen {time}!");
         config.addDefault("messages.playeronline", "{player} is online right now!");
         config.addDefault("messages.setnickname", "Successfully set your nickname");
@@ -183,6 +187,7 @@ public class Main extends JavaPlugin {
         this.getCommand("warps").setExecutor(new WarpsCommand());
         this.getCommand("warp").setExecutor(new WarpCommand());
         this.getCommand("setwarp").setExecutor(new SetWarpCommand());
+        this.getCommand("kits").setExecutor(new KitsCommand());
         this.getCommand("kit").setExecutor(new KitCommand());
         this.getCommand("seen").setExecutor(new SeenCommand());
         this.getCommand("nickname").setExecutor(new NicknameCommand());
