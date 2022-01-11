@@ -15,7 +15,7 @@ public class NicknameCommand implements CommandExecutor {
                     Player player = Main.Instance.getServer().getPlayer(args[0]);
 
                     if (player != null) {
-                        Main.Instance.players.set("players." + player.getPlayer().getName() + ".nickname", args[1]);
+                        Main.Instance.players.set(player.getPlayer().getName() + ".nickname", args[1]);
 
                         Main.Instance.players.save();
 
@@ -29,7 +29,7 @@ public class NicknameCommand implements CommandExecutor {
                 }
             } else if (args.length > 0) {
                 if (sender instanceof Player player) {
-                    Main.Instance.players.set("players." + player.getPlayer().getName() + ".nickname", args[0]);
+                    Main.Instance.players.set(player.getPlayer().getName() + ".nickname", args[0]);
 
                     Main.Instance.players.save();
 
