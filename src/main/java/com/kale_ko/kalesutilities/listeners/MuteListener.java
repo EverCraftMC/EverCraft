@@ -5,12 +5,11 @@ import com.kale_ko.kalesutilities.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-@SuppressWarnings("deprecation")
 public class MuteListener implements Listener {
     @EventHandler
-    public void onChatMessage(PlayerChatEvent event) {
+    public void onChatMessage(AsyncPlayerChatEvent event) {
         if (Main.Instance.players.getBoolean(event.getPlayer().getName() + ".muted")) {
             event.setCancelled(true);
 
