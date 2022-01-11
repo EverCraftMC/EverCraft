@@ -25,7 +25,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-        if (Main.Instance.players.getString(event.getPlayer().getName() + ".nickname").equalsIgnoreCase("") && Main.Instance.players.getString(event.getPlayer().getName() + ".prefix").equalsIgnoreCase("")) {
+        if ((Main.Instance.players.getString(event.getPlayer().getName() + ".nickname").equalsIgnoreCase("") || Main.Instance.players.getString(event.getPlayer().getName() + ".nickname").equalsIgnoreCase(event.getPlayer().getName())) && Main.Instance.players.getString(event.getPlayer().getName() + ".prefix").equalsIgnoreCase("")) {
             Main.Instance.players.set(event.getPlayer().getName(), null);
         }
 
