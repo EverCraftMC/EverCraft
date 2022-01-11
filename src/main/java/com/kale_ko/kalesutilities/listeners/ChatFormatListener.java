@@ -4,12 +4,11 @@ import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-@SuppressWarnings("deprecation")
 public class ChatFormatListener implements Listener {
     @EventHandler
-    public void onChatMessage(PlayerChatEvent event) {
+    public void onChatMessage(AsyncPlayerChatEvent event) {
         String player = Util.getPlayerNickName(event.getPlayer());
         String prefix = Util.getPlayerPrefix(event.getPlayer());
 
