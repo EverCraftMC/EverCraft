@@ -2,18 +2,14 @@ package com.kale_ko.kalesutilities.commands.moderation;
 
 import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-@SuppressWarnings("deprecation")
 public class BanCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.ban")) {
             if (args.length > 1) {
-                OfflinePlayer player = Main.Instance.getServer().getOfflinePlayer(args[0]);
-
                 StringBuilder banMessageBuilder = new StringBuilder();
 
                 for (Integer i = 1; i < args.length; i++) {
@@ -22,8 +18,8 @@ public class BanCommand implements CommandExecutor {
 
                 String banMessage = banMessageBuilder.toString();
 
-                Main.Instance.players.set(player.getPlayer().getName() + ".banned", true);
-                Main.Instance.players.set(player.getPlayer().getName() + ".banMessage", Main.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "are"));
+                Main.Instance.players.set(args[0] + ".banned", true);
+                Main.Instance.players.set(args[0] + ".banMessage", Main.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "are"));
 
                 Main.Instance.players.save();
 
