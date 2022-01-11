@@ -114,6 +114,7 @@ public class Main extends JavaPlugin {
 
     public Config config;
     public Config players;
+    public Config seen;
     public Config spawn;
     public Config warps;
     public Config kits;
@@ -126,6 +127,7 @@ public class Main extends JavaPlugin {
 
         config = Config.load("config.yml");
         players = Config.load("players.yml");
+        seen = Config.load("seen.yml");
         spawn = Config.load("spawn.yml");
         warps = Config.load("warps.yml");
         kits = Config.load("kits.yml");

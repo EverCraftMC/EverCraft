@@ -22,8 +22,8 @@ public class BanCommand implements CommandExecutor {
 
                 String banMessage = banMessageBuilder.toString();
 
-                Main.Instance.players.set("players." + player.getPlayer().getName() + ".banned", true);
-                Main.Instance.players.set("players." + player.getPlayer().getName() + ".banMessage", Main.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "are"));
+                Main.Instance.players.set(player.getPlayer().getName() + ".banned", true);
+                Main.Instance.players.set(player.getPlayer().getName() + ".banMessage", Main.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "are"));
 
                 Main.Instance.players.save();
 
