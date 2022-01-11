@@ -11,10 +11,10 @@ import org.bukkit.event.player.PlayerChatEvent;
 public class MuteListener implements Listener {
     @EventHandler
     public void onChatMessage(PlayerChatEvent event) {
-        if (Main.Instance.players.getBoolean("players." + event.getPlayer().getName() + ".muted")) {
+        if (Main.Instance.players.getBoolean(event.getPlayer().getName() + ".muted")) {
             event.setCancelled(true);
 
-            Util.sendMessage(event.getPlayer(), Main.Instance.players.getString("players." + event.getPlayer().getName() + ".mutedMessage"));
+            Util.sendMessage(event.getPlayer(), Main.Instance.players.getString(event.getPlayer().getName() + ".mutedMessage"));
 
             for (Player player : Main.Instance.getServer().getOnlinePlayers()) {
                 if (player != event.getPlayer() && Util.hasPermission(player, "kalesutilities.mute")) {

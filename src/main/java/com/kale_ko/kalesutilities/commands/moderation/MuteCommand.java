@@ -21,8 +21,8 @@ public class MuteCommand implements CommandExecutor {
 
                 String muteMessage = muteMessageBuilder.toString();
 
-                Main.Instance.players.set("players." + player.getPlayer().getName() + ".muted", true);
-                Main.Instance.players.set("players." + player.getPlayer().getName() + ".mutedMessage", Main.Instance.config.getString("messages.mute").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage).replace("was", "are"));
+                Main.Instance.players.set(player.getPlayer().getName() + ".muted", true);
+                Main.Instance.players.set(player.getPlayer().getName() + ".mutedMessage", Main.Instance.config.getString("messages.mute").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage).replace("was", "are"));
 
                 Main.Instance.players.save();
 

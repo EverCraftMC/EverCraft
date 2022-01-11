@@ -14,7 +14,7 @@ public class SeenCommand implements CommandExecutor {
                 if (Main.Instance.getServer().getPlayer(args[0]) != null) {
                     Util.sendMessage(sender, Main.Instance.config.getString("messages.playeronline").replace("{player}", args[0]));
                 } else {
-                    long lastOnline = Main.Instance.players.getLong("players." + args[0] + ".lastOnline");
+                    long lastOnline = Main.Instance.seen.getLong(args[0]);
 
                     if (lastOnline != 0) {
                         Util.sendMessage(sender, Main.Instance.config.getString("messages.lastonline").replace("{player}", args[0]).replace("{time}", new Date(lastOnline).toString()));

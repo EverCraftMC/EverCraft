@@ -10,8 +10,8 @@ public class UnmuteCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (Util.hasPermission(sender, "kalesutilities.mute")) {
             if (args.length > 0) {
-                Main.Instance.players.set("players." + args[0] + ".muted", null);
-                Main.Instance.players.set("players." + args[0] + ".mutedMessage", null);
+                Main.Instance.players.set(args[0] + ".muted", null);
+                Main.Instance.players.set(args[0] + ".mutedMessage", null);
 
                 Main.Instance.players.save();
 
