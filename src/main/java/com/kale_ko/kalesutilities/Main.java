@@ -3,7 +3,7 @@ package com.kale_ko.kalesutilities;
 import com.kale_ko.kalesutilities.commands.info.AboutCommand;
 import com.kale_ko.kalesutilities.commands.info.KalesUtilitiesCommand;
 import com.kale_ko.kalesutilities.commands.info.RulesCommand;
-// import com.kale_ko.kalesutilities.commands.info.StaffCommand;
+import com.kale_ko.kalesutilities.commands.info.StaffCommand;
 import com.kale_ko.kalesutilities.commands.kits.KitCommand;
 import com.kale_ko.kalesutilities.commands.kits.KitsCommand;
 import com.kale_ko.kalesutilities.commands.moderation.BanCommand;
@@ -59,7 +59,7 @@ import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 @Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ku", "ks" }, usage = "/kalesutilities [help, reload]")
 @Command(name = "about", desc = "See the about", aliases = { "info" }, usage = "/about {player (optional)}")
 @Command(name = "rules", desc = "See the rules", aliases = { "ruleslist" }, usage = "/rules {player (optional)}")
-// @Command(name = "staff", desc = "See the staff", aliases = { "stafflist" }, usage = "/staff {player (optional)}")
+@Command(name = "staff", desc = "See the staff", aliases = { "stafflist" }, usage = "/staff {player (optional)}")
 @Command(name = "spawn", desc = "Go to the spawn", aliases = { "hub", "lobby" }, usage = "/spawn {player (optional)}")
 @Command(name = "setspawn", desc = "Sets the spawn to your location", aliases = { "sethub", "setlobby" }, usage = "/setspawn")
 @Command(name = "warps", desc = "List the warps", aliases = { "listwarps", "warpslist" }, usage = "/warps {player (optional)}")
@@ -183,7 +183,7 @@ public class Main extends JavaPlugin {
         this.getCommand("kalesutilities").setExecutor(new KalesUtilitiesCommand());
         this.getCommand("about").setExecutor(new AboutCommand());
         this.getCommand("rules").setExecutor(new RulesCommand());
-        // this.getCommand("staff").setExecutor(new StaffCommand());
+        this.getCommand("staff").setExecutor(new StaffCommand());
         this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("setspawn").setExecutor(new SetSpawnCommand());
         this.getCommand("warps").setExecutor(new WarpsCommand());
