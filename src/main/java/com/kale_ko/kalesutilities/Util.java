@@ -109,15 +109,15 @@ public class Util {
         CraftPlayer craftplayer = (CraftPlayer) player;
         GameProfile playerProfile = craftplayer.getProfile();
 
-        if (player.getName().startsWith("*")) {
-            try {
-                Field playerNameField = playerProfile.getClass().getDeclaredField("name");
-                playerNameField.setAccessible(true);
-                playerNameField.set(playerProfile, player.getName().substring(1));
-            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
+        // if (player.getName().startsWith("*")) {
+        //     try {
+        //         Field playerNameField = playerProfile.getClass().getDeclaredField("name");
+        //         playerNameField.setAccessible(true);
+        //         playerNameField.set(playerProfile, player.getName().substring(1));
+        //     } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+        //         e.printStackTrace();
+        //     }
+        // }
 
         player.setCustomName(getPlayerName(player));
         player.setCustomNameVisible(true);
