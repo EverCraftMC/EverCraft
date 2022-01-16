@@ -2,7 +2,6 @@ package com.kale_ko.kalesutilities.commands.player;
 
 import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
-import java.util.List;
 import java.util.UUID;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,8 +9,6 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 
 public class StatusCommand implements CommandExecutor {
     @Override
@@ -26,16 +23,7 @@ public class StatusCommand implements CommandExecutor {
 
                 String statusMessage = statusMessageBuilder.toString().substring(0, statusMessageBuilder.length() - 1);
 
-                List<MetadataValue> statusEntityUUID = player.getMetadata("statusEntityUUID");
-
-                String found = null;
-                for (MetadataValue metadata : statusEntityUUID) {
-                    if (metadata.getOwningPlugin() == Main.Instance) {
-                        found = metadata.asString();
-                    }
-                }
-
-                if (found == null) {
+                if (!Util.hasMetadata(player, "statusEntityUUID")) {
                     ArmorStand armorstand = (ArmorStand) player.getWorld().spawnEntity(player.getLocation().add(0, 0.1, 0), EntityType.ARMOR_STAND);
                     armorstand.setCustomName(statusMessage);
                     armorstand.setCustomNameVisible(true);
@@ -44,9 +32,9 @@ public class StatusCommand implements CommandExecutor {
                     armorstand.setVisible(false);
                     armorstand.setInvulnerable(true);
                     armorstand.setPersistent(false);
-                    player.setMetadata("statusEntityUUID", new FixedMetadataValue(Main.Instance, armorstand.getUniqueId().toString()));
+                    Util.setMetadata(player, "statusEntityUUID", armorstand.getUniqueId().toString());
                 } else {
-                    Entity armorstand = Main.Instance.getServer().getEntity(UUID.fromString(found));
+                    Entity armorstand = Main.Instance.getServer().getEntity(UUID.fromString(Util.getMetadata(player, "statusEntityUUID").asString()));
                     armorstand.setCustomName(statusMessage);
                 }
             } else {
