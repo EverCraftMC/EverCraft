@@ -37,6 +37,17 @@ public class PrefixCommand implements CommandExecutor {
             } else {
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
             }
+        } else if (args.length == 0) {
+            if (sender instanceof Player player) {
+                Main.Instance.players.set(player.getPlayer().getName() + ".prefix", "");
+
+                Main.Instance.players.save();
+
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.setprefix"));
+                Util.updatePlayerName(player);
+            } else {
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+            }
         } else {
             Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("prefix").getUsage()));
         }
