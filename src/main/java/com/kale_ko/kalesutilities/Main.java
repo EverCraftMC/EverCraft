@@ -1,6 +1,7 @@
 package com.kale_ko.kalesutilities;
 
 import com.kale_ko.kalesutilities.commands.info.AboutCommand;
+import com.kale_ko.kalesutilities.commands.info.HelpCommand;
 import com.kale_ko.kalesutilities.commands.info.KalesUtilitiesCommand;
 import com.kale_ko.kalesutilities.commands.info.RulesCommand;
 import com.kale_ko.kalesutilities.commands.info.StaffCommand;
@@ -248,6 +249,7 @@ public class Main extends JavaPlugin {
         Console.info("Loading commands..");
 
         this.getCommand("kalesutilities").setExecutor(new KalesUtilitiesCommand());
+        this.getCommand("help").setExecutor(new HelpCommand());
         this.getCommand("about").setExecutor(new AboutCommand());
         this.getCommand("rules").setExecutor(new RulesCommand());
         this.getCommand("staff").setExecutor(new StaffCommand());

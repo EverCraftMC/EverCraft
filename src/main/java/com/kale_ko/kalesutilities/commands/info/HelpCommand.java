@@ -19,7 +19,7 @@ public class HelpCommand implements CommandExecutor {
 
                 for (Plugin plugin : Main.Instance.getServer().getPluginManager().getPlugins()) {
                     for (org.bukkit.command.Command pluginCommand : PluginCommandYamlParser.parse(plugin)) {
-                        if (Util.hasPermission(player, pluginCommand.getPermission())) {
+                        if (pluginCommand.getPermission() == null || Util.hasPermission(player, pluginCommand.getPermission())) {
                             help.append(pluginCommand.getUsage() + " - " + pluginCommand.getDescription() + "\n");
                         }
                     }
@@ -34,7 +34,7 @@ public class HelpCommand implements CommandExecutor {
 
             for (Plugin plugin : Main.Instance.getServer().getPluginManager().getPlugins()) {
                 for (org.bukkit.command.Command pluginCommand : PluginCommandYamlParser.parse(plugin)) {
-                    if (Util.hasPermission(sender, pluginCommand.getPermission())) {
+                    if (pluginCommand.getPermission() == null || Util.hasPermission(sender, pluginCommand.getPermission())) {
                         help.append(pluginCommand.getUsage() + " - " + pluginCommand.getDescription() + "\n");
                     }
                 }
