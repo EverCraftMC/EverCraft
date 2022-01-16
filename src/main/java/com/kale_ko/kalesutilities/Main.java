@@ -79,6 +79,7 @@ import org.bukkit.plugin.java.annotation.plugin.Website;
 })
 
 @Permission(name = "kalesutilities.commands.info.*", desc = "Use all kalesutilities info commands", defaultValue = PermissionDefault.FALSE, children = {
+        @ChildPermission(name = "kalesutilities.commands.info.help", inherit = true),
         @ChildPermission(name = "kalesutilities.commands.info.about", inherit = true),
         @ChildPermission(name = "kalesutilities.commands.info.rules", inherit = true),
         @ChildPermission(name = "kalesutilities.commands.info.staff", inherit = true)
@@ -116,6 +117,7 @@ import org.bukkit.plugin.java.annotation.plugin.Website;
         @ChildPermission(name = "kalesutilities.commands.moderation.mute", inherit = true)
 })
 
+@Permission(name = "kalesutilities.commands.info.help", desc = "Use /help", defaultValue = PermissionDefault.TRUE)
 @Permission(name = "kalesutilities.commands.info.about", desc = "Use /about", defaultValue = PermissionDefault.TRUE)
 @Permission(name = "kalesutilities.commands.info.rules", desc = "Use /rules", defaultValue = PermissionDefault.TRUE)
 @Permission(name = "kalesutilities.commands.info.staff", desc = "Use /staff", defaultValue = PermissionDefault.TRUE)
@@ -149,6 +151,7 @@ import org.bukkit.plugin.java.annotation.plugin.Website;
 @Permission(name = "kalesutilities.features.commandspy", desc = "Receive command spy notifications", defaultValue = PermissionDefault.OP)
 
 @Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ku", "ks" }, usage = "/kalesutilities [help, reload]")
+@Command(name = "help", desc = "See the help", aliases = { "h", "howto" }, usage = "/help {player (optional)}", permission = "kalesutilities.commands.info.help")
 @Command(name = "about", desc = "See the about", aliases = { "info" }, usage = "/about {player (optional)}", permission = "kalesutilities.commands.info.about")
 @Command(name = "rules", desc = "See the rules", aliases = { "ruleslist" }, usage = "/rules {player (optional)}", permission = "kalesutilities.commands.info.rules")
 @Command(name = "staff", desc = "See the staff", aliases = { "stafflist" }, usage = "/staff {player (optional)}", permission = "kalesutilities.commands.info.staff")
@@ -201,7 +204,7 @@ public class Main extends JavaPlugin {
         config.addDefault("config.chatFormat", "{prefix}{player} > {message}");
         config.addDefault("config.about", "Kales Minecraft Server!");
         config.addDefault("config.rules", "\n1. No Hacking\n2. No Griefing\n3. Be Respectful\n4. No Profanity\n5. Just Don't Be Rude/Annoying.\n\nBreaking rules could result in a kick, ban, or mute");
-        config.addDefault("config.staff", "&4&l[Owner] Kale_Ko\n&1&l[Admin] JMbuilder");
+        config.addDefault("config.staff", "");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
