@@ -16,6 +16,7 @@ import com.kale_ko.kalesutilities.commands.player.NicknameCommand;
 import com.kale_ko.kalesutilities.commands.player.PrefixCommand;
 import com.kale_ko.kalesutilities.commands.player.SeenCommand;
 import com.kale_ko.kalesutilities.commands.player.StatusCommand;
+import com.kale_ko.kalesutilities.commands.staff.CommandSpyCommand;
 import com.kale_ko.kalesutilities.commands.staff.GamemodeCommand;
 import com.kale_ko.kalesutilities.commands.staff.StaffChatCommand;
 import com.kale_ko.kalesutilities.commands.staff.SudoCommand;
@@ -50,7 +51,7 @@ import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
 import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 import org.bukkit.plugin.java.annotation.plugin.Website;
 
-@Plugin(name = "KalesUtilities", version = "4.0.0")
+@Plugin(name = "KalesUtilities", version = "4.1.0")
 @Description("A custom plugin to run on KalesMC")
 @Website("https://github.com/Kale-Ko/Kales-Utilities-V2")
 @Author("Kale Ko")
@@ -109,7 +110,8 @@ import org.bukkit.plugin.java.annotation.plugin.Website;
 @Permission(name = "kalesutilities.commands.staff.*", desc = "Use all kalesutilities staff commands", defaultValue = PermissionDefault.FALSE, children = {
         @ChildPermission(name = "kalesutilities.commands.staff.gamemode", inherit = true),
         @ChildPermission(name = "kalesutilities.commands.staff.sudo", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.staff.staffchat", inherit = true)
+        @ChildPermission(name = "kalesutilities.commands.staff.staffchat", inherit = true),
+        @ChildPermission(name = "kalesutilities.commands.staff.commandspy", inherit = true)
 })
 
 @Permission(name = "kalesutilities.commands.moderation.*", desc = "Use all kalesutilities moderation commands", defaultValue = PermissionDefault.FALSE, children = {
@@ -140,6 +142,7 @@ import org.bukkit.plugin.java.annotation.plugin.Website;
 @Permission(name = "kalesutilities.commands.staff.gamemode", desc = "Use /gm", defaultValue = PermissionDefault.OP)
 @Permission(name = "kalesutilities.commands.staff.sudo", desc = "Use /sudo", defaultValue = PermissionDefault.OP)
 @Permission(name = "kalesutilities.commands.staff.staffchat", desc = "Use /staffchat", defaultValue = PermissionDefault.OP)
+@Permission(name = "kalesutilities.commands.staff.commandspy", desc = "Use /commandspy", defaultValue = PermissionDefault.OP)
 
 @Permission(name = "kalesutilities.commands.moderation.kick", desc = "Use /kick", defaultValue = PermissionDefault.OP)
 @Permission(name = "kalesutilities.commands.moderation.ban", desc = "Use /ban and /unban", defaultValue = PermissionDefault.OP)
@@ -148,8 +151,6 @@ import org.bukkit.plugin.java.annotation.plugin.Website;
 @Permission(name = "kalesutilities.features.colorchat", desc = "Color you chat", defaultValue = PermissionDefault.OP)
 @Permission(name = "kalesutilities.features.colorsigns", desc = "Color signs in the world", defaultValue = PermissionDefault.OP)
 @Permission(name = "kalesutilities.features.editsigns", desc = "Edit signs in the world", defaultValue = PermissionDefault.OP)
-
-@Permission(name = "kalesutilities.features.commandspy", desc = "Receive command spy notifications", defaultValue = PermissionDefault.OP)
 
 @Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ku", "ks" }, usage = "/kalesutilities [help, reload]")
 @Command(name = "help", desc = "See the help", aliases = { "h", "howto" }, usage = "/help {player (optional)}", permission = "kalesutilities.commands.info.help")
@@ -170,6 +171,7 @@ import org.bukkit.plugin.java.annotation.plugin.Website;
 @Command(name = "gmc", desc = "Sets you gamemode", aliases = { "gms", "gma", "gmsp" }, usage = "/gm(c, s, a, sp) {player (optional)}", permission = "kalesutilities.commands.staff.gamemode")
 @Command(name = "sudo", desc = "Make a player say something or run a command", aliases = {}, usage = "/sudo {player} {message/command}", permission = "kalesutilities.commands.staff.sudo")
 @Command(name = "staffchat", desc = "Send a message in the staffchat", aliases = { "sc" }, usage = "/staffchat {message}", permission = "kalesutilities.commands.staff.staffchat")
+@Command(name = "commandspy", desc = "Receive command spy notifications", aliases = { "cs" }, usage = "/commandspy", permission = "kalesutilities.commands.staff.commandspy")
 @Command(name = "kick", desc = "Kick a player from the server", aliases = {}, usage = "/kick {player} {message}", permission = "kalesutilities.commands.moderation.kick")
 @Command(name = "ban", desc = "Ban a player from the server", aliases = {}, usage = "/ban {player} {message}", permission = "kalesutilities.commands.moderation.ban")
 @Command(name = "unban", desc = "Unban a player from the server", aliases = {}, usage = "/unban {player}", permission = "kalesutilities.commands.moderation.ban")
@@ -233,6 +235,7 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
         config.addDefault("messages.sudomessage", "Successfully made {player} say {message}");
         config.addDefault("messages.staffchat", "&l&d[Staffchat] &r{player} &r> {message}");
+        config.addDefault("messages.togglecommandspy", "Successfully turned commandspy {value}");
         config.addDefault("messages.commandspy", "&l&d[CommandSpy] &r{player} &rran {message}");
         config.addDefault("messages.kick", "{player} was kicked by {moderator} for {reason}");
         config.addDefault("messages.ban", "{player} was banned by {moderator} for {reason}");
@@ -271,6 +274,7 @@ public class Main extends JavaPlugin {
         this.getCommand("gmc").setExecutor(new GamemodeCommand());
         this.getCommand("sudo").setExecutor(new SudoCommand());
         this.getCommand("staffchat").setExecutor(new StaffChatCommand());
+        this.getCommand("commandspy").setExecutor(new CommandSpyCommand());
 
         this.getCommand("kick").setExecutor(new KickCommand());
         this.getCommand("ban").setExecutor(new BanCommand());
