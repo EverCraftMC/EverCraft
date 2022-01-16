@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class SignEditorListener implements Listener {
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
-        if (Util.hasPermission(event.getPlayer(), "kalesutilities.colorsigns")) {
+        if (Util.hasPermission(event.getPlayer(), "kalesutilities.features.colorsigns")) {
             event.setLine(0, Util.formatMessage(event.getLine(0)));
             event.setLine(1, Util.formatMessage(event.getLine(1)));
             event.setLine(2, Util.formatMessage(event.getLine(2)));
@@ -38,7 +38,7 @@ public class SignEditorListener implements Listener {
                 || event.getClickedBlock().getType() == Material.CRIMSON_WALL_SIGN
                 || event.getClickedBlock().getType() == Material.WARPED_SIGN
                 || event.getClickedBlock().getType() == Material.WARPED_WALL_SIGN)) {
-            if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemOnCursor().getType() == Material.AIR && event.getPlayer().isSneaking() && Util.hasPermission(event.getPlayer(), "kalesutilities.editsign")) {
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemOnCursor().getType() == Material.AIR && event.getPlayer().isSneaking() && Util.hasPermission(event.getPlayer(), "kalesutilities.features.editsigns")) {
                 Sign sign = (Sign) event.getClickedBlock().getState();
                 sign.setEditable(true);
                 sign.setLine(0, Util.unFormatMessage(sign.getLine(0)));

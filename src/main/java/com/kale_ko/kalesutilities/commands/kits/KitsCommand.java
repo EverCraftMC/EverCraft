@@ -10,31 +10,27 @@ import org.bukkit.entity.Player;
 public class KitsCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        if (Util.hasPermission(sender, "kalesutilities.kits")) {
-            StringBuilder kits = new StringBuilder();
+        StringBuilder kits = new StringBuilder();
 
-            Set<String> keys = Main.Instance.kits.getKeys();
-            for (String key : keys) {
-                kits.append(key + "\n");
-            }
+        Set<String> keys = Main.Instance.kits.getKeys();
+        for (String key : keys) {
+            kits.append(key + "\n");
+        }
 
-            if (args.length == 0) {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.kits").replace("{kitList}", kits.toString()));
-            } else {
-                if (Util.hasPermission(sender, "kalesutilities.sudo")) {
-                    Player player = Main.Instance.getServer().getPlayer(args[0]);
-
-                    if (player != null) {
-                        Util.sendMessage(player, Main.Instance.config.getString("messages.kits").replace("{kitList}", kits.toString()));
-                    } else {
-                        Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
-                    }
-                } else {
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.sudo"));
-                }
-            }
+        if (args.length == 0) {
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.kits").replace("{kitList}", kits.toString()));
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.kits"));
+            if (Util.hasPermission(sender, "kalesutilities.commands.staff.sudo")) {
+                Player player = Main.Instance.getServer().getPlayer(args[0]);
+
+                if (player != null) {
+                    Util.sendMessage(player, Main.Instance.config.getString("messages.kits").replace("{kitList}", kits.toString()));
+                } else {
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
+                }
+            } else {
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.commands.staff.sudo"));
+            }
         }
 
         return true;

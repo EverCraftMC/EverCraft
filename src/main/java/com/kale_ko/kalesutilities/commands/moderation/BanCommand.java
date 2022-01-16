@@ -8,33 +8,29 @@ import org.bukkit.command.CommandSender;
 public class BanCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        if (Util.hasPermission(sender, "kalesutilities.ban")) {
-            if (args.length > 1) {
-                StringBuilder banMessageBuilder = new StringBuilder();
+        if (args.length > 1) {
+            StringBuilder banMessageBuilder = new StringBuilder();
 
-                for (Integer i = 1; i < args.length; i++) {
-                    banMessageBuilder.append(args[i] + " ");
-                }
+            for (Integer i = 1; i < args.length; i++) {
+                banMessageBuilder.append(args[i] + " ");
+            }
 
-                String banMessage = banMessageBuilder.toString();
+            String banMessage = banMessageBuilder.toString();
 
-                Main.Instance.players.set(args[0] + ".banned", true);
-                Main.Instance.players.set(args[0] + ".banMessage", Main.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "are"));
+            Main.Instance.players.set(args[0] + ".banned", true);
+            Main.Instance.players.set(args[0] + ".banMessage", Main.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "are"));
 
-                Main.Instance.players.save();
+            Main.Instance.players.save();
 
-                if (Main.Instance.getServer().getPlayer(args[0]) != null) {
-                    Main.Instance.getServer().getPlayer(args[0]).kickPlayer(Main.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "where"));
+            if (Main.Instance.getServer().getPlayer(args[0]) != null) {
+                Main.Instance.getServer().getPlayer(args[0]).kickPlayer(Main.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "where"));
 
-                    Util.broadcastMessage(Main.Instance.config.getString("messages.ban").replace("{player}", Util.getPlayerName(Main.Instance.getServer().getPlayer(args[0]))).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage));
-                } else {
-                    Util.broadcastMessage(Main.Instance.config.getString("messages.ban").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage));
-                }
+                Util.broadcastMessage(Main.Instance.config.getString("messages.ban").replace("{player}", Util.getPlayerName(Main.Instance.getServer().getPlayer(args[0]))).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage));
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("ban").getUsage()));
+                Util.broadcastMessage(Main.Instance.config.getString("messages.ban").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.ban"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("ban").getUsage()));
         }
 
         return true;
