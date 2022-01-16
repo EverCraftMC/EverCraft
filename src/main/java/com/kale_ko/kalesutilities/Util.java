@@ -1,9 +1,12 @@
 package com.kale_ko.kalesutilities;
 
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
 public class Util {
     public static void sendMessage(CommandSender user, String message) {
@@ -107,5 +110,37 @@ public class Util {
         player.setCustomNameVisible(true);
         player.setDisplayName(getPlayerName(player));
         player.setPlayerListName(getPlayerName(player));
+    }
+
+    public static boolean hasMetadata(Player player, String key) {
+        List<MetadataValue> metadataKey = player.getMetadata(key);
+
+        for (MetadataValue metadata : metadataKey) {
+            if (metadata.getOwningPlugin() == Main.Instance) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static MetadataValue getMetadata(Player player, String key) {
+        List<MetadataValue> metadataKey = player.getMetadata(key);
+
+        for (MetadataValue metadata : metadataKey) {
+            if (metadata.getOwningPlugin() == Main.Instance) {
+                return metadata;
+            }
+        }
+
+        return null;
+    }
+
+    public static void setMetadata(Player player, String key, Object value) {
+        player.setMetadata(key, new FixedMetadataValue(Main.Instance, value));
+    }
+
+    public static void removeMetadata(Player player, String key) {
+        player.removeMetadata(key, Main.Instance);
     }
 }
