@@ -10,6 +10,7 @@ group = "com.kale_ko"
 version = project.plugin_version
 
 repositories {
+    mavenCentral()
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
     maven { url = "https://libraries.minecraft.net/" }
     flatDir {
