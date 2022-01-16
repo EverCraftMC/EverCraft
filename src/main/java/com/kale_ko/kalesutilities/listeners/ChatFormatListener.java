@@ -12,7 +12,7 @@ public class ChatFormatListener implements Listener {
         String player = Util.getPlayerNickName(event.getPlayer());
         String prefix = Util.getPlayerPrefix(event.getPlayer());
 
-        if (Util.hasPermission(event.getPlayer(), "kalesutilities.colorchat")) {
+        if (Util.hasPermission(event.getPlayer(), "kalesutilities.features.colorchat")) {
             event.setMessage(Util.formatMessage(event.getMessage()));
         }
 
