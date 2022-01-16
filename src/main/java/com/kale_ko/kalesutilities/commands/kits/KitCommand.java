@@ -30,7 +30,7 @@ public class KitCommand implements CommandExecutor {
                         }
                     }
 
-                    Util.sendMessage(player, Main.Instance.config.getString("messages.kit").replace("{kit}", args[0]));
+                    Util.sendMessage(player, Main.Instance.config.getString("messages.kit").replace("{kit}", args[1]));
                 } else {
                     Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
                 }
