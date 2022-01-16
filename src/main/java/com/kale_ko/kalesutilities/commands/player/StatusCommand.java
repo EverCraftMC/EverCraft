@@ -16,48 +16,44 @@ import org.bukkit.metadata.MetadataValue;
 public class StatusCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        if (Util.hasPermission(sender, "kalesutilities.setstatus")) {
-            if (args.length > 0) {
-                if (sender instanceof Player player) {
-                    StringBuilder statusMessageBuilder = new StringBuilder();
+        if (args.length > 0) {
+            if (sender instanceof Player player) {
+                StringBuilder statusMessageBuilder = new StringBuilder();
 
-                    for (Integer i = 0; i < args.length; i++) {
-                        statusMessageBuilder.append(args[i] + " ");
+                for (Integer i = 0; i < args.length; i++) {
+                    statusMessageBuilder.append(args[i] + " ");
+                }
+
+                String statusMessage = statusMessageBuilder.toString().substring(0, statusMessageBuilder.length() - 1);
+
+                List<MetadataValue> statusEntityUUID = player.getMetadata("statusEntityUUID");
+
+                String found = null;
+                for (MetadataValue metadata : statusEntityUUID) {
+                    if (metadata.getOwningPlugin() == Main.Instance) {
+                        found = metadata.asString();
                     }
+                }
 
-                    String statusMessage = statusMessageBuilder.toString().substring(0, statusMessageBuilder.length() - 1);
-
-                    List<MetadataValue> statusEntityUUID = player.getMetadata("statusEntityUUID");
-
-                    String found = null;
-                    for (MetadataValue metadata : statusEntityUUID) {
-                        if (metadata.getOwningPlugin() == Main.Instance) {
-                            found = metadata.asString();
-                        }
-                    }
-
-                    if (found == null) {
-                        ArmorStand armorstand = (ArmorStand) player.getWorld().spawnEntity(player.getLocation().add(0, 0.1, 0), EntityType.ARMOR_STAND);
-                        armorstand.setCustomName(statusMessage);
-                        armorstand.setCustomNameVisible(true);
-                        armorstand.setCollidable(false);
-                        armorstand.setGravity(false);
-                        armorstand.setVisible(false);
-                        armorstand.setInvulnerable(true);
-                        armorstand.setPersistent(false);
-                        player.setMetadata("statusEntityUUID", new FixedMetadataValue(Main.Instance, armorstand.getUniqueId().toString()));
-                    } else {
-                        Entity armorstand = Main.Instance.getServer().getEntity(UUID.fromString(found));
-                        armorstand.setCustomName(statusMessage);
-                    }
+                if (found == null) {
+                    ArmorStand armorstand = (ArmorStand) player.getWorld().spawnEntity(player.getLocation().add(0, 0.1, 0), EntityType.ARMOR_STAND);
+                    armorstand.setCustomName(statusMessage);
+                    armorstand.setCustomNameVisible(true);
+                    armorstand.setCollidable(false);
+                    armorstand.setGravity(false);
+                    armorstand.setVisible(false);
+                    armorstand.setInvulnerable(true);
+                    armorstand.setPersistent(false);
+                    player.setMetadata("statusEntityUUID", new FixedMetadataValue(Main.Instance, armorstand.getUniqueId().toString()));
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+                    Entity armorstand = Main.Instance.getServer().getEntity(UUID.fromString(found));
+                    armorstand.setCustomName(statusMessage);
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("status").getUsage()));
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.setstatus"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("status").getUsage()));
         }
 
         return true;

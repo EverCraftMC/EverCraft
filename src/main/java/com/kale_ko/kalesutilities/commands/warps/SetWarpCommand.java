@@ -9,18 +9,14 @@ import org.bukkit.entity.Player;
 public class SetWarpCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        if (Util.hasPermission(sender, "kalesutilities.setwarp")) {
-            if (sender instanceof Player player) {
-                Main.Instance.warps.set(args[0], player.getLocation());
+        if (sender instanceof Player player) {
+            Main.Instance.warps.set(args[0], player.getLocation());
 
-                Main.Instance.warps.save();
+            Main.Instance.warps.save();
 
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.setwarp").replace("{warp}", args[0]));
-            } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
-            }
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.setwarp").replace("{warp}", args[0]));
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.setwarp"));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
         }
 
         return true;

@@ -9,24 +9,20 @@ import org.bukkit.entity.Player;
 public class RulesCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        if (Util.hasPermission(sender, "kalesutilities.rules")) {
-            if (args.length > 0) {
-                if (Util.hasPermission(sender, "kalesutilities.sudo")) {
-                    Player player = Main.Instance.getServer().getPlayer(args[0]);
- 
-                    if (player != null) {
-                        Util.sendMessage(player, Main.Instance.config.getString("config.rules"));
-                    } else {
-                        Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
-                    }
+        if (args.length > 0) {
+            if (Util.hasPermission(sender, "kalesutilities.commands.staff.sudo")) {
+                Player player = Main.Instance.getServer().getPlayer(args[0]);
+
+                if (player != null) {
+                    Util.sendMessage(player, Main.Instance.config.getString("config.rules"));
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.sudo"));
+                    Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("config.rules"));
+                Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.commands.staff.sudo"));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.rules"));
+            Util.sendMessage(sender, Main.Instance.config.getString("config.rules"));
         }
 
         return true;
