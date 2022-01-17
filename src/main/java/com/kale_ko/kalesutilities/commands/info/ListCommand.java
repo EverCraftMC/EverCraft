@@ -19,7 +19,7 @@ public class ListCommand implements CommandExecutor {
                     list.append(Util.getPlayerName(player2) + ", ");
                 }
     
-                Util.sendMessage(player, Main.Instance.config.getString("messages.list").replace("{playerList}", list.toString().substring(list.length() - 2)));
+                Util.sendMessage(player, Main.Instance.config.getString("messages.list").replace("{playerList}", list.toString().substring(0, list.length() - 2)));
             } else {
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
             }
@@ -30,7 +30,7 @@ public class ListCommand implements CommandExecutor {
                 list.append(Util.getPlayerName(player) + ", ");
             }
 
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.list").replace("{playerList}", list.toString().substring(list.length() - 2)));
+            Util.sendMessage(sender, Main.Instance.config.getString("messages.list").replace("{playerList}", list.toString().substring(0, list.length() - 2)));
         }
 
         return true;
