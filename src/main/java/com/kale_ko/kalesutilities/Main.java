@@ -3,6 +3,7 @@ package com.kale_ko.kalesutilities;
 import com.kale_ko.kalesutilities.commands.info.AboutCommand;
 import com.kale_ko.kalesutilities.commands.info.HelpCommand;
 import com.kale_ko.kalesutilities.commands.info.KalesUtilitiesCommand;
+import com.kale_ko.kalesutilities.commands.info.ListCommand;
 import com.kale_ko.kalesutilities.commands.info.RulesCommand;
 import com.kale_ko.kalesutilities.commands.info.StaffCommand;
 import com.kale_ko.kalesutilities.commands.kits.KitCommand;
@@ -82,6 +83,7 @@ import org.bukkit.plugin.java.annotation.plugin.Website;
 
 @Permission(name = "kalesutilities.commands.info.*", desc = "Use all kalesutilities info commands", defaultValue = PermissionDefault.FALSE, children = {
         @ChildPermission(name = "kalesutilities.commands.info.help", inherit = true),
+        @ChildPermission(name = "kalesutilities.commands.info.list", inherit = true),
         @ChildPermission(name = "kalesutilities.commands.info.about", inherit = true),
         @ChildPermission(name = "kalesutilities.commands.info.rules", inherit = true),
         @ChildPermission(name = "kalesutilities.commands.info.staff", inherit = true)
@@ -121,6 +123,7 @@ import org.bukkit.plugin.java.annotation.plugin.Website;
 })
 
 @Permission(name = "kalesutilities.commands.info.help", desc = "Use /help", defaultValue = PermissionDefault.TRUE)
+@Permission(name = "kalesutilities.commands.info.list", desc = "Use /list", defaultValue = PermissionDefault.TRUE)
 @Permission(name = "kalesutilities.commands.info.about", desc = "Use /about", defaultValue = PermissionDefault.TRUE)
 @Permission(name = "kalesutilities.commands.info.rules", desc = "Use /rules", defaultValue = PermissionDefault.TRUE)
 @Permission(name = "kalesutilities.commands.info.staff", desc = "Use /staff", defaultValue = PermissionDefault.TRUE)
@@ -154,6 +157,7 @@ import org.bukkit.plugin.java.annotation.plugin.Website;
 
 @Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ku", "ks" }, usage = "/kalesutilities [help, reload]")
 @Command(name = "help", desc = "See the help", aliases = { "h", "howto" }, usage = "/help {player (optional)}", permission = "kalesutilities.commands.info.help")
+@Command(name = "list", desc = "See the list", aliases = { "players", "playerlist", "listplayers" }, usage = "/list {player (optional)}", permission = "kalesutilities.commands.info.list")
 @Command(name = "about", desc = "See the about", aliases = { "info" }, usage = "/about {player (optional)}", permission = "kalesutilities.commands.info.about")
 @Command(name = "rules", desc = "See the rules", aliases = { "ruleslist" }, usage = "/rules {player (optional)}", permission = "kalesutilities.commands.info.rules")
 @Command(name = "staff", desc = "See the staff", aliases = { "stafflist" }, usage = "/staff {player (optional)}", permission = "kalesutilities.commands.info.staff")
@@ -216,6 +220,7 @@ public class Main extends JavaPlugin {
         config.addDefault("messages.joinMessage", "&e{player} &ehas joined the game!");
         config.addDefault("messages.quitMessage", "&e{player} &ehas left the game");
         config.addDefault("messages.help", "\n{commandList}");
+        config.addDefault("messages.list", "\n{playerList}");
         config.addDefault("messages.reload", "Config Reloaded");
         config.addDefault("messages.spawned", "You have been sent to spawn");
         config.addDefault("messages.spawnedplayer", "Successfully sent {player} to spawn");
@@ -253,6 +258,7 @@ public class Main extends JavaPlugin {
 
         this.getCommand("kalesutilities").setExecutor(new KalesUtilitiesCommand());
         this.getCommand("help").setExecutor(new HelpCommand());
+        this.getCommand("list").setExecutor(new ListCommand());
         this.getCommand("about").setExecutor(new AboutCommand());
         this.getCommand("rules").setExecutor(new RulesCommand());
         this.getCommand("staff").setExecutor(new StaffCommand());
