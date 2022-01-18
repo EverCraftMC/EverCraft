@@ -7,6 +7,9 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import net.minecraft.nbt.MojangsonParser;
+import net.minecraft.nbt.NBTTagCompound;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 public class Util {
     public static void sendMessage(CommandSender user, String message) {
@@ -142,5 +145,15 @@ public class Util {
 
     public static void removeMetadata(Player player, String key) {
         player.removeMetadata(key, Main.Instance);
+    }
+
+    public static NBTTagCompound parseNBT(String nbt) {
+        try {
+            return MojangsonParser.a(nbt);
+        } catch (CommandSyntaxException err) {
+            err.printStackTrace();
+        }
+
+        return null;
     }
 }
