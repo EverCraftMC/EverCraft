@@ -6,9 +6,11 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class KitCommand implements CommandExecutor {
     @Override
@@ -42,7 +44,8 @@ public class KitCommand implements CommandExecutor {
                 List<String> items = Main.Instance.kits.getStringList(args[0]);
 
                 for (String item : items) {
-                    ItemStack itemStack = new ItemStack(Material.matchMaterial(item), 1);
+                    NBTTagCompound nbt = Util.parseNBT(item);
+                    ItemStack itemStack = CraftItemStack.asBukkitCopy(net.minecraft.world.item.ItemStack.a(nbt));
 
                     if (itemStack.getType().getEquipmentSlot() != EquipmentSlot.HAND && itemStack.getType().getEquipmentSlot() != EquipmentSlot.OFF_HAND && (player.getEquipment().getItem(itemStack.getType().getEquipmentSlot()) == null || player.getEquipment().getItem(itemStack.getType().getEquipmentSlot()).getType().isAir())) {
                         player.getEquipment().setItem(itemStack.getType().getEquipmentSlot(), itemStack);
