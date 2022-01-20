@@ -20,11 +20,12 @@ public class KitCommand implements CommandExecutor {
                 Player player = Main.Instance.getServer().getPlayer(args[0]);
 
                 if (player != null) {
-                    List<String> items = Main.Instance.kits.getStringList(args[1]);
-
+                    List<String> items = Main.Instance.kits.getStringList(args[0]);
+    
                     for (String item : items) {
-                        ItemStack itemStack = new ItemStack(Material.matchMaterial(item), 1);
-
+                        NBTTagCompound nbt = Util.parseNBT(item);
+                        ItemStack itemStack = CraftItemStack.asBukkitCopy(net.minecraft.world.item.ItemStack.a(nbt));
+    
                         if (itemStack.getType().getEquipmentSlot() != EquipmentSlot.HAND && itemStack.getType().getEquipmentSlot() != EquipmentSlot.OFF_HAND && (player.getEquipment().getItem(itemStack.getType().getEquipmentSlot()) == null || player.getEquipment().getItem(itemStack.getType().getEquipmentSlot()).getType().isAir())) {
                             player.getEquipment().setItem(itemStack.getType().getEquipmentSlot(), itemStack);
                         } else {
