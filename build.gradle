@@ -11,7 +11,7 @@ version = project.plugin_version
 
 repositories {
     mavenCentral()
-    maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+    maven { url "https://hub.spigotmc.org/nexus/content/repositories/public/" }
     maven { url = "https://libraries.minecraft.net/" }
     flatDir {
         dirs 'dev'
@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
     compileOnly "org.spigotmc:spigot-api:${project.minecraft_version}-${project.spigot_version}"
+    compileOnly "net.md-5:bungeecord-api:${project.minecraft_release}-${project.bungee_version}"
     compileOnly name: "bukkit-${project.minecraft_version}"
     compileOnly "com.mojang:authlib:1.5.21"
     compileOnly "com.mojang:brigadier:1.0.18"
