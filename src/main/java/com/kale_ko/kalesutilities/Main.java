@@ -52,7 +52,7 @@ import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
 import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
 import org.bukkit.plugin.java.annotation.plugin.Website;
 
-@Plugin(name = "KalesUtilities", version = "4.3.0")
+@Plugin(name = "KalesUtilities", version = "4.3.2")
 @Description("A custom plugin to run on KalesMC")
 @Website("https://github.com/Kale-Ko/Kales-Utilities-V2")
 @Author("Kale Ko")
