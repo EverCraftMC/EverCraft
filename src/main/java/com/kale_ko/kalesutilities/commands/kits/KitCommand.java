@@ -3,7 +3,6 @@ package com.kale_ko.kalesutilities.commands.kits;
 import com.kale_ko.kalesutilities.Main;
 import com.kale_ko.kalesutilities.Util;
 import java.util.List;
-import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
