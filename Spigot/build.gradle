@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = JavaVersion.toVersion(project.java_version)
+targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+archivesBaseName = project.plugin_id
+group = "com.kale_ko"
+version = project.plugin_version
+
+repositories {
+    mavenCentral()
+    maven { url "https://hub.spigotmc.org/nexus/content/repositories/public/" }
+    maven { url = "https://libraries.minecraft.net/" }
+    flatDir {
+        dirs 'lib'
+    }
+}
+
+dependencies {
+    compileOnly "org.spigotmc:spigot-api:${project.minecraft_version}-${project.spigot_version}"
+    compileOnly name: "bukkit-${project.minecraft_version}"
+    compileOnly "com.mojang:authlib:1.5.21"
+    compileOnly "com.mojang:brigadier:1.0.18"
+
+    compileOnly "org.spigotmc:plugin-annotations:${project.spigot_anotations_version}"
+    annotationProcessor "org.spigotmc:plugin-annotations:${project.spigot_anotations_version}"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+    options.encoding = "UTF-8"
+}
