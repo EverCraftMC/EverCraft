@@ -9,22 +9,18 @@ archivesBaseName = project.plugin_id
 group = "com.kale_ko"
 version = project.plugin_version
 
+repositories {
+    mavenCentral()
+    maven { url "https://hub.spigotmc.org/nexus/content/repositories/public/" }
+}
+
+dependencies {
+    compileOnly "net.md-5:bungeecord-api:${project.minecraft_release}-${project.bungee_version}"
+}
+
 tasks.withType(JavaCompile).configureEach {
     sourceCompatibility = JavaVersion.toVersion(project.java_version)
     targetCompatibility = JavaVersion.toVersion(project.java_version)
 
     options.encoding = "UTF-8"
-}
-
-def mainProjects = [":Spigot",":Bungee"]
-tasks.register("buildAll", Jar) {
-    dependsOn mainProjects.collect{ it + ":compileJava" }
-
-    baseName = project.archivesBaseName
-    destinationDirectory = file("\\")
-    from files(mainProjects.collect{ project(it).sourceSets.main.output })
-}
-
-java {
-	withSourcesJar()
 }
