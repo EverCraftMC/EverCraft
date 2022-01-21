@@ -24,7 +24,3 @@ tasks.register("buildAll", Jar) {
     destinationDirectory = file("\\")
     from files(mainProjects.collect{ project(it).sourceSets.main.output })
 }
-
-java {
-	withSourcesJar()
-}
