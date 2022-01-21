@@ -1,4 +1,5 @@
 rootProject.name = 'Kales-Utilites'
 
+include 'Shared'
 include 'Spigot'
 include 'Bungee'

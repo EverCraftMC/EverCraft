@@ -15,12 +15,3 @@ tasks.withType(JavaCompile).configureEach {
 
     options.encoding = "UTF-8"
 }
-
-def mainProjects = [":Shared", ":Spigot", ":Bungee"]
-tasks.register("buildAll", Jar) {
-    dependsOn mainProjects.collect{ it + ":compileJava" }
-
-    baseName = project.archivesBaseName
-    destinationDirectory = file("\\")
-    from files(mainProjects.collect{ project(it).sourceSets.main.output })
-}
