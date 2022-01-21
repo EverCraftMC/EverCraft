@@ -44,7 +44,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.annotation.plugin.Plugin;
 import org.bukkit.plugin.java.annotation.plugin.Description;
 import org.bukkit.plugin.java.annotation.plugin.author.Author;
-import org.bukkit.plugin.java.annotation.plugin.LogPrefix;
 import org.bukkit.plugin.java.annotation.command.Command;
 import org.bukkit.plugin.java.annotation.permission.ChildPermission;
 import org.bukkit.plugin.java.annotation.permission.Permission;
@@ -56,7 +55,6 @@ import org.bukkit.plugin.java.annotation.plugin.Website;
 @Description("A custom plugin to run on KalesMC")
 @Website("https://github.com/Kale-Ko/Kales-Utilities-V2")
 @Author("Kale Ko")
-@LogPrefix("Kales Utilities")
 @ApiVersion(ApiVersion.Target.v1_18)
 @LoadOrder(PluginLoadOrder.POSTWORLD)
 
