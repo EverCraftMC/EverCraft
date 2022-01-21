@@ -19,6 +19,8 @@ repositories {
 }
 
 dependencies {
+    implementation project(':Shared')
+
     compileOnly "org.spigotmc:spigot-api:${project.minecraft_version}-${project.spigot_version}"
     compileOnly name: "bukkit-${project.minecraft_version}"
     compileOnly "com.mojang:authlib:1.5.21"
