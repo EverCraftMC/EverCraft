@@ -115,6 +115,13 @@ public class Util {
         player.setPlayerListName(getPlayerName(player));
     }
 
+    public static void resetPlayerName(Player player) {
+        player.setCustomName(player.getName());
+        player.setCustomNameVisible(false);
+        player.setDisplayName(player.getName());
+        player.setPlayerListName(player.getName());
+    }
+
     public static boolean hasMetadata(Player player, String key) {
         List<MetadataValue> metadataKey = player.getMetadata(key);
 

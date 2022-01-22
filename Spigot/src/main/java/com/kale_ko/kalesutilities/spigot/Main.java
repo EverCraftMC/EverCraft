@@ -37,6 +37,8 @@ import com.kale_ko.kalesutilities.spigot.listeners.SignEditorListener;
 import com.kale_ko.kalesutilities.spigot.listeners.SpawnListener;
 import com.kale_ko.kalesutilities.spigot.listeners.WelcomeListener;
 import java.util.logging.Logger;
+
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginLoadOrder;
@@ -303,6 +305,14 @@ public class Main extends JavaPlugin {
 
         Console.info("Finished loading event listeners");
 
+        Console.info("Updating player names..");
+
+        for (Player player : getServer().getOnlinePlayers()) {
+            Util.updatePlayerName(player);
+        }
+
+        Console.info("Finished updating player names");
+
         Console.info("Finished enabling");
     }
 
@@ -313,6 +323,14 @@ public class Main extends JavaPlugin {
         HandlerList.unregisterAll(Main.Instance);
 
         Console.info("Finished removing event listeners");
+
+        Console.info("Reseting player names..");
+
+        for (Player player : getServer().getOnlinePlayers()) {
+            Util.resetPlayerName(player);
+        }
+
+        Console.info("Finished reseting player names");
 
         Console.info("Finished disabling");
     }
