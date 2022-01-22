@@ -104,4 +104,8 @@ public class Util {
     public static void updatePlayerName(ProxiedPlayer player) {
         player.setDisplayName(getPlayerName(player));
     }
+
+    public static void resetPlayerName(ProxiedPlayer player) {
+        player.setDisplayName(player.getName());
+    }
 }
