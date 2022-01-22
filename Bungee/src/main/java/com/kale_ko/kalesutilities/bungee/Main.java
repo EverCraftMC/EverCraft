@@ -1,6 +1,7 @@
 package com.kale_ko.kalesutilities.bungee;
 
 import java.util.logging.Logger;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class Main extends Plugin {
@@ -30,6 +31,14 @@ public class Main extends Plugin {
 
         Console.info("Finished loading event listeners");
 
+        Console.info("Updating player names..");
+
+        for (ProxiedPlayer player : getProxy().getPlayers()) {
+            Util.updatePlayerName(player);
+        }
+
+        Console.info("Finished updating player names");
+
         Console.info("Finished enabling");
     }
 
@@ -40,6 +49,14 @@ public class Main extends Plugin {
         getProxy().getPluginManager().unregisterListeners(Main.Instance);
 
         Console.info("Finished removing event listeners");
+
+        Console.info("Reseting player names..");
+
+        for (ProxiedPlayer player : getProxy().getPlayers()) {
+            Util.resetPlayerName(player);
+        }
+
+        Console.info("Finished reseting player names");
 
         Console.info("Finished disabling");
     }
