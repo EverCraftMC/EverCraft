@@ -9,8 +9,8 @@ public class Main extends Plugin {
 
     public final Logger Console = getLogger();
 
-    public Config config;
-    public Config players;
+    public BungeeConfig config;
+    public BungeeConfig players;
 
     @Override
     public void onEnable() {
@@ -18,8 +18,8 @@ public class Main extends Plugin {
 
         Console.info("Loading config..");
 
-        config = Config.load("config.yml");
-        players = Config.load("players.yml");
+        config = BungeeConfig.load("config.yml");
+        players = BungeeConfig.load("players.yml");
 
         Console.info("Finished loading config");
 
