@@ -1,6 +1,9 @@
 package com.kale_ko.kalesutilities.shared.mysql;
 
-import com.kale_ko.kalesutilities.shared.config.Config;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MySQLConfig {
     private String tableName;
@@ -8,7 +11,7 @@ public class MySQLConfig {
 
     private Map<String, Object> defaults = new HashMap<String, Object>();
 
-    public MySQLConfig(String url, Integer port, String database, String username, String password, String tableName) {
+    public MySQLConfig(String url, Integer port, String database, String tableName, String username, String password) {
         this.mysql = new MySQL(url, port, database, username, password);
     }
 
@@ -84,11 +87,9 @@ public class MySQLConfig {
         for (Map.Entry<String, Object> entry : this.defaults.entrySet()) {
 
         }
-
-        this.save();
     }
 
-    public static MySQLConfig load(String fileName) {
-        return new MySQLConfig(fileName);
+    public static MySQLConfig load(String url, Integer port, String database, String tableName, String username, String password) {
+        return new MySQLConfig(url, port, database, tableName, username, password);
     }
 }
