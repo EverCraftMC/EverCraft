@@ -95,11 +95,11 @@ public class MySQLConfig {
         this.defaults.put(key, value);
     }
 
-    // public void copyDefaults() {
-    //     for (Map.Entry<String, Object> entry : this.defaults.entrySet()) {
-
-    //     }
-    // }
+    public void copyDefaults() {
+        for (Map.Entry<String, Object> entry : this.defaults.entrySet()) {
+            this.set(entry.getKey(), entry.getValue());
+        }
+    }
 
     public static MySQLConfig load(String url, Integer port, String database, String tableName, String username, String password) {
         return new MySQLConfig(url, port, database, tableName, username, password);
