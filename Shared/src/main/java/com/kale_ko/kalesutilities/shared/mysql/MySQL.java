@@ -25,7 +25,18 @@ public class MySQL {
         }
     }
 
-    public String select(String table, String[] fields) {
+    public void createTable(String name, String data) {
+        try {
+            String createStatement = "CREATE TABLE IF NOT EXISTS " + name + " " + data;
+            Statement statement = connection.createStatement();
+
+            statement.executeUpdate(createStatement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String selectAll(String table, String[] fields) {
         return select(table, fields, "1 = 1");
     }
 
@@ -41,13 +52,14 @@ public class MySQL {
                 for (String field : fields) {
                     String currentFieldValue = result.getString(field);
 
-                    if (currentFieldValue != null) {
-                        ret.append(result.getString(field) + "\t");
-                    }
+                    ret.append(result.getString(field) + "\t");
                 }
 
                 ret = new StringBuilder(ret.substring(0, ret.length() - 1) + "\n");
             }
+
+            statement.close();
+            result.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -55,12 +67,37 @@ public class MySQL {
         return ret.toString();
     }
 
+    public String selectFirst(String table, String[] fields, String condition) {
+        String selectStatement = "SELECT * FROM " + table + " " + "WHERE " + condition;
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(selectStatement);
+
+            while (result.next()) {
+                for (String field : fields) {
+                    String currentFieldValue = result.getString(field);
+
+                    return result.getString(field);
+                }
+            }
+
+            statement.close();
+            result.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public void insert(String table, String values) {
         try {
-            String selectStatement = "INSERT INTO " + table + " VALUES " + values;
+            String insertStatement = "INSERT INTO " + table + " VALUES " + values;
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate(selectStatement);
+            statement.executeUpdate(insertStatement);
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -68,10 +105,11 @@ public class MySQL {
 
     public void insert(String table, String keys, String values) {
         try {
-            String selectStatement = "INSERT INTO " + table + " " + keys + " VALUES " + values;
+            String insertStatement = "INSERT INTO " + table + " " + keys + " VALUES " + values;
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate(selectStatement);
+            statement.executeUpdate(insertStatement);
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -79,10 +117,11 @@ public class MySQL {
 
     public void update(String table, String key, String value, String condition) {
         try {
-            String selectStatement = "UPDATE " + table + " SET " + key + " = " + value + " WHERE " + condition;
+            String updateStatement = "UPDATE " + table + " SET " + key + " = " + value + " WHERE " + condition;
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate(selectStatement);
+            statement.executeUpdate(updateStatement);
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -90,10 +129,11 @@ public class MySQL {
 
     public void delete(String table, String condition) {
         try {
-            String selectStatement = "DELETE FROM " + table + " WHERE " + condition;
+            String deleteStatement = "DELETE FROM " + table + " WHERE " + condition;
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate(selectStatement);
+            statement.executeUpdate(deleteStatement);
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
