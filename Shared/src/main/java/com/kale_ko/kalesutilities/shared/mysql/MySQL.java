@@ -1,4 +1,4 @@
-package com.kale_ko.kalesutilities.shared;
+package com.kale_ko.kalesutilities.shared.mysql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,8 +11,7 @@ public class MySQL {
 
     public MySQL(String url, Integer port, String database, String username, String password) {
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://" + url + ":" + port + "/" + database, username,
-                    password);
+            connection = DriverManager.getConnection("jdbc:mysql://" + url + ":" + port + "/" + database, username, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
