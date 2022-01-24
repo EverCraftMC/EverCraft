@@ -37,7 +37,6 @@ import com.kale_ko.kalesutilities.spigot.listeners.SignEditorListener;
 import com.kale_ko.kalesutilities.spigot.listeners.SpawnListener;
 import com.kale_ko.kalesutilities.spigot.listeners.WelcomeListener;
 import java.util.logging.Logger;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.permissions.PermissionDefault;
@@ -187,12 +186,12 @@ public class Main extends JavaPlugin {
 
     public final Logger Console = getLogger();
 
-    public Config config;
-    public Config players;
-    public Config seen;
-    public Config spawn;
-    public Config warps;
-    public Config kits;
+    public SpigotConfig config;
+    public SpigotConfig players;
+    public SpigotConfig seen;
+    public SpigotConfig spawn;
+    public SpigotConfig warps;
+    public SpigotConfig kits;
 
     @Override
     public void onEnable() {
@@ -200,12 +199,12 @@ public class Main extends JavaPlugin {
 
         Console.info("Loading config..");
 
-        config = Config.load("config.yml");
-        players = Config.load("players.yml");
-        seen = Config.load("seen.yml");
-        spawn = Config.load("spawn.yml");
-        warps = Config.load("warps.yml");
-        kits = Config.load("kits.yml");
+        config = SpigotConfig.load("config.yml");
+        players = SpigotConfig.load("players.yml");
+        seen = SpigotConfig.load("seen.yml");
+        spawn = SpigotConfig.load("spawn.yml");
+        warps = SpigotConfig.load("warps.yml");
+        kits = SpigotConfig.load("kits.yml");
 
         config.addDefault("config.prefix", "&6&l[Kales Utilities]&r");
         config.addDefault("config.chatFormat", "{prefix}{player} > {message}");

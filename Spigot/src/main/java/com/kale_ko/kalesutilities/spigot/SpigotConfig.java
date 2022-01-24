@@ -1,25 +1,20 @@
-package com.kale_ko.kalesutilities.bungee;
+package com.kale_ko.kalesutilities.spigot;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
+import java.util.Set;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
-public class Config {
+public class SpigotConfig {
     private String fileName;
     private String filePath;
     private File file;
-    private Configuration config;
+    private YamlConfiguration config;
 
-    private Map<String, Object> defaults = new HashMap<String, Object>();
-
-    public Config(String fileName) {
+    public SpigotConfig(String fileName) {
         this.fileName = fileName;
 
         File dataFolder = Main.Instance.getDataFolder();
@@ -36,8 +31,8 @@ public class Config {
         }
     }
 
-    public Collection<String> getKeys() {
-        return this.config.getKeys();
+    public Set<String> getKeys() {
+        return this.config.getKeys(false);
     }
 
     public Object getObject(String key) {
@@ -57,7 +52,7 @@ public class Config {
     }
 
     public List<Integer> getIntList(String key) {
-        return this.config.getIntList(key);
+        return this.config.getIntegerList(key);
     }
 
     public Float getFloat(String key) {
@@ -92,8 +87,8 @@ public class Config {
         return this.config.getBooleanList(key);
     }
 
-    public <T> T getSerializable(String key, T clazz) {
-        return this.config.get(key, clazz);
+    public <T extends ConfigurationSerializable> T getSerializable(String key, Class<T> clazz) {
+        return this.config.getSerializable(key, clazz);
     }
 
     public void set(String key, Object value) {
@@ -101,38 +96,29 @@ public class Config {
     }
 
     public void addDefault(String key, Object value) {
-        this.defaults.put(key, value);
+        this.config.addDefault(key, value);
     }
 
     public void copyDefaults() {
-        for (Map.Entry<String, Object> entry : this.defaults.entrySet()) {
-            if (this.config.get(entry.getKey()) == null) {
-                this.config.set(entry.getKey(), entry.getValue());
-            }
-        }
-
+        this.config.options().copyDefaults(true);
         this.save();
     }
 
     public void reload() {
-        try {
-            Configuration data = ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.file);
-            this.config = data;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        YamlConfiguration data = YamlConfiguration.loadConfiguration(this.file);
+        this.config = data;
     }
 
     public void save() {
         try {
-            ConfigurationProvider.getProvider(YamlConfiguration.class).save(this.config, this.file);
+            this.config.save(this.filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static Config load(String fileName) {
-        Config newConfig = new Config(fileName);
+    public static SpigotConfig load(String fileName) {
+        SpigotConfig newConfig = new SpigotConfig(fileName);
         newConfig.reload();
         return newConfig;
     }
