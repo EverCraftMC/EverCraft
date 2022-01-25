@@ -14,6 +14,7 @@ repositories {
 }
 
 dependencies {
+    compileOnly "com.fasterxml.jackson.core:jackson-core:${project.jackson_databind_version}"
     compileOnly "com.fasterxml.jackson.core:jackson-databind:${project.jackson_databind_version}"
 }
 
