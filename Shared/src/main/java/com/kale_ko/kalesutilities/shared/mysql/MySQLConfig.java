@@ -1,6 +1,5 @@
 package com.kale_ko.kalesutilities.shared.mysql;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +23,11 @@ public class MySQLConfig {
     }
 
     public Object getObject(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, new String[] { "value" }, "key = " + key), Object.class);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), Object.class);
     }
 
     public String getString(String key) {
-        return mysql.selectFirst(this.tableName, new String[] { "value" }, "key = " + key);
+        return mysql.selectFirst(this.tableName, "value", "key = " + key);
     }
 
     // public List<String> getStringList(String key) {
@@ -36,7 +35,7 @@ public class MySQLConfig {
     // }
 
     public Integer getInt(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, new String[] { "value" }, "key = " + key), Integer.class);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), Integer.class);
     }
 
     // public List<Integer> getIntList(String key) {
@@ -44,7 +43,7 @@ public class MySQLConfig {
     // }
 
     public Float getFloat(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, new String[] { "value" }, "key = " + key), Float.class);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), Float.class);
     }
 
     // public List<Float> getFloatList(String key) {
@@ -52,7 +51,7 @@ public class MySQLConfig {
     // }
 
     public Double getDouble(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, new String[] { "value" }, "key = " + key), Double.class);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), Double.class);
     }
 
     // public List<Double> getDoubleList(String key) {
@@ -60,7 +59,7 @@ public class MySQLConfig {
     // }
 
     public Long getLong(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, new String[] { "value" }, "key = " + key), Long.class);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), Long.class);
     }
 
     // public List<Long> getLongList(String key) {
@@ -68,7 +67,7 @@ public class MySQLConfig {
     // }
 
     public Boolean getBoolean(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, new String[] { "value" }, "key = " + key), Boolean.class);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), Boolean.class);
     }
 
     // public List<Boolean> getBooleanList(String key) {
@@ -76,11 +75,11 @@ public class MySQLConfig {
     // }
 
     public <T> T getSerializable(String key, Class<T> clazz) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, new String[] { "value" }, "key = " + key), clazz);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), clazz);
     }
 
     public void set(String key, Object value) {
-        if (value != null && mysql.selectFirst(this.tableName, new String[] { "value" }, "key = " + key) == null) {
+        if (value != null && mysql.selectFirst(this.tableName, "value", "key = " + key) == null) {
             mysql.insert(this.tableName, "('" + key + "', '" + Serializer.serialize(value) + "')");
         } else {
             if (value != null) {
