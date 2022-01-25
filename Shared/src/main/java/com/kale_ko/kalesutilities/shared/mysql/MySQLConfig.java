@@ -22,12 +22,8 @@ public class MySQLConfig {
         return Arrays.asList(mysql.selectAll(this.tableName, new String[] { "key" }).split("\n"));
     }
 
-    public Object getObject(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"), Object.class);
-    }
-
     public String getString(String key) {
-        return mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'");
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"), String.class);
     }
 
     // public List<String> getStringList(String key) {
