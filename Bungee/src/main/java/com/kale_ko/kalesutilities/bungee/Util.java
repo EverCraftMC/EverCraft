@@ -1,5 +1,8 @@
 package com.kale_ko.kalesutilities.bungee;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -107,5 +110,15 @@ public class Util {
 
     public static void resetPlayerName(ProxiedPlayer player) {
         player.setDisplayName(player.getName());
+    }
+
+    public static <T, N> Map<T, N> mapFromLists(List<T> keys, List<N> values) {
+        Map<T, N> newMap = new HashMap<T, N>();
+
+        for (T key : keys) {
+            newMap.put(key, values.get(keys.indexOf(key)));
+        }
+
+        return newMap;
     }
 }

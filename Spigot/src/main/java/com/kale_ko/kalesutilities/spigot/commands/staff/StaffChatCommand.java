@@ -1,14 +1,19 @@
 package com.kale_ko.kalesutilities.spigot.commands.staff;
 
+import java.util.List;
 import com.kale_ko.kalesutilities.spigot.Main;
 import com.kale_ko.kalesutilities.spigot.Util;
-import org.bukkit.command.CommandExecutor;
+import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class StaffChatCommand implements CommandExecutor {
+public class StaffChatCommand extends SpigotCommand {
+    public StaffChatCommand(String name, String description, List<String> aliases, String usage, String permission) {
+        super(name, description, aliases, usage, permission);
+    }
+
     @Override
-    public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         StringBuilder messageBuilder = new StringBuilder();
 
         for (Integer i = 0; i < args.length; i++) {

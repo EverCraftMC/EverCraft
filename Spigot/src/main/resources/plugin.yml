@@ -1,7 +1,10 @@
-main: com.kale_ko.kalesutilities.bungee.Main
+main: com.kale_ko.kalesutilities.spigot.Main
 
 name: KalesUtilities
 version: 5.0.0
 description: A custom plugin to run on KalesMC
 author: Kale Ko
 website: https://github.com/Kale-Ko/Kales-Utilities-V2
+
+api-version: "1.18"
+load: POSTWORLD

@@ -2,14 +2,19 @@ package com.kale_ko.kalesutilities.spigot.commands.kits;
 
 import com.kale_ko.kalesutilities.spigot.Main;
 import com.kale_ko.kalesutilities.spigot.Util;
+import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
+import java.util.List;
 import java.util.Set;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class KitsCommand implements CommandExecutor {
+public class KitsCommand extends SpigotCommand {
+    public KitsCommand(String name, String description, List<String> aliases, String usage, String permission) {
+        super(name, description, aliases, usage, permission);
+    }
+
     @Override
-    public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         StringBuilder kits = new StringBuilder();
 
         Set<String> keys = Main.Instance.kits.getKeys();
