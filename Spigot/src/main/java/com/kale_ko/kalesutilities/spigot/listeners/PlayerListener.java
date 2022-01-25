@@ -18,8 +18,6 @@ public class PlayerListener implements Listener {
             Main.Instance.players.set(event.getPlayer().getName() + ".prefix", "");
         }
 
-        Main.Instance.players.save();
-
         Util.updatePlayerName(event.getPlayer());
     }
 
@@ -28,7 +26,5 @@ public class PlayerListener implements Listener {
         if ((Main.Instance.players.getString(event.getPlayer().getName() + ".nickname").equalsIgnoreCase("") || Main.Instance.players.getString(event.getPlayer().getName() + ".nickname").equalsIgnoreCase(event.getPlayer().getName())) && Main.Instance.players.getString(event.getPlayer().getName() + ".prefix").equalsIgnoreCase("")) {
             Main.Instance.players.set(event.getPlayer().getName(), null);
         }
-
-        Main.Instance.players.save();
     }
 }
