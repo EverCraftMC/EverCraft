@@ -1,21 +1,14 @@
 package com.kale_ko.kalesutilities.shared.mysql;
 
-import java.util.Base64;
-import java.io.IOException;
-import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Serializer {
     public static String serialize(Object object) {
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(object);
-            oos.close();
-            return Base64.getEncoder().encodeToString(baos.toByteArray());
-        } catch (IOException e) {
+            return objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
@@ -23,13 +16,10 @@ public class Serializer {
     }
 
     public static <T> T deserialize(String string, Class<T> clazz) {
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            byte[] data = Base64.getDecoder().decode(string);
-            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
-            Object object = ois.readObject();
-            ois.close();
-            return (T) object;
-        } catch (IOException | ClassNotFoundException e) {
+            return objectMapper.readValue(string, clazz);
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
