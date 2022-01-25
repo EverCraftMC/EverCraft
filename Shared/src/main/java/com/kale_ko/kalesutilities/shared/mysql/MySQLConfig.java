@@ -71,8 +71,7 @@ public class MySQLConfig {
     // }
 
     // public <T> T getSerializable(String key, Class<T> clazz) {
-    // return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue",
-    // "keyid = '" + key + "'"), clazz);
+
     // }
 
     public void set(String key, Object value) {
@@ -80,7 +79,7 @@ public class MySQLConfig {
             mysql.insert(this.tableName, "('" + key + "', '" + value.toString() + "')");
         } else {
             if (value != null) {
-                mysql.update(this.tableName, "keyvalue", value.toString(), "keyid = '" + key + "'");
+                mysql.update(this.tableName, "keyvalue = '" + value.toString() + "'", "keyid = '" + key + "'");
             } else {
                 mysql.delete(this.tableName, "keyid = '" + key + "'");
             }
