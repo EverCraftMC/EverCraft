@@ -9,15 +9,6 @@ archivesBaseName = project.plugin_id
 group = "com.kale_ko"
 version = project.plugin_version
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation "com.fasterxml.jackson.core:jackson-core:${project.jackson_version}"
-    implementation "com.fasterxml.jackson.core:jackson-databind:${project.jackson_version}"
-}
-
 tasks.withType(JavaCompile).configureEach {
     sourceCompatibility = JavaVersion.toVersion(project.java_version)
     targetCompatibility = JavaVersion.toVersion(project.java_version)

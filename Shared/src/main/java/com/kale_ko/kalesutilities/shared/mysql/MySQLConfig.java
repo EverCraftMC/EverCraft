@@ -23,7 +23,7 @@ public class MySQLConfig {
     }
 
     public String getString(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"), String.class);
+        return mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'");
     }
 
     // public List<String> getStringList(String key) {
@@ -31,7 +31,7 @@ public class MySQLConfig {
     // }
 
     public Integer getInt(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"), Integer.class);
+        return Integer.parseInt(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"));
     }
 
     // public List<Integer> getIntList(String key) {
@@ -39,7 +39,7 @@ public class MySQLConfig {
     // }
 
     public Float getFloat(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"), Float.class);
+        return Float.parseFloat(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"));
     }
 
     // public List<Float> getFloatList(String key) {
@@ -47,7 +47,7 @@ public class MySQLConfig {
     // }
 
     public Double getDouble(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"), Double.class);
+        return Double.parseDouble(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"));
     }
 
     // public List<Double> getDoubleList(String key) {
@@ -55,7 +55,7 @@ public class MySQLConfig {
     // }
 
     public Long getLong(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"), Long.class);
+        return Long.parseLong(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"));
     }
 
     // public List<Long> getLongList(String key) {
@@ -63,23 +63,24 @@ public class MySQLConfig {
     // }
 
     public Boolean getBoolean(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"), Boolean.class);
+        return Boolean.parseBoolean(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"));
     }
 
     // public List<Boolean> getBooleanList(String key) {
 
     // }
 
-    public <T> T getSerializable(String key, Class<T> clazz) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'"), clazz);
-    }
+    // public <T> T getSerializable(String key, Class<T> clazz) {
+    // return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue",
+    // "keyid = '" + key + "'"), clazz);
+    // }
 
     public void set(String key, Object value) {
         if (value != null && mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'") == null) {
-            mysql.insert(this.tableName, "('" + key + "', '" + Serializer.serialize(value) + "')");
+            mysql.insert(this.tableName, "('" + key + "', '" + value.toString() + "')");
         } else {
             if (value != null) {
-                mysql.update(this.tableName, "keyvalue", Serializer.serialize(value), "keyid = '" + key + "'");
+                mysql.update(this.tableName, "keyvalue", value.toString(), "keyid = '" + key + "'");
             } else {
                 mysql.delete(this.tableName, "keyid = '" + key + "'");
             }
