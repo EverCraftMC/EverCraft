@@ -15,7 +15,7 @@ public class MySQLConfig {
         this.mysql = new MySQL(url, port, database, username, password);
         this.tableName = tableName;
 
-        this.mysql.createTable(this.tableName, "(key VARCHAR(255), value VARCHAR(255))");
+        this.mysql.createTable(this.tableName, "(key LONGTEXT NOT NULL, value LONGTEXT NOT NULL)");
     }
 
     public List<String> getKeys() {
