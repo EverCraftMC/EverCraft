@@ -28,6 +28,8 @@ public class Main extends Plugin {
         config.addDefault("database.password", "");
         config.addDefault("database.tablePrefix", "kalesutilities_");
 
+        config.copyDefaults();
+
         Console.info("Finished loading config");
 
         Console.info("Loading data..");
