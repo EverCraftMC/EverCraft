@@ -1,14 +1,19 @@
 package com.kale_ko.kalesutilities.spigot.commands.moderation;
 
+import java.util.List;
 import com.kale_ko.kalesutilities.spigot.Main;
 import com.kale_ko.kalesutilities.spigot.Util;
-import org.bukkit.command.CommandExecutor;
+import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class KickCommand implements CommandExecutor {
+public class KickCommand extends SpigotCommand {
+    public KickCommand(String name, String description, List<String> aliases, String usage, String permission) {
+        super(name, description, aliases, usage, permission);
+    }
+
     @Override
-    public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (args.length > 1) {
             Player player = Main.Instance.getServer().getPlayer(args[0]);
 

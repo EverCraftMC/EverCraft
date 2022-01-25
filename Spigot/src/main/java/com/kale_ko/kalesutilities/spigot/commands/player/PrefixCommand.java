@@ -1,14 +1,19 @@
 package com.kale_ko.kalesutilities.spigot.commands.player;
 
+import java.util.List;
 import com.kale_ko.kalesutilities.spigot.Main;
 import com.kale_ko.kalesutilities.spigot.Util;
-import org.bukkit.command.CommandExecutor;
+import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class PrefixCommand implements CommandExecutor {
+public class PrefixCommand extends SpigotCommand {
+    public PrefixCommand(String name, String description, List<String> aliases, String usage, String permission) {
+        super(name, description, aliases, usage, permission);
+    }
+
     @Override
-    public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (args.length > 1) {
             if (Util.hasPermission(sender, "kalesutilities.commands.staff.sudo")) {
                 Player player = Main.Instance.getServer().getPlayer(args[0]);

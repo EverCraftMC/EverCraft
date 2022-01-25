@@ -1,16 +1,21 @@
 package com.kale_ko.kalesutilities.spigot.commands.info;
 
+import java.util.List;
 import com.kale_ko.kalesutilities.spigot.Main;
 import com.kale_ko.kalesutilities.spigot.Util;
-import org.bukkit.command.CommandExecutor;
+import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public class HelpCommand implements CommandExecutor {
+public class HelpCommand extends SpigotCommand {
+    public HelpCommand(String name, String description, List<String> aliases, String usage, String permission) {
+        super(name, description, aliases, usage, permission);
+    }
+
     @Override
-    public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (args.length > 0) {
             Player player = Main.Instance.getServer().getPlayer(args[0]);
 

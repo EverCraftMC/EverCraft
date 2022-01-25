@@ -37,150 +37,14 @@ import com.kale_ko.kalesutilities.spigot.listeners.SeenListener;
 import com.kale_ko.kalesutilities.spigot.listeners.SignEditorListener;
 import com.kale_ko.kalesutilities.spigot.listeners.SpawnListener;
 import com.kale_ko.kalesutilities.spigot.listeners.WelcomeListener;
+import java.util.Arrays;
 import java.util.logging.Logger;
+import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.PluginLoadOrder;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.annotation.plugin.Plugin;
-import org.bukkit.plugin.java.annotation.plugin.Description;
-import org.bukkit.plugin.java.annotation.plugin.author.Author;
-import org.bukkit.plugin.java.annotation.command.Command;
-import org.bukkit.plugin.java.annotation.permission.ChildPermission;
-import org.bukkit.plugin.java.annotation.permission.Permission;
-import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
-import org.bukkit.plugin.java.annotation.plugin.LoadOrder;
-import org.bukkit.plugin.java.annotation.plugin.Website;
-
-@Plugin(name = "KalesUtilities", version = "5.0.0")
-@Description("A custom plugin to run on KalesMC")
-@Website("https://github.com/Kale-Ko/Kales-Utilities-V2")
-@Author("Kale Ko")
-@ApiVersion(ApiVersion.Target.v1_18)
-@LoadOrder(PluginLoadOrder.POSTWORLD)
-
-@Permission(name = "kalesutilities.*", desc = "Use all kalesutilities things", defaultValue = PermissionDefault.FALSE, children = {
-        @ChildPermission(name = "kalesutilities.commands.*", inherit = true),
-        @ChildPermission(name = "kalesutilities.features.*", inherit = true)
-})
-
-@Permission(name = "kalesutilities.commands.*", desc = "Use all kalesutilities commands", defaultValue = PermissionDefault.FALSE, children = {
-        @ChildPermission(name = "kalesutilities.commands.info.*", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.warps.*", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.kits.*", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.player.*", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.staff.*", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.moderation.*", inherit = true)
-})
-
-@Permission(name = "kalesutilities.features.*", desc = "Use all kalesutilities features", defaultValue = PermissionDefault.FALSE, children = {
-        @ChildPermission(name = "kalesutilities.features.colorchat", inherit = true),
-        @ChildPermission(name = "kalesutilities.features.colorsigns", inherit = true),
-        @ChildPermission(name = "kalesutilities.features.editsigns", inherit = true),
-        @ChildPermission(name = "kalesutilities.features.commandspy", inherit = true)
-})
-
-@Permission(name = "kalesutilities.commands.info.*", desc = "Use all kalesutilities info commands", defaultValue = PermissionDefault.FALSE, children = {
-        @ChildPermission(name = "kalesutilities.commands.info.help", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.info.list", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.info.about", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.info.rules", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.info.staff", inherit = true)
-})
-
-@Permission(name = "kalesutilities.commands.warps.*", desc = "Use all kalesutilities warps commands", defaultValue = PermissionDefault.FALSE, children = {
-        @ChildPermission(name = "kalesutilities.commands.warps.spawn", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.warps.setspawn", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.warps.warp", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.warps.warps", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.warps.setwarp", inherit = true)
-})
-
-@Permission(name = "kalesutilities.commands.kits.*", desc = "Use all kalesutilities warps commands", defaultValue = PermissionDefault.FALSE, children = {
-        @ChildPermission(name = "kalesutilities.commands.kits.kit", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.kits.kits", inherit = true)
-})
-
-@Permission(name = "kalesutilities.commands.player.*", desc = "Use all kalesutilities player commands", defaultValue = PermissionDefault.FALSE, children = {
-        @ChildPermission(name = "kalesutilities.commands.player.seen", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.player.nickname", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.player.prefix", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.player.status", inherit = true)
-})
-
-@Permission(name = "kalesutilities.commands.staff.*", desc = "Use all kalesutilities staff commands", defaultValue = PermissionDefault.FALSE, children = {
-        @ChildPermission(name = "kalesutilities.commands.staff.gamemode", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.staff.sudo", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.staff.staffchat", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.staff.commandspy", inherit = true)
-})
-
-@Permission(name = "kalesutilities.commands.moderation.*", desc = "Use all kalesutilities moderation commands", defaultValue = PermissionDefault.FALSE, children = {
-        @ChildPermission(name = "kalesutilities.commands.moderation.kick", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.moderation.ban", inherit = true),
-        @ChildPermission(name = "kalesutilities.commands.moderation.mute", inherit = true)
-})
-
-@Permission(name = "kalesutilities.commands.info.help", desc = "Use /help", defaultValue = PermissionDefault.TRUE)
-@Permission(name = "kalesutilities.commands.info.list", desc = "Use /list", defaultValue = PermissionDefault.TRUE)
-@Permission(name = "kalesutilities.commands.info.about", desc = "Use /about", defaultValue = PermissionDefault.TRUE)
-@Permission(name = "kalesutilities.commands.info.rules", desc = "Use /rules", defaultValue = PermissionDefault.TRUE)
-@Permission(name = "kalesutilities.commands.info.staff", desc = "Use /staff", defaultValue = PermissionDefault.TRUE)
-
-@Permission(name = "kalesutilities.commands.warps.spawn", desc = "Use /spawn", defaultValue = PermissionDefault.TRUE)
-@Permission(name = "kalesutilities.commands.warps.setspawn", desc = "Use /setspawn", defaultValue = PermissionDefault.OP)
-@Permission(name = "kalesutilities.commands.warps.warp", desc = "Use /warp", defaultValue = PermissionDefault.TRUE)
-@Permission(name = "kalesutilities.commands.warps.warps", desc = "Use /warps", defaultValue = PermissionDefault.TRUE)
-@Permission(name = "kalesutilities.commands.warps.setwarp", desc = "Use /setwarp", defaultValue = PermissionDefault.OP)
-
-@Permission(name = "kalesutilities.commands.kits.kit", desc = "Use /kit", defaultValue = PermissionDefault.TRUE)
-@Permission(name = "kalesutilities.commands.kits.kits", desc = "Use /kits", defaultValue = PermissionDefault.TRUE)
-
-@Permission(name = "kalesutilities.commands.player.seen", desc = "Use /seen", defaultValue = PermissionDefault.TRUE)
-@Permission(name = "kalesutilities.commands.player.nickname", desc = "Use /nickname", defaultValue = PermissionDefault.TRUE)
-@Permission(name = "kalesutilities.commands.player.prefix", desc = "Use /prefix", defaultValue = PermissionDefault.OP)
-@Permission(name = "kalesutilities.commands.player.status", desc = "Use /status", defaultValue = PermissionDefault.TRUE)
-
-@Permission(name = "kalesutilities.commands.staff.gamemode", desc = "Use /gm", defaultValue = PermissionDefault.OP)
-@Permission(name = "kalesutilities.commands.staff.sudo", desc = "Use /sudo", defaultValue = PermissionDefault.OP)
-@Permission(name = "kalesutilities.commands.staff.staffchat", desc = "Use /staffchat", defaultValue = PermissionDefault.OP)
-@Permission(name = "kalesutilities.commands.staff.commandspy", desc = "Use /commandspy", defaultValue = PermissionDefault.OP)
-
-@Permission(name = "kalesutilities.commands.moderation.kick", desc = "Use /kick", defaultValue = PermissionDefault.OP)
-@Permission(name = "kalesutilities.commands.moderation.ban", desc = "Use /ban and /unban", defaultValue = PermissionDefault.OP)
-@Permission(name = "kalesutilities.commands.moderation.mute", desc = "Use /mute and /unmute", defaultValue = PermissionDefault.OP)
-
-@Permission(name = "kalesutilities.features.colorchat", desc = "Color you chat", defaultValue = PermissionDefault.OP)
-@Permission(name = "kalesutilities.features.colorsigns", desc = "Color signs in the world", defaultValue = PermissionDefault.OP)
-@Permission(name = "kalesutilities.features.editsigns", desc = "Edit signs in the world", defaultValue = PermissionDefault.OP)
-
-@Command(name = "kalesutilities", desc = "The main plugin command for Kales Utilities", aliases = { "ku", "ks" }, usage = "/kalesutilities [help, reload]")
-@Command(name = "help", desc = "See the help", aliases = { "h", "howto" }, usage = "/help {player (optional)}", permission = "kalesutilities.commands.info.help")
-@Command(name = "list", desc = "See the list", aliases = { "players", "playerlist", "listplayers" }, usage = "/list {player (optional)}", permission = "kalesutilities.commands.info.list")
-@Command(name = "about", desc = "See the about", aliases = { "info" }, usage = "/about {player (optional)}", permission = "kalesutilities.commands.info.about")
-@Command(name = "rules", desc = "See the rules", aliases = { "ruleslist" }, usage = "/rules {player (optional)}", permission = "kalesutilities.commands.info.rules")
-@Command(name = "staff", desc = "See the staff", aliases = { "stafflist" }, usage = "/staff {player (optional)}", permission = "kalesutilities.commands.info.staff")
-@Command(name = "spawn", desc = "Go to the spawn", aliases = { "hub", "lobby" }, usage = "/spawn {player (optional)}", permission = "kalesutilities.commands.warps.spawn")
-@Command(name = "setspawn", desc = "Sets the spawn to your location", aliases = { "sethub", "setlobby" }, usage = "/setspawn", permission = "kalesutilities.commands.warps.setspawn")
-@Command(name = "warp", desc = "Go to a warp", aliases = {}, usage = "/warp {player (optional)} {warp}", permission = "kalesutilities.commands.warps.warp")
-@Command(name = "warps", desc = "List the warps", aliases = { "listwarps", "warpslist" }, usage = "/warps {player (optional)}", permission = "kalesutilities.commands.warps.warps")
-@Command(name = "setwarp", desc = "Sets a warp at your location", aliases = {}, usage = "/setwarp {warp}", permission = "kalesutilities.commands.warps.setwarp")
-@Command(name = "kit", desc = "Get a kit", aliases = { "getkit" }, usage = "/kit {player (optional)} {kit}", permission = "kalesutilities.commands.kits.kit")
-@Command(name = "kits", desc = "List the kits", aliases = { "listkits", "kitslist" }, usage = "/kits {player (optional)}", permission = "kalesutilities.commands.kits.kits")
-@Command(name = "seen", desc = "See when a player was last online", aliases = { "lastseen", "online", "lastonline" }, usage = "/seen {player}", permission = "kalesutilities.commands.player.seen")
-@Command(name = "nickname", desc = "Sets you nickname", aliases = { "nick", "setnickname", "setnick" }, usage = "/nickname {player (optional)} {nickname}", permission = "kalesutilities.commands.player.nickname")
-@Command(name = "prefix", desc = "Sets you prefix", aliases = { "setprefix" }, usage = "/prefix {player (optional)} {prefix}", permission = "kalesutilities.commands.player.prefix")
-@Command(name = "status", desc = "Sets you status", aliases = { "setstatus" }, usage = "/status {status}", permission = "kalesutilities.commands.player.status")
-@Command(name = "gmc", desc = "Sets you gamemode", aliases = { "gms", "gma", "gmsp" }, usage = "/gm(c, s, a, sp) {player (optional)}", permission = "kalesutilities.commands.staff.gamemode")
-@Command(name = "sudo", desc = "Make a player say something or run a command", aliases = {}, usage = "/sudo {player} {message/command}", permission = "kalesutilities.commands.staff.sudo")
-@Command(name = "staffchat", desc = "Send a message in the staffchat", aliases = { "sc" }, usage = "/staffchat {message}", permission = "kalesutilities.commands.staff.staffchat")
-@Command(name = "commandspy", desc = "Receive command spy notifications", aliases = { "cs" }, usage = "/commandspy", permission = "kalesutilities.commands.staff.commandspy")
-@Command(name = "kick", desc = "Kick a player from the server", aliases = {}, usage = "/kick {player} {message}", permission = "kalesutilities.commands.moderation.kick")
-@Command(name = "ban", desc = "Ban a player from the server", aliases = {}, usage = "/ban {player} {message}", permission = "kalesutilities.commands.moderation.ban")
-@Command(name = "unban", desc = "Unban a player from the server", aliases = {}, usage = "/unban {player}", permission = "kalesutilities.commands.moderation.ban")
-@Command(name = "mute", desc = "Mute a player on the server", aliases = {}, usage = "/mute {player} {message}", permission = "kalesutilities.commands.moderation.mute")
-@Command(name = "unmute", desc = "Unmute a player on the server", aliases = {}, usage = "/unmute {player}", permission = "kalesutilities.commands.moderation.mute")
 
 public class Main extends JavaPlugin {
     public static Main Instance;
@@ -265,39 +129,82 @@ public class Main extends JavaPlugin {
 
         Console.info("Finished loading data");
 
+        Console.info("Loading permissions..");
+
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.*", "Use everything", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.*", "kalesutilities.features.*"), Arrays.asList(true, true))));
+
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.*", "Use all commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.info.*", "kalesutilities.commands.warps.*", "kalesutilities.commands.kits.*", "kalesutilities.commands.player.*", "kalesutilities.commands.moderation.*"), Arrays.asList(true, true, true, true, true))));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.features.*", "Use all features", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.features.colorchat", "kalesutilities.features.colorsigns", "kalesutilities.features.editsigns"), Arrays.asList(true, true, true))));
+
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.info.*", "Use info commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.info.help", "kalesutilities.commands.info.about", "kalesutilities.commands.info.rules", "kalesutilities.commands.info.staff", "kalesutilities.commands.info.list"), Arrays.asList(true, true, true, true, true))));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.warps.*", "Use warp commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.warps.spawn", "kalesutilities.commands.warps.setspawn", "kalesutilities.commands.warps.warp", "kalesutilities.commands.warps.warps", "kalesutilities.commands.warps.setwarp"), Arrays.asList(true, true, true, true, true))));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.kits.*", "Use kit commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.kits.kit", "kalesutilities.commands.kits.kits"), Arrays.asList(true, true))));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.*", "Use player commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.player.seen", "kalesutilities.commands.player.nickname", "kalesutilities.commands.player.prefix", "kalesutilities.commands.player.status"), Arrays.asList(true, true, true, true))));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.moderation.*", "Use moderation commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.moderation.kick", "kalesutilities.commands.moderation.ban", "kalesutilities.commands.moderation.mute"), Arrays.asList(true, true, true))));
+
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.info.help", "Use /help", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.info.about", "Use /about", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.info.rules", "Use /rules", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.info.staff", "Use /staff", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.info.list", "Use /list", PermissionDefault.TRUE));
+
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.warps.spawn", "Use /spawn", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.warps.setspawn", "Use /setspawn", PermissionDefault.OP));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.warps.warp", "Use /warp", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.warps.warps", "Use /warps", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.warps.setwarp", "Use /setwarp", PermissionDefault.OP));
+
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.kits.kit", "Use /kit", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.kits.kits", "Use /kits", PermissionDefault.TRUE));
+
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.seen", "Use /seen", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.nickname", "Use /nickname", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.prefix", "Use /prefix", PermissionDefault.OP));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.status", "Use /status", PermissionDefault.TRUE));
+
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.moderation.kick", "Use /prefix", PermissionDefault.OP));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.moderation.ban", "Use /prefix", PermissionDefault.OP));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.moderation.mute", "Use /prefix", PermissionDefault.OP));
+
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.features.colorchat", "Color you chat", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.features.colorsigns", "Color you sings", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.features.editsigns", "Edit you sings", PermissionDefault.OP));
+
+        Console.info("Finished loading permissions");
+
         Console.info("Loading commands..");
 
-        this.getCommand("kalesutilities").setExecutor(new KalesUtilitiesCommand());
-        this.getCommand("help").setExecutor(new HelpCommand());
-        this.getCommand("list").setExecutor(new ListCommand());
-        this.getCommand("about").setExecutor(new AboutCommand());
-        this.getCommand("rules").setExecutor(new RulesCommand());
-        this.getCommand("staff").setExecutor(new StaffCommand());
+        ((CraftServer) this.getServer()).getCommandMap().register("kalesutilities", new KalesUtilitiesCommand("kalesutilities", "The main plugin command for Kales Utilities", Arrays.asList("ku", "ks"), "/kalesutilities [help, reload]", null));
+        ((CraftServer) this.getServer()).getCommandMap().register("help", new HelpCommand("help", "See the help", Arrays.asList("h", "howto"), "/help {player (optional)}", "kalesutilities.commands.info.help"));
+        ((CraftServer) this.getServer()).getCommandMap().register("about", new AboutCommand("about", "See the about", Arrays.asList("info", "ip", "discord", "apply", "feedback"), "/about {player (optional)}", "kalesutilities.commands.info.about"));
+        ((CraftServer) this.getServer()).getCommandMap().register("rules", new RulesCommand("rules", "See the rules", Arrays.asList("ruleslist"), "/rules {player (optional)}", "kalesutilities.commands.info.rules"));
+        ((CraftServer) this.getServer()).getCommandMap().register("staff", new StaffCommand("staff", "See the staff", Arrays.asList("stafflist"), "/staff {player (optional)}", "kalesutilities.commands.info.staff"));
+        ((CraftServer) this.getServer()).getCommandMap().register("list", new ListCommand("list", "See the list", Arrays.asList("players", "playerlist", "listplayers"), "/list {player (optional)}", "kalesutilities.commands.info.list"));
 
-        this.getCommand("spawn").setExecutor(new SpawnCommand());
-        this.getCommand("setspawn").setExecutor(new SetSpawnCommand());
-        this.getCommand("warp").setExecutor(new WarpCommand());
-        this.getCommand("warps").setExecutor(new WarpsCommand());
-        this.getCommand("setwarp").setExecutor(new SetWarpCommand());
+        ((CraftServer) this.getServer()).getCommandMap().register("spawn", new SpawnCommand("spawn", "Go to the spawn", Arrays.asList(), "/spawn {player (optional)}", "kalesutilities.commands.warps.spawn"));
+        ((CraftServer) this.getServer()).getCommandMap().register("setspawn", new SetSpawnCommand("setspawn", "Sets the spawn to your location", Arrays.asList(), "/setspawn", "kalesutilities.commands.warps.setspawn"));
+        ((CraftServer) this.getServer()).getCommandMap().register("warp", new WarpCommand("warp", "Go to a warp", Arrays.asList(), "/warp {player (optional)} {warp}", "kalesutilities.commands.warps.warp"));
+        ((CraftServer) this.getServer()).getCommandMap().register("warps", new WarpsCommand("warps", "List the warps", Arrays.asList("listwarps", "warpslist"), "/warps {player (optional)}", "kalesutilities.commands.warps.warps"));
+        ((CraftServer) this.getServer()).getCommandMap().register("setwarp", new SetWarpCommand("setwarp", "Sets a warp at your location", Arrays.asList(), "/setwarp {warp}", "kalesutilities.commands.warps.setwarp"));
 
-        this.getCommand("kit").setExecutor(new KitCommand());
-        this.getCommand("kits").setExecutor(new KitsCommand());
+        ((CraftServer) this.getServer()).getCommandMap().register("kit", new KitCommand("kit", "Get a kit", Arrays.asList("getkit"), "/kit {player (optional)} {kit}", "kalesutilities.commands.kits.kit"));
+        ((CraftServer) this.getServer()).getCommandMap().register("kits", new KitsCommand("kits", "List the kits", Arrays.asList("listkits", "kitslist"), "/kits {player (optional)}", "kalesutilities.commands.kits.kits"));
 
-        this.getCommand("seen").setExecutor(new SeenCommand());
-        this.getCommand("nickname").setExecutor(new NicknameCommand());
-        this.getCommand("prefix").setExecutor(new PrefixCommand());
-        this.getCommand("status").setExecutor(new StatusCommand());
+        ((CraftServer) this.getServer()).getCommandMap().register("seen", new SeenCommand("seen", "See when a player was last online", Arrays.asList("lastseen", "online", "lastonline"), "/seen {player}", "kalesutilities.commands.player.seen"));
+        ((CraftServer) this.getServer()).getCommandMap().register("nickname", new NicknameCommand("nickname", "Sets you nickname", Arrays.asList("nick", "setnickname", "setnick"), "/nickname {player (optional)} {nickname}", "kalesutilities.commands.player.nickname"));
+        ((CraftServer) this.getServer()).getCommandMap().register("prefix", new PrefixCommand("prefix", "Sets you prefix", Arrays.asList("setprefix"), "/prefix {player (optional)} {prefix}", "kalesutilities.commands.player.prefix"));
+        ((CraftServer) this.getServer()).getCommandMap().register("status", new StatusCommand("status", "Sets you status", Arrays.asList("setstatus"), "/status {status}", "kalesutilities.commands.player.status"));
 
-        this.getCommand("gmc").setExecutor(new GamemodeCommand());
-        this.getCommand("sudo").setExecutor(new SudoCommand());
-        this.getCommand("staffchat").setExecutor(new StaffChatCommand());
-        this.getCommand("commandspy").setExecutor(new CommandSpyCommand());
+        ((CraftServer) this.getServer()).getCommandMap().register("gmc", new GamemodeCommand("gmc", "Sets you gamemode", Arrays.asList("gms", "gma", "gmsp"), "/gm(c, s, a, sp) {player (optional)}", "kalesutilities.commands.staff.gamemode"));
+        ((CraftServer) this.getServer()).getCommandMap().register("staffchat", new StaffChatCommand("staffchat", "Send a message in the staffchat", Arrays.asList("sc"), "/staffchat {message}", "kalesutilities.commands.staff.staffchat"));
+        ((CraftServer) this.getServer()).getCommandMap().register("commandspy", new CommandSpyCommand("commandspy", "Receive command spy notifications", Arrays.asList("cs"), "/commandspy", "kalesutilities.commands.staff.commandspy"));
+        ((CraftServer) this.getServer()).getCommandMap().register("sudo", new SudoCommand("sudo", "Make a player say something or run a command", Arrays.asList(), "/sudo {player} {message/command}", "kalesutilities.commands.staff.sudo"));
 
-        this.getCommand("kick").setExecutor(new KickCommand());
-        this.getCommand("ban").setExecutor(new BanCommand());
-        this.getCommand("unban").setExecutor(new UnbanCommand());
-        this.getCommand("mute").setExecutor(new MuteCommand());
-        this.getCommand("unmute").setExecutor(new UnmuteCommand());
+        ((CraftServer) this.getServer()).getCommandMap().register("kick", new KickCommand("kick", "Kick a player from the server", Arrays.asList("boot"), "/kick {player} {message}", "kalesutilities.commands.moderation.kick"));
+        ((CraftServer) this.getServer()).getCommandMap().register("ban", new BanCommand("ban", "Ban a player from the server", Arrays.asList("permban"), "/ban {player} {message}", "kalesutilities.commands.moderation.ban"));
+        ((CraftServer) this.getServer()).getCommandMap().register("unban", new UnbanCommand("unban", "Unban a player from the server", Arrays.asList(), "/unban {player}", "kalesutilities.commands.moderation.ban"));
+        ((CraftServer) this.getServer()).getCommandMap().register("mute", new MuteCommand("mute", "Mute a player on the server", Arrays.asList("permmute"), "/mute {player} {message}", "kalesutilities.commands.moderation.mute"));
+        ((CraftServer) this.getServer()).getCommandMap().register("unmute", new UnmuteCommand("unmute", "Unmute a player on the server", Arrays.asList(), "/unmute {player}", "kalesutilities.commands.moderation.mute"));
 
         Console.info("Finished loading commands");
 
@@ -329,6 +236,19 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        Console.info("Closing data..");
+
+        this.players.close();
+        this.seen.close();
+
+        Console.info("Finished closing data");
+
+        Console.info("Removing commands..");
+
+        ((CraftServer) this.getServer()).getCommandMap().clearCommands();
+
+        Console.info("Finished removing commands");
+
         Console.info("Removing event listeners..");
 
         HandlerList.unregisterAll(Main.Instance);

@@ -1,6 +1,8 @@
 package com.kale_ko.kalesutilities.spigot;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -162,5 +164,15 @@ public class Util {
         }
 
         return null;
+    }
+
+    public static <T, N> Map<T, N> mapFromLists(List<T> keys, List<N> values) {
+        Map<T, N> newMap = new HashMap<T, N>();
+
+        for (T key : keys) {
+            newMap.put(key, values.get(keys.indexOf(key)));
+        }
+
+        return newMap;
     }
 }
