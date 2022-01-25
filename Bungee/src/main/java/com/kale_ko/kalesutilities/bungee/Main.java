@@ -21,6 +21,13 @@ public class Main extends Plugin {
 
         config = BungeeConfig.load("config.yml");
 
+        config.addDefault("database.url", "localhost");
+        config.addDefault("database.port", "3306");
+        config.addDefault("database.database", "minecraft");
+        config.addDefault("database.username", "root");
+        config.addDefault("database.password", "");
+        config.addDefault("database.tablePrefix", "kalesutilities_");
+
         Console.info("Finished loading config");
 
         Console.info("Loading data..");
