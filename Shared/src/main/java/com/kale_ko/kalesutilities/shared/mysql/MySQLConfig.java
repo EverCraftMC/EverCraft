@@ -15,7 +15,7 @@ public class MySQLConfig {
         this.mysql = new MySQL(url, port, database, username, password);
         this.tableName = tableName;
 
-        this.mysql.createTable(this.tableName, "(key LONGTEXT NOT NULL, value LONGTEXT NOT NULL)");
+        this.mysql.createTable(this.tableName, "(keyid LONGTEXT NOT NULL, keyvalue LONGTEXT NOT NULL)");
     }
 
     public List<String> getKeys() {
@@ -23,11 +23,11 @@ public class MySQLConfig {
     }
 
     public Object getObject(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), Object.class);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = " + key), Object.class);
     }
 
     public String getString(String key) {
-        return mysql.selectFirst(this.tableName, "value", "key = " + key);
+        return mysql.selectFirst(this.tableName, "keyvalue", "keyid = " + key);
     }
 
     // public List<String> getStringList(String key) {
@@ -35,7 +35,7 @@ public class MySQLConfig {
     // }
 
     public Integer getInt(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), Integer.class);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = " + key), Integer.class);
     }
 
     // public List<Integer> getIntList(String key) {
@@ -43,7 +43,7 @@ public class MySQLConfig {
     // }
 
     public Float getFloat(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), Float.class);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = " + key), Float.class);
     }
 
     // public List<Float> getFloatList(String key) {
@@ -51,7 +51,7 @@ public class MySQLConfig {
     // }
 
     public Double getDouble(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), Double.class);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = " + key), Double.class);
     }
 
     // public List<Double> getDoubleList(String key) {
@@ -59,7 +59,7 @@ public class MySQLConfig {
     // }
 
     public Long getLong(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), Long.class);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = " + key), Long.class);
     }
 
     // public List<Long> getLongList(String key) {
@@ -67,7 +67,7 @@ public class MySQLConfig {
     // }
 
     public Boolean getBoolean(String key) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), Boolean.class);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = " + key), Boolean.class);
     }
 
     // public List<Boolean> getBooleanList(String key) {
@@ -75,17 +75,17 @@ public class MySQLConfig {
     // }
 
     public <T> T getSerializable(String key, Class<T> clazz) {
-        return Serializer.deserialize(mysql.selectFirst(this.tableName, "value", "key = " + key), clazz);
+        return Serializer.deserialize(mysql.selectFirst(this.tableName, "keyvalue", "keyid = " + key), clazz);
     }
 
     public void set(String key, Object value) {
-        if (value != null && mysql.selectFirst(this.tableName, "value", "key = " + key) == null) {
+        if (value != null && mysql.selectFirst(this.tableName, "keyvalue", "keyid = " + key) == null) {
             mysql.insert(this.tableName, "('" + key + "', '" + Serializer.serialize(value) + "')");
         } else {
             if (value != null) {
-                mysql.update(this.tableName, "value", Serializer.serialize(value), "key = " + key);
+                mysql.update(this.tableName, "keyvalue", Serializer.serialize(value), "keyid = " + key);
             } else {
-                mysql.delete(this.tableName, "key = " + key);
+                mysql.delete(this.tableName, "keyid = " + key);
             }
         }
     }
