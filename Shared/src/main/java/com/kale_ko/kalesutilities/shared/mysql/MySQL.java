@@ -50,8 +50,6 @@ public class MySQL {
 
             while (result.next()) {
                 for (String field : fields) {
-                    String currentFieldValue = result.getString(field);
-
                     ret.append(result.getString(field) + "\t");
                 }
 
@@ -67,7 +65,7 @@ public class MySQL {
         return ret.toString();
     }
 
-    public String selectFirst(String table, String[] fields, String condition) {
+    public String selectFirst(String table, String field, String condition) {
         String selectStatement = "SELECT * FROM " + table + " " + "WHERE " + condition;
 
         try {
@@ -75,11 +73,7 @@ public class MySQL {
             ResultSet result = statement.executeQuery(selectStatement);
 
             while (result.next()) {
-                for (String field : fields) {
-                    String currentFieldValue = result.getString(field);
-
-                    return result.getString(field);
-                }
+                return result.getString(field);
             }
 
             statement.close();
