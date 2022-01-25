@@ -212,6 +212,12 @@ public class Main extends JavaPlugin {
         config.addDefault("config.about", "Kales Minecraft Server!");
         config.addDefault("config.rules", "\n1. No Hacking\n2. No Griefing\n3. Be Respectful\n4. No Profanity\n5. Just Don't Be Rude/Annoying.\n\nBreaking rules could result in a kick, ban, or mute");
         config.addDefault("config.staff", "");
+        config.addDefault("database.url", "localhost");
+        config.addDefault("database.port", "3306");
+        config.addDefault("database.database", "minecraft");
+        config.addDefault("database.username", "root");
+        config.addDefault("database.password", "");
+        config.addDefault("database.tablePrefix", "kalesutilities_");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
