@@ -10,10 +10,8 @@ public class MySQL {
     private Connection connection;
 
     public MySQL(String url, Integer port, String database, String username, String password) {
-        System.out.println("jdbc:mysql://" + url + ":" + port + "/" + database + "?user=" + username + "&password=" + password + "&useUnicode=true&characterEncoding=UTF-8");
-
         try {
-            this.connection = DriverManager.getConnection("jdbc:mysql://" + url + ":" + port + "/" + database + "?user=" + username + "&password=" + password + "&useUnicode=true&characterEncoding=UTF-8", username, password);
+            this.connection = DriverManager.getConnection("jdbc:mysql://" + url + ":" + port + "/" + database, username, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -15,7 +15,7 @@ public class MySQLConfig {
         this.mysql = new MySQL(url, port, database, username, password);
         this.tableName = tableName;
 
-        this.mysql.createTable(this.tableName, "(key TEXT CHARACTER SET utf8 BINARY, value TEXT CHARACTER SET utf8 BINARY)");
+        this.mysql.createTable(this.tableName, "(key TEXT, value TEXT)");
     }
 
     public List<String> getKeys() {
