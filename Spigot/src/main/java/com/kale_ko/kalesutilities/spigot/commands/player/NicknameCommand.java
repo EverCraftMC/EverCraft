@@ -16,8 +16,6 @@ public class NicknameCommand implements CommandExecutor {
                 if (player != null) {
                     Main.Instance.players.set(player.getPlayer().getName() + ".nickname", args[1]);
 
-                    Main.Instance.players.save();
-
                     Util.sendMessage(sender, Main.Instance.config.getString("messages.setnickname"));
                     Util.updatePlayerName(player);
                 } else {
@@ -30,8 +28,6 @@ public class NicknameCommand implements CommandExecutor {
             if (sender instanceof Player player) {
                 Main.Instance.players.set(player.getPlayer().getName() + ".nickname", args[0]);
 
-                Main.Instance.players.save();
-
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.setnickname"));
                 Util.updatePlayerName(player);
             } else {
@@ -40,8 +36,6 @@ public class NicknameCommand implements CommandExecutor {
         } else if (args.length == 0) {
             if (sender instanceof Player player) {
                 Main.Instance.players.set(player.getPlayer().getName() + ".nickname", player.getName());
-
-                Main.Instance.players.save();
 
                 Util.sendMessage(sender, Main.Instance.config.getString("messages.setnickname"));
                 Util.updatePlayerName(player);

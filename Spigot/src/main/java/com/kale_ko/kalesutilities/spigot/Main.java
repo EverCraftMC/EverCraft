@@ -1,5 +1,6 @@
 package com.kale_ko.kalesutilities.spigot;
 
+import com.kale_ko.kalesutilities.shared.mysql.MySQLConfig;
 import com.kale_ko.kalesutilities.spigot.commands.info.AboutCommand;
 import com.kale_ko.kalesutilities.spigot.commands.info.HelpCommand;
 import com.kale_ko.kalesutilities.spigot.commands.info.KalesUtilitiesCommand;
@@ -187,8 +188,8 @@ public class Main extends JavaPlugin {
     public final Logger Console = getLogger();
 
     public SpigotConfig config;
-    public SpigotConfig players;
-    public SpigotConfig seen;
+    public MySQLConfig players;
+    public MySQLConfig seen;
     public SpigotConfig spawn;
     public SpigotConfig warps;
     public SpigotConfig kits;
@@ -200,8 +201,8 @@ public class Main extends JavaPlugin {
         Console.info("Loading config..");
 
         config = SpigotConfig.load("config.yml");
-        players = SpigotConfig.load("players.yml");
-        seen = SpigotConfig.load("seen.yml");
+        players = MySQLConfig.load(config.getString("database.url"), config.getInt("database.port"), config.getString("database.database"), config.getString("database.tablePrefix") + "players", config.getString("database.username"), config.getString("database.password"));
+        seen = MySQLConfig.load(config.getString("database.url"), config.getInt("database.port"), config.getString("database.database"), config.getString("database.tablePrefix") + "seen", config.getString("database.username"), config.getString("database.password"));
         spawn = SpigotConfig.load("spawn.yml");
         warps = SpigotConfig.load("warps.yml");
         kits = SpigotConfig.load("kits.yml");

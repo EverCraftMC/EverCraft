@@ -12,8 +12,6 @@ public class UnbanCommand implements CommandExecutor {
             Main.Instance.players.set(args[0] + ".banned", null);
             Main.Instance.players.set(args[0] + ".banMessage", null);
 
-            Main.Instance.players.save();
-
             Util.broadcastMessage(Main.Instance.config.getString("messages.unban").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)));
         } else {
             Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("unban").getUsage()));

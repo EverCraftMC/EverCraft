@@ -1,6 +1,7 @@
 package com.kale_ko.kalesutilities.bungee;
 
 import java.util.logging.Logger;
+import com.kale_ko.kalesutilities.shared.mysql.MySQLConfig;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -10,7 +11,7 @@ public class Main extends Plugin {
     public final Logger Console = getLogger();
 
     public BungeeConfig config;
-    public BungeeConfig players;
+    public MySQLConfig players;
 
     @Override
     public void onEnable() {
@@ -19,7 +20,7 @@ public class Main extends Plugin {
         Console.info("Loading config..");
 
         config = BungeeConfig.load("config.yml");
-        players = BungeeConfig.load("players.yml");
+        players = MySQLConfig.load(config.getString("database.url"), config.getInt("database.port"), config.getString("database.database"), config.getString("database.tablePrefix") + "players", config.getString("database.username"), config.getString("database.password"));
 
         Console.info("Finished loading config");
 
