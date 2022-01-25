@@ -27,7 +27,7 @@ public class MySQL {
 
     public void createTable(String name, String data) {
         try {
-            String createStatement = "CREATE TABLE IF NOT EXISTS " + name + " " + data;
+            String createStatement = "CREATE TABLE IF NOT EXISTS " + name + " " + data + ";";
             Statement statement = this.connection.createStatement();
 
             statement.executeUpdate(createStatement);
@@ -41,7 +41,7 @@ public class MySQL {
     }
 
     public String select(String table, String[] fields, String condition) {
-        String selectStatement = "SELECT * FROM " + table + " " + "WHERE " + condition;
+        String selectStatement = "SELECT * FROM " + table + " " + "WHERE " + condition + ";";
         StringBuilder ret = new StringBuilder();
 
         try {
@@ -66,7 +66,7 @@ public class MySQL {
     }
 
     public String selectFirst(String table, String field, String condition) {
-        String selectStatement = "SELECT * FROM " + table + " " + "WHERE " + condition;
+        String selectStatement = "SELECT * FROM " + table + " " + "WHERE " + condition + ";";
 
         try {
             Statement statement = this.connection.createStatement();
@@ -87,7 +87,7 @@ public class MySQL {
 
     public void insert(String table, String values) {
         try {
-            String insertStatement = "INSERT INTO " + table + " VALUES " + values;
+            String insertStatement = "INSERT INTO " + table + " VALUES " + values + ";";
             Statement statement = this.connection.createStatement();
 
             statement.executeUpdate(insertStatement);
@@ -99,7 +99,7 @@ public class MySQL {
 
     public void insert(String table, String keys, String values) {
         try {
-            String insertStatement = "INSERT INTO " + table + " " + keys + " VALUES " + values;
+            String insertStatement = "INSERT INTO " + table + " " + keys + " VALUES " + values + ";";
             Statement statement = this.connection.createStatement();
 
             statement.executeUpdate(insertStatement);
@@ -111,7 +111,7 @@ public class MySQL {
 
     public void update(String table, String key, String value, String condition) {
         try {
-            String updateStatement = "UPDATE " + table + " SET " + key + " = " + value + " WHERE " + condition;
+            String updateStatement = "UPDATE " + table + " SET " + key + " = " + value + " WHERE " + condition + ";";
             Statement statement = this.connection.createStatement();
 
             statement.executeUpdate(updateStatement);
@@ -123,7 +123,7 @@ public class MySQL {
 
     public void delete(String table, String condition) {
         try {
-            String deleteStatement = "DELETE FROM " + table + " WHERE " + condition;
+            String deleteStatement = "DELETE FROM " + table + " WHERE " + condition + ";";
             Statement statement = this.connection.createStatement();
 
             statement.executeUpdate(deleteStatement);
