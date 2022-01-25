@@ -109,9 +109,9 @@ public class MySQL {
         }
     }
 
-    public void update(String table, String key, String value, String condition) {
+    public void update(String table, String set, String condition) {
         try {
-            String updateStatement = "UPDATE " + table + " SET " + key + " = " + value + " WHERE " + condition + ";";
+            String updateStatement = "UPDATE " + table + " SET " + set + "' WHERE " + condition + ";";
             Statement statement = this.connection.createStatement();
 
             statement.executeUpdate(updateStatement);
