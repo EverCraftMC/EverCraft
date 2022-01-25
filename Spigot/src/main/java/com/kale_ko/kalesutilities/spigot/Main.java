@@ -201,11 +201,6 @@ public class Main extends JavaPlugin {
         Console.info("Loading config..");
 
         config = SpigotConfig.load("config.yml");
-        players = MySQLConfig.load(config.getString("database.url"), config.getInt("database.port"), config.getString("database.database"), config.getString("database.tablePrefix") + "players", config.getString("database.username"), config.getString("database.password"));
-        seen = MySQLConfig.load(config.getString("database.url"), config.getInt("database.port"), config.getString("database.database"), config.getString("database.tablePrefix") + "seen", config.getString("database.username"), config.getString("database.password"));
-        spawn = SpigotConfig.load("spawn.yml");
-        warps = SpigotConfig.load("warps.yml");
-        kits = SpigotConfig.load("kits.yml");
 
         config.addDefault("config.prefix", "&6&l[Kales Utilities]&r");
         config.addDefault("config.chatFormat", "{prefix}{player} > {message}");
@@ -259,6 +254,16 @@ public class Main extends JavaPlugin {
         config.copyDefaults();
 
         Console.info("Finished loading config");
+
+        Console.info("Loading data..");
+
+        players = MySQLConfig.load(config.getString("database.url"), config.getInt("database.port"), config.getString("database.database"), config.getString("database.tablePrefix") + "players", config.getString("database.username"), config.getString("database.password"));
+        seen = MySQLConfig.load(config.getString("database.url"), config.getInt("database.port"), config.getString("database.database"), config.getString("database.tablePrefix") + "seen", config.getString("database.username"), config.getString("database.password"));
+        spawn = SpigotConfig.load("spawn.yml");
+        warps = SpigotConfig.load("warps.yml");
+        kits = SpigotConfig.load("kits.yml");
+
+        Console.info("Finished loading data");
 
         Console.info("Loading commands..");
 

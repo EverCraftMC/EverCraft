@@ -20,9 +20,14 @@ public class Main extends Plugin {
         Console.info("Loading config..");
 
         config = BungeeConfig.load("config.yml");
-        players = MySQLConfig.load(config.getString("database.url"), config.getInt("database.port"), config.getString("database.database"), config.getString("database.tablePrefix") + "players", config.getString("database.username"), config.getString("database.password"));
 
         Console.info("Finished loading config");
+
+        Console.info("Loading data..");
+
+        players = MySQLConfig.load(config.getString("database.url"), config.getInt("database.port"), config.getString("database.database"), config.getString("database.tablePrefix") + "players", config.getString("database.username"), config.getString("database.password"));
+
+        Console.info("Finished loading data");
 
         Console.info("Loading commands..");
 
