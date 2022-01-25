@@ -25,9 +25,6 @@ dependencies {
     compileOnly name: "bukkit-${project.minecraft_version}"
     compileOnly "com.mojang:authlib:${project.authlib_version}"
     compileOnly "com.mojang:brigadier:${project.brigadier_version}"
-
-    compileOnly "org.spigotmc:plugin-annotations:${project.spigot_anotations_version}"
-    annotationProcessor "org.spigotmc:plugin-annotations:${project.spigot_anotations_version}"
 }
 
 tasks.withType(JavaCompile).configureEach {

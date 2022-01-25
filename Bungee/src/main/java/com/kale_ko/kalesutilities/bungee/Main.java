@@ -29,6 +29,10 @@ public class Main extends Plugin {
 
         Console.info("Finished loading data");
 
+        Console.info("Loading permissions..");
+
+        Console.info("Finished loading permissions");
+
         Console.info("Loading commands..");
 
         Console.info("Finished loading commands");
@@ -50,6 +54,16 @@ public class Main extends Plugin {
 
     @Override
     public void onDisable() {
+        Console.info("Closing data..");
+
+        this.players.close();
+
+        Console.info("Finished closing data");
+
+        Console.info("Removing commands..");
+
+        Console.info("Finished removing commands");
+
         Console.info("Removing event listeners..");
 
         getProxy().getPluginManager().unregisterListeners(Main.Instance);

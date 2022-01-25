@@ -96,6 +96,10 @@ public class MySQLConfig {
         }
     }
 
+    public void close() {
+        mysql.close();
+    }
+
     public static MySQLConfig load(String url, Integer port, String database, String tableName, String username, String password) {
         return new MySQLConfig(url, port, database, tableName, username, password);
     }
