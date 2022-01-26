@@ -1,6 +1,7 @@
 package com.kale_ko.kalesutilities.bungee;
 
 import java.util.logging.Logger;
+import com.kale_ko.kalesutilities.bungee.listeners.PlayerJoinListener;
 import com.kale_ko.kalesutilities.shared.mysql.MySQLConfig;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -21,6 +22,7 @@ public class Main extends Plugin {
 
         config = BungeeConfig.load("config.yml");
 
+        config.addDefault("config.mainServer", "hub");
         config.addDefault("database.url", "localhost");
         config.addDefault("database.port", "3306");
         config.addDefault("database.database", "minecraft");
@@ -47,6 +49,8 @@ public class Main extends Plugin {
         Console.info("Finished loading commands");
 
         Console.info("Loading event listeners..");
+
+        getProxy().getPluginManager().registerListener(this, new PlayerJoinListener());
 
         Console.info("Finished loading event listeners");
 
