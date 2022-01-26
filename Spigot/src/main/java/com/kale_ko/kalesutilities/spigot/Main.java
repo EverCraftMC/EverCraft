@@ -175,37 +175,37 @@ public class Main extends JavaPlugin {
 
         Console.info("Loading commands..");
 
-        ((CraftServer) this.getServer()).getCommandMap().register("kalesutilities", new KalesUtilitiesCommand("kalesutilities", "The main plugin command for Kales Utilities", Arrays.asList("ku", "ks"), "/kalesutilities [help, reload]", "kalesutilities.commands.info.kalesutilities"));
-        ((CraftServer) this.getServer()).getCommandMap().register("help", new HelpCommand("help", "See the help", Arrays.asList("h", "howto"), "/help {player (optional)}", "kalesutilities.commands.info.help"));
-        ((CraftServer) this.getServer()).getCommandMap().register("about", new AboutCommand("about", "See the about", Arrays.asList("info", "ip", "discord", "apply", "feedback"), "/about {player (optional)}", "kalesutilities.commands.info.about"));
-        ((CraftServer) this.getServer()).getCommandMap().register("rules", new RulesCommand("rules", "See the rules", Arrays.asList("ruleslist"), "/rules {player (optional)}", "kalesutilities.commands.info.rules"));
-        ((CraftServer) this.getServer()).getCommandMap().register("staff", new StaffCommand("staff", "See the staff", Arrays.asList("stafflist"), "/staff {player (optional)}", "kalesutilities.commands.info.staff"));
-        ((CraftServer) this.getServer()).getCommandMap().register("list", new ListCommand("list", "See the list", Arrays.asList("players", "playerlist", "listplayers"), "/list {player (optional)}", "kalesutilities.commands.info.list"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":kalesutilities", new KalesUtilitiesCommand("kalesutilities", "The main plugin command for Kales Utilities", Arrays.asList("ku", "ks"), "/kalesutilities [help, reload]", "kalesutilities.commands.info.kalesutilities"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":help", new HelpCommand("help", "See the help", Arrays.asList("h", "howto"), "/help {player (optional)}", "kalesutilities.commands.info.help"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":about", new AboutCommand("about", "See the about", Arrays.asList("info", "ip", "discord", "apply", "feedback"), "/about {player (optional)}", "kalesutilities.commands.info.about"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":rules", new RulesCommand("rules", "See the rules", Arrays.asList("ruleslist"), "/rules {player (optional)}", "kalesutilities.commands.info.rules"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":staff", new StaffCommand("staff", "See the staff", Arrays.asList("stafflist"), "/staff {player (optional)}", "kalesutilities.commands.info.staff"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":list", new ListCommand("list", "See the list", Arrays.asList("players", "playerlist", "listplayers"), "/list {player (optional)}", "kalesutilities.commands.info.list"));
 
-        ((CraftServer) this.getServer()).getCommandMap().register("spawn", new SpawnCommand("spawn", "Go to the spawn", Arrays.asList(), "/spawn {player (optional)}", "kalesutilities.commands.warps.spawn"));
-        ((CraftServer) this.getServer()).getCommandMap().register("setspawn", new SetSpawnCommand("setspawn", "Sets the spawn to your location", Arrays.asList(), "/setspawn", "kalesutilities.commands.warps.setspawn"));
-        ((CraftServer) this.getServer()).getCommandMap().register("warp", new WarpCommand("warp", "Go to a warp", Arrays.asList(), "/warp {player (optional)} {warp}", "kalesutilities.commands.warps.warp"));
-        ((CraftServer) this.getServer()).getCommandMap().register("warps", new WarpsCommand("warps", "List the warps", Arrays.asList("listwarps", "warpslist"), "/warps {player (optional)}", "kalesutilities.commands.warps.warps"));
-        ((CraftServer) this.getServer()).getCommandMap().register("setwarp", new SetWarpCommand("setwarp", "Sets a warp at your location", Arrays.asList(), "/setwarp {warp}", "kalesutilities.commands.warps.setwarp"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":spawn", new SpawnCommand("spawn", "Go to the spawn", Arrays.asList(), "/spawn {player (optional)}", "kalesutilities.commands.warps.spawn"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":setspawn", new SetSpawnCommand("setspawn", "Sets the spawn to your location", Arrays.asList(), "/setspawn", "kalesutilities.commands.warps.setspawn"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":warp", new WarpCommand("warp", "Go to a warp", Arrays.asList(), "/warp {player (optional)} {warp}", "kalesutilities.commands.warps.warp"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":warps", new WarpsCommand("warps", "List the warps", Arrays.asList("listwarps", "warpslist"), "/warps {player (optional)}", "kalesutilities.commands.warps.warps"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":setwarp", new SetWarpCommand("setwarp", "Sets a warp at your location", Arrays.asList(), "/setwarp {warp}", "kalesutilities.commands.warps.setwarp"));
 
-        ((CraftServer) this.getServer()).getCommandMap().register("kit", new KitCommand("kit", "Get a kit", Arrays.asList("getkit"), "/kit {player (optional)} {kit}", "kalesutilities.commands.kits.kit"));
-        ((CraftServer) this.getServer()).getCommandMap().register("kits", new KitsCommand("kits", "List the kits", Arrays.asList("listkits", "kitslist"), "/kits {player (optional)}", "kalesutilities.commands.kits.kits"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":kit", new KitCommand("kit", "Get a kit", Arrays.asList("getkit"), "/kit {player (optional)} {kit}", "kalesutilities.commands.kits.kit"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":kits", new KitsCommand("kits", "List the kits", Arrays.asList("listkits", "kitslist"), "/kits {player (optional)}", "kalesutilities.commands.kits.kits"));
 
-        ((CraftServer) this.getServer()).getCommandMap().register("seen", new SeenCommand("seen", "See when a player was last online", Arrays.asList("lastseen", "online", "lastonline"), "/seen {player}", "kalesutilities.commands.player.seen"));
-        ((CraftServer) this.getServer()).getCommandMap().register("nickname", new NicknameCommand("nickname", "Sets you nickname", Arrays.asList("nick", "setnickname", "setnick"), "/nickname {player (optional)} {nickname}", "kalesutilities.commands.player.nickname"));
-        ((CraftServer) this.getServer()).getCommandMap().register("prefix", new PrefixCommand("prefix", "Sets you prefix", Arrays.asList("setprefix"), "/prefix {player (optional)} {prefix}", "kalesutilities.commands.player.prefix"));
-        ((CraftServer) this.getServer()).getCommandMap().register("status", new StatusCommand("status", "Sets you status", Arrays.asList("setstatus"), "/status {status}", "kalesutilities.commands.player.status"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":seen", new SeenCommand("seen", "See when a player was last online", Arrays.asList("lastseen", "online", "lastonline"), "/seen {player}", "kalesutilities.commands.player.seen"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":nickname", new NicknameCommand("nickname", "Sets you nickname", Arrays.asList("nick", "setnickname", "setnick"), "/nickname {player (optional)} {nickname}", "kalesutilities.commands.player.nickname"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":prefix", new PrefixCommand("prefix", "Sets you prefix", Arrays.asList("setprefix"), "/prefix {player (optional)} {prefix}", "kalesutilities.commands.player.prefix"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":status", new StatusCommand("status", "Sets you status", Arrays.asList("setstatus"), "/status {status}", "kalesutilities.commands.player.status"));
 
-        ((CraftServer) this.getServer()).getCommandMap().register("gmc", new GamemodeCommand("gmc", "Sets you gamemode", Arrays.asList("gms", "gma", "gmsp"), "/gm(c, s, a, sp) {player (optional)}", "kalesutilities.commands.staff.gamemode"));
-        ((CraftServer) this.getServer()).getCommandMap().register("staffchat", new StaffChatCommand("staffchat", "Send a message in the staffchat", Arrays.asList("sc"), "/staffchat {message}", "kalesutilities.commands.staff.staffchat"));
-        ((CraftServer) this.getServer()).getCommandMap().register("commandspy", new CommandSpyCommand("commandspy", "Receive command spy notifications", Arrays.asList("cs"), "/commandspy", "kalesutilities.commands.staff.commandspy"));
-        ((CraftServer) this.getServer()).getCommandMap().register("sudo", new SudoCommand("sudo", "Make a player say something or run a command", Arrays.asList(), "/sudo {player} {message/command}", "kalesutilities.commands.staff.sudo"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":gmc", new GamemodeCommand("gmc", "Sets you gamemode", Arrays.asList("gms", "gma", "gmsp"), "/gm(c, s, a, sp) {player (optional)}", "kalesutilities.commands.staff.gamemode"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":staffchat", new StaffChatCommand("staffchat", "Send a message in the staffchat", Arrays.asList("sc"), "/staffchat {message}", "kalesutilities.commands.staff.staffchat"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":commandspy", new CommandSpyCommand("commandspy", "Receive command spy notifications", Arrays.asList("cs"), "/commandspy", "kalesutilities.commands.staff.commandspy"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":sudo", new SudoCommand("sudo", "Make a player say something or run a command", Arrays.asList(), "/sudo {player} {message/command}", "kalesutilities.commands.staff.sudo"));
 
-        ((CraftServer) this.getServer()).getCommandMap().register("kick", new KickCommand("kick", "Kick a player from the server", Arrays.asList("boot"), "/kick {player} {message}", "kalesutilities.commands.moderation.kick"));
-        ((CraftServer) this.getServer()).getCommandMap().register("ban", new BanCommand("ban", "Ban a player from the server", Arrays.asList("permban"), "/ban {player} {message}", "kalesutilities.commands.moderation.ban"));
-        ((CraftServer) this.getServer()).getCommandMap().register("unban", new UnbanCommand("unban", "Unban a player from the server", Arrays.asList(), "/unban {player}", "kalesutilities.commands.moderation.ban"));
-        ((CraftServer) this.getServer()).getCommandMap().register("mute", new MuteCommand("mute", "Mute a player on the server", Arrays.asList("permmute"), "/mute {player} {message}", "kalesutilities.commands.moderation.mute"));
-        ((CraftServer) this.getServer()).getCommandMap().register("unmute", new UnmuteCommand("unmute", "Unmute a player on the server", Arrays.asList(), "/unmute {player}", "kalesutilities.commands.moderation.mute"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":kick", new KickCommand("kick", "Kick a player from the server", Arrays.asList("boot"), "/kick {player} {message}", "kalesutilities.commands.moderation.kick"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":ban", new BanCommand("ban", "Ban a player from the server", Arrays.asList("permban"), "/ban {player} {message}", "kalesutilities.commands.moderation.ban"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":unban", new UnbanCommand("unban", "Unban a player from the server", Arrays.asList(), "/unban {player}", "kalesutilities.commands.moderation.ban"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":mute", new MuteCommand("mute", "Mute a player on the server", Arrays.asList("permmute"), "/mute {player} {message}", "kalesutilities.commands.moderation.mute"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName() + ":unmute", new UnmuteCommand("unmute", "Unmute a player on the server", Arrays.asList(), "/unmute {player}", "kalesutilities.commands.moderation.mute"));
 
         Console.info("Finished loading commands");
 

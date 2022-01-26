@@ -31,6 +31,14 @@ public class Main extends Plugin {
         config.addDefault("database.username", "root");
         config.addDefault("database.password", "");
         config.addDefault("database.tablePrefix", "kalesutilities_");
+        config.addDefault("messages.invalidCommand", "{command} is not a command");
+        config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
+        config.addDefault("messages.noconsole", "You can't use that command from the console");
+        config.addDefault("messages.playernotfound", "{player} can't be found");
+        config.addDefault("messages.usage", "Usage: {usage}");
+        config.addDefault("messages.help", "\n{commandList}");
+        config.addDefault("messages.list", "\n{playerList}");
+        config.addDefault("messages.reload", "Config Reloaded");
 
         config.copyDefaults();
 
@@ -42,14 +50,10 @@ public class Main extends Plugin {
 
         Console.info("Finished loading data");
 
-        Console.info("Loading permissions..");
-
-        Console.info("Finished loading permissions");
-
         Console.info("Loading commands..");
 
-        getProxy().getPluginManager().registerCommand(this, new KalesUtilitiesBungeeCommand("kalesutilitiesbungee",
-                Arrays.asList("kub", "ksb"), "kalesutilities.commands.info.kalesutilities"));
+        getProxy().getPluginManager().registerCommand(this, new KalesUtilitiesBungeeCommand("kalesutilitiesbungee", Arrays.asList("kub", "ksb"), "kalesutilities.commands.info.kalesutilities"));
+        getProxy().getPluginManager().registerCommand(this, new KalesUtilitiesBungeeCommand("hub", Arrays.asList("lobby"), "kalesutilities.commands.server.hub"));
 
         Console.info("Finished loading commands");
 
@@ -79,6 +83,8 @@ public class Main extends Plugin {
         Console.info("Finished closing data");
 
         Console.info("Removing commands..");
+
+        getProxy().getPluginManager().unregisterCommands(this);
 
         Console.info("Finished removing commands");
 
