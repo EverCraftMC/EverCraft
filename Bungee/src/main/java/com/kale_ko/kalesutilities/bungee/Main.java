@@ -3,6 +3,7 @@ package com.kale_ko.kalesutilities.bungee;
 import java.util.Arrays;
 import java.util.logging.Logger;
 import com.kale_ko.kalesutilities.bungee.commands.info.KalesUtilitiesBungeeCommand;
+import com.kale_ko.kalesutilities.bungee.commands.server.HubCommand;
 import com.kale_ko.kalesutilities.bungee.listeners.PlayerJoinListener;
 import com.kale_ko.kalesutilities.shared.mysql.MySQLConfig;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -34,6 +35,7 @@ public class Main extends Plugin {
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
+        config.addDefault("messages.allreadyconnected", "You are already connected to that server");
         config.addDefault("messages.playernotfound", "{player} can't be found");
         config.addDefault("messages.usage", "Usage: {usage}");
         config.addDefault("messages.help", "\n{commandList}");
@@ -53,7 +55,7 @@ public class Main extends Plugin {
         Console.info("Loading commands..");
 
         getProxy().getPluginManager().registerCommand(this, new KalesUtilitiesBungeeCommand("kalesutilitiesbungee", Arrays.asList("kub", "ksb"), "kalesutilities.commands.info.kalesutilities"));
-        getProxy().getPluginManager().registerCommand(this, new KalesUtilitiesBungeeCommand("hub", Arrays.asList("lobby"), "kalesutilities.commands.server.hub"));
+        getProxy().getPluginManager().registerCommand(this, new HubCommand("hub", Arrays.asList("lobby"), "kalesutilities.commands.server.hub"));
 
         Console.info("Finished loading commands");
 
