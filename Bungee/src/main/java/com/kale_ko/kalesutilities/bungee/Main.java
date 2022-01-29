@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import com.kale_ko.kalesutilities.bungee.commands.info.KalesUtilitiesBungeeCommand;
 import com.kale_ko.kalesutilities.bungee.commands.server.HubCommand;
 import com.kale_ko.kalesutilities.bungee.listeners.PlayerJoinListener;
+import com.kale_ko.kalesutilities.bungee.listeners.WelcomeListener;
 import com.kale_ko.kalesutilities.shared.mysql.MySQLConfig;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -38,6 +39,8 @@ public class Main extends Plugin {
         config.addDefault("messages.allreadyconnected", "You are already connected to that server");
         config.addDefault("messages.playernotfound", "{player} can't be found");
         config.addDefault("messages.usage", "Usage: {usage}");
+        config.addDefault("messages.joinMessage", "&e{player} &ehas joined the server!");
+        config.addDefault("messages.quitMessage", "&e{player} &ehas left the server");
         config.addDefault("messages.help", "\n{commandList}");
         config.addDefault("messages.list", "\n{playerList}");
         config.addDefault("messages.reload", "Config Reloaded");
@@ -62,6 +65,7 @@ public class Main extends Plugin {
         Console.info("Loading event listeners..");
 
         getProxy().getPluginManager().registerListener(this, new PlayerJoinListener());
+        getProxy().getPluginManager().registerListener(this, new WelcomeListener());
 
         Console.info("Finished loading event listeners");
 
