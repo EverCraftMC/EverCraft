@@ -1,4 +1,4 @@
-main: com.kale_ko.kalesutilities.spigot.Main
+main: com.kale_ko.kalesutilities.spigot.SpigotPlugin
 
 name: KalesUtilities
 version: ${plugin_version}
