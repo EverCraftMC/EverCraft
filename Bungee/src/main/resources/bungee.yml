@@ -1,4 +1,4 @@
-main: com.kale_ko.kalesutilities.bungee.Main
+main: com.kale_ko.kalesutilities.bungee.BungeePlugin
 
 name: KalesUtilities
 version: ${plugin_version}
