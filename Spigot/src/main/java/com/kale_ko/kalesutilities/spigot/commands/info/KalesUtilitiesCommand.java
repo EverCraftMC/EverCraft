@@ -1,7 +1,7 @@
 package com.kale_ko.kalesutilities.spigot.commands.info;
 
 import java.util.List;
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
@@ -15,16 +15,16 @@ public class KalesUtilitiesCommand extends SpigotCommand {
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase("help")) {
-                Main.Instance.getServer().dispatchCommand(sender, "help");
+                SpigotPlugin.Instance.getServer().dispatchCommand(sender, "help");
             } else if (args[0].equalsIgnoreCase("reload")) {
-                Main.Instance.reload();
+                SpigotPlugin.Instance.reload();
 
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.reload"));
+                Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.reload"));
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.invalidCommand").replace("{command}", "/" + label + " " + String.join(" ", args)));
+                Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.invalidCommand").replace("{command}", "/" + label + " " + String.join(" ", args)));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("kalesutilities").getUsage()));
+            Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.usage").replace("{usage}", SpigotPlugin.Instance.getCommand("kalesutilities").getUsage()));
         }
 
         return true;

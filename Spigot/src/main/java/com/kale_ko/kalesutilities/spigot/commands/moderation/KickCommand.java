@@ -1,7 +1,7 @@
 package com.kale_ko.kalesutilities.spigot.commands.moderation;
 
 import java.util.List;
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
@@ -15,7 +15,7 @@ public class KickCommand extends SpigotCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (args.length > 1) {
-            Player player = Main.Instance.getServer().getPlayer(args[0]);
+            Player player = SpigotPlugin.Instance.getServer().getPlayer(args[0]);
 
             if (player != null) {
                 StringBuilder kickMessageBuilder = new StringBuilder();
@@ -26,14 +26,14 @@ public class KickCommand extends SpigotCommand {
 
                 String kickMessage = kickMessageBuilder.toString();
 
-                player.kickPlayer(Main.Instance.config.getString("messages.kick").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", kickMessage).replace("was", "where"));
+                player.kickPlayer(SpigotPlugin.Instance.config.getString("messages.kick").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", kickMessage).replace("was", "where"));
 
-                Util.broadcastMessage(Main.Instance.config.getString("messages.kick").replace("{player}", Util.getPlayerName(player)).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", kickMessage));
+                Util.broadcastMessage(SpigotPlugin.Instance.config.getString("messages.kick").replace("{player}", Util.getPlayerName(player)).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", kickMessage));
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
+                Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("kick").getUsage()));
+            Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.usage").replace("{usage}", SpigotPlugin.Instance.getCommand("kick").getUsage()));
         }
 
         return true;

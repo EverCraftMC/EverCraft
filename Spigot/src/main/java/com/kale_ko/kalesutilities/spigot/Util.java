@@ -15,26 +15,26 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 public class Util {
     public static void sendMessage(CommandSender user, String message) {
-        user.sendMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+        user.sendMessage(formatMessage(SpigotPlugin.Instance.config.getString("config.prefix") + " " + message));
     }
 
     public static void sendMessage(CommandSender user, String message, Boolean noprefix) {
         if (!noprefix) {
-            user.sendMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+            user.sendMessage(formatMessage(SpigotPlugin.Instance.config.getString("config.prefix") + " " + message));
         } else {
             user.sendMessage(formatMessage(message));
         }
     }
 
     public static void broadcastMessage(String message) {
-        Main.Instance.getServer().broadcastMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+        SpigotPlugin.Instance.getServer().broadcastMessage(formatMessage(SpigotPlugin.Instance.config.getString("config.prefix") + " " + message));
     }
 
     public static void broadcastMessage(String message, Boolean noprefix) {
         if (!noprefix) {
-            Main.Instance.getServer().broadcastMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+            SpigotPlugin.Instance.getServer().broadcastMessage(formatMessage(SpigotPlugin.Instance.config.getString("config.prefix") + " " + message));
         } else {
-            Main.Instance.getServer().broadcastMessage(formatMessage(message));
+            SpigotPlugin.Instance.getServer().broadcastMessage(formatMessage(message));
         }
     }
 
@@ -59,7 +59,7 @@ public class Util {
     }
 
     public static String getNoPermissionMessage(String permission) {
-        return Main.Instance.config.getString("messages.noperms").replace("{permission}", permission);
+        return SpigotPlugin.Instance.config.getString("messages.noperms").replace("{permission}", permission);
     }
 
     public static Boolean hasPermission(Player player, String permission) {
@@ -77,11 +77,11 @@ public class Util {
     public static String getPlayerNickName(Player player) {
         String name = player.getName();
 
-        if (Main.Instance.players.getString(player.getName() + ".nickname") != null && !Main.Instance.players.getString(player.getName() + ".nickname").equalsIgnoreCase("") && !Main.Instance.players.getString(player.getName() + ".nickname").equalsIgnoreCase(" ")) {
-            if (Util.hasPermission(player, "kalesutilities.nonickstar") || Main.Instance.players.getString(player.getName() + ".nickname").equalsIgnoreCase(name) || Util.stripFormating(Util.formatMessage(Main.Instance.players.getString(player.getName() + ".nickname") + "&r")).equalsIgnoreCase(name)) {
-                name = Util.formatMessage(Main.Instance.players.getString(player.getName() + ".nickname") + "&r");
+        if (SpigotPlugin.Instance.players.getString(player.getName() + ".nickname") != null && !SpigotPlugin.Instance.players.getString(player.getName() + ".nickname").equalsIgnoreCase("") && !SpigotPlugin.Instance.players.getString(player.getName() + ".nickname").equalsIgnoreCase(" ")) {
+            if (Util.hasPermission(player, "kalesutilities.nonickstar") || SpigotPlugin.Instance.players.getString(player.getName() + ".nickname").equalsIgnoreCase(name) || Util.stripFormating(Util.formatMessage(SpigotPlugin.Instance.players.getString(player.getName() + ".nickname") + "&r")).equalsIgnoreCase(name)) {
+                name = Util.formatMessage(SpigotPlugin.Instance.players.getString(player.getName() + ".nickname") + "&r");
             } else {
-                name = Util.formatMessage("*" + Main.Instance.players.getString(player.getName() + ".nickname") + "&r");
+                name = Util.formatMessage("*" + SpigotPlugin.Instance.players.getString(player.getName() + ".nickname") + "&r");
             }
         }
 
@@ -91,8 +91,8 @@ public class Util {
     public static String getPlayerPrefix(Player player) {
         String prefix = "";
 
-        if (Main.Instance.players.getString(player.getName() + ".prefix") != null && !Main.Instance.players.getString(player.getName() + ".prefix").equalsIgnoreCase("") && !Main.Instance.players.getString(player.getName() + ".prefix").equalsIgnoreCase(" ")) {
-            prefix = Util.formatMessage(Main.Instance.players.getString(player.getName() + ".prefix") + "&r") + " ";
+        if (SpigotPlugin.Instance.players.getString(player.getName() + ".prefix") != null && !SpigotPlugin.Instance.players.getString(player.getName() + ".prefix").equalsIgnoreCase("") && !SpigotPlugin.Instance.players.getString(player.getName() + ".prefix").equalsIgnoreCase(" ")) {
+            prefix = Util.formatMessage(SpigotPlugin.Instance.players.getString(player.getName() + ".prefix") + "&r") + " ";
         }
 
         return prefix;
@@ -128,7 +128,7 @@ public class Util {
         List<MetadataValue> metadataKey = player.getMetadata(key);
 
         for (MetadataValue metadata : metadataKey) {
-            if (metadata.getOwningPlugin() == Main.Instance) {
+            if (metadata.getOwningPlugin() == SpigotPlugin.Instance) {
                 return true;
             }
         }
@@ -140,7 +140,7 @@ public class Util {
         List<MetadataValue> metadataKey = player.getMetadata(key);
 
         for (MetadataValue metadata : metadataKey) {
-            if (metadata.getOwningPlugin() == Main.Instance) {
+            if (metadata.getOwningPlugin() == SpigotPlugin.Instance) {
                 return metadata;
             }
         }
@@ -149,11 +149,11 @@ public class Util {
     }
 
     public static void setMetadata(Player player, String key, Object value) {
-        player.setMetadata(key, new FixedMetadataValue(Main.Instance, value));
+        player.setMetadata(key, new FixedMetadataValue(SpigotPlugin.Instance, value));
     }
 
     public static void removeMetadata(Player player, String key) {
-        player.removeMetadata(key, Main.Instance);
+        player.removeMetadata(key, SpigotPlugin.Instance);
     }
 
     public static NBTTagCompound parseNBT(String nbt) {

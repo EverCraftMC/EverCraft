@@ -1,7 +1,7 @@
 package com.kale_ko.kalesutilities.spigot.commands.staff;
 
 import java.util.List;
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.GameMode;
@@ -20,50 +20,50 @@ public class GamemodeCommand extends SpigotCommand {
                 if (label.equalsIgnoreCase("gmc")) {
                     player.setGameMode(GameMode.CREATIVE);
 
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "creative"));
+                    Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.gamemode").replace("{gamemode}", "creative"));
                 } else if (label.equalsIgnoreCase("gms")) {
                     player.setGameMode(GameMode.SURVIVAL);
 
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "survival"));
+                    Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.gamemode").replace("{gamemode}", "survival"));
                 } else if (label.equalsIgnoreCase("gma")) {
                     player.setGameMode(GameMode.ADVENTURE);
 
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "adventure"));
+                    Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.gamemode").replace("{gamemode}", "adventure"));
                 } else if (label.equalsIgnoreCase("gmsp")) {
                     player.setGameMode(GameMode.SPECTATOR);
 
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "spectator"));
+                    Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.gamemode").replace("{gamemode}", "spectator"));
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+                Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noconsole"));
             }
         } else {
             if (Util.hasPermission(sender, "kalesutilities.commands.staff.sudo")) {
-                Player player = Main.Instance.getServer().getPlayer(args[0]);
+                Player player = SpigotPlugin.Instance.getServer().getPlayer(args[0]);
 
                 if (player != null) {
                     if (label.equalsIgnoreCase("gmc")) {
                         player.setGameMode(GameMode.CREATIVE);
 
-                        Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "creative"));
+                        Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.gamemode").replace("{gamemode}", "creative"));
                     } else if (label.equalsIgnoreCase("gms")) {
                         player.setGameMode(GameMode.SURVIVAL);
 
-                        Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "survival"));
+                        Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.gamemode").replace("{gamemode}", "survival"));
                     } else if (label.equalsIgnoreCase("gma")) {
                         player.setGameMode(GameMode.ADVENTURE);
 
-                        Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "adventure"));
+                        Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.gamemode").replace("{gamemode}", "adventure"));
                     } else if (label.equalsIgnoreCase("gmsp")) {
                         player.setGameMode(GameMode.SPECTATOR);
 
-                        Util.sendMessage(sender, Main.Instance.config.getString("messages.gamemode").replace("{gamemode}", "spectator"));
+                        Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.gamemode").replace("{gamemode}", "spectator"));
                     }
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
+                    Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.commands.staff.sudo"));
+                Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.commands.staff.sudo"));
             }
         }
 

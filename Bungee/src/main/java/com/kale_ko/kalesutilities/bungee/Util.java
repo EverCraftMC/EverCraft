@@ -9,26 +9,26 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class Util {
     public static void sendMessage(CommandSender user, String message) {
-        user.sendMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+        user.sendMessage(formatMessage(BungeePlugin.Instance.config.getString("config.prefix") + " " + message));
     }
 
     public static void sendMessage(CommandSender user, String message, Boolean noprefix) {
         if (!noprefix) {
-            user.sendMessage(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+            user.sendMessage(formatMessage(BungeePlugin.Instance.config.getString("config.prefix") + " " + message));
         } else {
             user.sendMessage(formatMessage(message));
         }
     }
 
     public static void broadcastMessage(String message) {
-        Main.Instance.getProxy().broadcast(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+        BungeePlugin.Instance.getProxy().broadcast(formatMessage(BungeePlugin.Instance.config.getString("config.prefix") + " " + message));
     }
 
     public static void broadcastMessage(String message, Boolean noprefix) {
         if (!noprefix) {
-            Main.Instance.getProxy().broadcast(formatMessage(Main.Instance.config.getString("config.prefix") + " " + message));
+            BungeePlugin.Instance.getProxy().broadcast(formatMessage(BungeePlugin.Instance.config.getString("config.prefix") + " " + message));
         } else {
-            Main.Instance.getProxy().broadcast(formatMessage(message));
+            BungeePlugin.Instance.getProxy().broadcast(formatMessage(message));
         }
     }
 
@@ -53,7 +53,7 @@ public class Util {
     }
 
     public static String getNoPermissionMessage(String permission) {
-        return Main.Instance.config.getString("messages.noperms").replace("{permission}", permission);
+        return BungeePlugin.Instance.config.getString("messages.noperms").replace("{permission}", permission);
     }
 
     public static Boolean hasPermission(ProxiedPlayer player, String permission) {
@@ -61,7 +61,7 @@ public class Util {
     }
 
     public static Boolean hasPermission(CommandSender sender, String permission) {
-        if (sender == Main.Instance.getProxy().getConsole()) {
+        if (sender == BungeePlugin.Instance.getProxy().getConsole()) {
             return true;
         } else {
             return sender.hasPermission(permission);
@@ -71,11 +71,11 @@ public class Util {
     public static String getPlayerNickName(ProxiedPlayer player) {
         String name = player.getName();
 
-        if (Main.Instance.players.getString(player.getName() + ".nickname") != null && !Main.Instance.players.getString(player.getName() + ".nickname").equalsIgnoreCase("") && !Main.Instance.players.getString(player.getName() + ".nickname").equalsIgnoreCase(" ")) {
-            if (Util.hasPermission(player, "kalesutilities.nonickstar") || Main.Instance.players.getString(player.getName() + ".nickname").equalsIgnoreCase(name) || Util.stripFormating(Util.formatMessage(Main.Instance.players.getString(player.getName() + ".nickname") + "&r")).equalsIgnoreCase(name)) {
-                name = Util.formatMessage(Main.Instance.players.getString(player.getName() + ".nickname") + "&r");
+        if (BungeePlugin.Instance.players.getString(player.getName() + ".nickname") != null && !BungeePlugin.Instance.players.getString(player.getName() + ".nickname").equalsIgnoreCase("") && !BungeePlugin.Instance.players.getString(player.getName() + ".nickname").equalsIgnoreCase(" ")) {
+            if (Util.hasPermission(player, "kalesutilities.nonickstar") || BungeePlugin.Instance.players.getString(player.getName() + ".nickname").equalsIgnoreCase(name) || Util.stripFormating(Util.formatMessage(BungeePlugin.Instance.players.getString(player.getName() + ".nickname") + "&r")).equalsIgnoreCase(name)) {
+                name = Util.formatMessage(BungeePlugin.Instance.players.getString(player.getName() + ".nickname") + "&r");
             } else {
-                name = Util.formatMessage("*" + Main.Instance.players.getString(player.getName() + ".nickname") + "&r");
+                name = Util.formatMessage("*" + BungeePlugin.Instance.players.getString(player.getName() + ".nickname") + "&r");
             }
         }
 
@@ -85,8 +85,8 @@ public class Util {
     public static String getPlayerPrefix(ProxiedPlayer player) {
         String prefix = "";
 
-        if (Main.Instance.players.getString(player.getName() + ".prefix") != null && !Main.Instance.players.getString(player.getName() + ".prefix").equalsIgnoreCase("") && !Main.Instance.players.getString(player.getName() + ".prefix").equalsIgnoreCase(" ")) {
-            prefix = Util.formatMessage(Main.Instance.players.getString(player.getName() + ".prefix") + "&r") + " ";
+        if (BungeePlugin.Instance.players.getString(player.getName() + ".prefix") != null && !BungeePlugin.Instance.players.getString(player.getName() + ".prefix").equalsIgnoreCase("") && !BungeePlugin.Instance.players.getString(player.getName() + ".prefix").equalsIgnoreCase(" ")) {
+            prefix = Util.formatMessage(BungeePlugin.Instance.players.getString(player.getName() + ".prefix") + "&r") + " ";
         }
 
         return prefix;

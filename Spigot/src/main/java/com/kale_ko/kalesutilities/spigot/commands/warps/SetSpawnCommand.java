@@ -1,7 +1,7 @@
 package com.kale_ko.kalesutilities.spigot.commands.warps;
 
 import java.util.List;
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
@@ -15,17 +15,17 @@ public class SetSpawnCommand extends SpigotCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (sender instanceof Player player) {
-            if (Main.Instance.spawn.getObject("overidespawn") == null) {
-                Main.Instance.spawn.set("overidespawn", true);
+            if (SpigotPlugin.Instance.spawn.getObject("overidespawn") == null) {
+                SpigotPlugin.Instance.spawn.set("overidespawn", true);
             }
 
-            Main.Instance.spawn.set(player.getWorld().getName(), player.getLocation());
+            SpigotPlugin.Instance.spawn.set(player.getWorld().getName(), player.getLocation());
 
-            Main.Instance.spawn.save();
+            SpigotPlugin.Instance.spawn.save();
 
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.setspawn"));
+            Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.setspawn"));
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+            Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noconsole"));
         }
 
         return true;
