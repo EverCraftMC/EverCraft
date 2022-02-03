@@ -38,7 +38,7 @@ public class SignEditorListener implements Listener {
                 || event.getClickedBlock().getType() == Material.CRIMSON_WALL_SIGN
                 || event.getClickedBlock().getType() == Material.WARPED_SIGN
                 || event.getClickedBlock().getType() == Material.WARPED_WALL_SIGN)) {
-            if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemOnCursor().getType() == Material.AIR && event.getPlayer().isSneaking() && Util.hasPermission(event.getPlayer(), "kalesutilities.features.editsigns")) {
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getInventory().getItemInMainHand().getType() == Material.AIR && event.getPlayer().isSneaking() && Util.hasPermission(event.getPlayer(), "kalesutilities.features.editsigns")) {
                 Sign sign = (Sign) event.getClickedBlock().getState();
                 sign.setEditable(true);
                 sign.setLine(0, Util.unFormatMessage(sign.getLine(0)));

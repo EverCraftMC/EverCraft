@@ -1,6 +1,6 @@
 package com.kale_ko.kalesutilities.spigot.commands.player;
 
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import java.util.List;
@@ -39,14 +39,14 @@ public class StatusCommand extends SpigotCommand {
                     armorstand.setPersistent(false);
                     Util.setMetadata(player, "statusEntityUUID", armorstand.getUniqueId().toString());
                 } else {
-                    Entity armorstand = Main.Instance.getServer().getEntity(UUID.fromString(Util.getMetadata(player, "statusEntityUUID").asString()));
+                    Entity armorstand = SpigotPlugin.Instance.getServer().getEntity(UUID.fromString(Util.getMetadata(player, "statusEntityUUID").asString()));
                     armorstand.setCustomName(statusMessage);
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+                Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noconsole"));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("status").getUsage()));
+            Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.usage").replace("{usage}", SpigotPlugin.Instance.getCommand("status").getUsage()));
         }
 
         return true;

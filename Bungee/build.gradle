@@ -26,3 +26,9 @@ tasks.withType(JavaCompile).configureEach {
 
     options.encoding = "UTF-8"
 }
+
+processResources {
+    filesMatching("bungee.yml") {
+        expand "plugin_version": project.plugin_version
+    }
+}

@@ -1,7 +1,7 @@
 package com.kale_ko.kalesutilities.spigot.commands.economy;
 
 import java.util.List;
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
 
@@ -12,7 +12,7 @@ public class SetBalanceCommand extends SpigotCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        Main.Instance.players.set(args[0] + ".balance", Float.parseFloat(args[0]));
+        SpigotPlugin.Instance.players.set(args[0] + ".balance", Float.parseFloat(args[0]));
 
         return true;
     }

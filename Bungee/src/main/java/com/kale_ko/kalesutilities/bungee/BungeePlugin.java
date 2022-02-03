@@ -8,10 +8,9 @@ import com.kale_ko.kalesutilities.bungee.listeners.PlayerJoinListener;
 import com.kale_ko.kalesutilities.bungee.listeners.WelcomeListener;
 import com.kale_ko.kalesutilities.shared.mysql.MySQLConfig;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Plugin;
 
-public class Main extends Plugin {
-    public static Main Instance;
+public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements com.kale_ko.kalesutilities.shared.Plugin {
+    public static BungeePlugin Instance;
 
     public final Logger Console = getLogger();
 
@@ -20,7 +19,7 @@ public class Main extends Plugin {
 
     @Override
     public void onEnable() {
-        Main.Instance = this;
+        BungeePlugin.Instance = this;
 
         Console.info("Loading config..");
 
@@ -96,7 +95,7 @@ public class Main extends Plugin {
 
         Console.info("Removing event listeners..");
 
-        getProxy().getPluginManager().unregisterListeners(Main.Instance);
+        getProxy().getPluginManager().unregisterListeners(BungeePlugin.Instance);
 
         Console.info("Finished removing event listeners");
 
@@ -111,6 +110,7 @@ public class Main extends Plugin {
         Console.info("Finished disabling");
     }
 
+    @Override
     public void reload() {
         Console.info("Reloading..");
 

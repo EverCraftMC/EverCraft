@@ -1,7 +1,7 @@
 main: com.kale_ko.kalesutilities.bungee.Main
 
 name: KalesUtilities
-version: 5.0.0
+version: ${plugin_version}
 description: A custom plugin to run on KalesMC
 author: Kale Ko
 website: https://github.com/Kale-Ko/Kales-Utilities-V2

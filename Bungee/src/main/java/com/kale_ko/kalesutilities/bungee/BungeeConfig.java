@@ -7,11 +7,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.kale_ko.kalesutilities.shared.PluginConfig;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-public class BungeeConfig {
+public class BungeeConfig implements PluginConfig  {
     private String fileName;
     private String filePath;
     private File file;
@@ -22,7 +23,7 @@ public class BungeeConfig {
     public BungeeConfig(String fileName) {
         this.fileName = fileName;
 
-        File dataFolder = Main.Instance.getDataFolder();
+        File dataFolder = BungeePlugin.Instance.getDataFolder();
         if (!dataFolder.exists()) {
             dataFolder.mkdir();
         }

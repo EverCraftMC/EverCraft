@@ -1,5 +1,6 @@
 package com.kale_ko.kalesutilities.spigot;
 
+import com.kale_ko.kalesutilities.shared.Plugin;
 import com.kale_ko.kalesutilities.shared.mysql.MySQLConfig;
 import com.kale_ko.kalesutilities.spigot.commands.info.AboutCommand;
 import com.kale_ko.kalesutilities.spigot.commands.info.HelpCommand;
@@ -46,8 +47,8 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Main extends JavaPlugin {
-    public static Main Instance;
+public class SpigotPlugin extends JavaPlugin implements Plugin {
+    public static SpigotPlugin Instance;
 
     public final Logger Console = getLogger();
 
@@ -59,7 +60,7 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Main.Instance = this;
+        SpigotPlugin.Instance = this;
 
         Console.info("Loading config..");
 
@@ -253,7 +254,7 @@ public class Main extends JavaPlugin {
 
         Console.info("Removing event listeners..");
 
-        HandlerList.unregisterAll(Main.Instance);
+        HandlerList.unregisterAll(SpigotPlugin.Instance);
 
         Console.info("Finished removing event listeners");
 
@@ -268,6 +269,7 @@ public class Main extends JavaPlugin {
         Console.info("Finished disabling");
     }
 
+    @Override
     public void reload() {
         Console.info("Reloading..");
 

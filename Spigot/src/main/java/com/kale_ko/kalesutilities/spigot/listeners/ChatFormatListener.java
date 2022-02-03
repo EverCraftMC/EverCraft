@@ -1,6 +1,6 @@
 package com.kale_ko.kalesutilities.spigot.listeners;
 
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,6 +16,6 @@ public class ChatFormatListener implements Listener {
             event.setMessage(Util.formatMessage(event.getMessage()));
         }
 
-        event.setFormat(Util.formatMessage(Main.Instance.config.getString("config.chatFormat")).replace("{prefix}", prefix).replace("{player}", player).replace("{message}", "%2$s"));
+        event.setFormat(Util.formatMessage(SpigotPlugin.Instance.config.getString("config.chatFormat")).replace("{prefix}", prefix).replace("{player}", player).replace("{message}", "%2$s"));
     }
 }
