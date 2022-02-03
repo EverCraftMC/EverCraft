@@ -1,6 +1,6 @@
 package com.kale_ko.kalesutilities.spigot.commands.player;
 
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import java.util.Date;
@@ -15,19 +15,19 @@ public class SeenCommand extends SpigotCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (args.length > 0) {
-            if (Main.Instance.getServer().getPlayer(args[0]) != null) {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.playeronline").replace("{player}", args[0]));
+            if (SpigotPlugin.Instance.getServer().getPlayer(args[0]) != null) {
+                Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.playeronline").replace("{player}", args[0]));
             } else {
-                long lastOnline = Main.Instance.players.getLong(args[0] + ".lastseen");
+                long lastOnline = SpigotPlugin.Instance.players.getLong(args[0] + ".lastseen");
 
                 if (lastOnline != 0) {
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.lastonline").replace("{player}", args[0]).replace("{time}", new Date(lastOnline).toString()));
+                    Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.lastonline").replace("{player}", args[0]).replace("{time}", new Date(lastOnline).toString()));
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
+                    Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
                 }
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("seen").getUsage()));
+            Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.usage").replace("{usage}", SpigotPlugin.Instance.getCommand("seen").getUsage()));
         }
 
         return true;

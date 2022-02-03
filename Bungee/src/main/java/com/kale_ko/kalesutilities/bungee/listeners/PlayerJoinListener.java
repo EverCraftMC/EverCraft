@@ -1,6 +1,6 @@
 package com.kale_ko.kalesutilities.bungee.listeners;
 
-import com.kale_ko.kalesutilities.bungee.Main;
+import com.kale_ko.kalesutilities.bungee.BungeePlugin;
 import com.kale_ko.kalesutilities.bungee.Util;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
@@ -11,7 +11,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(ServerConnectEvent event) {
         if (event.getReason().equals(ServerConnectEvent.Reason.JOIN_PROXY)) {
-            event.setTarget(Main.Instance.getProxy().getServerInfo(Main.Instance.config.getString("config.mainServer")));
+            event.setTarget(BungeePlugin.Instance.getProxy().getServerInfo(BungeePlugin.Instance.config.getString("config.mainServer")));
         }
     }
 

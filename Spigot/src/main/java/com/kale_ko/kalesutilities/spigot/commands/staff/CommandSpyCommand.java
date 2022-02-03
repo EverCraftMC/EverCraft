@@ -1,7 +1,7 @@
 package com.kale_ko.kalesutilities.spigot.commands.staff;
 
 import java.util.List;
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
@@ -19,19 +19,19 @@ public class CommandSpyCommand extends SpigotCommand {
                 if (Util.getMetadata(player, "receiveCommandSpy").asBoolean()) {
                     Util.setMetadata(player, "receiveCommandSpy", false);
 
-                    Util.sendMessage(player, Main.Instance.config.getString("messages.togglecommandspy").replace("{value}", "off"));
+                    Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglecommandspy").replace("{value}", "off"));
                 } else {
                     Util.setMetadata(player, "receiveCommandSpy", true);
 
-                    Util.sendMessage(player, Main.Instance.config.getString("messages.togglecommandspy").replace("{value}", "on"));
+                    Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglecommandspy").replace("{value}", "on"));
                 }
             } else {
                 Util.setMetadata(player, "receiveCommandSpy", true);
 
-                Util.sendMessage(player, Main.Instance.config.getString("messages.togglecommandspy").replace("{value}", "on"));
+                Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglecommandspy").replace("{value}", "on"));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+            Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noconsole"));
         }
 
         return true;

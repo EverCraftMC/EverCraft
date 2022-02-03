@@ -1,7 +1,7 @@
 package com.kale_ko.kalesutilities.spigot.commands.staff;
 
 import java.util.List;
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
@@ -27,9 +27,9 @@ public class StaffChatCommand extends SpigotCommand {
             senderName = Util.getPlayerName(player);
         }
 
-        for (Player player : Main.Instance.getServer().getOnlinePlayers()) {
+        for (Player player : SpigotPlugin.Instance.getServer().getOnlinePlayers()) {
             if (Util.hasPermission(player, "kalesutilities.commands.staff.staffchat")) {
-                Util.sendMessage(player, Main.Instance.config.getString("messages.staffchat").replace("{player}", senderName).replace("{message}", message), true);
+                Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.staffchat").replace("{player}", senderName).replace("{message}", message), true);
             }
         }
 

@@ -1,7 +1,7 @@
 package com.kale_ko.kalesutilities.spigot.commands.player;
 
 import java.util.List;
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
@@ -16,39 +16,39 @@ public class PrefixCommand extends SpigotCommand {
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (args.length > 1) {
             if (Util.hasPermission(sender, "kalesutilities.commands.staff.sudo")) {
-                Player player = Main.Instance.getServer().getPlayer(args[0]);
+                Player player = SpigotPlugin.Instance.getServer().getPlayer(args[0]);
 
                 if (player != null) {
-                    Main.Instance.players.set(player.getPlayer().getName() + ".prefix", args[1]);
+                    SpigotPlugin.Instance.players.set(player.getPlayer().getName() + ".prefix", args[1]);
 
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.setprefix"));
+                    Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.setprefix"));
                     Util.updatePlayerName(player);
                 } else {
-                    Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
+                    Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
                 }
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.commands.staff.sudo"));
+                Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.commands.staff.sudo"));
             }
         } else if (args.length > 0) {
             if (sender instanceof Player player) {
-                Main.Instance.players.set(player.getPlayer().getName() + ".prefix", args[0]);
+                SpigotPlugin.Instance.players.set(player.getPlayer().getName() + ".prefix", args[0]);
 
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.setprefix"));
+                Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.setprefix"));
                 Util.updatePlayerName(player);
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+                Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noconsole"));
             }
         } else if (args.length == 0) {
             if (sender instanceof Player player) {
-                Main.Instance.players.set(player.getPlayer().getName() + ".prefix", "");
+                SpigotPlugin.Instance.players.set(player.getPlayer().getName() + ".prefix", "");
 
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.setprefix"));
+                Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.setprefix"));
                 Util.updatePlayerName(player);
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+                Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noconsole"));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("prefix").getUsage()));
+            Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.usage").replace("{usage}", SpigotPlugin.Instance.getCommand("prefix").getUsage()));
         }
 
         return true;

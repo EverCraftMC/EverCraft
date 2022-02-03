@@ -3,12 +3,14 @@ package com.kale_ko.kalesutilities.spigot;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+import com.kale_ko.kalesutilities.shared.PluginConfig;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
-public class SpigotConfig {
+public class SpigotConfig implements PluginConfig {
     private String fileName;
     private String filePath;
     private File file;
@@ -17,7 +19,7 @@ public class SpigotConfig {
     public SpigotConfig(String fileName) {
         this.fileName = fileName;
 
-        File dataFolder = Main.Instance.getDataFolder();
+        File dataFolder = SpigotPlugin.Instance.getDataFolder();
         if (!dataFolder.exists()) {
             dataFolder.mkdir();
         }
@@ -31,8 +33,8 @@ public class SpigotConfig {
         }
     }
 
-    public Set<String> getKeys() {
-        return this.config.getKeys(false);
+    public Collection<String> getKeys() {
+        return new ArrayList<String>(this.config.getKeys(false));
     }
 
     public Object getObject(String key) {

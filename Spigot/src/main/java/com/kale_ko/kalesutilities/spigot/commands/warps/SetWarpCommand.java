@@ -1,7 +1,7 @@
 package com.kale_ko.kalesutilities.spigot.commands.warps;
 
 import java.util.List;
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
@@ -15,13 +15,13 @@ public class SetWarpCommand extends SpigotCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (sender instanceof Player player) {
-            Main.Instance.warps.set(args[0], player.getLocation());
+            SpigotPlugin.Instance.warps.set(args[0], player.getLocation());
 
-            Main.Instance.warps.save();
+            SpigotPlugin.Instance.warps.save();
 
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.setwarp").replace("{warp}", args[0]));
+            Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.setwarp").replace("{warp}", args[0]));
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.noconsole"));
+            Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noconsole"));
         }
 
         return true;

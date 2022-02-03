@@ -1,7 +1,7 @@
 package com.kale_ko.kalesutilities.spigot.commands.moderation;
 
 import java.util.List;
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
@@ -15,7 +15,7 @@ public class BanCommand extends SpigotCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (args.length > 1) {
-            Player player = Main.Instance.getServer().getPlayer(args[0]);
+            Player player = SpigotPlugin.Instance.getServer().getPlayer(args[0]);
 
             StringBuilder banMessageBuilder = new StringBuilder();
 
@@ -25,18 +25,18 @@ public class BanCommand extends SpigotCommand {
 
             String banMessage = banMessageBuilder.toString();
 
-            Main.Instance.players.set(args[0] + ".banned", true);
-            Main.Instance.players.set(args[0] + ".banMessage", Main.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "are"));
+            SpigotPlugin.Instance.players.set(args[0] + ".banned", true);
+            SpigotPlugin.Instance.players.set(args[0] + ".banMessage", SpigotPlugin.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "are"));
 
             if (player != null) {
-                player.kickPlayer(Main.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "where"));
+                player.kickPlayer(SpigotPlugin.Instance.config.getString("messages.ban").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage).replace("was", "where"));
 
-                Util.broadcastMessage(Main.Instance.config.getString("messages.ban").replace("{player}", Util.getPlayerName(player)).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage));
+                Util.broadcastMessage(SpigotPlugin.Instance.config.getString("messages.ban").replace("{player}", Util.getPlayerName(player)).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage));
             } else {
-                Util.broadcastMessage(Main.Instance.config.getString("messages.ban").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage));
+                Util.broadcastMessage(SpigotPlugin.Instance.config.getString("messages.ban").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", banMessage));
             }
         } else {
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.usage").replace("{usage}", Main.Instance.getCommand("ban").getUsage()));
+            Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.usage").replace("{usage}", SpigotPlugin.Instance.getCommand("ban").getUsage()));
         }
 
         return true;

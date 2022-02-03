@@ -1,7 +1,7 @@
 package com.kale_ko.kalesutilities.spigot.commands.moderation;
 
 import java.util.List;
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
@@ -15,7 +15,7 @@ public class MuteCommand extends SpigotCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (args.length > 1) {
-            Player player = Main.Instance.getServer().getPlayer(args[0]);
+            Player player = SpigotPlugin.Instance.getServer().getPlayer(args[0]);
 
             StringBuilder muteMessageBuilder = new StringBuilder();
 
@@ -25,13 +25,13 @@ public class MuteCommand extends SpigotCommand {
 
             String muteMessage = muteMessageBuilder.toString();
 
-            Main.Instance.players.set(player.getPlayer().getName() + ".muted", true);
-            Main.Instance.players.set(player.getPlayer().getName() + ".mutedMessage", Main.Instance.config.getString("messages.mute").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage).replace("was", "are"));
+            SpigotPlugin.Instance.players.set(player.getPlayer().getName() + ".muted", true);
+            SpigotPlugin.Instance.players.set(player.getPlayer().getName() + ".mutedMessage", SpigotPlugin.Instance.config.getString("messages.mute").replace("{player}", "You").replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage).replace("was", "are"));
 
-            if (Main.Instance.getServer().getPlayer(args[0]) != null) {
-                Util.broadcastMessage(Main.Instance.config.getString("messages.mute").replace("{player}", Util.getPlayerName(Main.Instance.getServer().getPlayer(args[0]))).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage));
+            if (SpigotPlugin.Instance.getServer().getPlayer(args[0]) != null) {
+                Util.broadcastMessage(SpigotPlugin.Instance.config.getString("messages.mute").replace("{player}", Util.getPlayerName(SpigotPlugin.Instance.getServer().getPlayer(args[0]))).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage));
             } else {
-                Util.broadcastMessage(Main.Instance.config.getString("messages.mute").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage));
+                Util.broadcastMessage(SpigotPlugin.Instance.config.getString("messages.mute").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage));
             }
         }
 

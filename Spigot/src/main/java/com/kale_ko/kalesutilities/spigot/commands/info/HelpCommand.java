@@ -1,7 +1,7 @@
 package com.kale_ko.kalesutilities.spigot.commands.info;
 
 import java.util.List;
-import com.kale_ko.kalesutilities.spigot.Main;
+import com.kale_ko.kalesutilities.spigot.SpigotPlugin;
 import com.kale_ko.kalesutilities.spigot.Util;
 import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.command.CommandSender;
@@ -17,12 +17,12 @@ public class HelpCommand extends SpigotCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (args.length > 0) {
-            Player player = Main.Instance.getServer().getPlayer(args[0]);
+            Player player = SpigotPlugin.Instance.getServer().getPlayer(args[0]);
 
             if (player != null) {
                 StringBuilder help = new StringBuilder();
 
-                for (Plugin plugin : Main.Instance.getServer().getPluginManager().getPlugins()) {
+                for (Plugin plugin : SpigotPlugin.Instance.getServer().getPluginManager().getPlugins()) {
                     for (org.bukkit.command.Command pluginCommand : PluginCommandYamlParser.parse(plugin)) {
                         if (pluginCommand.getPermission() == null || Util.hasPermission(player, pluginCommand.getPermission())) {
                             help.append(pluginCommand.getUsage() + " - " + pluginCommand.getDescription() + "\n");
@@ -30,14 +30,14 @@ public class HelpCommand extends SpigotCommand {
                     }
                 }
 
-                Util.sendMessage(player, Main.Instance.config.getString("messages.help").replace("{commandList}", help.toString()));
+                Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.help").replace("{commandList}", help.toString()));
             } else {
-                Util.sendMessage(sender, Main.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
+                Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.playernotfound").replace("{player}", args[0]));
             }
         } else {
             StringBuilder help = new StringBuilder();
 
-            for (Plugin plugin : Main.Instance.getServer().getPluginManager().getPlugins()) {
+            for (Plugin plugin : SpigotPlugin.Instance.getServer().getPluginManager().getPlugins()) {
                 for (org.bukkit.command.Command pluginCommand : PluginCommandYamlParser.parse(plugin)) {
                     if (pluginCommand.getPermission() == null || Util.hasPermission(sender, pluginCommand.getPermission())) {
                         help.append(pluginCommand.getUsage() + " - " + pluginCommand.getDescription() + "\n");
@@ -45,7 +45,7 @@ public class HelpCommand extends SpigotCommand {
                 }
             }
 
-            Util.sendMessage(sender, Main.Instance.config.getString("messages.help").replace("{commandList}", help.toString()));
+            Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.help").replace("{commandList}", help.toString()));
         }
 
         return true;
