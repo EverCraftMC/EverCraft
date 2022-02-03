@@ -11,7 +11,7 @@ public class MySQL {
 
     public MySQL(String url, Integer port, String database, String username, String password) {
         try {
-            this.connection = DriverManager.getConnection("jdbc:mysql://" + url + ":" + port + "/" + database, username, password);
+            this.connection = DriverManager.getConnection("jdbc:mysql://" + url + ":" + port + "/" + database + "?autoReconnect=true", username, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -19,7 +19,7 @@ public class MySQL {
 
     public MySQL(String url, String database, String username, String password) {
         try {
-            this.connection = DriverManager.getConnection("jdbc:mysql://" + url + ":3306/" + database, username, password);
+            this.connection = DriverManager.getConnection("jdbc:mysql://" + url + ":3306/" + database + "?autoReconnect=true", username, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
