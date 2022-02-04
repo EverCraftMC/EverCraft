@@ -36,7 +36,6 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         config.addDefault("database.password", "");
         config.addDefault("database.tablePrefix", "kalesutilities_");
         config.addDefault("discord.token", "");
-        config.addDefault("discord.server", "");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
@@ -85,7 +84,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
         Console.info("Starting Discord bot");
 
-        bot = new DiscordBot(config.getString("discord.token"), config.getInt("discord.server"));
+        bot = new DiscordBot(config.getString("discord.token"));
     }
 
     @Override

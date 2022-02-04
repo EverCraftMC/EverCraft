@@ -15,13 +15,10 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 public class DiscordBot implements EventListener {
     private String token;
 
-    private Integer serverID;
-
     private JDA jda;
 
-    public DiscordBot(String token, Integer serverID) {
+    public DiscordBot(String token) {
         this.token = token;
-        this.serverID = serverID;
 
         try {
             this.jda = JDABuilder.createDefault(this.token)
