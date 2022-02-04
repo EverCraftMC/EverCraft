@@ -6,6 +6,7 @@ import com.kale_ko.kalesutilities.bungee.commands.info.KalesUtilitiesBungeeComma
 import com.kale_ko.kalesutilities.bungee.commands.server.HubCommand;
 import com.kale_ko.kalesutilities.bungee.listeners.PlayerJoinListener;
 import com.kale_ko.kalesutilities.bungee.listeners.WelcomeListener;
+import com.kale_ko.kalesutilities.shared.discord.DiscordBot;
 import com.kale_ko.kalesutilities.shared.mysql.MySQLConfig;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -16,6 +17,8 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
     public BungeeConfig config;
     public MySQLConfig players;
+
+    public DiscordBot bot;
 
     @Override
     public void onEnable() {
@@ -32,6 +35,8 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         config.addDefault("database.username", "root");
         config.addDefault("database.password", "");
         config.addDefault("database.tablePrefix", "kalesutilities_");
+        config.addDefault("discord.token", "");
+        config.addDefault("discord.server", "");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
@@ -77,6 +82,10 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         Console.info("Finished updating player names");
 
         Console.info("Finished enabling");
+
+        Console.info("Starting Discord bot");
+
+        bot = new DiscordBot(config.getString("discord.token"), config.getInt("discord.server"));
     }
 
     @Override
