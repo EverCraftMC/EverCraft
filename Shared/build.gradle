@@ -9,6 +9,14 @@ archivesBaseName = project.plugin_id
 group = "com.kale_ko"
 version = project.plugin_version
 
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("net.dv8tion:JDA:${project.jda_version}")
+}
+
 tasks.withType(JavaCompile).configureEach {
     sourceCompatibility = JavaVersion.toVersion(project.java_version)
     targetCompatibility = JavaVersion.toVersion(project.java_version)
