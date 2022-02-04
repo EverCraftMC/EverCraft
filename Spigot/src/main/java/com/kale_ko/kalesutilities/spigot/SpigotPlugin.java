@@ -1,6 +1,7 @@
 package com.kale_ko.kalesutilities.spigot;
 
 import com.kale_ko.kalesutilities.shared.Plugin;
+import com.kale_ko.kalesutilities.shared.discord.DiscordBot;
 import com.kale_ko.kalesutilities.shared.mysql.MySQLConfig;
 import com.kale_ko.kalesutilities.spigot.commands.info.AboutCommand;
 import com.kale_ko.kalesutilities.spigot.commands.info.HelpCommand;
@@ -58,6 +59,8 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
     public SpigotConfig warps;
     public SpigotConfig kits;
 
+    public DiscordBot bot;
+
     @Override
     public void onEnable() {
         SpigotPlugin.Instance = this;
@@ -77,6 +80,8 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         config.addDefault("database.username", "root");
         config.addDefault("database.password", "");
         config.addDefault("database.tablePrefix", "kalesutilities_");
+        config.addDefault("discord.token", "");
+        config.addDefault("discord.server", "");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
@@ -236,6 +241,10 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         Console.info("Finished updating player names");
 
         Console.info("Finished enabling");
+
+        Console.info("Starting Discord bot");
+
+        bot = new DiscordBot(config.getString("discord.token"), config.getInt("discord.server"));
     }
 
     @Override
