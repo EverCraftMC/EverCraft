@@ -27,7 +27,7 @@ public class DiscordBot implements EventListener {
                     .setMemberCachePolicy(MemberCachePolicy.OWNER)
                     .setAutoReconnect(true)
                     .setCompression(Compression.ZLIB)
-                    .setActivity(Activity.playing("play.kalesmc.ga"))
+                    .setActivity(Activity.playing("on play.kalesmc.ga"))
                     .setStatus(OnlineStatus.ONLINE)
                     .addEventListeners(this)
                     .build();
