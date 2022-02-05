@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation project(':Shared')
+    compileOnly project(':Shared')
 
     compileOnly "net.md-5:bungeecord-api:${project.minecraft_release}-${project.bungee_version}"
 }

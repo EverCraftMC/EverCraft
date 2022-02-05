@@ -20,6 +20,9 @@ def mainProjects = [":Shared", ":Spigot", ":Bungee"]
 tasks.register("buildAll", Jar) {
     dependsOn mainProjects.collect{ it + ":build" }
 
+    mainProjects.collect { project(it).configurations.implementation.canBeResolved = true }
+
     destinationDirectory = file("\\")
-    from files(mainProjects.collect{ project(it).sourceSets.main.output })
+    from files(mainProjects.collect { project(it).sourceSets.main.output })
+    from files(mainProjects.collect { project(it).configurations.implementation })
 }
