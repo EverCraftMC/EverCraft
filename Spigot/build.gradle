@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    implementation project(':Shared')
+    compileOnly project(':Shared')
 
     compileOnly "org.spigotmc:spigot-api:${project.minecraft_version}-${project.spigot_version}"
     compileOnly name: "bukkit-${project.minecraft_version}"

@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation"net.dv8tion:JDA:${project.jda_version}"
+    implementation "net.dv8tion:JDA:${project.jda_version}"
 }
 
 tasks.withType(JavaCompile).configureEach {
