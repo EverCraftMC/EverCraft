@@ -22,7 +22,9 @@ tasks.register("buildAll", Jar) {
 
     mainProjects.collect { project(it).configurations.implementation.canBeResolved = true }
 
+    duplicatesStrategy = "exclude"
+
     destinationDirectory = file("\\")
     from files(mainProjects.collect { project(it).sourceSets.main.output })
-    from files(mainProjects.collect { project(it).configurations.implementation })
+    from files(mainProjects.collect { project(it).configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) } })
 }
