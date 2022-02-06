@@ -17,5 +17,7 @@ public class ChatFormatListener implements Listener {
         }
 
         event.setFormat(Util.formatMessage(SpigotPlugin.Instance.config.getString("config.chatFormat")).replace("{prefix}", prefix).replace("{player}", player).replace("{message}", "%2$s"));
+
+        SpigotPlugin.Instance.bot.sendMessage(Util.discordFormating(SpigotPlugin.Instance.config.getString("config.chatFormat")).replace("{prefix}", Util.discordFormating(prefix)).replace("{player}", Util.discordFormating(player)).replace("{message}", Util.discordFormating(event.getMessage())));
     }
 }

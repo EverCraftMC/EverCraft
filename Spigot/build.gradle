@@ -25,6 +25,8 @@ dependencies {
     compileOnly name: "bukkit-${project.minecraft_version}"
     compileOnly "com.mojang:authlib:${project.authlib_version}"
     compileOnly "com.mojang:brigadier:${project.brigadier_version}"
+
+    compileOnly "net.dv8tion:JDA:${project.jda_version}"
 }
 
 tasks.withType(JavaCompile).configureEach {

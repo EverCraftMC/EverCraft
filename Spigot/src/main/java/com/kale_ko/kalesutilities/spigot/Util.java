@@ -58,6 +58,10 @@ public class Util {
         return ChatColor.stripColor(message);
     }
 
+    public static String discordFormating(String message) {
+        return stripFormating(message);
+    }
+
     public static String getNoPermissionMessage(String permission) {
         return SpigotPlugin.Instance.config.getString("messages.noperms").replace("{permission}", permission);
     }
