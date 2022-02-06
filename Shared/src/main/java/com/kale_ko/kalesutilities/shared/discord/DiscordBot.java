@@ -15,10 +15,16 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 public class DiscordBot implements EventListener {
     private String token;
 
+    private String serverID;
+    private String channelID;
+
     private JDA jda;
 
-    public DiscordBot(String token) {
+    public DiscordBot(String token, String serverID, String channelID) {
         this.token = token;
+
+        this.serverID = serverID;
+        this.channelID = channelID;
 
         try {
             this.jda = JDABuilder.createDefault(this.token)
@@ -34,6 +40,10 @@ public class DiscordBot implements EventListener {
         } catch (LoginException e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendMessage(String message) {
+        this.jda.getGuildById(this.serverID).getTextChannelById(this.channelID).sendMessage(message);
     }
 
     @Override

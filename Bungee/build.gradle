@@ -18,6 +18,8 @@ dependencies {
     compileOnly project(':Shared')
 
     compileOnly "net.md-5:bungeecord-api:${project.minecraft_release}-${project.bungee_version}"
+
+    compileOnly "net.dv8tion:JDA:${project.jda_version}"
 }
 
 tasks.withType(JavaCompile).configureEach {
