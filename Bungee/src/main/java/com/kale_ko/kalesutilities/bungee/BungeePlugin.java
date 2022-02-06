@@ -1,13 +1,14 @@
 package com.kale_ko.kalesutilities.bungee;
 
-import java.util.Arrays;
-import java.util.logging.Logger;
 import com.kale_ko.kalesutilities.bungee.commands.info.KalesUtilitiesBungeeCommand;
 import com.kale_ko.kalesutilities.bungee.commands.server.HubCommand;
 import com.kale_ko.kalesutilities.bungee.listeners.PlayerJoinListener;
 import com.kale_ko.kalesutilities.bungee.listeners.WelcomeListener;
 import com.kale_ko.kalesutilities.shared.discord.DiscordBot;
 import com.kale_ko.kalesutilities.shared.mysql.MySQLConfig;
+import com.kale_ko.kalesutilities.shared.util.ParamRunnable;
+import java.util.Arrays;
+import java.util.logging.Logger;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements com.kale_ko.kalesutilities.shared.Plugin {
@@ -87,7 +88,13 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
         Console.info("Starting Discord bot");
 
-        bot = new DiscordBot(config.getString("discord.token"), config.getString("discord.serverID"), config.getString("discord.channelID"));
+        bot = new DiscordBot(config.getString("discord.token"), config.getString("discord.serverID"), config.getString("discord.channelID"), new ParamRunnable() {
+            @Override
+            public void run() { }
+
+            @Override
+            public void init(Object... params) { }
+        });
     }
 
     @Override
