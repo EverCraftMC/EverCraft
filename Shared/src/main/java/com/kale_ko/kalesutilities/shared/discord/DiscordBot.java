@@ -43,7 +43,7 @@ public class DiscordBot implements EventListener {
     }
 
     public void sendMessage(String message) {
-        this.jda.getGuildById(this.serverID).getTextChannelById(this.channelID).sendMessage(message);
+        this.jda.getGuildById(this.serverID).getTextChannelById(this.channelID).sendMessage(message).queue();
     }
 
     @Override
