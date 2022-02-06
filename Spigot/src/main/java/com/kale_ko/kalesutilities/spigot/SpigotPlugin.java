@@ -34,6 +34,7 @@ import com.kale_ko.kalesutilities.spigot.listeners.BannedJoinListener;
 import com.kale_ko.kalesutilities.spigot.listeners.ChatFormatListener;
 import com.kale_ko.kalesutilities.spigot.listeners.ChatListener;
 import com.kale_ko.kalesutilities.spigot.listeners.CommandSpyListener;
+import com.kale_ko.kalesutilities.spigot.listeners.GlobalChatListener;
 import com.kale_ko.kalesutilities.spigot.listeners.MuteListener;
 import com.kale_ko.kalesutilities.spigot.listeners.PlayerListener;
 import com.kale_ko.kalesutilities.spigot.listeners.PlayerMoveListener;
@@ -225,6 +226,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         Console.info("Loading event listeners..");
 
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+        getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new GlobalChatListener());
 
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new BannedJoinListener(), this);
