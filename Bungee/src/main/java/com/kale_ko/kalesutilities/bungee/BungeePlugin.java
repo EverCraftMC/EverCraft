@@ -28,6 +28,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
         config = BungeeConfig.load("config.yml");
 
+        config.addDefault("config.serverName", "");
         config.addDefault("config.mainServer", "hub");
         config.addDefault("database.url", "localhost");
         config.addDefault("database.port", "3306");

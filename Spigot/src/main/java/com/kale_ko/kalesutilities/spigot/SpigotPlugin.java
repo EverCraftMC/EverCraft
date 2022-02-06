@@ -31,6 +31,7 @@ import com.kale_ko.kalesutilities.spigot.commands.warps.WarpCommand;
 import com.kale_ko.kalesutilities.spigot.commands.warps.WarpsCommand;
 import com.kale_ko.kalesutilities.spigot.listeners.BannedJoinListener;
 import com.kale_ko.kalesutilities.spigot.listeners.ChatFormatListener;
+import com.kale_ko.kalesutilities.spigot.listeners.ChatListener;
 import com.kale_ko.kalesutilities.spigot.listeners.CommandSpyListener;
 import com.kale_ko.kalesutilities.spigot.listeners.MuteListener;
 import com.kale_ko.kalesutilities.spigot.listeners.PlayerListener;
@@ -69,6 +70,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         config = SpigotConfig.load("config.yml");
 
+        config.addDefault("config.serverName", "");
         config.addDefault("config.prefix", "&6&l[Kales Utilities]&r");
         config.addDefault("config.chatFormat", "{prefix}{player} > {message}");
         config.addDefault("config.about", "Kales Minecraft Server!");
@@ -226,6 +228,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
         getServer().getPluginManager().registerEvents(new MuteListener(), this);
         getServer().getPluginManager().registerEvents(new ChatFormatListener(), this);
+        getServer().getPluginManager().registerEvents(new ChatListener(), this);
         getServer().getPluginManager().registerEvents(new SeenListener(), this);
         getServer().getPluginManager().registerEvents(new CommandSpyListener(), this);
         getServer().getPluginManager().registerEvents(new SignEditorListener(), this);
