@@ -53,7 +53,7 @@ public class Util {
     }
 
     public static String discordFormating(String message) {
-        return stripFormating(message);
+        return stripFormating(formatMessage(message));
     }
 
     public static String getNoPermissionMessage(String permission) {

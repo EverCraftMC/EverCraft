@@ -17,7 +17,7 @@ public class WelcomeListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        SpigotPlugin.Instance.bot.sendMessage("[" + SpigotPlugin.Instance.config.getString("config.serverName") + "] " + Util.discordFormating(SpigotPlugin.Instance.config.getString("messages.joinMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))));
+        SpigotPlugin.Instance.bot.sendMessage("[" + SpigotPlugin.Instance.config.getString("config.serverName") + "] " + Util.discordFormating(SpigotPlugin.Instance.config.getString("messages.quitMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))));
 
         event.setQuitMessage(Util.formatMessage(SpigotPlugin.Instance.config.getString("messages.quitMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))));
     }
