@@ -3,6 +3,7 @@ package com.kale_ko.kalesutilities.spigot;
 import com.kale_ko.kalesutilities.shared.Plugin;
 import com.kale_ko.kalesutilities.shared.discord.DiscordBot;
 import com.kale_ko.kalesutilities.shared.mysql.MySQLConfig;
+import com.kale_ko.kalesutilities.shared.util.ParamRunnable;
 import com.kale_ko.kalesutilities.spigot.commands.info.AboutCommand;
 import com.kale_ko.kalesutilities.spigot.commands.info.HelpCommand;
 import com.kale_ko.kalesutilities.spigot.commands.info.KalesUtilitiesCommand;
@@ -92,6 +93,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         config.addDefault("messages.usage", "Usage: {usage}");
         config.addDefault("messages.joinMessage", "&e{player} &ehas joined the game!");
         config.addDefault("messages.quitMessage", "&e{player} &ehas left the game");
+        config.addDefault("messages.discord", "&b&l[Discord] &r{sender} > {message}");
         config.addDefault("messages.help", "\n{commandList}");
         config.addDefault("messages.list", "\n{playerList}");
         config.addDefault("messages.reload", "Config Reloaded");
@@ -248,7 +250,21 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         Console.info("Starting Discord bot");
 
-        bot = new DiscordBot(config.getString("discord.token"), config.getString("discord.serverID"), config.getString("discord.channelID"));
+        bot = new DiscordBot(config.getString("discord.token"), config.getString("discord.serverID"), config.getString("discord.channelID"), new ParamRunnable() {
+            private String sender;
+            private String message;
+
+            @Override
+            public void run() {
+                Util.broadcastMessage(config.getString("messages.discord").replace("{sender}", this.sender).replace("{message}", this.message));
+            }
+
+            @Override
+            public void init(Object... params) {
+                this.sender = (String) params[0];
+                this.message = (String) params[1];
+            }
+        });
     }
 
     @Override
