@@ -3,8 +3,11 @@ package com.kale_ko.kalesutilities.bungee;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class Util {
@@ -29,6 +32,16 @@ public class Util {
             BungeePlugin.Instance.getProxy().broadcast(formatMessage(BungeePlugin.Instance.config.getString("config.prefix") + " " + message));
         } else {
             BungeePlugin.Instance.getProxy().broadcast(formatMessage(message));
+        }
+    }
+
+    public static void messageServers(String channel, String message) {
+        for (Map.Entry<String, ServerInfo> server : BungeePlugin.Instance.getProxy().getServers().entrySet()) {
+            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+            out.writeUTF(channel);
+            out.writeUTF(message);
+
+            server.getValue().sendData("BungeeChord", out.toByteArray());
         }
     }
 
