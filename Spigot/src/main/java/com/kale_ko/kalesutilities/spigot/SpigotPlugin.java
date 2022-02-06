@@ -224,6 +224,8 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         Console.info("Loading event listeners..");
 
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new BannedJoinListener(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
@@ -282,6 +284,8 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         Console.info("Finished removing commands");
 
         Console.info("Removing event listeners..");
+
+        getServer().getMessenger().unregisterOutgoingPluginChannel(this);
 
         HandlerList.unregisterAll(SpigotPlugin.Instance);
 
