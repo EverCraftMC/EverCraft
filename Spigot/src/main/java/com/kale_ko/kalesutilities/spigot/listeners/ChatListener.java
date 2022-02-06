@@ -9,6 +9,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 public class ChatListener implements Listener {
     @EventHandler
     public void onChatMessage(AsyncPlayerChatEvent event) {
-        SpigotPlugin.Instance.bot.sendMessage(Util.discordFormating("[" + SpigotPlugin.Instance.config.getString("config.serverName") + "] " + event.getFormat().replace("%2$s", event.getMessage())));
+        if (!event.isCancelled()) {
+            SpigotPlugin.Instance.bot.sendMessage(Util.discordFormating("[" + SpigotPlugin.Instance.config.getString("config.serverName") + "] " + event.getFormat().replace("%2$s", event.getMessage())));
+        }
     }
 }
