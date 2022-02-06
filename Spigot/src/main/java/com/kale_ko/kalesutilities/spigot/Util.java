@@ -11,6 +11,8 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import net.minecraft.nbt.MojangsonParser;
 import net.minecraft.nbt.NBTTagCompound;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 public class Util {
@@ -36,6 +38,16 @@ public class Util {
         } else {
             SpigotPlugin.Instance.getServer().broadcastMessage(formatMessage(message));
         }
+    }
+
+    public static void messageBungee(String channel, String message) {
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF(channel);
+        out.writeUTF(message);
+
+        Player player = (Player) SpigotPlugin.Instance.getServer().getOnlinePlayers().toArray()[0];
+
+        player.sendPluginMessage(SpigotPlugin.Instance, "BungeeCord", out.toByteArray());
     }
 
     public static String formatMessage(String message) {
