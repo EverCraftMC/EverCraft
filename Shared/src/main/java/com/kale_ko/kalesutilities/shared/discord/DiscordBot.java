@@ -55,8 +55,10 @@ public class DiscordBot implements EventListener {
     @Override
     public void onEvent(GenericEvent rawevent) {
         if (rawevent instanceof MessageReceivedEvent event) {
-            this.messageCallback.init(event.getAuthor().getAsTag(), event.getMessage().getContentDisplay());
-            this.messageCallback.run();
+            if (!event.getAuthor().getId().equalsIgnoreCase(this.jda.getSelfUser().getId())) {
+                this.messageCallback.init(event.getAuthor().getAsTag(), event.getMessage().getContentDisplay());
+                this.messageCallback.run();
+            }
         }
     }
 }

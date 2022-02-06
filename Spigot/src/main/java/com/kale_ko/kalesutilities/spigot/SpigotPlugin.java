@@ -256,7 +256,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
             @Override
             public void run() {
-                Util.broadcastMessage(config.getString("messages.discord").replace("{sender}", this.sender).replace("{message}", this.message));
+                Util.broadcastMessage(config.getString("messages.discord").replace("{sender}", this.sender).replace("{message}", this.message), true);
             }
 
             @Override
