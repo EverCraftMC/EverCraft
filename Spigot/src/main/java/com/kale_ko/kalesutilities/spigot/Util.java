@@ -40,10 +40,12 @@ public class Util {
         }
     }
 
-    public static void messageBungee(String channel, String message) {
+    public static void messageBungee(String channel, String... messages) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF(channel);
-        out.writeUTF(message);
+        for (String message : messages) {
+            out.writeUTF(message);
+        }
 
         Player player = (Player) SpigotPlugin.Instance.getServer().getOnlinePlayers().toArray()[0];
 
