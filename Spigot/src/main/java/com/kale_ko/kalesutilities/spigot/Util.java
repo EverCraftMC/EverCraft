@@ -59,7 +59,7 @@ public class Util {
     }
 
     public static String discordFormating(String message) {
-        return stripFormating(formatMessage(message));
+        return stripFormating(formatMessage(message)).replace("_", "\\_").replace("*", "\\*").replace("~~", "\\~~").replace("@everyone", "\\@everyone");
     }
 
     public static String getNoPermissionMessage(String permission) {
