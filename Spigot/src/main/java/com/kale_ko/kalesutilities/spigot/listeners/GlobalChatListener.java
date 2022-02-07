@@ -14,7 +14,7 @@ public class GlobalChatListener implements PluginMessageListener {
             ByteArrayDataInput in = ByteStreams.newDataInput(message);
 
             if (in.readUTF().equals("globalChat")) {
-                if (!in.readUTF().equals(SpigotPlugin.Instance.config.getString("serverName"))) {
+                if (!in.readUTF().equals(SpigotPlugin.Instance.config.getString("config.serverName"))) {
                     Util.broadcastMessage(in.readUTF());
                 }
             }
