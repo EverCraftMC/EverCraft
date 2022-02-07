@@ -43,9 +43,7 @@ public class Util {
     public static void messageBungee(String... messages) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         for (String message : messages) {
-            if (message != null) {
-                out.writeUTF(message);
-            }
+            out.writeUTF(message);
         }
 
         Player player = (Player) SpigotPlugin.Instance.getServer().getOnlinePlayers().toArray()[0];
