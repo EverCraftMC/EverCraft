@@ -10,11 +10,11 @@ import net.md_5.bungee.event.EventHandler;
 public class GlobalChatListener implements Listener {
     @EventHandler
     public void onMessage(PluginMessageEvent event) {
-        if (event.getTag().equals("BungeeChord")) {
+        if (event.getTag().equals("BungeeCord")) {
             ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
 
-            if (in.readUTF().equals("globalMessage")) {
-                Util.messageServers("globalMessage", in.readUTF(), in.readUTF());
+            if (in.readUTF().equals("globalChat")) {
+                Util.messageServers("globalChat", in.readUTF(), in.readUTF());
             }
         }
     }
