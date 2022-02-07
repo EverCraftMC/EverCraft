@@ -19,6 +19,7 @@ import com.kale_ko.kalesutilities.spigot.commands.moderation.UnbanCommand;
 import com.kale_ko.kalesutilities.spigot.commands.moderation.UnmuteCommand;
 import com.kale_ko.kalesutilities.spigot.commands.player.NicknameCommand;
 import com.kale_ko.kalesutilities.spigot.commands.player.PrefixCommand;
+import com.kale_ko.kalesutilities.spigot.commands.player.PvPCommand;
 import com.kale_ko.kalesutilities.spigot.commands.player.SeenCommand;
 import com.kale_ko.kalesutilities.spigot.commands.player.StatusCommand;
 import com.kale_ko.kalesutilities.spigot.commands.staff.CommandSpyCommand;
@@ -107,6 +108,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         config.addDefault("messages.setwarp", "Successfully set warp {warp}");
         config.addDefault("messages.kits", "\n{kitList}");
         config.addDefault("messages.kit", "Successfully received kit {kit}");
+        config.addDefault("messages.togglepvp", "Successfully turned pvp {value}");
         config.addDefault("messages.lastonline", "{player} was last seen {time}!");
         config.addDefault("messages.playeronline", "{player} is online right now!");
         config.addDefault("messages.setnickname", "Successfully set your nickname");
@@ -173,6 +175,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.nickname", "Use /nickname", PermissionDefault.TRUE));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.prefix", "Use /prefix", PermissionDefault.OP));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.status", "Use /status", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.pvp", "Use /pvp", PermissionDefault.TRUE));
 
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.economy.balance", "Use /balance", PermissionDefault.TRUE));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.economy.setbalance", "Use /setbalance", PermissionDefault.OP));
@@ -209,6 +212,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new NicknameCommand("nickname", "Sets you nickname", Arrays.asList("nick", "setnickname", "setnick"), "/nickname {player (optional)} {nickname}", "kalesutilities.commands.player.nickname"));
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new PrefixCommand("prefix", "Sets you prefix", Arrays.asList("setprefix"), "/prefix {player (optional)} {prefix}", "kalesutilities.commands.player.prefix"));
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new StatusCommand("status", "Sets you status", Arrays.asList("setstatus"), "/status {status}", "kalesutilities.commands.player.status"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new PvPCommand("pvp", "Sets you pvp status", Arrays.asList("setpvp", "togglepvp"), "/pvp", "kalesutilities.commands.player.pvp"));
 
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new GamemodeCommand("gmc", "Sets you gamemode", Arrays.asList("gms", "gma", "gmsp"), "/gm(c, s, a, sp) {player (optional)}", "kalesutilities.commands.staff.gamemode"));
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new StaffChatCommand("staffchat", "Send a message in the staffchat", Arrays.asList("sc"), "/staffchat {message}", "kalesutilities.commands.staff.staffchat"));
