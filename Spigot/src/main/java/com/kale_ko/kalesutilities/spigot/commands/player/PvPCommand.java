@@ -26,9 +26,9 @@ public class PvPCommand extends SpigotCommand {
                     Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglepvp").replace("{value}", "on"));
                 }
             } else {
-                Util.setMetadata(player, "enablePvP", true);
+                Util.setMetadata(player, "enablePvP", false);
 
-                Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglepvp").replace("{value}", "on"));
+                Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglepvp").replace("{value}", "off"));
             }
         } else {
             Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noconsole"));
