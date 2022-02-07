@@ -35,12 +35,13 @@ public class Util {
         }
     }
 
-    public static void messageServers(String channel, String... messages) {
+    public static void messageServers(String... messages) {
         for (Map.Entry<String, ServerInfo> server : BungeePlugin.Instance.getProxy().getServers().entrySet()) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF(channel);
             for (String message : messages) {
-                out.writeUTF(message);
+                if (message != null) {
+                    out.writeUTF(message);
+                }
             }
 
             server.getValue().sendData("BungeeChord", out.toByteArray());
