@@ -5,6 +5,8 @@ plugins {
 sourceCompatibility = JavaVersion.toVersion(project.java_version)
 targetCompatibility = JavaVersion.toVersion(project.java_version)
 
+configurations.implementation.canBeResolved = true
+
 archivesBaseName = project.plugin_id
 group = "com.kale_ko"
 version = project.plugin_version

@@ -287,7 +287,11 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         Console.info("Removing commands..");
 
-        ((CraftServer) this.getServer()).getCommandMap().clearCommands();
+        for (org.bukkit.command.Command command : ((CraftServer) this.getServer()).getCommandMap().getCommands()) {
+            if (command.getLabel().startsWith(this.getName())) {
+                command.unregister(((CraftServer) this.getServer()).getCommandMap());
+            }
+        }
 
         Console.info("Finished removing commands");
 
