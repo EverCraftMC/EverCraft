@@ -9,6 +9,8 @@ archivesBaseName = project.plugin_id
 group = "com.kale_ko"
 version = project.plugin_version
 
+configurations.implementation.canBeResolved = true
+
 repositories {
     mavenCentral()
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/public/" }
