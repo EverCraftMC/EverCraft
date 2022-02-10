@@ -48,6 +48,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         config.addDefault("messages.playernotfound", "{player} can't be found");
         config.addDefault("messages.usage", "Usage: {usage}");
         config.addDefault("messages.joinMessage", "&e{player} &ehas joined the server!");
+        config.addDefault("messages.moveMessage", "&e{player} &ehas went to {server}!");
         config.addDefault("messages.quitMessage", "&e{player} &ehas left the server");
         config.addDefault("messages.help", "\n{commandList}");
         config.addDefault("messages.list", "\n{playerList}");
