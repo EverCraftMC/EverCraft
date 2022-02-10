@@ -298,6 +298,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         Console.info("Removing event listeners..");
 
         getServer().getMessenger().unregisterOutgoingPluginChannel(this);
+        getServer().getMessenger().unregisterIncomingPluginChannel(this);
 
         HandlerList.unregisterAll(SpigotPlugin.Instance);
 
