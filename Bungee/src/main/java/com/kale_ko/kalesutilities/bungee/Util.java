@@ -39,9 +39,7 @@ public class Util {
         for (Map.Entry<String, ServerInfo> server : BungeePlugin.Instance.getProxy().getServers().entrySet()) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             for (String message : messages) {
-                if (message != null) {
-                    out.writeUTF(message);
-                }
+                out.writeUTF(message);
             }
 
             server.getValue().sendData("BungeeCord", out.toByteArray());
