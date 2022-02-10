@@ -44,7 +44,7 @@ public class Util {
                 }
             }
 
-            server.getValue().sendData("BungeeChord", out.toByteArray());
+            server.getValue().sendData("BungeeCord", out.toByteArray());
         }
     }
 
