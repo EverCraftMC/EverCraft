@@ -13,13 +13,13 @@ public class WelcomeListener implements Listener {
     public void onPlayerJoin(PostLoginEvent event) {
         BungeePlugin.Instance.bot.sendMessage("[" + BungeePlugin.Instance.config.getString("config.serverName") + "] " + Util.discordFormating(BungeePlugin.Instance.config.getString("messages.joinMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))));
 
-        Util.broadcastMessage(Util.formatMessage(BungeePlugin.Instance.config.getString("messages.joinMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))));
+        Util.broadcastMessage(Util.formatMessage(BungeePlugin.Instance.config.getString("messages.joinMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))), true);
     }
 
     @EventHandler
     public void onPlayerMove(ServerConnectEvent event) {
         if (event.getReason().equals(ServerConnectEvent.Reason.COMMAND) || event.getReason().equals(ServerConnectEvent.Reason.PLUGIN) || event.getReason().equals(ServerConnectEvent.Reason.PLUGIN_MESSAGE) || event.getReason().equals(ServerConnectEvent.Reason.SERVER_DOWN_REDIRECT) || event.getReason().equals(ServerConnectEvent.Reason.KICK_REDIRECT) || event.getReason().equals(ServerConnectEvent.Reason.LOBBY_FALLBACK)) {
-            Util.broadcastMessage(Util.formatMessage(BungeePlugin.Instance.config.getString("messages.moveMessage").replace("{player}", Util.getPlayerName(event.getPlayer())).replace("{server}", event.getTarget().getName())));
+            Util.broadcastMessage(Util.formatMessage(BungeePlugin.Instance.config.getString("messages.moveMessage").replace("{player}", Util.getPlayerName(event.getPlayer())).replace("{server}", event.getTarget().getName())), true);
         }
     }
 
@@ -27,6 +27,6 @@ public class WelcomeListener implements Listener {
     public void onPlayerLeave(PlayerDisconnectEvent event) {
         BungeePlugin.Instance.bot.sendMessage("[" + BungeePlugin.Instance.config.getString("config.serverName") + "] " + Util.discordFormating(BungeePlugin.Instance.config.getString("messages.quitMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))));
 
-        Util.broadcastMessage(Util.formatMessage(BungeePlugin.Instance.config.getString("messages.quitMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))));
+        Util.broadcastMessage(Util.formatMessage(BungeePlugin.Instance.config.getString("messages.quitMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))), true);
     }
 }

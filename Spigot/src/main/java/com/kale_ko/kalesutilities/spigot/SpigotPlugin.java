@@ -94,8 +94,8 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         config.addDefault("messages.noconsole", "You can't use that command from the console");
         config.addDefault("messages.playernotfound", "{player} can't be found");
         config.addDefault("messages.usage", "Usage: {usage}");
-        config.addDefault("messages.joinMessage", "&e{player} &ehas joined the game!");
-        config.addDefault("messages.quitMessage", "&e{player} &ehas left the game");
+        config.addDefault("messages.joinMessage", "");
+        config.addDefault("messages.quitMessage", "");
         config.addDefault("messages.discord", "&b&l[Discord] &r{sender} > {message}");
         config.addDefault("messages.help", "\n{commandList}");
         config.addDefault("messages.list", "\n{playerList}");
@@ -236,7 +236,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new BannedJoinListener(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
-        // getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
+        getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
         getServer().getPluginManager().registerEvents(new MuteListener(), this);
         getServer().getPluginManager().registerEvents(new ChatFormatListener(), this);
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
