@@ -28,8 +28,14 @@ public class ChatListener implements Listener {
 
     @EventHandler
     public void onAdvancement(PlayerAdvancementDoneEvent event) {
-        Util.messageBungee("globalChat", SpigotPlugin.Instance.config.getString("config.serverName"), event.getPlayer().getName() + " has completed the " + ((CraftAdvancement) event.getAdvancement()).getHandle().c().e().a() + " " + ((CraftAdvancement) event.getAdvancement()).getHandle().c().a().getString());
+        if (((CraftAdvancement) event.getAdvancement()).getHandle().c().e().a() != "challenge") {
+            Util.messageBungee("globalChat", SpigotPlugin.Instance.config.getString("config.serverName"), "[" + SpigotPlugin.Instance.config.getString("config.serverName") + "] " + event.getPlayer().getName() + " has made the advancement [" + ((CraftAdvancement) event.getAdvancement()).getHandle().c().a().getString() + "]");
 
-        SpigotPlugin.Instance.bot.sendMessage(Util.discordFormating(event.getPlayer().getName() + " has completed the " + ((CraftAdvancement) event.getAdvancement()).getHandle().c().e().a() + " " + ((CraftAdvancement) event.getAdvancement()).getHandle().c().a().getString()));
+            SpigotPlugin.Instance.bot.sendMessage(Util.discordFormating("[" + SpigotPlugin.Instance.config.getString("config.serverName") + "] " + event.getPlayer().getName() + " has made the advancement [" + ((CraftAdvancement) event.getAdvancement()).getHandle().c().a().getString() + "]"));
+        } else {
+            Util.messageBungee("globalChat", SpigotPlugin.Instance.config.getString("config.serverName"), "[" + SpigotPlugin.Instance.config.getString("config.serverName") + "] " + event.getPlayer().getName() + " has completed the challenge [" + ((CraftAdvancement) event.getAdvancement()).getHandle().c().a().getString() + "]");
+
+            SpigotPlugin.Instance.bot.sendMessage(Util.discordFormating("[" + SpigotPlugin.Instance.config.getString("config.serverName") + "] " + event.getPlayer().getName() + " has completed the challenge [" + ((CraftAdvancement) event.getAdvancement()).getHandle().c().a().getString() + "]"));
+        }
     }
 }
