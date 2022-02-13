@@ -17,6 +17,8 @@ public class GlobalMesageListener implements Listener {
                 Util.messageServers("globalChat", in.readUTF(), in.readUTF());
             } else if (in.readUTF().equals("globalStaffChat")) {
                 Util.messageServers("globalStaffChat", in.readUTF(), in.readUTF());
+            } else if (in.readUTF().equals("globalCommandspy")) {
+                Util.messageServers("globalCommandspy", in.readUTF(), in.readUTF());
             }
         }
     }
