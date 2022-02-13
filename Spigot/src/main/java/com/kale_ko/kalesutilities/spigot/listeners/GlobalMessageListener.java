@@ -27,6 +27,16 @@ public class GlobalMessageListener implements PluginMessageListener {
                         }
                     }
                 }
+            } else if (in.readUTF().equals("globalCommandspy")) {
+                if (!in.readUTF().equals(SpigotPlugin.Instance.config.getString("config.serverName"))) {
+                    String text = in.readUTF();
+
+                    for (Player player2 : SpigotPlugin.Instance.getServer().getOnlinePlayers()) {
+                        if (Util.hasPermission(player2, "kalesutilities.commands.staff.commandspy") && (Util.hasMetadata(player2, "receiveCommandSpy") && Util.getMetadata(player2, "receiveCommandSpy").asBoolean())) {
+                            Util.sendMessage(player2, text, true);
+                        }
+                    }
+                }
             }
         }
     }
