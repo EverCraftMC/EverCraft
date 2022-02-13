@@ -7,7 +7,7 @@ import com.kale_ko.kalesutilities.spigot.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
-public class GlobalChatListener implements PluginMessageListener {
+public class GlobalMessageListener implements PluginMessageListener {
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         if (channel.equals("BungeeCord")) {
@@ -16,6 +16,16 @@ public class GlobalChatListener implements PluginMessageListener {
             if (in.readUTF().equals("globalChat")) {
                 if (!in.readUTF().equals(SpigotPlugin.Instance.config.getString("config.serverName"))) {
                     Util.broadcastMessage(in.readUTF(), true);
+                }
+            } else if (in.readUTF().equals("globalStaffChat")) {
+                if (!in.readUTF().equals(SpigotPlugin.Instance.config.getString("config.serverName"))) {
+                    String text = in.readUTF();
+
+                    for (Player player2 : SpigotPlugin.Instance.getServer().getOnlinePlayers()) {
+                        if (Util.hasPermission(player2, "kalesutilities.commands.staff.staffchat")) {
+                            Util.sendMessage(player2, text, true);
+                        }
+                    }
                 }
             }
         }

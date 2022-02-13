@@ -35,7 +35,7 @@ import com.kale_ko.kalesutilities.spigot.listeners.BannedJoinListener;
 import com.kale_ko.kalesutilities.spigot.listeners.ChatFormatListener;
 import com.kale_ko.kalesutilities.spigot.listeners.ChatListener;
 import com.kale_ko.kalesutilities.spigot.listeners.CommandSpyListener;
-import com.kale_ko.kalesutilities.spigot.listeners.GlobalChatListener;
+import com.kale_ko.kalesutilities.spigot.listeners.GlobalMessageListener;
 import com.kale_ko.kalesutilities.spigot.listeners.MuteListener;
 import com.kale_ko.kalesutilities.spigot.listeners.PlayerListener;
 import com.kale_ko.kalesutilities.spigot.listeners.PlayerMoveListener;
@@ -146,7 +146,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.*", "Use everything", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.*", "kalesutilities.features.*"), Arrays.asList(true, true))));
 
-        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.*", "Use all commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.info.*", "kalesutilities.commands.warps.*", "kalesutilities.commands.kits.*", "kalesutilities.commands.player.*", "kalesutilities.commands.economy.*", "kalesutilities.commands.moderation.*"), Arrays.asList(true, true, true, true, true, true))));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.*", "Use all commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.info.*", "kalesutilities.commands.warps.*", "kalesutilities.commands.kits.*", "kalesutilities.commands.player.*", "kalesutilities.commands.economy.*", "kalesutilities.commands.staff.*", "kalesutilities.commands.moderation.*"), Arrays.asList(true, true, true, true, true, true, true))));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.features.*", "Use all features", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.features.colorchat", "kalesutilities.features.colorsigns", "kalesutilities.features.editsigns"), Arrays.asList(true, true, true))));
 
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.info.*", "Use info commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.info.kalesutilities","kalesutilities.commands.info.help", "kalesutilities.commands.info.about", "kalesutilities.commands.info.rules", "kalesutilities.commands.info.staff", "kalesutilities.commands.info.list"), Arrays.asList(true, true, true, true, true, true))));
@@ -154,6 +154,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.kits.*", "Use kit commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.kits.kit", "kalesutilities.commands.kits.kits"), Arrays.asList(true, true))));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.*", "Use player commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.player.seen", "kalesutilities.commands.player.nickname", "kalesutilities.commands.player.prefix", "kalesutilities.commands.player.status"), Arrays.asList(true, true, true, true))));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.economy.*", "Use economy commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.economy.balance", "kalesutilities.commands.economy.setbalance"), Arrays.asList(true, true))));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.*", "Use staff commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.staff.gamemode", "kalesutilities.commands.staff.staffchat", "kalesutilities.commands.staff.commandspy", "kalesutilities.commands.staff.sudo"), Arrays.asList(true, true, true, true))));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.moderation.*", "Use moderation commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.moderation.kick", "kalesutilities.commands.moderation.ban", "kalesutilities.commands.moderation.mute"), Arrays.asList(true, true, true))));
 
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.info.kalesutilities", "Use /kalesutilities", PermissionDefault.TRUE));
@@ -180,6 +181,11 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.economy.balance", "Use /balance", PermissionDefault.TRUE));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.economy.setbalance", "Use /setbalance", PermissionDefault.OP));
+
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.gamemode", "Use /gmc", PermissionDefault.OP));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.staffchat", "Use /staffchat", PermissionDefault.OP));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.commandspy", "Use /commandspy", PermissionDefault.OP));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.sudo", "Use /sudo", PermissionDefault.OP));
 
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.moderation.kick", "Use /prefix", PermissionDefault.OP));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.moderation.ban", "Use /prefix", PermissionDefault.OP));
@@ -231,7 +237,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         Console.info("Loading event listeners..");
 
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new GlobalChatListener());
+        getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new GlobalMessageListener());
 
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new BannedJoinListener(), this);

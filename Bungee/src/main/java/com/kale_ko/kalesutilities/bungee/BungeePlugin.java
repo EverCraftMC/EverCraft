@@ -2,7 +2,7 @@ package com.kale_ko.kalesutilities.bungee;
 
 import com.kale_ko.kalesutilities.bungee.commands.info.KalesUtilitiesBungeeCommand;
 import com.kale_ko.kalesutilities.bungee.commands.server.HubCommand;
-import com.kale_ko.kalesutilities.bungee.listeners.GlobalChatListener;
+import com.kale_ko.kalesutilities.bungee.listeners.GlobalMesageListener;
 import com.kale_ko.kalesutilities.bungee.listeners.PlayerJoinListener;
 import com.kale_ko.kalesutilities.bungee.listeners.WelcomeListener;
 import com.kale_ko.kalesutilities.shared.discord.DiscordBot;
@@ -75,7 +75,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         Console.info("Loading event listeners..");
 
         getProxy().getPluginManager().registerListener(this, new PlayerJoinListener());
-        getProxy().getPluginManager().registerListener(this, new GlobalChatListener());
+        getProxy().getPluginManager().registerListener(this, new GlobalMesageListener());
         getProxy().getPluginManager().registerListener(this, new WelcomeListener());
 
         Console.info("Finished loading event listeners");
