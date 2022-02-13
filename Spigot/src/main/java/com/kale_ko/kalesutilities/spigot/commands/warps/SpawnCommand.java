@@ -7,6 +7,7 @@ import com.kale_ko.kalesutilities.spigot.commands.SpigotCommand;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 
 public class SpawnCommand extends SpigotCommand {
     public SpawnCommand(String name, String description, List<String> aliases, String usage, String permission) {
@@ -14,7 +15,7 @@ public class SpawnCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         if (args.length == 0 && sender instanceof Player player) {
             player.teleport(SpigotPlugin.Instance.spawn.getSerializable(player.getWorld().getName(), Location.class));
 
@@ -27,6 +28,10 @@ public class SpawnCommand extends SpigotCommand {
 
                 if (player != null) {
                     player.teleport(SpigotPlugin.Instance.spawn.getSerializable(player.getWorld().getName(), Location.class));
+                    player.getInventory().clear();
+                    for (PotionEffect effect : player.getActivePotionEffects()) {
+                        player.removePotionEffect(effect.getType());
+                    }
 
                     Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.spawnedplayer").replace("{player}", args[0]));
                     Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.spawned"));
@@ -37,7 +42,5 @@ public class SpawnCommand extends SpigotCommand {
                 Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.commands.staff.sudo"));
             }
         }
-
-        return true;
     }
 }

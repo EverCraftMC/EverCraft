@@ -13,7 +13,7 @@ public class KickCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         if (args.length > 1) {
             Player player = SpigotPlugin.Instance.getServer().getPlayer(args[0]);
 
@@ -35,7 +35,5 @@ public class KickCommand extends SpigotCommand {
         } else {
             Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.usage").replace("{usage}", SpigotPlugin.Instance.getCommand("kick").getUsage()));
         }
-
-        return true;
     }
 }

@@ -14,7 +14,7 @@ public class KitsCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         StringBuilder kits = new StringBuilder();
 
         Collection<String> keys = SpigotPlugin.Instance.kits.getKeys();
@@ -37,7 +37,5 @@ public class KitsCommand extends SpigotCommand {
                 Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.commands.staff.sudo"));
             }
         }
-
-        return true;
     }
 }

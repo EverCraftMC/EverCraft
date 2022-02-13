@@ -12,7 +12,7 @@ public class KalesUtilitiesCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase("help")) {
                 SpigotPlugin.Instance.getServer().dispatchCommand(sender, "help");
@@ -26,7 +26,5 @@ public class KalesUtilitiesCommand extends SpigotCommand {
         } else {
             Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.usage").replace("{usage}", SpigotPlugin.Instance.getCommand("kalesutilities").getUsage()));
         }
-
-        return true;
     }
 }
