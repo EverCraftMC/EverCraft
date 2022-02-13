@@ -9,29 +9,31 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class Util {
     public static void sendMessage(CommandSender user, String message) {
-        user.sendMessage(formatMessage(BungeePlugin.Instance.config.getString("config.prefix") + " " + message));
+        user.sendMessage(stringToBungeeComponent(formatMessage(BungeePlugin.Instance.config.getString("config.prefix") + " " + message)));
     }
 
     public static void sendMessage(CommandSender user, String message, Boolean noprefix) {
         if (!noprefix) {
-            user.sendMessage(formatMessage(BungeePlugin.Instance.config.getString("config.prefix") + " " + message));
+            user.sendMessage(stringToBungeeComponent(formatMessage(BungeePlugin.Instance.config.getString("config.prefix") + " " + message)));
         } else {
-            user.sendMessage(formatMessage(message));
+            user.sendMessage(stringToBungeeComponent(formatMessage(message)));
         }
     }
 
     public static void broadcastMessage(String message) {
-        BungeePlugin.Instance.getProxy().broadcast(formatMessage(BungeePlugin.Instance.config.getString("config.prefix") + " " + message));
+        BungeePlugin.Instance.getProxy().broadcast(stringToBungeeComponent(formatMessage(BungeePlugin.Instance.config.getString("config.prefix") + " " + message)));
     }
 
     public static void broadcastMessage(String message, Boolean noprefix) {
         if (!noprefix) {
-            BungeePlugin.Instance.getProxy().broadcast(formatMessage(BungeePlugin.Instance.config.getString("config.prefix") + " " + message));
+            BungeePlugin.Instance.getProxy().broadcast(stringToBungeeComponent(formatMessage(BungeePlugin.Instance.config.getString("config.prefix") + " " + message)));
         } else {
-            BungeePlugin.Instance.getProxy().broadcast(formatMessage(message));
+            BungeePlugin.Instance.getProxy().broadcast(stringToBungeeComponent(formatMessage(message)));
         }
     }
 
@@ -42,8 +44,14 @@ public class Util {
                 out.writeUTF(message);
             }
 
-            server.getValue().sendData("BungeeCord", out.toByteArray());
+            if (!server.getValue().getPlayers().isEmpty()) {
+                server.getValue().sendData("BungeeCord", out.toByteArray());
+            }
         }
+    }
+
+    public static BaseComponent[] stringToBungeeComponent(String string) {
+        return TextComponent.fromLegacyText(string);
     }
 
     public static String formatMessage(String message) {
