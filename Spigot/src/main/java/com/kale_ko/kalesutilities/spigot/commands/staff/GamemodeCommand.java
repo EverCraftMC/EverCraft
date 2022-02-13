@@ -14,7 +14,7 @@ public class GamemodeCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         if (args.length == 0) {
             if (sender instanceof Player player) {
                 if (label.equalsIgnoreCase("gmc")) {
@@ -66,7 +66,5 @@ public class GamemodeCommand extends SpigotCommand {
                 Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noperms").replace("{permission}", "kalesutilities.commands.staff.sudo"));
             }
         }
-
-        return true;
     }
 }

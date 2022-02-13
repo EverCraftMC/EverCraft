@@ -13,7 +13,7 @@ public class PrefixCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         if (args.length > 1) {
             if (Util.hasPermission(sender, "kalesutilities.commands.staff.sudo")) {
                 Player player = SpigotPlugin.Instance.getServer().getPlayer(args[0]);
@@ -50,7 +50,5 @@ public class PrefixCommand extends SpigotCommand {
         } else {
             Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.usage").replace("{usage}", SpigotPlugin.Instance.getCommand("prefix").getUsage()));
         }
-
-        return true;
     }
 }

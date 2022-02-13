@@ -15,7 +15,7 @@ public class HelpCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         if (args.length > 0) {
             Player player = SpigotPlugin.Instance.getServer().getPlayer(args[0]);
 
@@ -47,7 +47,5 @@ public class HelpCommand extends SpigotCommand {
 
             Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.help").replace("{commandList}", help.toString()));
         }
-
-        return true;
     }
 }

@@ -13,7 +13,7 @@ public class SetWarpCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         if (sender instanceof Player player) {
             SpigotPlugin.Instance.warps.set(args[0], player.getLocation());
 
@@ -23,7 +23,5 @@ public class SetWarpCommand extends SpigotCommand {
         } else {
             Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noconsole"));
         }
-
-        return true;
     }
 }

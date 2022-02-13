@@ -13,7 +13,7 @@ public class SudoCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         if (args.length > 1) {
             if (args[0].equalsIgnoreCase("*")) {
                 StringBuilder sudoMessageBuilder = new StringBuilder();
@@ -65,7 +65,5 @@ public class SudoCommand extends SpigotCommand {
         } else {
             Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.usage").replace("{usage}", SpigotPlugin.Instance.getCommand("sudo").getUsage()));
         }
-
-        return true;
     }
 }

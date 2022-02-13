@@ -13,7 +13,7 @@ public class SetSpawnCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         if (sender instanceof Player player) {
             if (SpigotPlugin.Instance.spawn.getObject("overidespawn") == null) {
                 SpigotPlugin.Instance.spawn.set("overidespawn", true);
@@ -27,7 +27,5 @@ public class SetSpawnCommand extends SpigotCommand {
         } else {
             Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noconsole"));
         }
-
-        return true;
     }
 }

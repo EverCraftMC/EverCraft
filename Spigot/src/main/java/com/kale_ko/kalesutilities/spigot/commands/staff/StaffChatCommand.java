@@ -13,7 +13,7 @@ public class StaffChatCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         StringBuilder messageBuilder = new StringBuilder();
 
         for (Integer i = 0; i < args.length; i++) {
@@ -34,7 +34,5 @@ public class StaffChatCommand extends SpigotCommand {
                 Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.staffchat").replace("{player}", senderName).replace("{message}", message), true);
             }
         }
-
-        return true;
     }
 }

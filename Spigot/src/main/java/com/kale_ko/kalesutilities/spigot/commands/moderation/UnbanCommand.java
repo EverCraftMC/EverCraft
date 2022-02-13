@@ -12,7 +12,7 @@ public class UnbanCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         if (args.length > 0) {
             SpigotPlugin.Instance.players.set(args[0] + ".banned", null);
             SpigotPlugin.Instance.players.set(args[0] + ".banMessage", null);
@@ -21,7 +21,5 @@ public class UnbanCommand extends SpigotCommand {
         } else {
             Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.usage").replace("{usage}", SpigotPlugin.Instance.getCommand("unban").getUsage()));
         }
-
-        return true;
     }
 }

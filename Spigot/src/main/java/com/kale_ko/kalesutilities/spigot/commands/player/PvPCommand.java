@@ -13,7 +13,7 @@ public class PvPCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         if (sender instanceof Player player) {
             if (Util.hasMetadata(player, "enablePvP")) {
                 if (Util.getMetadata(player, "enablePvP").asBoolean()) {
@@ -33,7 +33,5 @@ public class PvPCommand extends SpigotCommand {
         } else {
             Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noconsole"));
         }
-
-        return true;
     }
 }
