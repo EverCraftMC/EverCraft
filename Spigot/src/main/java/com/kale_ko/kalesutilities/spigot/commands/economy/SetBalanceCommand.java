@@ -11,9 +11,7 @@ public class SetBalanceCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         SpigotPlugin.Instance.players.set(args[0] + ".balance", Float.parseFloat(args[0]));
-
-        return true;
     }
 }

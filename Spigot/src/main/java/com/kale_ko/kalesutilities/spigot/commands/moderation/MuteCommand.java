@@ -13,7 +13,7 @@ public class MuteCommand extends SpigotCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public void run(CommandSender sender, String label, String[] args) {
         if (args.length > 1) {
             Player player = SpigotPlugin.Instance.getServer().getPlayer(args[0]);
 
@@ -34,7 +34,5 @@ public class MuteCommand extends SpigotCommand {
                 Util.broadcastMessage(SpigotPlugin.Instance.config.getString("messages.mute").replace("{player}", args[0]).replace("{moderator}", Util.getPlayerName(sender)).replace("{reason}", muteMessage));
             }
         }
-
-        return true;
     }
 }

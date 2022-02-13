@@ -19,6 +19,14 @@ public class SpigotCommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        return false;
+        if (Util.hasPermission(sender, getPermission())) {
+            run(sender, commandLabel, args);
+        } else {
+            Util.sendMessage(sender, "&cYou do not have permission to perform that command.");
+        }
+
+        return true;
     }
+
+    public void run(CommandSender sender, String commandLabel, String[] args) { }
 }
