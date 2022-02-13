@@ -27,6 +27,8 @@ public class StaffChatCommand extends SpigotCommand {
             senderName = Util.getPlayerName(player);
         }
 
+        Util.messageBungee("globalStaffChat", SpigotPlugin.Instance.config.getString("config.serverName"), SpigotPlugin.Instance.config.getString("messages.staffchat").replace("{player}", senderName).replace("{message}", message));
+
         for (Player player : SpigotPlugin.Instance.getServer().getOnlinePlayers()) {
             if (Util.hasPermission(player, "kalesutilities.commands.staff.staffchat")) {
                 Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.staffchat").replace("{player}", senderName).replace("{message}", message), true);

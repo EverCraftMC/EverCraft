@@ -7,7 +7,7 @@ import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-public class GlobalChatListener implements Listener {
+public class GlobalMesageListener implements Listener {
     @EventHandler
     public void onMessage(PluginMessageEvent event) {
         if (event.getTag().equals("BungeeCord")) {
@@ -15,6 +15,8 @@ public class GlobalChatListener implements Listener {
 
             if (in.readUTF().equals("globalChat")) {
                 Util.messageServers("globalChat", in.readUTF(), in.readUTF());
+            } else if (in.readUTF().equals("globalStaffChat")) {
+                Util.messageServers("globalStaffChat", in.readUTF(), in.readUTF());
             }
         }
     }
