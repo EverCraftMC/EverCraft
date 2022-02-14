@@ -109,13 +109,7 @@ public class Util {
     }
 
     public static String getPlayerPrefix(ProxiedPlayer player) {
-        String prefix = "";
-
-        if (BungeePlugin.Instance.players.getString(player.getName() + ".prefix") != null && !BungeePlugin.Instance.players.getString(player.getName() + ".prefix").equalsIgnoreCase("") && !BungeePlugin.Instance.players.getString(player.getName() + ".prefix").equalsIgnoreCase(" ")) {
-            prefix = Util.formatMessage(BungeePlugin.Instance.players.getString(player.getName() + ".prefix") + "&r") + " ";
-        }
-
-        return prefix;
+        return Util.formatMessage(BungeePlugin.Instance.luckperms.getPlayerAdapter(ProxiedPlayer.class).getUser(player).getCachedData().getMetaData().getPrefix() + "&r ");
     }
 
     public static String getPlayerName(ProxiedPlayer player) {

@@ -18,7 +18,6 @@ import com.kale_ko.kalesutilities.spigot.commands.moderation.MuteCommand;
 import com.kale_ko.kalesutilities.spigot.commands.moderation.UnbanCommand;
 import com.kale_ko.kalesutilities.spigot.commands.moderation.UnmuteCommand;
 import com.kale_ko.kalesutilities.spigot.commands.player.NicknameCommand;
-import com.kale_ko.kalesutilities.spigot.commands.player.PrefixCommand;
 import com.kale_ko.kalesutilities.spigot.commands.player.PvPCommand;
 import com.kale_ko.kalesutilities.spigot.commands.player.SeenCommand;
 import com.kale_ko.kalesutilities.spigot.commands.player.StatusCommand;
@@ -52,6 +51,8 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
 
 public class SpigotPlugin extends JavaPlugin implements Plugin {
     public static SpigotPlugin Instance;
@@ -63,6 +64,8 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
     public SpigotConfig spawn;
     public SpigotConfig warps;
     public SpigotConfig kits;
+
+    public LuckPerms luckperms;
 
     public DiscordBot bot;
 
@@ -152,7 +155,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.info.*", "Use info commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.info.kalesutilities","kalesutilities.commands.info.help", "kalesutilities.commands.info.about", "kalesutilities.commands.info.rules", "kalesutilities.commands.info.staff", "kalesutilities.commands.info.list"), Arrays.asList(true, true, true, true, true, true))));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.warps.*", "Use warp commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.warps.spawn", "kalesutilities.commands.warps.setspawn", "kalesutilities.commands.warps.warp", "kalesutilities.commands.warps.warps", "kalesutilities.commands.warps.setwarp"), Arrays.asList(true, true, true, true, true))));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.kits.*", "Use kit commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.kits.kit", "kalesutilities.commands.kits.kits"), Arrays.asList(true, true))));
-        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.*", "Use player commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.player.seen", "kalesutilities.commands.player.nickname", "kalesutilities.commands.player.prefix", "kalesutilities.commands.player.status"), Arrays.asList(true, true, true, true))));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.*", "Use player commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.player.seen", "kalesutilities.commands.player.nickname", "kalesutilities.commands.player.status"), Arrays.asList(true, true, true))));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.economy.*", "Use economy commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.economy.balance", "kalesutilities.commands.economy.setbalance"), Arrays.asList(true, true))));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.*", "Use staff commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.staff.gamemode", "kalesutilities.commands.staff.staffchat", "kalesutilities.commands.staff.commandspy", "kalesutilities.commands.staff.sudo"), Arrays.asList(true, true, true, true))));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.moderation.*", "Use moderation commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.moderation.kick", "kalesutilities.commands.moderation.ban", "kalesutilities.commands.moderation.mute"), Arrays.asList(true, true, true))));
@@ -175,7 +178,6 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.seen", "Use /seen", PermissionDefault.TRUE));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.nickname", "Use /nickname", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.prefix", "Use /prefix", PermissionDefault.OP));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.status", "Use /status", PermissionDefault.TRUE));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.pvp", "Use /pvp", PermissionDefault.TRUE));
 
@@ -217,7 +219,6 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new SeenCommand("seen", "See when a player was last online", Arrays.asList("lastseen", "online", "lastonline"), "/seen {player}", "kalesutilities.commands.player.seen"));
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new NicknameCommand("nickname", "Sets you nickname", Arrays.asList("nick", "setnickname", "setnick"), "/nickname {player (optional)} {nickname}", "kalesutilities.commands.player.nickname"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new PrefixCommand("prefix", "Sets you prefix", Arrays.asList("setprefix"), "/prefix {player (optional)} {prefix}", "kalesutilities.commands.player.prefix"));
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new StatusCommand("status", "Sets you status", Arrays.asList("setstatus"), "/status {status}", "kalesutilities.commands.player.status"));
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new PvPCommand("pvp", "Sets you pvp status", Arrays.asList("setpvp", "togglepvp"), "/pvp", "kalesutilities.commands.player.pvp"));
 
@@ -253,6 +254,12 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
 
         Console.info("Finished loading event listeners");
+
+        Console.info("Loading luckperms integration..");
+
+        luckperms = LuckPermsProvider.get();
+
+        Console.info("Finished loading luckperms integration..");
 
         Console.info("Updating player names..");
 

@@ -106,13 +106,7 @@ public class Util {
     }
 
     public static String getPlayerPrefix(Player player) {
-        String prefix = "";
-
-        if (SpigotPlugin.Instance.players.getString(player.getName() + ".prefix") != null && !SpigotPlugin.Instance.players.getString(player.getName() + ".prefix").equalsIgnoreCase("") && !SpigotPlugin.Instance.players.getString(player.getName() + ".prefix").equalsIgnoreCase(" ")) {
-            prefix = Util.formatMessage(SpigotPlugin.Instance.players.getString(player.getName() + ".prefix") + "&r") + " ";
-        }
-
-        return prefix;
+        return Util.formatMessage(SpigotPlugin.Instance.luckperms.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrefix() + "&r ");
     }
 
     public static String getPlayerName(Player player) {
