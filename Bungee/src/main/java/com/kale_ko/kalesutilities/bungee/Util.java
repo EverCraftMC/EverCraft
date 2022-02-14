@@ -55,7 +55,11 @@ public class Util {
     }
 
     public static String formatMessage(String message) {
-        return ChatColor.translateAlternateColorCodes('&', message);
+        if (message != null) {
+            return ChatColor.translateAlternateColorCodes('&', message);
+        } else {
+            return null;
+        }
     }
 
     public static String unFormatMessage(String message) {
@@ -71,11 +75,19 @@ public class Util {
     }
 
     public static String stripFormating(String message) {
-        return ChatColor.stripColor(message);
+        if (message != null) {
+            return ChatColor.stripColor(message);
+        } else {
+            return null;
+        }
     }
 
     public static String discordFormating(String message) {
-        return stripFormating(formatMessage(message)).replace("_", "\\_").replace("*", "\\*").replace("~", "\\~").replace("`", "\\`").replace("@everyone", "\\@everyone");
+        if (message != null) {
+            return stripFormating(formatMessage(message)).replace("_", "\\_").replace("*", "\\*").replace("~", "\\~").replace("`", "\\`").replace("@everyone", "\\@everyone");
+        } else {
+            return null;
+        }
     }
 
     public static String getNoPermissionMessage(String permission) {
@@ -83,14 +95,22 @@ public class Util {
     }
 
     public static Boolean hasPermission(ProxiedPlayer player, String permission) {
-        return player.hasPermission(permission);
+        if (permission != null) {
+            return player.hasPermission(permission);
+        } else {
+            return true;
+        }
     }
 
     public static Boolean hasPermission(CommandSender sender, String permission) {
         if (sender == BungeePlugin.Instance.getProxy().getConsole()) {
             return true;
         } else {
-            return sender.hasPermission(permission);
+            if (permission != null) {
+                return sender.hasPermission(permission);
+            } else {
+                return true;
+            }
         }
     }
 
