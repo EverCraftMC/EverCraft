@@ -10,6 +10,8 @@ import com.kale_ko.kalesutilities.shared.mysql.MySQLConfig;
 import com.kale_ko.kalesutilities.shared.util.ParamRunnable;
 import java.util.Arrays;
 import java.util.logging.Logger;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements com.kale_ko.kalesutilities.shared.Plugin {
@@ -19,6 +21,8 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
     public BungeeConfig config;
     public MySQLConfig players;
+
+    public LuckPerms luckperms;
 
     public DiscordBot bot;
 
@@ -79,6 +83,12 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         getProxy().getPluginManager().registerListener(this, new WelcomeListener());
 
         Console.info("Finished loading event listeners");
+
+        Console.info("Loading luckperms integration..");
+
+        luckperms = LuckPermsProvider.get();
+
+        Console.info("Finished loading luckperms integration..");
 
         Console.info("Updating player names..");
 
