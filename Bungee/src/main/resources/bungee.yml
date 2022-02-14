@@ -5,3 +5,5 @@ version: ${plugin_version}
 description: A custom plugin to run on KalesMC
 author: Kale Ko
 website: https://github.com/Kale-Ko/Kales-Utilities-V2
+
+depend: [LuckPerms]
