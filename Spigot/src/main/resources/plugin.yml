@@ -8,3 +8,5 @@ website: https://github.com/Kale-Ko/Kales-Utilities-V2
 
 api-version: "1.18"
 load: POSTWORLD
+
+depend: [LuckPerms]

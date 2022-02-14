@@ -106,7 +106,7 @@ public class Util {
     }
 
     public static String getPlayerPrefix(Player player) {
-        return Util.formatMessage(SpigotPlugin.Instance.luckperms.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrefix() + "&r ");
+        return Util.formatMessage(SpigotPlugin.Instance.luckperms.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrefix());
     }
 
     public static String getPlayerName(Player player) {
