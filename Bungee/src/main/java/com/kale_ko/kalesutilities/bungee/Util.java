@@ -109,7 +109,7 @@ public class Util {
     }
 
     public static String getPlayerPrefix(ProxiedPlayer player) {
-        return Util.formatMessage(BungeePlugin.Instance.luckperms.getPlayerAdapter(ProxiedPlayer.class).getUser(player).getCachedData().getMetaData().getPrefix() + "&r ");
+        return Util.formatMessage(BungeePlugin.Instance.luckperms.getPlayerAdapter(ProxiedPlayer.class).getUser(player).getCachedData().getMetaData().getPrefix());
     }
 
     public static String getPlayerName(ProxiedPlayer player) {
