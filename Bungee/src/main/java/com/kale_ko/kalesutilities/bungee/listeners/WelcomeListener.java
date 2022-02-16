@@ -18,6 +18,8 @@ public class WelcomeListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(ServerConnectedEvent event) {
+        BungeePlugin.Instance.bot.sendMessage("[" + BungeePlugin.Instance.config.getString("config.serverName") + "] " + Util.discordFormating(BungeePlugin.Instance.config.getString("messages.moveMessage").replace("{player}", Util.getPlayerName(event.getPlayer())).replace("{server}", event.getServer().getInfo().getName())));
+
         Util.broadcastMessage(Util.formatMessage(BungeePlugin.Instance.config.getString("messages.moveMessage").replace("{player}", Util.getPlayerName(event.getPlayer())).replace("{server}", event.getServer().getInfo().getName())), true);
     }
 
