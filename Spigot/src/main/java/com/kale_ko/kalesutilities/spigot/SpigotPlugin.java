@@ -90,8 +90,10 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         config.addDefault("config.about", "Kales Minecraft Server!");
         config.addDefault("config.rules", "\n1. No Hacking\n2. No Griefing\n3. Be Respectful\n4. No Profanity\n5. Just Don't Be Rude/Annoying.\n\nBreaking rules could result in a kick, ban, or mute");
         config.addDefault("config.staff", "");
+        config.addDefault("config.tablistHeader", "&7--------------------\n&6&lKalesMC");
+        config.addDefault("config.tablistFooter", "&7--------------------");
         config.addDefault("config.scoreboardTitle", "&6&lKalesMC  ");
-        config.addDefault("config.scoreboardLines", Arrays.asList("&7-----------------", "&7&lUsername", "&f%username%", "&7&lHealth", "&f%health%", "&7&lPing", "&f%ping% ms", "&7&lOnline", "&f%onlineproxyplayers% / %maxproxyplayers%", "&7&lThis Server", "&f%onlineplayers% / %maxplayers%"));
+        config.addDefault("config.scoreboardLines", Arrays.asList("&7----------------", "&7&lUsername", "&f%username%", "&7&lHealth", "&f%health%", "&7&lPing", "&f%ping% ms", "&7&lOnline", "&f%onlineproxyplayers% / %maxproxyplayers%", "&7&lThis Server", "&f%onlineplayers% / %maxplayers%"));
         config.addDefault("database.url", "localhost");
         config.addDefault("database.port", "3306");
         config.addDefault("database.database", "minecraft");
