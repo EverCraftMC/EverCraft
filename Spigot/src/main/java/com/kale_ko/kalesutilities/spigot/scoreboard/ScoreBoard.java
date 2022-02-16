@@ -43,41 +43,46 @@ public class ScoreBoard {
                 sb.resetScores(entry);
             }
 
-            ServerPing ping = new ServerPinger(SpigotPlugin.Instance.config.getString("config.proxyHost"), SpigotPlugin.Instance.config.getInt("config.proxyPort"), SpigotPlugin.Instance.config.getInt("config.requestTimeout")).ping();
+            Bukkit.getScheduler().runTaskAsynchronously(SpigotPlugin.Instance, new Runnable() {
+                public void run() {
+                    ServerPing ping = new ServerPinger(SpigotPlugin.Instance.config.getString("config.proxyHost"), SpigotPlugin.Instance.config.getInt("config.proxyPort"), SpigotPlugin.Instance.config.getInt("config.requestTimeout")).ping();
 
-            List<String> lines = SpigotPlugin.Instance.config.getStringList("config.scoreboardLines");
-            int i = 0;
+                    List<String> lines = SpigotPlugin.Instance.config.getStringList("config.scoreboardLines");
+                    int i = 0;
 
-            for (String line : lines) {
-                line = Util.formatMessage(line
-                    .replace("%username%", Util.getPlayerName(player)).replace("%health%", "" + Math.round(player.getHealth() * 100) / 100)
-                    .replace("%balance%", "" + Util.formatCurrencyMin(0)) // SpigotPlugin.Instance.eco.getBalance(player)
-                    .replace("%ping%", "" + player.getPing())
-                    .replace("%onlineplayers%", "" + SpigotPlugin.Instance.getServer().getOnlinePlayers().size()))
-                    .replace("%maxplayers%", "" + SpigotPlugin.Instance.getServer().getMaxPlayers())
-                    .replace("%onlineproxyplayers%", "" + ping.onlinePlayers)
-                    .replace("%maxproxyplayers%", "" + ping.maxPlayers)
-                    .replace("%uptime%", Util.formatDurationLetters(ManagementFactory.getRuntimeMXBean().getUptime(), true, true));
+                    for (String line : lines) {
+                        line = Util.formatMessage(line
+                                .replace("%username%", Util.getPlayerName(player))
+                                .replace("%health%", "" + Math.round(player.getHealth() * 100) / 100)
+                                .replace("%balance%", "" + Util.formatCurrencyMin(0)) // SpigotPlugin.Instance.eco.getBalance(player)
+                                .replace("%ping%", "" + player.getPing())
+                                .replace("%onlineplayers%", "" + SpigotPlugin.Instance.getServer().getOnlinePlayers().size()))
+                                .replace("%maxplayers%", "" + SpigotPlugin.Instance.getServer().getMaxPlayers())
+                                .replace("%onlineproxyplayers%", "" + ping.onlinePlayers)
+                                .replace("%maxproxyplayers%", "" + ping.maxPlayers)
+                                .replace("%uptime%", Util.formatDurationLetters(ManagementFactory.getRuntimeMXBean().getUptime(), true, true));
 
-                obj.getScore(line).setScore(lines.size() - i);
+                        obj.getScore(line).setScore(lines.size() - i);
 
-                i++;
-            }
-
-            obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-            player.setScoreboard(sb);
-
-            for (Map.Entry<Integer, String> entry : SpigotPlugin.Instance.luckperms.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrefixes().entrySet()) {
-                if (entry.getValue().equals(SpigotPlugin.Instance.luckperms.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrefix())) {
-                    Team team = sb.getTeam("sort" + (100 - entry.getKey()));
-
-                    if (team == null) {
-                        team = sb.registerNewTeam("sort" + (100 - entry.getKey()));
+                        i++;
                     }
 
-                    team.addEntry(player.getName());
+                    obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+                    player.setScoreboard(sb);
+
+                    for (Map.Entry<Integer, String> entry : SpigotPlugin.Instance.luckperms.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrefixes().entrySet()) {
+                        if (entry.getValue().equals(SpigotPlugin.Instance.luckperms.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrefix())) {
+                            Team team = sb.getTeam("sort" + (100 - entry.getKey()));
+
+                            if (team == null) {
+                                team = sb.registerNewTeam("sort" + (100 - entry.getKey()));
+                            }
+
+                            team.addEntry(player.getName());
+                        }
+                    }
                 }
-            }
+            });
         }
     }
 
