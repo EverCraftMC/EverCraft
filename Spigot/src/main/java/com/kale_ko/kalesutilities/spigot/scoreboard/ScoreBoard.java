@@ -69,6 +69,27 @@ public class ScoreBoard {
 
                     obj.setDisplaySlot(DisplaySlot.SIDEBAR);
                     player.setScoreboard(sb);
+                    player.setPlayerListHeaderFooter(
+                            Util.formatMessage(SpigotPlugin.Instance.config.getString("config.tablistHeader")
+                                    .replace("%username%", Util.getPlayerName(player))
+                                    .replace("%health%", "" + Math.round(player.getHealth() * 100) / 100)
+                                    .replace("%balance%", "" + Util.formatCurrencyMin(0)) // SpigotPlugin.Instance.eco.getBalance(player)
+                                    .replace("%ping%", "" + player.getPing())
+                                    .replace("%onlineplayers%", "" + SpigotPlugin.Instance.getServer().getOnlinePlayers().size())
+                                    .replace("%maxplayers%", "" + SpigotPlugin.Instance.getServer().getMaxPlayers())
+                                    .replace("%onlineproxyplayers%", "" + ping.onlinePlayers)
+                                    .replace("%maxproxyplayers%", "" + ping.maxPlayers)
+                                    .replace("%uptime%", Util.formatDurationLetters(ManagementFactory.getRuntimeMXBean().getUptime(), true, true))),
+                            Util.formatMessage(SpigotPlugin.Instance.config.getString("config.tablistFooter")
+                                    .replace("%username%", Util.getPlayerName(player))
+                                    .replace("%health%", "" + Math.round(player.getHealth() * 100) / 100)
+                                    .replace("%balance%", "" + Util.formatCurrencyMin(0)) // SpigotPlugin.Instance.eco.getBalance(player)
+                                    .replace("%ping%", "" + player.getPing())
+                                    .replace("%onlineplayers%", "" + SpigotPlugin.Instance.getServer().getOnlinePlayers().size()))
+                                    .replace("%maxplayers%", "" + SpigotPlugin.Instance.getServer().getMaxPlayers())
+                                    .replace("%onlineproxyplayers%", "" + ping.onlinePlayers)
+                                    .replace("%maxproxyplayers%", "" + ping.maxPlayers)
+                                    .replace("%uptime%", Util.formatDurationLetters(ManagementFactory.getRuntimeMXBean().getUptime(), true, true)));
 
                     for (Map.Entry<Integer, String> entry : SpigotPlugin.Instance.luckperms.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrefixes().entrySet()) {
                         if (entry.getValue().equals(SpigotPlugin.Instance.luckperms.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrefix())) {
