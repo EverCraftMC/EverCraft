@@ -43,7 +43,7 @@ public class ScoreBoard {
                 sb.resetScores(entry);
             }
 
-            ServerPing ping = new ServerPinger(SpigotPlugin.Instance.config.getString("config.proxyHost"), SpigotPlugin.Instance.config.getInt("config.proxyPort"), 2).ping();
+            ServerPing ping = new ServerPinger(SpigotPlugin.Instance.config.getString("config.proxyHost"), SpigotPlugin.Instance.config.getInt("config.proxyPort"), SpigotPlugin.Instance.config.getInt("config.requestTimeout")).ping();
 
             List<String> lines = SpigotPlugin.Instance.config.getStringList("config.scoreboardLines");
             int i = 0;
