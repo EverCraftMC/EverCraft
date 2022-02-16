@@ -1,5 +1,6 @@
 package com.kale_ko.kalesutilities.bungee;
 
+import com.kale_ko.kalesutilities.bungee.broadcast.Broadcast;
 import com.kale_ko.kalesutilities.bungee.commands.info.KalesUtilitiesBungeeCommand;
 import com.kale_ko.kalesutilities.bungee.commands.server.HubCommand;
 import com.kale_ko.kalesutilities.bungee.listeners.GlobalMesageListener;
@@ -24,6 +25,8 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
     public LuckPerms luckperms;
 
+    private Broadcast broadcast;
+
     public DiscordBot bot;
 
     @Override
@@ -37,6 +40,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         config.addDefault("config.prefix", "&6&l[Kales Utilities]&r");
         config.addDefault("config.serverName", "");
         config.addDefault("config.mainServer", "hub");
+        config.addDefault("config.broadcastMessages", Arrays.asList("&3&lMake sure to join our Discord with /discord!"));
         config.addDefault("database.url", "localhost");
         config.addDefault("database.port", "3306");
         config.addDefault("database.database", "minecraft");
@@ -69,6 +73,12 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
         Console.info("Finished loading data");
 
+        Console.info("Loading luckperms integration..");
+
+        luckperms = LuckPermsProvider.get();
+
+        Console.info("Finished loading luckperms integration..");
+
         Console.info("Loading commands..");
 
         getProxy().getPluginManager().registerCommand(this, new KalesUtilitiesBungeeCommand("kalesutilitiesbungee", Arrays.asList("kub", "ksb"), "kalesutilities.commands.info.kalesutilities"));
@@ -84,11 +94,11 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
         Console.info("Finished loading event listeners");
 
-        Console.info("Loading luckperms integration..");
+        Console.info("Loading broadcast..");
 
-        luckperms = LuckPermsProvider.get();
+        broadcast = new Broadcast(config.getLong("broadcastIntervial"));
 
-        Console.info("Finished loading luckperms integration..");
+        Console.info("Finished loading broadcast..");
 
         Console.info("Updating player names..");
 
@@ -130,6 +140,12 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         getProxy().getPluginManager().unregisterListeners(BungeePlugin.Instance);
 
         Console.info("Finished removing event listeners");
+
+        Console.info("Removing broadcast..");
+
+        broadcast.close();
+
+        Console.info("Finished removing broadcast..");
 
         Console.info("Reseting player names..");
 
