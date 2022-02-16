@@ -313,6 +313,16 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         Console.info("Finished closing data");
 
+        Console.info("Removing permissions..");
+
+        for (Permission permission : this.getServer().getPluginManager().getPermissions()) {
+            if (permission.getName().startsWith("kalesutilities.")) {
+                this.getServer().getPluginManager().removePermission(permission);
+            }
+        }
+
+        Console.info("Finished removing permissions");
+
         Console.info("Removing commands..");
 
         for (org.bukkit.command.Command command : ((CraftServer) this.getServer()).getCommandMap().getCommands()) {
