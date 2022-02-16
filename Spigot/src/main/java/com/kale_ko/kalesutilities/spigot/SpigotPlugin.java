@@ -82,6 +82,8 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         config = SpigotConfig.load("config.yml");
 
         config.addDefault("config.serverName", "");
+        config.addDefault("config.proxyHost", "localhost");
+        config.addDefault("config.proxyPort", 25565);
         config.addDefault("config.prefix", "&6&l[Kales Utilities]&r");
         config.addDefault("config.chatFormat", "{prefix}{player} > {message}");
         config.addDefault("config.about", "Kales Minecraft Server!");
