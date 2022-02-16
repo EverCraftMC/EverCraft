@@ -18,6 +18,10 @@ public class SpawnCommand extends SpigotCommand {
     public void run(CommandSender sender, String label, String[] args) {
         if (args.length == 0 && sender instanceof Player player) {
             player.teleport(SpigotPlugin.Instance.spawn.getSerializable(player.getWorld().getName(), Location.class));
+            player.getInventory().clear();
+            for (PotionEffect effect : player.getActivePotionEffects()) {
+                player.removePotionEffect(effect.getType());
+            }
 
             Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.spawned"));
         } else if (args.length == 0) {
