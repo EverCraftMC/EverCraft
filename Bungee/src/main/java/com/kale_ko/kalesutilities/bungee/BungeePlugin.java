@@ -40,6 +40,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         config.addDefault("config.prefix", "&6&l[Kales Utilities]&r");
         config.addDefault("config.serverName", "");
         config.addDefault("config.mainServer", "hub");
+        config.addDefault("config.broadcastIntervial", 900);
         config.addDefault("config.broadcastMessages", Arrays.asList("&3&lMake sure to join our Discord with /discord!"));
         config.addDefault("database.url", "localhost");
         config.addDefault("database.port", "3306");
@@ -96,7 +97,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
         Console.info("Loading broadcast..");
 
-        broadcast = new Broadcast(config.getLong("broadcastIntervial"));
+        broadcast = new Broadcast(config.getLong("config.broadcastIntervial"));
 
         Console.info("Finished loading broadcast..");
 
