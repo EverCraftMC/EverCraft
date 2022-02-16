@@ -35,6 +35,7 @@ import com.kale_ko.kalesutilities.spigot.listeners.ChatFormatListener;
 import com.kale_ko.kalesutilities.spigot.listeners.ChatListener;
 import com.kale_ko.kalesutilities.spigot.listeners.CommandSpyListener;
 import com.kale_ko.kalesutilities.spigot.listeners.GlobalMessageListener;
+import com.kale_ko.kalesutilities.spigot.listeners.MentionListener;
 import com.kale_ko.kalesutilities.spigot.listeners.MuteListener;
 import com.kale_ko.kalesutilities.spigot.listeners.PlayerListener;
 import com.kale_ko.kalesutilities.spigot.listeners.PlayerMoveListener;
@@ -246,6 +247,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
         getServer().getPluginManager().registerEvents(new MuteListener(), this);
         getServer().getPluginManager().registerEvents(new ChatFormatListener(), this);
+        getServer().getPluginManager().registerEvents(new MentionListener(), this);
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
         getServer().getPluginManager().registerEvents(new SeenListener(), this);
         getServer().getPluginManager().registerEvents(new CommandSpyListener(), this);
