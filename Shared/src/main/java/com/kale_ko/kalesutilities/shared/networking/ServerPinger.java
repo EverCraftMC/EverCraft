@@ -7,10 +7,15 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class ServerPinger {
+    private static Runnable pingerRunner;
+    private static Thread pingerThread;
+
     String hostname;
     Integer port;
 
     Integer timeout;
+
+    ServerPing response;
 
     public ServerPinger(String hostname, Integer port, Integer timeout) {
         this.hostname = hostname;
@@ -19,6 +24,29 @@ public class ServerPinger {
     }
 
     public ServerPing ping() {
+        if (pingerThread == null) {
+            pingerRunner = new Runnable() {
+                public void run() {
+                    response = doping();
+                }
+            };
+            pingerThread = new Thread(pingerRunner, "Server Pinger");
+        }
+
+        pingerThread.start();
+        try {
+            pingerThread.join();
+
+            return response;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            pingerThread.interrupt();
+        }
+
+        return null;
+    }
+
+    private ServerPing doping() {
         try {
             Socket socket = new Socket();
             socket.setTcpNoDelay(true);
