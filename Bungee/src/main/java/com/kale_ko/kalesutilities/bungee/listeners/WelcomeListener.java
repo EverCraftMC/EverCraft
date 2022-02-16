@@ -4,7 +4,7 @@ import com.kale_ko.kalesutilities.bungee.BungeePlugin;
 import com.kale_ko.kalesutilities.bungee.Util;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
-import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
@@ -17,10 +17,8 @@ public class WelcomeListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMove(ServerConnectEvent event) {
-        if (event.getReason().equals(ServerConnectEvent.Reason.COMMAND) || event.getReason().equals(ServerConnectEvent.Reason.PLUGIN) || event.getReason().equals(ServerConnectEvent.Reason.PLUGIN_MESSAGE) || event.getReason().equals(ServerConnectEvent.Reason.SERVER_DOWN_REDIRECT) || event.getReason().equals(ServerConnectEvent.Reason.KICK_REDIRECT) || event.getReason().equals(ServerConnectEvent.Reason.LOBBY_FALLBACK)) {
-            Util.broadcastMessage(Util.formatMessage(BungeePlugin.Instance.config.getString("messages.moveMessage").replace("{player}", Util.getPlayerName(event.getPlayer())).replace("{server}", event.getTarget().getName())), true);
-        }
+    public void onPlayerMove(ServerConnectedEvent event) {
+        Util.broadcastMessage(Util.formatMessage(BungeePlugin.Instance.config.getString("messages.moveMessage").replace("{player}", Util.getPlayerName(event.getPlayer())).replace("{server}", event.getServer().getInfo().getName())), true);
     }
 
     @EventHandler

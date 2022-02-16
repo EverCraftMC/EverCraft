@@ -14,7 +14,7 @@ public class MentionListener implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         for (Player player : SpigotPlugin.Instance.getServer().getOnlinePlayers()) {
             if (event.getMessage().contains("@" + player.getName())) {
-                event.setMessage(event.getMessage().replace("@" + player.getName(), Util.formatMessage("&a@") + player.getName() + Util.formatMessage("&r&7")));
+                event.setMessage(event.getMessage().replace("@" + player.getName(), Util.formatMessage("&b@") + player.getName() + Util.formatMessage("&r")));
                 player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 1);
             }
         }
