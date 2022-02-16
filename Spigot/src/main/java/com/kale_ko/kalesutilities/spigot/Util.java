@@ -1,8 +1,12 @@
 package com.kale_ko.kalesutilities.spigot;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -205,5 +209,71 @@ public class Util {
         }
 
         return newMap;
+    }
+
+    private static final String[] currencyLetters = new String[] {
+        "",
+        "",
+        "M",
+        "B",
+        "T"
+    };
+
+    public static String formatCurrencyMin(double currency) {
+        String currencyString = NumberFormat.getCurrencyInstance(Locale.US).format(currency);
+        String currencyMin = currencyString;
+        if (currency > 999999) {
+            currencyMin = currencyString.split(",")[0] + "." + currencyString.split(",")[1].substring(0, 2) + currencyLetters[currencyString.split(",").length - 1];
+        }
+
+        return currencyMin;
+    }
+
+    public static String formatDurationLetters(long durationMillis, boolean suppressLeadingZeroElements, boolean suppressTrailingZeroElements) {
+        String duration = DurationFormatUtils.formatDuration(durationMillis, "d'd 'H'h 'm'm 's's'");
+
+        if (suppressLeadingZeroElements) {
+            duration = " " + duration;
+            String tmp = StringUtils.replaceOnce(duration, " 0d", "");
+
+            if (tmp.length() != duration.length()) {
+                duration = tmp;
+                tmp = StringUtils.replaceOnce(duration, " 0h", "");
+
+                if (tmp.length() != duration.length()) {
+                    duration = tmp;
+                    tmp = StringUtils.replaceOnce(duration, " 0m", "");
+                    duration = tmp;
+
+                    if (tmp.length() != duration.length()) {
+                        duration = StringUtils.replaceOnce(tmp, " 0s", "");
+                    }
+                }
+            }
+
+            if (duration.length() != 0) {
+                duration = duration.substring(1);
+            }
+        }
+
+        if (suppressTrailingZeroElements) {
+            String tmp = StringUtils.replaceOnce(duration, " 0s", "");
+
+            if (tmp.length() != duration.length()) {
+                duration = tmp;
+                tmp = StringUtils.replaceOnce(duration, " 0m", "");
+
+                if (tmp.length() != duration.length()) {
+                    duration = tmp;
+                    tmp = StringUtils.replaceOnce(duration, " 0h", "");
+
+                    if (tmp.length() != duration.length()) {
+                        duration = StringUtils.replaceOnce(tmp, " 0d", "");
+                    }
+                }
+            }
+        }
+
+        return duration.trim();
     }
 }
