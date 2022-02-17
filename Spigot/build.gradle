@@ -2,15 +2,6 @@ plugins {
     id 'java'
 }
 
-sourceCompatibility = JavaVersion.toVersion(project.java_version)
-targetCompatibility = JavaVersion.toVersion(project.java_version)
-
-archivesBaseName = project.plugin_id
-group = "com.kale_ko"
-version = project.plugin_version
-
-configurations.implementation.canBeResolved = true
-
 repositories {
     mavenCentral()
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/public/" }
@@ -30,13 +21,6 @@ dependencies {
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
     compileOnly "net.dv8tion:JDA:${project.jda_version}"
-}
-
-tasks.withType(JavaCompile).configureEach {
-    sourceCompatibility = JavaVersion.toVersion(project.java_version)
-    targetCompatibility = JavaVersion.toVersion(project.java_version)
-
-    options.encoding = "UTF-8"
 }
 
 processResources {
