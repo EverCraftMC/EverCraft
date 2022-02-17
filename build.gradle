@@ -5,24 +5,32 @@ plugins {
 sourceCompatibility = JavaVersion.toVersion(project.java_version)
 targetCompatibility = JavaVersion.toVersion(project.java_version)
 
-archivesBaseName = project.plugin_id
+archivesBaseName = "kalesutilities"
 group = "com.kale_ko"
 version = project.plugin_version
 
-tasks.withType(JavaCompile).configureEach {
+def projects = [":Shared", ":Spigot", ":Bungee"]
+
+projects.collect {
+    project(it).configurations {
+        depencancy
+        depencancy.canBeResolved = true
+
+        compileOnly {
+            extendsFrom depencancy
+        }
+    }
+}
+
+tasks.register("buildAll", Jar) {
     sourceCompatibility = JavaVersion.toVersion(project.java_version)
     targetCompatibility = JavaVersion.toVersion(project.java_version)
 
-    options.encoding = "UTF-8"
-}
-
-def mainProjects = [":Shared", ":Spigot", ":Bungee"]
-tasks.register("buildAll", Jar) {
-    dependsOn mainProjects.collect{ it + ":build" }
+    dependsOn projects.collect{ it + ":build" }
 
     duplicatesStrategy = "exclude"
 
     destinationDirectory = file("\\")
-    from files(mainProjects.collect { project(it).sourceSets.main.output })
-    from files(mainProjects.collect { project(it).configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) } })
+    from files(projects.collect { project(it).sourceSets.main.output })
+    from files(projects.collect { project(it).configurations.depencancy.collect { it.isDirectory() ? it : zipTree(it) } })
 }
