@@ -38,11 +38,15 @@ public class ServerPinger {
             socket.close();
 
             String[] data = rawdata.substring(3).split("§");
-            String motd = data[0];
-            Integer onlinePlayers = Integer.parseInt(data[1].replaceAll("[^0-9]", ""));
-            Integer maxPlayers = Integer.parseInt(data[2].replaceAll("[^0-9]", ""));
+            if (data.length == 3) {
+                String motd = data[0];
+                Integer onlinePlayers = Integer.parseInt(data[1].replaceAll("[^0-9]", ""));
+                Integer maxPlayers = Integer.parseInt(data[2].replaceAll("[^0-9]", ""));
 
-            return new ServerPing(motd, onlinePlayers, maxPlayers);
+                return new ServerPing(motd, onlinePlayers, maxPlayers);
+            } else {
+                throw new RuntimeException("Invalid data received: " + rawdata.toString());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
