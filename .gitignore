@@ -1,10 +1,5 @@
-node_modules
-package-lock.json
-
 build
-out
 bin
-target
 
 .vscode
 .classpath
@@ -12,7 +7,7 @@ target
 .settings
 .gradle
 
-run
 todo.md
 *.jar
 !bukkit-1.18.1.jar
+!gradle-wrapper.jar
