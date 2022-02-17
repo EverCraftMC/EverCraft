@@ -33,7 +33,7 @@ public class ScoreBoard {
         for (Player player : SpigotPlugin.Instance.getServer().getOnlinePlayers()) {
             if (!scoreBoardMap.containsKey(player)) {
                 Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
-                sb.registerNewObjective(player.getName(), "dummy", Util.formatMessage(SpigotPlugin.Instance.config.getString("config.scoreboardTitle")));
+                sb.registerNewObjective(player.getUniqueId().toString(), "dummy", Util.formatMessage(SpigotPlugin.Instance.config.getString("config.scoreboardTitle")));
                 scoreBoardMap.put(player, sb);
             }
 
@@ -58,8 +58,8 @@ public class ScoreBoard {
                                 .replace("%ping%", "" + player.getPing())
                                 .replace("%onlineplayers%", "" + SpigotPlugin.Instance.getServer().getOnlinePlayers().size()))
                                 .replace("%maxplayers%", "" + SpigotPlugin.Instance.getServer().getMaxPlayers())
-                                .replace("%onlineproxyplayers%", "" + ping.onlinePlayers)
-                                .replace("%maxproxyplayers%", "" + ping.maxPlayers)
+                                .replace("%onlineproxyplayers%", "" + ping.getPlayers().getOnline())
+                                .replace("%maxproxyplayers%", "" + ping.getPlayers().getMax())
                                 .replace("%uptime%", Util.formatDurationLetters(ManagementFactory.getRuntimeMXBean().getUptime(), true, true));
 
                         obj.getScore(line).setScore(lines.size() - i);
@@ -77,8 +77,8 @@ public class ScoreBoard {
                                     .replace("%ping%", "" + player.getPing())
                                     .replace("%onlineplayers%", "" + SpigotPlugin.Instance.getServer().getOnlinePlayers().size())
                                     .replace("%maxplayers%", "" + SpigotPlugin.Instance.getServer().getMaxPlayers())
-                                    .replace("%onlineproxyplayers%", "" + ping.onlinePlayers)
-                                    .replace("%maxproxyplayers%", "" + ping.maxPlayers)
+                                    .replace("%onlineproxyplayers%", "" + ping.getPlayers().getOnline())
+                                    .replace("%maxproxyplayers%", "" + ping.getPlayers().getMax())
                                     .replace("%uptime%", Util.formatDurationLetters(ManagementFactory.getRuntimeMXBean().getUptime(), true, true))),
                             Util.formatMessage(SpigotPlugin.Instance.config.getString("config.tablistFooter")
                                     .replace("%username%", Util.getPlayerName(player))
@@ -87,8 +87,8 @@ public class ScoreBoard {
                                     .replace("%ping%", "" + player.getPing())
                                     .replace("%onlineplayers%", "" + SpigotPlugin.Instance.getServer().getOnlinePlayers().size()))
                                     .replace("%maxplayers%", "" + SpigotPlugin.Instance.getServer().getMaxPlayers())
-                                    .replace("%onlineproxyplayers%", "" + ping.onlinePlayers)
-                                    .replace("%maxproxyplayers%", "" + ping.maxPlayers)
+                                    .replace("%onlineproxyplayers%", "" + ping.getPlayers().getOnline())
+                                    .replace("%maxproxyplayers%", "" + ping.getPlayers().getMax())
                                     .replace("%uptime%", Util.formatDurationLetters(ManagementFactory.getRuntimeMXBean().getUptime(), true, true)));
 
                     for (Map.Entry<Integer, String> entry : SpigotPlugin.Instance.luckperms.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrefixes().entrySet()) {
