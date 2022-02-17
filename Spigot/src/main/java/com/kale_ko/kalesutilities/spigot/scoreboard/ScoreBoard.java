@@ -33,7 +33,7 @@ public class ScoreBoard {
         for (Player player : SpigotPlugin.Instance.getServer().getOnlinePlayers()) {
             if (!scoreBoardMap.containsKey(player)) {
                 Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
-                sb.registerNewObjective(player.getUniqueId().toString(), "dummy", Util.formatMessage(SpigotPlugin.Instance.config.getString("config.scoreboardTitle")));
+                sb.registerNewObjective(player.getName().toString(), "dummy", Util.formatMessage(SpigotPlugin.Instance.config.getString("config.scoreboardTitle")));
                 scoreBoardMap.put(player, sb);
             }
 
