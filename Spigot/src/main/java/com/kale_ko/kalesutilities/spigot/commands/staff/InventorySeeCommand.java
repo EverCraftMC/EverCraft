@@ -33,24 +33,19 @@ public class InventorySeeCommand extends SpigotCommand {
             if (player2 != null) {
                 ChestGUI gui = new ChestGUI(args[0] + "'s inventory", 45);
 
-                for (Integer i = 0; i < 36; i++) {
-                    ItemStack stack = player2.getInventory().getItem(i);
-                    gui.addItem(i, stack);
-                }
-
-                ItemStack stack = player2.getInventory().getItem(100);
-                gui.addItem(39, stack);
-
-                stack = player2.getInventory().getItem(101);
-                gui.addItem(38, stack);
-
-                stack = player2.getInventory().getItem(102);
-                gui.addItem(37, stack);
-
-                stack = player2.getInventory().getItem(103);
+                ItemStack stack = player2.getInventory().getHelmet();
                 gui.addItem(36, stack);
 
-                stack = player2.getInventory().getItem(-106);
+                stack = player2.getInventory().getChestplate();
+                gui.addItem(37, stack);
+
+                stack = player2.getInventory().getLeggings();
+                gui.addItem(38, stack);
+
+                stack = player2.getInventory().getBoots();
+                gui.addItem(39, stack);
+
+                stack = player2.getInventory().getItemInOffHand();
                 gui.addItem(40, stack);
 
                 gui.open(player);
