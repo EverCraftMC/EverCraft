@@ -22,7 +22,9 @@ import com.kale_ko.kalesutilities.spigot.commands.player.PvPCommand;
 import com.kale_ko.kalesutilities.spigot.commands.player.SeenCommand;
 import com.kale_ko.kalesutilities.spigot.commands.player.StatusCommand;
 import com.kale_ko.kalesutilities.spigot.commands.staff.CommandSpyCommand;
+import com.kale_ko.kalesutilities.spigot.commands.staff.EnderChestSeeCommand;
 import com.kale_ko.kalesutilities.spigot.commands.staff.GamemodeCommand;
+import com.kale_ko.kalesutilities.spigot.commands.staff.InventorySeeCommand;
 import com.kale_ko.kalesutilities.spigot.commands.staff.StaffChatCommand;
 import com.kale_ko.kalesutilities.spigot.commands.staff.SudoCommand;
 import com.kale_ko.kalesutilities.spigot.commands.warps.SetSpawnCommand;
@@ -196,6 +198,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.economy.setbalance", "Use /setbalance", PermissionDefault.OP));
 
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.gamemode", "Use /gmc", PermissionDefault.OP));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.inventorysee", "Use /inventorysee", PermissionDefault.OP));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.staffchat", "Use /staffchat", PermissionDefault.OP));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.commandspy", "Use /commandspy", PermissionDefault.OP));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.sudo", "Use /sudo", PermissionDefault.OP));
@@ -234,6 +237,8 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new PvPCommand("pvp", "Sets you pvp status", Arrays.asList("setpvp", "togglepvp"), "/pvp", "kalesutilities.commands.player.pvp"));
 
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new GamemodeCommand("gmc", "Sets you gamemode", Arrays.asList("gms", "gma", "gmsp"), "/gm(c, s, a, sp) {player (optional)}", "kalesutilities.commands.staff.gamemode"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new InventorySeeCommand("inventorysee", "View someones inventory", Arrays.asList("invsee"), "/inventorysee {player}", "kalesutilities.commands.staff.inventorysee"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new EnderChestSeeCommand("enderchestsee", "View someones ender chest", Arrays.asList("endersee"), "/enderchestsee {player}", "kalesutilities.commands.staff.inventorysee"));
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new StaffChatCommand("staffchat", "Send a message in the staffchat", Arrays.asList("sc"), "/staffchat {message}", "kalesutilities.commands.staff.staffchat"));
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new CommandSpyCommand("commandspy", "Receive command spy notifications", Arrays.asList("cs"), "/commandspy", "kalesutilities.commands.staff.commandspy"));
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new SudoCommand("sudo", "Make a player say something or run a command", Arrays.asList(), "/sudo {player} {message/command}", "kalesutilities.commands.staff.sudo"));
