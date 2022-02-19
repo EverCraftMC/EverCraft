@@ -18,9 +18,11 @@ public class SpawnCommand extends SpigotCommand {
     public void run(CommandSender sender, String label, String[] args) {
         if (args.length == 0 && sender instanceof Player player) {
             player.teleport(SpigotPlugin.Instance.spawn.getSerializable(player.getWorld().getName(), Location.class));
-            player.getInventory().clear();
-            for (PotionEffect effect : player.getActivePotionEffects()) {
-                player.removePotionEffect(effect.getType());
+            if (SpigotPlugin.Instance.config.getBoolean("config.clearOnWarp")) {
+                player.getInventory().clear();
+                for (PotionEffect effect : player.getActivePotionEffects()) {
+                    player.removePotionEffect(effect.getType());
+                }
             }
 
             Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.spawned"));
@@ -32,9 +34,11 @@ public class SpawnCommand extends SpigotCommand {
 
                 if (player != null) {
                     player.teleport(SpigotPlugin.Instance.spawn.getSerializable(player.getWorld().getName(), Location.class));
-                    player.getInventory().clear();
-                    for (PotionEffect effect : player.getActivePotionEffects()) {
-                        player.removePotionEffect(effect.getType());
+                    if (SpigotPlugin.Instance.config.getBoolean("config.clearOnWarp")) {
+                        player.getInventory().clear();
+                        for (PotionEffect effect : player.getActivePotionEffects()) {
+                            player.removePotionEffect(effect.getType());
+                        }
                     }
 
                     Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.spawnedplayer").replace("{player}", args[0]));
