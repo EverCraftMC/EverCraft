@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import com.google.gson.Gson;
 
 public class ServerPinger {
@@ -118,6 +119,8 @@ public class ServerPinger {
             socket.close();
 
             return response;
+        } catch (SocketTimeoutException e) {
+            return null;
         } catch (IOException e) {
             e.printStackTrace();
         }
