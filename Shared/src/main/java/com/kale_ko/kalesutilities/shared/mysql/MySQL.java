@@ -17,14 +17,6 @@ public class MySQL {
         }
     }
 
-    public MySQL(String url, String database, String username, String password) {
-        try {
-            this.connection = DriverManager.getConnection("jdbc:mysql://" + url + ":3306/" + database + "?autoReconnect=true", username, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void createTable(String name, String data) {
         try {
             String createStatement = "CREATE TABLE IF NOT EXISTS " + name + " " + data + ";";

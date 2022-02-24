@@ -24,50 +24,6 @@ public class ServerPinger {
         this.timeout = timeout;
     }
 
-    public int readVarInt(DataInputStream in) {
-        int i = 0;
-        int j = 0;
-
-        while (true) {
-            try {
-                int k = in.readByte();
-                i |= (k & 0x7F) << j++ * 7;
-
-                if (j > 5) {
-                    throw new RuntimeException("Int too large");
-                } else if ((k & 0x80) != 128) {
-                    break;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return i;
-    }
-
-    public void writeVarInt(DataOutputStream out, int paramInt) {
-        while (true) {
-            if ((paramInt & 0xFFFFFF80) == 0) {
-                try {
-                    out.writeByte(paramInt);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                break;
-            }
-
-            try {
-                out.writeByte(paramInt & 0x7F | 0x80);
-
-                paramInt >>>= 7;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public ServerPing ping() {
         try {
             Socket socket = new Socket();
@@ -126,5 +82,49 @@ public class ServerPinger {
         }
 
         return null;
+    }
+
+    private int readVarInt(DataInputStream in) {
+        int i = 0;
+        int j = 0;
+
+        while (true) {
+            try {
+                int k = in.readByte();
+                i |= (k & 0x7F) << j++ * 7;
+
+                if (j > 5) {
+                    throw new RuntimeException("Int too large");
+                } else if ((k & 0x80) != 128) {
+                    break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return i;
+    }
+
+    private void writeVarInt(DataOutputStream out, int paramInt) {
+        while (true) {
+            if ((paramInt & 0xFFFFFF80) == 0) {
+                try {
+                    out.writeByte(paramInt);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+            }
+
+            try {
+                out.writeByte(paramInt & 0x7F | 0x80);
+
+                paramInt >>>= 7;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
