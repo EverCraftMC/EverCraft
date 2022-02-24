@@ -9,5 +9,5 @@ bin
 
 todo.md
 *.jar
-!bukkit-1.18.1.jar
+!lib/*.jar
 !gradle-wrapper.jar
