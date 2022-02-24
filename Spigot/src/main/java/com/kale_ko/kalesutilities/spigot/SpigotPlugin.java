@@ -2,8 +2,12 @@ package com.kale_ko.kalesutilities.spigot;
 
 import com.kale_ko.kalesutilities.shared.Plugin;
 import com.kale_ko.kalesutilities.shared.discord.DiscordBot;
+import com.kale_ko.kalesutilities.shared.economy.EconomyManager;
 import com.kale_ko.kalesutilities.shared.mysql.MySQLConfig;
 import com.kale_ko.kalesutilities.shared.util.ParamRunnable;
+import com.kale_ko.kalesutilities.spigot.commands.economy.BalanceCommand;
+import com.kale_ko.kalesutilities.spigot.commands.economy.BalanceTopCommand;
+import com.kale_ko.kalesutilities.spigot.commands.economy.EconomyCommand;
 import com.kale_ko.kalesutilities.spigot.commands.info.AboutCommand;
 import com.kale_ko.kalesutilities.spigot.commands.info.HelpCommand;
 import com.kale_ko.kalesutilities.spigot.commands.info.KalesUtilitiesCommand;
@@ -70,6 +74,8 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
     public SpigotConfig kits;
 
     public LuckPerms luckperms;
+
+    public EconomyManager eco;
 
     private ScoreBoard scoreboard;
 
@@ -170,7 +176,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.warps.*", "Use warp commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.warps.spawn", "kalesutilities.commands.warps.setspawn", "kalesutilities.commands.warps.warp", "kalesutilities.commands.warps.warps", "kalesutilities.commands.warps.setwarp"), Arrays.asList(true, true, true, true, true))));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.kits.*", "Use kit commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.kits.kit", "kalesutilities.commands.kits.kits"), Arrays.asList(true, true))));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.*", "Use player commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.player.seen", "kalesutilities.commands.player.nickname", "kalesutilities.commands.player.status"), Arrays.asList(true, true, true))));
-        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.economy.*", "Use economy commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.economy.balance", "kalesutilities.commands.economy.setbalance"), Arrays.asList(true, true))));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.economy.*", "Use economy commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.economy.balance", "kalesutilities.commands.economy.balancetop", "kalesutilities.commands.economy.economy"), Arrays.asList(true, true, true))));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.*", "Use staff commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.staff.gamemode", "kalesutilities.commands.staff.staffchat", "kalesutilities.commands.staff.commandspy", "kalesutilities.commands.staff.sudo"), Arrays.asList(true, true, true, true))));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.moderation.*", "Use moderation commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("kalesutilities.commands.moderation.kick", "kalesutilities.commands.moderation.ban", "kalesutilities.commands.moderation.mute"), Arrays.asList(true, true, true))));
 
@@ -196,7 +202,8 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.player.pvp", "Use /pvp", PermissionDefault.TRUE));
 
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.economy.balance", "Use /balance", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.economy.setbalance", "Use /setbalance", PermissionDefault.OP));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.economy.balancetop", "Use /balancetop", PermissionDefault.TRUE));
+        this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.economy.economy", "Use /economy", PermissionDefault.OP));
 
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.gamemode", "Use /gmc", PermissionDefault.OP));
         this.getServer().getPluginManager().addPermission(new Permission("kalesutilities.commands.staff.inventorysee", "Use /inventorysee", PermissionDefault.OP));
@@ -236,6 +243,10 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new NicknameCommand("nickname", "Sets you nickname", Arrays.asList("nick", "setnickname", "setnick"), "/nickname {player (optional)} {nickname}", "kalesutilities.commands.player.nickname"));
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new StatusCommand("status", "Sets you status", Arrays.asList("setstatus"), "/status {status}", "kalesutilities.commands.player.status"));
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new PvPCommand("pvp", "Sets you pvp status", Arrays.asList("setpvp", "togglepvp"), "/pvp", "kalesutilities.commands.player.pvp"));
+
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new BalanceCommand("balance", "Check your balance", Arrays.asList("bal"), "/balance", "kalesutilities.commands.economy.balance"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new BalanceTopCommand("balancetop", "Check the top balances", Arrays.asList("baltop"), "/balancetop", "kalesutilities.commands.economy.balancetop"));
+        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new EconomyCommand("economy", "Manage the economy", Arrays.asList("eco"), "/economy", "kalesutilities.commands.economy.economy"));
 
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new GamemodeCommand("gmc", "Sets you gamemode", Arrays.asList("gms", "gma", "gmsp"), "/gm(c, s, a, sp) {player (optional)}", "kalesutilities.commands.staff.gamemode"));
         ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new InventorySeeCommand("inventorysee", "View someones inventory", Arrays.asList("invsee"), "/inventorysee {player}", "kalesutilities.commands.staff.inventorysee"));
@@ -284,6 +295,12 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         luckperms = LuckPermsProvider.get();
 
         Console.info("Finished loading luckperms integration..");
+
+        Console.info("Loading economy..");
+
+        eco = new EconomyManager(players);
+
+        Console.info("Finished loading economy..");
 
         Console.info("Updating player names..");
 
