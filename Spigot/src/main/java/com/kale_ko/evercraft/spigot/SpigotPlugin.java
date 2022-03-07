@@ -4,6 +4,7 @@ import com.kale_ko.evercraft.shared.Plugin;
 import com.kale_ko.evercraft.shared.discord.DiscordBot;
 import com.kale_ko.evercraft.shared.economy.EconomyManager;
 import com.kale_ko.evercraft.shared.mysql.MySQLConfig;
+import com.kale_ko.evercraft.shared.updater.Updater;
 import com.kale_ko.evercraft.shared.util.ParamRunnable;
 import com.kale_ko.evercraft.spigot.commands.economy.BalanceCommand;
 import com.kale_ko.evercraft.spigot.commands.economy.BalanceTopCommand;
@@ -51,6 +52,11 @@ import com.kale_ko.evercraft.spigot.listeners.SignEditorListener;
 import com.kale_ko.evercraft.spigot.listeners.SpawnListener;
 import com.kale_ko.evercraft.spigot.listeners.WelcomeListener;
 import com.kale_ko.evercraft.spigot.scoreboard.ScoreBoard;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.logging.Logger;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
@@ -58,6 +64,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.InvalidPluginException;
+import org.bukkit.plugin.UnknownDependencyException;
 import org.bukkit.plugin.java.JavaPlugin;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -80,6 +88,55 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
     private ScoreBoard scoreboard;
 
     public DiscordBot bot;
+
+    @Override
+    public void onLoad() {
+        Console.info("Checking for updates..");
+
+        File dataFolder = getDataFolder();
+        if (!dataFolder.exists()) {
+            dataFolder.mkdir();
+        }
+
+        File file = new File(Paths.get(dataFolder.getAbsolutePath(), "token.txt").toString());
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String token = reader.readLine();
+            reader.close();
+
+            Updater updater = new Updater("EverCraft-MC/EverCraft", token, Paths.get(getFile().getParentFile().getAbsolutePath(), "plugins").toString());
+
+            if (updater.check(getDescription().getVersion())) {
+                Console.info("Found new version, downloading..");
+
+                File pluginfile = updater.update();
+
+                Console.info("Finished downloading new version");
+
+                Console.info("Attempting to reload plugin..");
+
+                getPluginLoader().disablePlugin(this);
+
+                try {
+                    getPluginLoader().loadPlugin(pluginfile);
+                } catch (UnknownDependencyException | InvalidPluginException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Console.info("Plugin is up to date");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onEnable() {
@@ -167,99 +224,99 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         Console.info("Loading permissions..");
 
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.*", "Use everything", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.*", "evercraft.features.*"), Arrays.asList(true, true))));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.*", "Use everything", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.*", "evercraft.features.*"), Arrays.asList(true, true))));
 
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.*", "Use all commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.info.*", "evercraft.commands.warps.*", "evercraft.commands.kits.*", "evercraft.commands.player.*", "evercraft.commands.economy.*", "evercraft.commands.staff.*", "evercraft.commands.moderation.*"), Arrays.asList(true, true, true, true, true, true, true))));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.features.*", "Use all features", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.features.colorchat", "evercraft.features.colorsigns", "evercraft.features.editsigns"), Arrays.asList(true, true, true))));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.*", "Use all commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.info.*", "evercraft.commands.warps.*", "evercraft.commands.kits.*", "evercraft.commands.player.*", "evercraft.commands.economy.*", "evercraft.commands.staff.*", "evercraft.commands.moderation.*"), Arrays.asList(true, true, true, true, true, true, true))));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.features.*", "Use all features", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.features.colorchat", "evercraft.features.colorsigns", "evercraft.features.editsigns"), Arrays.asList(true, true, true))));
 
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.*", "Use info commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.info.evercraft","evercraft.commands.info.help", "evercraft.commands.info.about", "evercraft.commands.info.rules", "evercraft.commands.info.staff", "evercraft.commands.info.list"), Arrays.asList(true, true, true, true, true, true))));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.warps.*", "Use warp commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.warps.spawn", "evercraft.commands.warps.setspawn", "evercraft.commands.warps.warp", "evercraft.commands.warps.warps", "evercraft.commands.warps.setwarp"), Arrays.asList(true, true, true, true, true))));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.kits.*", "Use kit commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.kits.kit", "evercraft.commands.kits.kits"), Arrays.asList(true, true))));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.player.*", "Use player commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.player.seen", "evercraft.commands.player.nickname", "evercraft.commands.player.status"), Arrays.asList(true, true, true))));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.economy.*", "Use economy commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.economy.balance", "evercraft.commands.economy.balancetop", "evercraft.commands.economy.economy"), Arrays.asList(true, true, true))));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.*", "Use staff commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.staff.gamemode", "evercraft.commands.staff.staffchat", "evercraft.commands.staff.commandspy", "evercraft.commands.staff.sudo"), Arrays.asList(true, true, true, true))));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.moderation.*", "Use moderation commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.moderation.kick", "evercraft.commands.moderation.ban", "evercraft.commands.moderation.mute"), Arrays.asList(true, true, true))));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.*", "Use info commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.info.evercraft","evercraft.commands.info.help", "evercraft.commands.info.about", "evercraft.commands.info.rules", "evercraft.commands.info.staff", "evercraft.commands.info.list"), Arrays.asList(true, true, true, true, true, true))));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.warps.*", "Use warp commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.warps.spawn", "evercraft.commands.warps.setspawn", "evercraft.commands.warps.warp", "evercraft.commands.warps.warps", "evercraft.commands.warps.setwarp"), Arrays.asList(true, true, true, true, true))));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.kits.*", "Use kit commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.kits.kit", "evercraft.commands.kits.kits"), Arrays.asList(true, true))));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.player.*", "Use player commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.player.seen", "evercraft.commands.player.nickname", "evercraft.commands.player.status"), Arrays.asList(true, true, true))));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.economy.*", "Use economy commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.economy.balance", "evercraft.commands.economy.balancetop", "evercraft.commands.economy.economy"), Arrays.asList(true, true, true))));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.*", "Use staff commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.staff.gamemode", "evercraft.commands.staff.staffchat", "evercraft.commands.staff.commandspy", "evercraft.commands.staff.sudo"), Arrays.asList(true, true, true, true))));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.moderation.*", "Use moderation commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.moderation.kick", "evercraft.commands.moderation.ban", "evercraft.commands.moderation.mute"), Arrays.asList(true, true, true))));
 
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.evercraft", "Use /evercraft", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.help", "Use /help", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.about", "Use /about", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.rules", "Use /rules", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.staff", "Use /staff", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.list", "Use /list", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.evercraft", "Use /evercraft", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.help", "Use /help", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.about", "Use /about", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.rules", "Use /rules", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.staff", "Use /staff", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.list", "Use /list", PermissionDefault.TRUE));
 
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.warps.spawn", "Use /spawn", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.warps.setspawn", "Use /setspawn", PermissionDefault.OP));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.warps.warp", "Use /warp", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.warps.warps", "Use /warps", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.warps.setwarp", "Use /setwarp", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.warps.spawn", "Use /spawn", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.warps.setspawn", "Use /setspawn", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.warps.warp", "Use /warp", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.warps.warps", "Use /warps", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.warps.setwarp", "Use /setwarp", PermissionDefault.OP));
 
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.kits.kit", "Use /kit", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.kits.kits", "Use /kits", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.kits.kit", "Use /kit", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.kits.kits", "Use /kits", PermissionDefault.TRUE));
 
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.player.seen", "Use /seen", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.player.nickname", "Use /nickname", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.player.status", "Use /status", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.player.pvp", "Use /pvp", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.player.seen", "Use /seen", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.player.nickname", "Use /nickname", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.player.status", "Use /status", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.player.pvp", "Use /pvp", PermissionDefault.TRUE));
 
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.economy.balance", "Use /balance", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.economy.balancetop", "Use /balancetop", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.economy.economy", "Use /economy", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.economy.balance", "Use /balance", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.economy.balancetop", "Use /balancetop", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.economy.economy", "Use /economy", PermissionDefault.OP));
 
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode", "Use /gmc", PermissionDefault.OP));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.inventorysee", "Use /inventorysee", PermissionDefault.OP));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.staffchat", "Use /staffchat", PermissionDefault.OP));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.commandspy", "Use /commandspy", PermissionDefault.OP));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.sudo", "Use /sudo", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode", "Use /gmc", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.inventorysee", "Use /inventorysee", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.staffchat", "Use /staffchat", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.commandspy", "Use /commandspy", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.sudo", "Use /sudo", PermissionDefault.OP));
 
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.moderation.kick", "Use /prefix", PermissionDefault.OP));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.moderation.ban", "Use /prefix", PermissionDefault.OP));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.commands.moderation.mute", "Use /prefix", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.moderation.kick", "Use /prefix", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.moderation.ban", "Use /prefix", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.moderation.mute", "Use /prefix", PermissionDefault.OP));
 
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.features.colorchat", "Color you chat", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.features.colorsigns", "Color you sings", PermissionDefault.TRUE));
-        this.getServer().getPluginManager().addPermission(new Permission("evercraft.features.editsigns", "Edit you sings", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.features.colorchat", "Color you chat", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.features.colorsigns", "Color you sings", PermissionDefault.TRUE));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.features.editsigns", "Edit you sings", PermissionDefault.OP));
 
         Console.info("Finished loading permissions");
 
         Console.info("Loading commands..");
 
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new EverCraftCommand("evercraft", "The main plugin command for EverCraft", Arrays.asList("ku", "ks"), "/evercraft [help, reload]", "evercraft.commands.info.evercraft"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new HelpCommand("help", "See the help", Arrays.asList("h", "howto"), "/help {player (optional)}", "evercraft.commands.info.help"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new AboutCommand("about", "See the about", Arrays.asList("info", "ip", "discord", "apply", "feedback"), "/about {player (optional)}", "evercraft.commands.info.about"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new RulesCommand("rules", "See the rules", Arrays.asList("ruleslist"), "/rules {player (optional)}", "evercraft.commands.info.rules"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new StaffCommand("staff", "See the staff", Arrays.asList("stafflist"), "/staff {player (optional)}", "evercraft.commands.info.staff"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new ListCommand("list", "See the list", Arrays.asList("players", "playerlist", "listplayers"), "/list {player (optional)}", "evercraft.commands.info.list"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new EverCraftCommand("evercraft", "The main plugin command for EverCraft", Arrays.asList("ku", "ks"), "/evercraft [help, reload]", "evercraft.commands.info.evercraft"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new HelpCommand("help", "See the help", Arrays.asList("h", "howto"), "/help {player (optional)}", "evercraft.commands.info.help"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new AboutCommand("about", "See the about", Arrays.asList("info", "ip", "discord", "apply", "feedback"), "/about {player (optional)}", "evercraft.commands.info.about"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new RulesCommand("rules", "See the rules", Arrays.asList("ruleslist"), "/rules {player (optional)}", "evercraft.commands.info.rules"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new StaffCommand("staff", "See the staff", Arrays.asList("stafflist"), "/staff {player (optional)}", "evercraft.commands.info.staff"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new ListCommand("list", "See the list", Arrays.asList("players", "playerlist", "listplayers"), "/list {player (optional)}", "evercraft.commands.info.list"));
 
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new SpawnCommand("spawn", "Go to the spawn", Arrays.asList(), "/spawn {player (optional)}", "evercraft.commands.warps.spawn"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new SetSpawnCommand("setspawn", "Sets the spawn to your location", Arrays.asList(), "/setspawn", "evercraft.commands.warps.setspawn"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new WarpCommand("warp", "Go to a warp", Arrays.asList(), "/warp {player (optional)} {warp}", "evercraft.commands.warps.warp"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new WarpsCommand("warps", "List the warps", Arrays.asList("listwarps", "warpslist"), "/warps {player (optional)}", "evercraft.commands.warps.warps"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new SetWarpCommand("setwarp", "Sets a warp at your location", Arrays.asList(), "/setwarp {warp}", "evercraft.commands.warps.setwarp"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new SpawnCommand("spawn", "Go to the spawn", Arrays.asList(), "/spawn {player (optional)}", "evercraft.commands.warps.spawn"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new SetSpawnCommand("setspawn", "Sets the spawn to your location", Arrays.asList(), "/setspawn", "evercraft.commands.warps.setspawn"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new WarpCommand("warp", "Go to a warp", Arrays.asList(), "/warp {player (optional)} {warp}", "evercraft.commands.warps.warp"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new WarpsCommand("warps", "List the warps", Arrays.asList("listwarps", "warpslist"), "/warps {player (optional)}", "evercraft.commands.warps.warps"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new SetWarpCommand("setwarp", "Sets a warp at your location", Arrays.asList(), "/setwarp {warp}", "evercraft.commands.warps.setwarp"));
 
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new KitCommand("kit", "Get a kit", Arrays.asList("getkit"), "/kit {player (optional)} {kit}", "evercraft.commands.kits.kit"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new KitsCommand("kits", "List the kits", Arrays.asList("listkits", "kitslist"), "/kits {player (optional)}", "evercraft.commands.kits.kits"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new KitCommand("kit", "Get a kit", Arrays.asList("getkit"), "/kit {player (optional)} {kit}", "evercraft.commands.kits.kit"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new KitsCommand("kits", "List the kits", Arrays.asList("listkits", "kitslist"), "/kits {player (optional)}", "evercraft.commands.kits.kits"));
 
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new SeenCommand("seen", "See when a player was last online", Arrays.asList("lastseen", "online", "lastonline"), "/seen {player}", "evercraft.commands.player.seen"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new NicknameCommand("nickname", "Sets you nickname", Arrays.asList("nick", "setnickname", "setnick"), "/nickname {player (optional)} {nickname}", "evercraft.commands.player.nickname"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new StatusCommand("status", "Sets you status", Arrays.asList("setstatus"), "/status {status}", "evercraft.commands.player.status"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new PvPCommand("pvp", "Sets you pvp status", Arrays.asList("setpvp", "togglepvp"), "/pvp", "evercraft.commands.player.pvp"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new SeenCommand("seen", "See when a player was last online", Arrays.asList("lastseen", "online", "lastonline"), "/seen {player}", "evercraft.commands.player.seen"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new NicknameCommand("nickname", "Sets you nickname", Arrays.asList("nick", "setnickname", "setnick"), "/nickname {player (optional)} {nickname}", "evercraft.commands.player.nickname"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new StatusCommand("status", "Sets you status", Arrays.asList("setstatus"), "/status {status}", "evercraft.commands.player.status"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new PvPCommand("pvp", "Sets you pvp status", Arrays.asList("setpvp", "togglepvp"), "/pvp", "evercraft.commands.player.pvp"));
 
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new BalanceCommand("balance", "Check your balance", Arrays.asList("bal"), "/balance", "evercraft.commands.economy.balance"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new BalanceTopCommand("balancetop", "Check the top balances", Arrays.asList("baltop"), "/balancetop", "evercraft.commands.economy.balancetop"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new EconomyCommand("economy", "Manage the economy", Arrays.asList("eco"), "/economy", "evercraft.commands.economy.economy"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new BalanceCommand("balance", "Check your balance", Arrays.asList("bal"), "/balance", "evercraft.commands.economy.balance"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new BalanceTopCommand("balancetop", "Check the top balances", Arrays.asList("baltop"), "/balancetop", "evercraft.commands.economy.balancetop"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new EconomyCommand("economy", "Manage the economy", Arrays.asList("eco"), "/economy", "evercraft.commands.economy.economy"));
 
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new GamemodeCommand("gmc", "Sets you gamemode", Arrays.asList("gms", "gma", "gmsp"), "/gm(c, s, a, sp) {player (optional)}", "evercraft.commands.staff.gamemode"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new InventorySeeCommand("inventorysee", "View someones inventory", Arrays.asList("invsee"), "/inventorysee {player}", "evercraft.commands.staff.inventorysee"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new EnderChestSeeCommand("enderchestsee", "View someones ender chest", Arrays.asList("endersee"), "/enderchestsee {player}", "evercraft.commands.staff.inventorysee"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new StaffChatCommand("staffchat", "Send a message in the staffchat", Arrays.asList("sc"), "/staffchat {message}", "evercraft.commands.staff.staffchat"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new CommandSpyCommand("commandspy", "Receive command spy notifications", Arrays.asList("cs"), "/commandspy", "evercraft.commands.staff.commandspy"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new SudoCommand("sudo", "Make a player say something or run a command", Arrays.asList(), "/sudo {player} {message/command}", "evercraft.commands.staff.sudo"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new GamemodeCommand("gmc", "Sets you gamemode", Arrays.asList("gms", "gma", "gmsp"), "/gm(c, s, a, sp) {player (optional)}", "evercraft.commands.staff.gamemode"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new InventorySeeCommand("inventorysee", "View someones inventory", Arrays.asList("invsee"), "/inventorysee {player}", "evercraft.commands.staff.inventorysee"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new EnderChestSeeCommand("enderchestsee", "View someones ender chest", Arrays.asList("endersee"), "/enderchestsee {player}", "evercraft.commands.staff.inventorysee"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new StaffChatCommand("staffchat", "Send a message in the staffchat", Arrays.asList("sc"), "/staffchat {message}", "evercraft.commands.staff.staffchat"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new CommandSpyCommand("commandspy", "Receive command spy notifications", Arrays.asList("cs"), "/commandspy", "evercraft.commands.staff.commandspy"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new SudoCommand("sudo", "Make a player say something or run a command", Arrays.asList(), "/sudo {player} {message/command}", "evercraft.commands.staff.sudo"));
 
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new KickCommand("kick", "Kick a player from the server", Arrays.asList("boot"), "/kick {player} {message}", "evercraft.commands.moderation.kick"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new BanCommand("ban", "Ban a player from the server", Arrays.asList("permban"), "/ban {player} {message}", "evercraft.commands.moderation.ban"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new UnbanCommand("unban", "Unban a player from the server", Arrays.asList(), "/unban {player}", "evercraft.commands.moderation.ban"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new MuteCommand("mute", "Mute a player on the server", Arrays.asList("permmute"), "/mute {player} {message}", "evercraft.commands.moderation.mute"));
-        ((CraftServer) this.getServer()).getCommandMap().register(this.getName(), new UnmuteCommand("unmute", "Unmute a player on the server", Arrays.asList(), "/unmute {player}", "evercraft.commands.moderation.mute"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new KickCommand("kick", "Kick a player from the server", Arrays.asList("boot"), "/kick {player} {message}", "evercraft.commands.moderation.kick"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new BanCommand("ban", "Ban a player from the server", Arrays.asList("permban"), "/ban {player} {message}", "evercraft.commands.moderation.ban"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new UnbanCommand("unban", "Unban a player from the server", Arrays.asList(), "/unban {player}", "evercraft.commands.moderation.ban"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new MuteCommand("mute", "Mute a player on the server", Arrays.asList("permmute"), "/mute {player} {message}", "evercraft.commands.moderation.mute"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new UnmuteCommand("unmute", "Unmute a player on the server", Arrays.asList(), "/unmute {player}", "evercraft.commands.moderation.mute"));
 
         Console.info("Finished loading commands");
 
@@ -320,13 +377,13 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
             @Override
             public void run() {
-                Util.broadcastMessage(config.getString("messages.discord").replace("{sender}", this.sender).replace("{message}", this.message), true);
+                Util.broadcastMessage(config.getString("messages.discord").replace("{sender}", sender).replace("{message}", message), true);
             }
 
             @Override
             public void init(Object... params) {
-                this.sender = (String) params[0];
-                this.message = (String) params[1];
+                sender = (String) params[0];
+                message = (String) params[1];
             }
         });
     }
@@ -335,15 +392,15 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
     public void onDisable() {
         Console.info("Closing data..");
 
-        this.players.close();
+        players.close();
 
         Console.info("Finished closing data");
 
         Console.info("Removing permissions..");
 
-        for (Permission permission : this.getServer().getPluginManager().getPermissions()) {
+        for (Permission permission : getServer().getPluginManager().getPermissions()) {
             if (permission.getName().startsWith("evercraft.")) {
-                this.getServer().getPluginManager().removePermission(permission);
+                getServer().getPluginManager().removePermission(permission);
             }
         }
 
@@ -351,9 +408,9 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         Console.info("Removing commands..");
 
-        for (org.bukkit.command.Command command : ((CraftServer) this.getServer()).getCommandMap().getCommands()) {
-            if (command.getLabel().startsWith(this.getName())) {
-                command.unregister(((CraftServer) this.getServer()).getCommandMap());
+        for (org.bukkit.command.Command command : ((CraftServer) getServer()).getCommandMap().getCommands()) {
+            if (command.getLabel().startsWith(getName())) {
+                command.unregister(((CraftServer) getServer()).getCommandMap());
             }
         }
 
@@ -364,7 +421,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         getServer().getMessenger().unregisterOutgoingPluginChannel(this);
         getServer().getMessenger().unregisterIncomingPluginChannel(this);
 
-        HandlerList.unregisterAll(SpigotPlugin.Instance);
+        HandlerList.unregisterAll(this);
 
         Console.info("Finished removing event listeners");
 
@@ -391,11 +448,11 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         Console.info("Disabling..");
 
-        this.onDisable();
+        onDisable();
 
         Console.info("Enabling..");
 
-        this.onEnable();
+        onEnable();
 
         Console.info("Finished reloading");
     }
