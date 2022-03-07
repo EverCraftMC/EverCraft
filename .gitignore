@@ -9,5 +9,5 @@ bin
 
 todo.md
 *.jar
-!lib/*.jar
+!*/lib/*.jar
 !gradle-wrapper.jar
