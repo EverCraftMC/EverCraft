@@ -5,7 +5,7 @@ plugins {
 sourceCompatibility = JavaVersion.toVersion(project.java_version)
 targetCompatibility = JavaVersion.toVersion(project.java_version)
 
-archivesBaseName = "kalesutilities"
+archivesBaseName = "evercraft"
 group = "com.kale_ko"
 version = project.plugin_version
 

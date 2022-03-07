@@ -15,7 +15,7 @@ dependencies {
     compileOnly project(':Shared')
 
     compileOnly "org.spigotmc:spigot-api:${project.minecraft_version}-${project.spigot_version}"
-    compileOnly name: "bukkit-${project.minecraft_version}"
+    compileOnly name: "craftbukkit-${project.minecraft_version}"
     compileOnly "com.mojang:authlib:${project.authlib_version}"
     compileOnly "com.mojang:brigadier:${project.brigadier_version}"
 

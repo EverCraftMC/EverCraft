@@ -1,4 +1,4 @@
-rootProject.name = 'Kales-Utilites'
+rootProject.name = 'EverCraft'
 
 include 'Shared'
 include 'Spigot'

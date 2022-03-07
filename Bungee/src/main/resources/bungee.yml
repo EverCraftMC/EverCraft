@@ -1,9 +1,9 @@
-main: com.kale_ko.kalesutilities.bungee.BungeePlugin
+main: com.kale_ko.evercraft.bungee.SpigotPlugin
 
-name: KalesUtilities
+name: EverCraft
 version: ${plugin_version}
-description: A custom plugin to run on KalesMC
+description: A custom plugin to run on EverCraft
 author: Kale Ko
-website: https://github.com/Kale-Ko/Kales-Utilities-V2
+website: https://github.com/EverCraft-MC/EverCraft
 
 depend: [LuckPerms]
