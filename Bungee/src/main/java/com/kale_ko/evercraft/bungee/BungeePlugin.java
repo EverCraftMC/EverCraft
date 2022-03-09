@@ -113,6 +113,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         config.addDefault("messages.help", "\n{commandList}");
         config.addDefault("messages.list", "\n{playerList}");
         config.addDefault("messages.reload", "Config Reloaded");
+        config.addDefault("messages.discord", "&b&l[Discord] &r{sender} > {message}");
 
         config.copyDefaults();
 
@@ -164,11 +165,19 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         Console.info("Starting Discord bot");
 
         bot = new DiscordBot(config.getString("discord.token"), config.getString("discord.serverID"), config.getString("discord.channelID"), new ParamRunnable() {
-            @Override
-            public void run() { }
+            private String sender;
+            private String message;
 
             @Override
-            public void init(Object... params) { }
+            public void run() {
+                Util.broadcastMessage(config.getString("messages.discord").replace("{sender}", sender).replace("{message}", message), true);
+            }
+
+            @Override
+            public void init(Object... params) {
+                sender = (String) params[0];
+                message = (String) params[1];
+            }
         });
     }
 

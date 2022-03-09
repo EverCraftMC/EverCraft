@@ -1,11 +1,9 @@
 package com.kale_ko.evercraft.spigot;
 
 import com.kale_ko.evercraft.shared.Plugin;
-import com.kale_ko.evercraft.shared.discord.DiscordBot;
 import com.kale_ko.evercraft.shared.economy.EconomyManager;
 import com.kale_ko.evercraft.shared.mysql.MySQLConfig;
 import com.kale_ko.evercraft.shared.updater.Updater;
-import com.kale_ko.evercraft.shared.util.ParamRunnable;
 import com.kale_ko.evercraft.spigot.commands.economy.BalanceCommand;
 import com.kale_ko.evercraft.spigot.commands.economy.BalanceTopCommand;
 import com.kale_ko.evercraft.spigot.commands.economy.EconomyCommand;
@@ -86,8 +84,6 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
     public EconomyManager eco;
 
     private ScoreBoard scoreboard;
-
-    public DiscordBot bot;
 
     @Override
     public void onLoad() {
@@ -176,7 +172,6 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         config.addDefault("messages.usage", "Usage: {usage}");
         config.addDefault("messages.joinMessage", "");
         config.addDefault("messages.quitMessage", "");
-        config.addDefault("messages.discord", "&b&l[Discord] &r{sender} > {message}");
         config.addDefault("messages.help", "\n{commandList}");
         config.addDefault("messages.list", "\n{playerList}");
         config.addDefault("messages.reload", "Config Reloaded");
@@ -368,24 +363,6 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         Console.info("Finished updating player names");
 
         Console.info("Finished enabling");
-
-        Console.info("Starting Discord bot");
-
-        bot = new DiscordBot(config.getString("discord.token"), config.getString("discord.serverID"), config.getString("discord.channelID"), new ParamRunnable() {
-            private String sender;
-            private String message;
-
-            @Override
-            public void run() {
-                Util.broadcastMessage(config.getString("messages.discord").replace("{sender}", sender).replace("{message}", message), true);
-            }
-
-            @Override
-            public void init(Object... params) {
-                sender = (String) params[0];
-                message = (String) params[1];
-            }
-        });
     }
 
     @Override
