@@ -6,17 +6,23 @@ import com.kale_ko.evercraft.bungee.commands.server.HubCommand;
 import com.kale_ko.evercraft.bungee.listeners.GlobalMesageListener;
 import com.kale_ko.evercraft.bungee.listeners.PlayerJoinListener;
 import com.kale_ko.evercraft.bungee.listeners.WelcomeListener;
+import com.kale_ko.evercraft.bungee.websocket.PlayerSample;
+import com.kale_ko.evercraft.bungee.websocket.PlayersWebSocketMessage;
+import com.kale_ko.evercraft.bungee.websocket.VersionsWebSocketMessage;
 import com.kale_ko.evercraft.shared.discord.DiscordBot;
 import com.kale_ko.evercraft.shared.mysql.MySQLConfig;
 import com.kale_ko.evercraft.shared.updater.Updater;
 import com.kale_ko.evercraft.shared.util.ParamRunnable;
+import com.kale_ko.evercraft.shared.websocket.TextWebSocketMessage;
 import com.kale_ko.evercraft.shared.websocket.WebSocket;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -187,6 +193,60 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         Console.info("Starting messager");
 
         messager = new WebSocket(config.getInt("messagerPort"));
+
+        messager.registerListener("motd", new ParamRunnable() {
+            private String channel;
+            private String clientId;
+
+            @Override
+            public void run() {
+                messager.sendMessage(clientId, channel, new TextWebSocketMessage("server", channel, getProxy().getConfigurationAdapter().getListeners().iterator().next().getMotd()));
+            }
+
+            @Override
+            public void init(Object... params) {
+                channel = (String) params[0];
+                clientId = (String) params[1];
+            }
+        });
+
+        messager.registerListener("players", new ParamRunnable() {
+            private String channel;
+            private String clientId;
+
+            @Override
+            public void run() {
+                List<PlayerSample> playerSamples = new ArrayList<PlayerSample>();
+
+                for (ProxiedPlayer player : getProxy().getPlayers()) {
+                    playerSamples.add(new PlayerSample(player.getUniqueId().toString(), player.getName()));
+                }
+
+                messager.sendMessage(clientId, channel, new PlayersWebSocketMessage("server", channel, getProxy().getOnlineCount(), getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers(), playerSamples));
+            }
+
+            @Override
+            public void init(Object... params) {
+                channel = (String) params[0];
+                clientId = (String) params[1];
+            }
+        });
+
+        messager.registerListener("versions", new ParamRunnable() {
+            private String channel;
+            private String clientId;
+
+            @Override
+            public void run() {
+                messager.sendMessage(clientId, channel, new VersionsWebSocketMessage("server", channel, getProxy().getVersion(), getProxy().getProtocolVersion() + ""));
+            }
+
+            @Override
+            public void init(Object... params) {
+                channel = (String) params[0];
+                clientId = (String) params[1];
+            }
+        });
     }
 
     @Override
