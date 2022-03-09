@@ -22,7 +22,7 @@ public class DiscordBot implements EventListener {
 
     private ParamRunnable messageCallback;
 
-    private JDA jda;
+    public JDA jda;
 
     public DiscordBot(String token, String serverID, String channelID, ParamRunnable messageCallback) {
         this.token = token;
