@@ -162,9 +162,6 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         config.addDefault("database.username", "root");
         config.addDefault("database.password", "");
         config.addDefault("database.tablePrefix", "kalesutilities_");
-        config.addDefault("discord.token", "");
-        config.addDefault("discord.serverID", "");
-        config.addDefault("discord.channelID", "");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
         config.addDefault("messages.noconsole", "You can't use that command from the console");
