@@ -10,6 +10,7 @@ import com.kale_ko.evercraft.shared.discord.DiscordBot;
 import com.kale_ko.evercraft.shared.mysql.MySQLConfig;
 import com.kale_ko.evercraft.shared.updater.Updater;
 import com.kale_ko.evercraft.shared.util.ParamRunnable;
+import com.kale_ko.evercraft.shared.websocket.WebSocket;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -34,6 +35,8 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
     private Broadcast broadcast;
 
     public DiscordBot bot;
+
+    public WebSocket messager;
 
     @Override
     public void onLoad() {
@@ -92,6 +95,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         config.addDefault("config.mainServer", "hub");
         config.addDefault("config.broadcastIntervial", 900);
         config.addDefault("config.broadcastMessages", Arrays.asList("&3&lMake sure to join our Discord with /discord!"));
+        config.addDefault("messagerPort", 3000);
         config.addDefault("database.url", "localhost");
         config.addDefault("database.port", "3306");
         config.addDefault("database.database", "minecraft");
@@ -179,6 +183,10 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
                 message = (String) params[1];
             }
         });
+
+        Console.info("Starting messager");
+
+        messager = new WebSocket(config.getInt("messagerPort"));
     }
 
     @Override
@@ -214,6 +222,14 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         }
 
         Console.info("Finished reseting player names");
+
+        Console.info("Stoping discord bot");
+
+        bot.jda.shutdown();
+
+        Console.info("Stoping messager");
+
+        messager.close();
 
         Console.info("Finished disabling");
     }
