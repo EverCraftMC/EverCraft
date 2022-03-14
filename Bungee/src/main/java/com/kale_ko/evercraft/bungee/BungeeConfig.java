@@ -12,7 +12,7 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-public class BungeeConfig implements PluginConfig  {
+public class BungeeConfig implements PluginConfig {
     private String fileName;
     private String filePath;
     private File file;

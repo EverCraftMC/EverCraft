@@ -212,11 +212,11 @@ public class Util {
     }
 
     private static final String[] currencyLetters = new String[] {
-        "",
-        "",
-        "M",
-        "B",
-        "T"
+            "",
+            "",
+            "M",
+            "B",
+            "T"
     };
 
     public static String formatCurrencyMin(double currency) {
