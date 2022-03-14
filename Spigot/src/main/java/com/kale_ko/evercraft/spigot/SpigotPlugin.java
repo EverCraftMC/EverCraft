@@ -3,7 +3,6 @@ package com.kale_ko.evercraft.spigot;
 import com.kale_ko.evercraft.shared.Plugin;
 import com.kale_ko.evercraft.shared.economy.EconomyManager;
 import com.kale_ko.evercraft.shared.mysql.MySQLConfig;
-import com.kale_ko.evercraft.shared.updater.Updater;
 import com.kale_ko.evercraft.spigot.commands.economy.BalanceCommand;
 import com.kale_ko.evercraft.spigot.commands.economy.BalanceTopCommand;
 import com.kale_ko.evercraft.spigot.commands.economy.EconomyCommand;
@@ -50,11 +49,6 @@ import com.kale_ko.evercraft.spigot.listeners.SignEditorListener;
 import com.kale_ko.evercraft.spigot.listeners.SpawnListener;
 import com.kale_ko.evercraft.spigot.listeners.WelcomeListener;
 import com.kale_ko.evercraft.spigot.scoreboard.ScoreBoard;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.logging.Logger;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
@@ -62,8 +56,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.InvalidPluginException;
-import org.bukkit.plugin.UnknownDependencyException;
 import org.bukkit.plugin.java.JavaPlugin;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -84,55 +76,6 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
     public EconomyManager eco;
 
     private ScoreBoard scoreboard;
-
-    @Override
-    public void onLoad() {
-        Console.info("Checking for updates..");
-
-        File dataFolder = getDataFolder();
-        if (!dataFolder.exists()) {
-            dataFolder.mkdir();
-        }
-
-        File file = new File(Paths.get(dataFolder.getAbsolutePath(), "token.txt").toString());
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String token = reader.readLine();
-            reader.close();
-
-            Updater updater = new Updater("EverCraft-MC/EverCraft", token, Paths.get(getFile().getParentFile().getAbsolutePath(), "plugins").toString());
-
-            if (updater.check(getDescription().getVersion())) {
-                Console.info("Found new version, downloading..");
-
-                File pluginfile = updater.update();
-
-                Console.info("Finished downloading new version");
-
-                Console.info("Attempting to reload plugin..");
-
-                getPluginLoader().disablePlugin(this);
-
-                try {
-                    getPluginLoader().loadPlugin(pluginfile);
-                } catch (UnknownDependencyException | InvalidPluginException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Console.info("Plugin is up to date");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onEnable() {
@@ -221,7 +164,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.*", "Use all commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.info.*", "evercraft.commands.warps.*", "evercraft.commands.kits.*", "evercraft.commands.player.*", "evercraft.commands.economy.*", "evercraft.commands.staff.*", "evercraft.commands.moderation.*"), Arrays.asList(true, true, true, true, true, true, true))));
         getServer().getPluginManager().addPermission(new Permission("evercraft.features.*", "Use all features", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.features.colorchat", "evercraft.features.colorsigns", "evercraft.features.editsigns"), Arrays.asList(true, true, true))));
 
-        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.*", "Use info commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.info.evercraft","evercraft.commands.info.help", "evercraft.commands.info.about", "evercraft.commands.info.rules", "evercraft.commands.info.staff", "evercraft.commands.info.list"), Arrays.asList(true, true, true, true, true, true))));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.info.*", "Use info commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.info.evercraft", "evercraft.commands.info.help", "evercraft.commands.info.about", "evercraft.commands.info.rules", "evercraft.commands.info.staff", "evercraft.commands.info.list"), Arrays.asList(true, true, true, true, true, true))));
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.warps.*", "Use warp commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.warps.spawn", "evercraft.commands.warps.setspawn", "evercraft.commands.warps.warp", "evercraft.commands.warps.warps", "evercraft.commands.warps.setwarp"), Arrays.asList(true, true, true, true, true))));
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.kits.*", "Use kit commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.kits.kit", "evercraft.commands.kits.kits"), Arrays.asList(true, true))));
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.player.*", "Use player commands", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.player.seen", "evercraft.commands.player.nickname", "evercraft.commands.player.status"), Arrays.asList(true, true, true))));
