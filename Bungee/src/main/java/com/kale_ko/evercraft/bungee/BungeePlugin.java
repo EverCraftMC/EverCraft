@@ -11,15 +11,9 @@ import com.kale_ko.evercraft.bungee.websocket.PlayersWebSocketMessage;
 import com.kale_ko.evercraft.bungee.websocket.VersionsWebSocketMessage;
 import com.kale_ko.evercraft.shared.discord.DiscordBot;
 import com.kale_ko.evercraft.shared.mysql.MySQLConfig;
-import com.kale_ko.evercraft.shared.updater.Updater;
 import com.kale_ko.evercraft.shared.util.ParamRunnable;
 import com.kale_ko.evercraft.shared.websocket.TextWebSocketMessage;
 import com.kale_ko.evercraft.shared.websocket.WebSocket;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,50 +37,6 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
     public DiscordBot bot;
 
     public WebSocket messager;
-
-    @Override
-    public void onLoad() {
-        Console.info("Checking for updates..");
-
-        File dataFolder = getDataFolder();
-        if (!dataFolder.exists()) {
-            dataFolder.mkdir();
-        }
-
-        File file = new File(Paths.get(dataFolder.getAbsolutePath(), "token.txt").toString());
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String token = reader.readLine();
-            reader.close();
-
-            Updater updater = new Updater("EverCraft-MC/EverCraft", token, Paths.get(getFile().getParentFile().getAbsolutePath(), "plugins").toString());
-
-            if (updater.check(getDescription().getVersion())) {
-                Console.info("Found new version, downloading..");
-
-                updater.update();
-
-                Console.info("Finished downloading new version");
-
-                Console.info("Attempting to reload plugin..");
-
-                getProxy().getPluginManager().loadPlugins();
-                // getProxy().stop();
-            } else {
-                Console.info("Plugin is up to date");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onEnable() {

@@ -39,7 +39,7 @@ public class ScoreBoard {
 
             Scoreboard sb = scoreBoardMap.get(player);
             Objective obj = sb.getObjective(player.getName());
-            for(String entry : sb.getEntries()) {
+            for (String entry : sb.getEntries()) {
                 sb.resetScores(entry);
             }
 
