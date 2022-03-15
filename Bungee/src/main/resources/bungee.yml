@@ -1,4 +1,4 @@
-main: com.kale_ko.evercraft.bungee.SpigotPlugin
+main: com.kale_ko.evercraft.bungee.BungeePlugin
 
 name: EverCraft
 version: ${plugin_version}
