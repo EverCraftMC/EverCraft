@@ -42,7 +42,6 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         config.addDefault("config.mainServer", "hub");
         config.addDefault("config.broadcastIntervial", 900);
         config.addDefault("config.broadcastMessages", Arrays.asList("&3&lMake sure to join our Discord with /discord!"));
-        config.addDefault("messagerPort", 3000);
         config.addDefault("database.url", "localhost");
         config.addDefault("database.port", "3306");
         config.addDefault("database.database", "minecraft");
