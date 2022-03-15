@@ -14,16 +14,18 @@ public class GlobalMesageListener implements Listener {
         if (event.getTag().equals("BungeeCord")) {
             ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
 
-            if (in.readUTF().equals("globalChat")) {
+            String channel = in.readUTF();
+
+            if (channel.equals("globalChat")) {
                 String sender = in.readUTF();
                 String message = in.readUTF();
 
                 Util.messageServers("globalChat", sender, message);
 
                 BungeePlugin.Instance.bot.sendMessage(Util.discordFormating(message));
-            } else if (in.readUTF().equals("globalStaffChat")) {
+            } else if (channel.equals("globalStaffChat")) {
                 Util.messageServers("globalStaffChat", in.readUTF(), in.readUTF());
-            } else if (in.readUTF().equals("globalCommandspy")) {
+            } else if (channel.equals("globalCommandspy")) {
                 Util.messageServers("globalCommandspy", in.readUTF(), in.readUTF());
             }
         }
