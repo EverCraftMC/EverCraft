@@ -1,13 +1,14 @@
 package com.kale_ko.evercraft.shared.networking;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServerPing {
-    private ServerMotd description;
-    private ServerPlayers players;
-    private ServerVersion version;
-    private String favicon;
-    private int ping;
+    private ServerMotd description = new ServerMotd();
+    private ServerPlayers players = new ServerPlayers();
+    private ServerVersion version = new ServerVersion();
+    private String favicon = "";
+    private int ping = -1;
 
     public ServerMotd getMotd() {
         return this.description;
@@ -34,12 +35,12 @@ public class ServerPing {
     }
 
     public class ServerMotdComponent {
-        private String text;
-        private String color;
+        private String text = "A Minecraft Server!";
+        private String color = "white";
 
-        private Boolean bold;
-        private Boolean italic;
-        private Boolean underline;
+        private Boolean bold = false;
+        private Boolean italic = false;
+        private Boolean underline = false;
 
         public String getText() {
             return this.text;
@@ -63,7 +64,7 @@ public class ServerPing {
     }
 
     public class ServerMotd extends ServerMotdComponent {
-        private List<ServerMotdComponent> extra;
+        private List<ServerMotdComponent> extra = new ArrayList<ServerMotdComponent>();
 
         public List<ServerMotdComponent> getExtra() {
             return this.extra;
@@ -71,9 +72,9 @@ public class ServerPing {
     }
 
     public class ServerPlayers {
-        private int online;
-        private int max;
-        private List<ServerPlayer> sample;
+        private int online = 0;
+        private int max = 20;
+        private List<ServerPlayer> sample = new ArrayList<ServerPlayer>();
 
         public int getOnline() {
             return online;
@@ -88,8 +89,8 @@ public class ServerPing {
         }
 
         public class ServerPlayer {
-            private String name;
-            private String id;
+            private String name = "Player";
+            private String id = "00000000-0000-0000-0000-000000000000";
 
             public String getName() {
                 return name;
@@ -102,8 +103,8 @@ public class ServerPing {
     }
 
     public class ServerVersion {
-        private String name;
-        private String protocol;
+        private String name = "Unknown";
+        private String protocol = "-1";
 
         public String getName() {
             return name;
