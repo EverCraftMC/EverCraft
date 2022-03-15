@@ -14,6 +14,8 @@ public class WelcomeListener implements Listener {
         BungeePlugin.Instance.bot.sendMessage("[" + BungeePlugin.Instance.config.getString("config.serverName") + "] " + Util.discordFormating(BungeePlugin.Instance.config.getString("messages.joinMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))));
 
         Util.broadcastMessage(Util.formatMessage(BungeePlugin.Instance.config.getString("messages.joinMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))), true);
+
+        BungeePlugin.Instance.bot.updateOnline(BungeePlugin.Instance.getProxy().getOnlineCount());
     }
 
     @EventHandler
@@ -28,5 +30,7 @@ public class WelcomeListener implements Listener {
         BungeePlugin.Instance.bot.sendMessage("[" + BungeePlugin.Instance.config.getString("config.serverName") + "] " + Util.discordFormating(BungeePlugin.Instance.config.getString("messages.quitMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))));
 
         Util.broadcastMessage(Util.formatMessage(BungeePlugin.Instance.config.getString("messages.quitMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))), true);
+
+        BungeePlugin.Instance.bot.updateOnline(BungeePlugin.Instance.getProxy().getOnlineCount());
     }
 }
