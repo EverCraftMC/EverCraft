@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerLoginEvent.Result;
 public class BannedJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerLoginEvent event) {
-        if (SpigotPlugin.Instance.players.getBoolean(event.getPlayer().getName() + ".banned")) {
+        if (SpigotPlugin.Instance.players.getBoolean(event.getPlayer().getName() + ".banned") != null && SpigotPlugin.Instance.players.getBoolean(event.getPlayer().getName() + ".banned")) {
             event.setKickMessage(SpigotPlugin.Instance.players.getString(event.getPlayer().getName() + ".banMessage"));
             event.disallow(Result.KICK_BANNED, SpigotPlugin.Instance.players.getString(event.getPlayer().getName() + ".banMessage"));
 

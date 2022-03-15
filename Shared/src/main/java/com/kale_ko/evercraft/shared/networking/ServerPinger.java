@@ -84,7 +84,7 @@ public class ServerPinger {
         return null;
     }
 
-    private int readVarInt(DataInputStream in) {
+    private int readVarInt(DataInputStream in) throws SocketTimeoutException {
         int i = 0;
         int j = 0;
 
@@ -98,6 +98,8 @@ public class ServerPinger {
                 } else if ((k & 0x80) != 128) {
                     break;
                 }
+            } catch (SocketTimeoutException e) {
+                throw e;
             } catch (IOException e) {
                 e.printStackTrace();
             }
