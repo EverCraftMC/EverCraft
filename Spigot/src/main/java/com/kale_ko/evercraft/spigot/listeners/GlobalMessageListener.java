@@ -13,11 +13,13 @@ public class GlobalMessageListener implements PluginMessageListener {
         if (channel.equals("BungeeCord")) {
             ByteArrayDataInput in = ByteStreams.newDataInput(message);
 
-            if (in.readUTF().equals("globalChat")) {
+            String subchannel = in.readUTF();
+
+            if (subchannel.equals("globalChat")) {
                 if (!in.readUTF().equals(SpigotPlugin.Instance.config.getString("config.serverName"))) {
                     Util.broadcastMessage(in.readUTF(), true);
                 }
-            } else if (in.readUTF().equals("globalStaffChat")) {
+            } else if (subchannel.equals("globalStaffChat")) {
                 if (!in.readUTF().equals(SpigotPlugin.Instance.config.getString("config.serverName"))) {
                     String text = in.readUTF();
 
@@ -27,7 +29,7 @@ public class GlobalMessageListener implements PluginMessageListener {
                         }
                     }
                 }
-            } else if (in.readUTF().equals("globalCommandspy")) {
+            } else if (subchannel.equals("globalCommandspy")) {
                 if (!in.readUTF().equals(SpigotPlugin.Instance.config.getString("config.serverName"))) {
                     String text = in.readUTF();
 
