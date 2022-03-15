@@ -18,17 +18,19 @@ public class DiscordBot implements EventListener {
     private String token;
 
     private String serverID;
-    private String channelID;
+    private String minecraftChannelID;
+    private String onlineChannelID;
 
     private ParamRunnable messageCallback;
 
     public JDA jda;
 
-    public DiscordBot(String token, String serverID, String channelID, ParamRunnable messageCallback) {
+    public DiscordBot(String token, String serverID, String minecraftChannelID, String onlineChannelID, ParamRunnable messageCallback) {
         this.token = token;
 
         this.serverID = serverID;
-        this.channelID = channelID;
+        this.minecraftChannelID = minecraftChannelID;
+        this.onlineChannelID = onlineChannelID;
 
         this.messageCallback = messageCallback;
 
@@ -49,13 +51,17 @@ public class DiscordBot implements EventListener {
     }
 
     public void sendMessage(String message) {
-        this.jda.getGuildById(this.serverID).getTextChannelById(this.channelID).sendMessage(message).queue();
+        this.jda.getGuildById(this.serverID).getTextChannelById(this.minecraftChannelID).sendMessage(message).queue();
+    }
+
+    public void updateOnline(Integer online) {
+        this.jda.getGuildById(this.serverID).getGuildChannelById(this.onlineChannelID).getManager().setName("Online: " + online).queue();
     }
 
     @Override
     public void onEvent(GenericEvent rawevent) {
         if (rawevent instanceof MessageReceivedEvent event) {
-            if (event.getChannel().getId().equalsIgnoreCase(this.channelID) && !event.getAuthor().getId().equalsIgnoreCase(this.jda.getSelfUser().getId())) {
+            if (event.getChannel().getId().equalsIgnoreCase(this.minecraftChannelID) && !event.getAuthor().getId().equalsIgnoreCase(this.jda.getSelfUser().getId())) {
                 this.messageCallback.init(event.getAuthor().getAsTag(), event.getMessage().getContentDisplay());
                 this.messageCallback.run();
             }

@@ -10,5 +10,4 @@ dependencies {
     compileOnly "com.google.code.gson:gson:${project.gson_version}"
 
     depencancy "net.dv8tion:JDA:${project.jda_version}"
-    depencancy "com.corundumstudio.socketio:netty-socketio:${project.socket_io_version}"
 }
