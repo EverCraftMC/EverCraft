@@ -3,10 +3,10 @@ package com.kale_ko.evercraft.bungee;
 import com.kale_ko.evercraft.bungee.broadcast.Broadcast;
 import com.kale_ko.evercraft.bungee.commands.info.EverCraftBungeeCommand;
 import com.kale_ko.evercraft.bungee.commands.server.HubCommand;
+import com.kale_ko.evercraft.bungee.discord.DiscordBot;
 import com.kale_ko.evercraft.bungee.listeners.GlobalMesageListener;
 import com.kale_ko.evercraft.bungee.listeners.PlayerJoinListener;
 import com.kale_ko.evercraft.bungee.listeners.WelcomeListener;
-import com.kale_ko.evercraft.shared.discord.DiscordBot;
 import com.kale_ko.evercraft.shared.mysql.MySQLConfig;
 import com.kale_ko.evercraft.shared.util.ParamRunnable;
 import java.util.Arrays;
@@ -51,6 +51,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         config.addDefault("discord.token", "");
         config.addDefault("discord.serverID", "");
         config.addDefault("discord.minecraftChannelID", "");
+        config.addDefault("discord.staffMinecraftChannelID", "");
         config.addDefault("discord.onlineChannelID", "");
         config.addDefault("messages.invalidCommand", "{command} is not a command");
         config.addDefault("messages.noperms", "You need the permission {permission} to run that command");
@@ -115,7 +116,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
         Console.info("Starting Discord bot");
 
-        bot = new DiscordBot(config.getString("discord.token"), config.getString("discord.serverID"), config.getString("discord.minecraftChannelID"), config.getString("discord.onlineChannelID"), new ParamRunnable() {
+        bot = new DiscordBot(config.getString("discord.token"), config.getString("discord.serverID"), config.getString("discord.minecraftChannelID"), config.getString("discord.staffMinecraftChannelID"), config.getString("discord.onlineChannelID"), new ParamRunnable() {
             private String sender;
             private String message;
 
