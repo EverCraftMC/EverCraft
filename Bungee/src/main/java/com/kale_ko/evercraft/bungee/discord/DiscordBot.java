@@ -23,10 +23,11 @@ public class DiscordBot implements EventListener {
     private String onlineChannelID;
 
     private ParamRunnable messageCallback;
+    private ParamRunnable staffMessageCallback;
 
     public JDA jda;
 
-    public DiscordBot(String token, String serverID, String minecraftChannelID, String staffMinecraftChannelID, String onlineChannelID, ParamRunnable messageCallback) {
+    public DiscordBot(String token, String serverID, String minecraftChannelID, String staffMinecraftChannelID, String onlineChannelID, ParamRunnable messageCallback, ParamRunnable staffMessageCallback) {
         this.token = token;
 
         this.serverID = serverID;
@@ -35,6 +36,7 @@ public class DiscordBot implements EventListener {
         this.onlineChannelID = onlineChannelID;
 
         this.messageCallback = messageCallback;
+        this.staffMessageCallback = staffMessageCallback;
 
         try {
             this.jda = JDABuilder.createDefault(this.token)
@@ -75,6 +77,9 @@ public class DiscordBot implements EventListener {
             if (event.getChannel().getId().equalsIgnoreCase(this.minecraftChannelID) && !event.getAuthor().getId().equalsIgnoreCase(this.jda.getSelfUser().getId())) {
                 this.messageCallback.init(event.getAuthor().getAsTag(), event.getMessage().getContentDisplay());
                 this.messageCallback.run();
+            } else if (event.getChannel().getId().equalsIgnoreCase(this.staffMinecraftChannelID) && !event.getAuthor().getId().equalsIgnoreCase(this.jda.getSelfUser().getId())) {
+                this.staffMessageCallback.init(event.getAuthor().getAsTag(), event.getMessage().getContentDisplay());
+                this.staffMessageCallback.run();
             }
         }
     }
