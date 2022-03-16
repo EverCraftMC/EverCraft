@@ -31,6 +31,6 @@ public class WelcomeListener implements Listener {
 
         Util.broadcastMessage(Util.formatMessage(BungeePlugin.Instance.config.getString("messages.quitMessage").replace("{player}", Util.getPlayerName(event.getPlayer()))), true);
 
-        BungeePlugin.Instance.bot.updateOnline(BungeePlugin.Instance.getProxy().getOnlineCount());
+        BungeePlugin.Instance.bot.updateOnline(BungeePlugin.Instance.getProxy().getOnlineCount() - 1);
     }
 }
