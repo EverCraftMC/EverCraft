@@ -33,15 +33,12 @@ public class ScoreBoard {
         for (Player player : SpigotPlugin.Instance.getServer().getOnlinePlayers()) {
             if (!scoreBoardMap.containsKey(player)) {
                 Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
-                sb.registerNewObjective(player.getName().toString(), "dummy", Util.formatMessage(SpigotPlugin.Instance.config.getString("config.scoreboardTitle")));
+                sb.registerNewObjective(player.getName(), "dummy", Util.formatMessage(SpigotPlugin.Instance.config.getString("config.scoreboardTitle")));
                 scoreBoardMap.put(player, sb);
             }
 
             Scoreboard sb = scoreBoardMap.get(player);
             Objective obj = sb.getObjective(player.getName());
-            for (String entry : sb.getEntries()) {
-                sb.resetScores(entry);
-            }
 
             Bukkit.getScheduler().runTaskAsynchronously(SpigotPlugin.Instance, new Runnable() {
                 public void run() {
@@ -58,15 +55,20 @@ public class ScoreBoard {
                         line = Util.formatMessage(line
                                 .replace("%username%", Util.getPlayerName(player))
                                 .replace("%health%", "" + Math.round(player.getHealth() * 100) / 100)
-                                .replace("%balance%", "" + Util.formatCurrencyMin(0)) // SpigotPlugin.Instance.eco.getBalance(player)
+                                .replace("%balance%", "" + Util.formatCurrencyMin(SpigotPlugin.Instance.eco.getBalance(player.getName())))
                                 .replace("%ping%", "" + player.getPing())
-                                .replace("%onlineplayers%", "" + SpigotPlugin.Instance.getServer().getOnlinePlayers().size()))
+                                .replace("%onlineplayers%", "" + SpigotPlugin.Instance.getServer().getOnlinePlayers().size())
                                 .replace("%maxplayers%", "" + SpigotPlugin.Instance.getServer().getMaxPlayers())
                                 .replace("%onlineproxyplayers%", "" + ping.getPlayers().getOnline())
                                 .replace("%maxproxyplayers%", "" + ping.getPlayers().getMax())
-                                .replace("%uptime%", Util.formatDurationLetters(ManagementFactory.getRuntimeMXBean().getUptime(), true, true));
+                                .replace("%uptime%", Util.formatDurationLetters(ManagementFactory.getRuntimeMXBean().getUptime(), true, true)));
 
-                        obj.getScore(line).setScore(lines.size() - i);
+                        if (!line.equals(getScore(obj, lines.size() - i))) {
+                            if (getScore(obj, lines.size() - i) != null) {
+                                sb.resetScores(getScore(obj, lines.size() - i));
+                            }
+                            obj.getScore(line).setScore(lines.size() - i);
+                        }
 
                         i++;
                     }
@@ -97,10 +99,10 @@ public class ScoreBoard {
 
                     for (Map.Entry<Integer, String> entry : SpigotPlugin.Instance.luckperms.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrefixes().entrySet()) {
                         if (entry.getValue().equals(SpigotPlugin.Instance.luckperms.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrefix())) {
-                            Team team = sb.getTeam("sort" + (100 - entry.getKey()));
+                            Team team = sb.getTeam("sort" + (9 - entry.getKey()));
 
                             if (team == null) {
-                                team = sb.registerNewTeam("sort" + (100 - entry.getKey()));
+                                team = sb.registerNewTeam("sort" + (9 - entry.getKey()));
                             }
 
                             team.addEntry(player.getName());
@@ -109,6 +111,16 @@ public class ScoreBoard {
                 }
             });
         }
+    }
+
+    private String getScore(Objective objective, Integer score) {
+        for (String entry : objective.getScoreboard().getEntries()) {
+            if (objective.getScore(entry).getScore() == score) {
+                return entry;
+            }
+        }
+
+        return null;
     }
 
     public void close() {
