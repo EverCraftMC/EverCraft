@@ -66,6 +66,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         config.addDefault("messages.list", "\n{playerList}");
         config.addDefault("messages.reload", "Config Reloaded");
         config.addDefault("messages.discord", "&b&l[Discord] &r{sender} > {message}");
+        config.addDefault("messages.staffDiscord", "&b&l[Discord] &d&l[Staffchat] &r{sender} > {message}");
 
         config.copyDefaults();
 
@@ -122,7 +123,21 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
             @Override
             public void run() {
-                Util.broadcastMessage(config.getString("messages.discord").replace("{sender}", sender).replace("{message}", message), true);
+                Util.messageServers("globalChat", "Discord", config.getString("messages.discord").replace("{sender}", sender).replace("{message}", message));
+            }
+
+            @Override
+            public void init(Object... params) {
+                sender = (String) params[0];
+                message = (String) params[1];
+            }
+        }, new ParamRunnable() {
+            private String sender;
+            private String message;
+
+            @Override
+            public void run() {
+                Util.messageServers("globalStaffChat", "Discord", config.getString("messages.staffDiscord").replace("{sender}", sender).replace("{message}", message));
             }
 
             @Override
