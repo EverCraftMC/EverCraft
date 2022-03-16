@@ -1,4 +1,4 @@
-package com.kale_ko.evercraft.shared.discord;
+package com.kale_ko.evercraft.bungee.discord;
 
 import javax.security.auth.login.LoginException;
 import com.kale_ko.evercraft.shared.util.ParamRunnable;
@@ -19,17 +19,19 @@ public class DiscordBot implements EventListener {
 
     private String serverID;
     private String minecraftChannelID;
+    private String staffMinecraftChannelID;
     private String onlineChannelID;
 
     private ParamRunnable messageCallback;
 
     public JDA jda;
 
-    public DiscordBot(String token, String serverID, String minecraftChannelID, String onlineChannelID, ParamRunnable messageCallback) {
+    public DiscordBot(String token, String serverID, String minecraftChannelID, String staffMinecraftChannelID, String onlineChannelID, ParamRunnable messageCallback) {
         this.token = token;
 
         this.serverID = serverID;
         this.minecraftChannelID = minecraftChannelID;
+        this.staffMinecraftChannelID = staffMinecraftChannelID;
         this.onlineChannelID = onlineChannelID;
 
         this.messageCallback = messageCallback;
@@ -50,8 +52,17 @@ public class DiscordBot implements EventListener {
         }
     }
 
-    public void sendMessage(String message) {
-        this.jda.getGuildById(this.serverID).getTextChannelById(this.minecraftChannelID).sendMessage(message).queue();
+    public enum MessageType {
+        Chat,
+        StaffChat
+    }
+
+    public void sendMessage(MessageType type, String message) {
+        if (type == MessageType.Chat) {
+            this.jda.getGuildById(this.serverID).getTextChannelById(this.minecraftChannelID).sendMessage(message).queue();
+        } else if (type == MessageType.StaffChat) {
+            this.jda.getGuildById(this.serverID).getTextChannelById(this.staffMinecraftChannelID).sendMessage(message).queue();
+        }
     }
 
     public void updateOnline(Integer online) {
