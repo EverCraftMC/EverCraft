@@ -133,7 +133,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         config.addDefault("messages.gamemode", "Successfully set your gamemode to {gamemode}");
         config.addDefault("messages.sudocommand", "Successfully ran {command} as {player}");
         config.addDefault("messages.sudomessage", "Successfully made {player} say {message}");
-        config.addDefault("messages.staffchat", "&l&d[Staffchat] &r{player} &r> {message}");
+        config.addDefault("messages.staffchat", "&d&l[Staffchat] &r{player} &r> {message}");
         config.addDefault("messages.togglecommandspy", "Successfully turned commandspy {value}");
         config.addDefault("messages.commandspy", "&l&d[CommandSpy] &r{player} &rran {message}");
         config.addDefault("messages.kick", "{player} was kicked by {moderator} for {reason}");
