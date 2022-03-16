@@ -9,7 +9,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 public class MuteListener implements Listener {
     @EventHandler
     public void onChatMessage(AsyncPlayerChatEvent event) {
-        if (SpigotPlugin.Instance.players.getBoolean(event.getPlayer().getName() + ".muted")) {
+        if (SpigotPlugin.Instance.players.getBoolean(event.getPlayer().getName() + ".muted") != null && SpigotPlugin.Instance.players.getBoolean(event.getPlayer().getName() + ".muted")) {
             event.setCancelled(true);
 
             Util.sendMessage(event.getPlayer(), SpigotPlugin.Instance.players.getString(event.getPlayer().getName() + ".mutedMessage"));
