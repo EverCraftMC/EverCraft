@@ -6,6 +6,7 @@ import com.kale_ko.evercraft.bungee.commands.server.HubCommand;
 import com.kale_ko.evercraft.bungee.discord.DiscordBot;
 import com.kale_ko.evercraft.bungee.listeners.GlobalMesageListener;
 import com.kale_ko.evercraft.bungee.listeners.PlayerJoinListener;
+import com.kale_ko.evercraft.bungee.listeners.ServerPingListener;
 import com.kale_ko.evercraft.bungee.listeners.WelcomeListener;
 import com.kale_ko.evercraft.shared.mysql.MySQLConfig;
 import com.kale_ko.evercraft.shared.util.ParamRunnable;
@@ -95,6 +96,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
         getProxy().getPluginManager().registerListener(this, new PlayerJoinListener());
         getProxy().getPluginManager().registerListener(this, new GlobalMesageListener());
+        getProxy().getPluginManager().registerListener(this, new ServerPingListener());
         getProxy().getPluginManager().registerListener(this, new WelcomeListener());
 
         Console.info("Finished loading event listeners");

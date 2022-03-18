@@ -54,6 +54,14 @@ public class Util {
         return TextComponent.fromLegacyText(string);
     }
 
+    public static String bungeeComponentToString(BaseComponent component) {
+        return component.toLegacyText();
+    }
+
+    public static BaseComponent flattenBungeeComponent(BaseComponent[] component) {
+        return new TextComponent(component);
+    }
+
     public static String formatMessage(String message) {
         if (message != null) {
             return ChatColor.translateAlternateColorCodes('&', message);
