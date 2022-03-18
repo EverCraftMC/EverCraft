@@ -197,7 +197,13 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.economy.balancetop", "Use /balancetop", PermissionDefault.TRUE));
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.economy.economy", "Use /economy", PermissionDefault.OP));
 
-        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode", "Use /gmc", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode.*", "Use /gamemode", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.staff.gamemode.use", "evercraft.commands.staff.gamemode.creative", "evercraft.commands.staff.gamemode.survival", "evercraft.commands.staff.gamemode.adventure", "evercraft.commands.staff.gamemode.spectator"), Arrays.asList(true, true, true, true))));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode.use", "Use /gamemode", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode.creative", "Use /gmc", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode.survival", "Use /gms", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode.adventure", "Use /gma", PermissionDefault.OP));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode.spectator", "Use /gmsp", PermissionDefault.OP));
+
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.inventorysee", "Use /inventorysee", PermissionDefault.OP));
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.staffchat", "Use /staffchat", PermissionDefault.OP));
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.commandspy", "Use /commandspy", PermissionDefault.OP));
@@ -240,7 +246,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         ((CraftServer) getServer()).getCommandMap().register(getName(), new BalanceTopCommand("balancetop", "Check the top balances", Arrays.asList("baltop"), "/balancetop", "evercraft.commands.economy.balancetop"));
         ((CraftServer) getServer()).getCommandMap().register(getName(), new EconomyCommand("economy", "Manage the economy", Arrays.asList("eco"), "/economy", "evercraft.commands.economy.economy"));
 
-        ((CraftServer) getServer()).getCommandMap().register(getName(), new GamemodeCommand("gmc", "Sets you gamemode", Arrays.asList("gms", "gma", "gmsp"), "/gm(c, s, a, sp) {player (optional)}", "evercraft.commands.staff.gamemode"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new GamemodeCommand("gamemode", "Change your gamemode", Arrays.asList("gmc", "gms", "gma", "gmsp"), "/gamemode {gamemode} {player (optional)}", "evercraft.commands.staff.gamemode.use"));
         ((CraftServer) getServer()).getCommandMap().register(getName(), new InventorySeeCommand("inventorysee", "View someones inventory", Arrays.asList("invsee"), "/inventorysee {player}", "evercraft.commands.staff.inventorysee"));
         ((CraftServer) getServer()).getCommandMap().register(getName(), new EnderChestSeeCommand("enderchestsee", "View someones ender chest", Arrays.asList("endersee"), "/enderchestsee {player}", "evercraft.commands.staff.inventorysee"));
         ((CraftServer) getServer()).getCommandMap().register(getName(), new StaffChatCommand("staffchat", "Send a message in the staffchat", Arrays.asList("sc"), "/staffchat {message}", "evercraft.commands.staff.staffchat"));

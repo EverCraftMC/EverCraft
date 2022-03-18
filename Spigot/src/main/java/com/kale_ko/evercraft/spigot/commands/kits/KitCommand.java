@@ -23,7 +23,7 @@ public class KitCommand extends SpigotCommand {
                 Player player = SpigotPlugin.Instance.getServer().getPlayer(args[0]);
 
                 if (player != null) {
-                    List<String> items = SpigotPlugin.Instance.kits.getStringList(args[0]);
+                    List<String> items = SpigotPlugin.Instance.kits.getStringList(args[1]);
 
                     for (String item : items) {
                         NBTTagCompound nbt = Util.parseNBT(item);
