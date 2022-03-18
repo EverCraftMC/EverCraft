@@ -1,6 +1,7 @@
 package com.kale_ko.evercraft.spigot.commands;
 
 import java.util.List;
+import com.kale_ko.evercraft.spigot.SpigotPlugin;
 import com.kale_ko.evercraft.spigot.Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -22,7 +23,7 @@ public class SpigotCommand extends Command {
         if (Util.hasPermission(sender, getPermission())) {
             run(sender, commandLabel, args);
         } else {
-            Util.sendMessage(sender, "&cYou do not have permission to perform that command.");
+            Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noperms").replace("{permission}", getPermission()));
         }
 
         return true;
