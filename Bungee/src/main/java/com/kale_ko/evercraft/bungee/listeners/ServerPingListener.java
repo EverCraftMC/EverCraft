@@ -3,7 +3,6 @@ package com.kale_ko.evercraft.bungee.listeners;
 import java.util.ArrayList;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeePlugin;
-import com.kale_ko.evercraft.bungee.Util;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.ServerPing.PlayerInfo;
 import net.md_5.bungee.api.ServerPing.Players;
@@ -24,9 +23,6 @@ public class ServerPingListener implements Listener {
             protocol.setProtocol(758);
         }
 
-        String motd = Util.bungeeComponentToString(event.getResponse().getDescriptionComponent());
-        motd = motd.replace("{player}", event.getConnection().getName());
-
         List<PlayerInfo> playerlist = new ArrayList<PlayerInfo>();
 
         for (ProxiedPlayer player : BungeePlugin.Instance.getProxy().getPlayers()) {
@@ -36,6 +32,6 @@ public class ServerPingListener implements Listener {
         Players players = event.getResponse().getPlayers();
         players.setSample(playerlist.toArray(new PlayerInfo[] {}));
 
-        event.setResponse(new ServerPing(protocol, players, Util.flattenBungeeComponent(Util.stringToBungeeComponent(motd)), event.getResponse().getFaviconObject()));
+        event.setResponse(new ServerPing(protocol, players, event.getResponse().getDescriptionComponent(), event.getResponse().getFaviconObject()));
     }
 }
