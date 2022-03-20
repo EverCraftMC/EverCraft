@@ -57,7 +57,7 @@ public class GamemodeCommand extends SpigotCommand {
                     Player player = SpigotPlugin.Instance.getServer().getPlayer(args[0]);
 
                     if (player != null) {
-                        if (args[0].equalsIgnoreCase("c") || args[0].equalsIgnoreCase("creative") || args[0].equalsIgnoreCase("1")) {
+                        if (args[1].equalsIgnoreCase("c") || args[1].equalsIgnoreCase("creative") || args[1].equalsIgnoreCase("1")) {
                             if (Util.hasPermission(player, "evercraft.commands.staff.gamemode.creative")) {
                                 player.setGameMode(GameMode.CREATIVE);
     
@@ -65,7 +65,7 @@ public class GamemodeCommand extends SpigotCommand {
                             } else {
                                 Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noperms").replace("{permission}", "evercraft.commands.staff.gamemode.creative"));
                             }
-                        } else if (args[0].equalsIgnoreCase("s") || args[0].equalsIgnoreCase("survival") || args[0].equalsIgnoreCase("0")) {
+                        } else if (args[1].equalsIgnoreCase("s") || args[1].equalsIgnoreCase("survival") || args[1].equalsIgnoreCase("0")) {
                             if (Util.hasPermission(player, "evercraft.commands.staff.gamemode.survival")) {
                                 player.setGameMode(GameMode.SURVIVAL);
     
@@ -73,7 +73,7 @@ public class GamemodeCommand extends SpigotCommand {
                             } else {
                                 Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noperms").replace("{permission}", "evercraft.commands.staff.gamemode.survival"));
                             }
-                        } else if (args[0].equalsIgnoreCase("a") || args[0].equalsIgnoreCase("adventure") || args[0].equalsIgnoreCase("2")) {
+                        } else if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("adventure") || args[1].equalsIgnoreCase("2")) {
                             if (Util.hasPermission(player, "evercraft.commands.staff.gamemode.adventure")) {
                                 player.setGameMode(GameMode.ADVENTURE);
     
@@ -81,7 +81,7 @@ public class GamemodeCommand extends SpigotCommand {
                             } else {
                                 Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noperms").replace("{permission}", "evercraft.commands.staff.gamemode.adventure"));
                             }
-                        } else if (args[0].equalsIgnoreCase("sp") || args[0].equalsIgnoreCase("spectator") || args[0].equalsIgnoreCase("3")) {
+                        } else if (args[1].equalsIgnoreCase("sp") || args[1].equalsIgnoreCase("spectator") || args[1].equalsIgnoreCase("3")) {
                             if (Util.hasPermission(player, "evercraft.commands.staff.gamemode.spectator")) {
                                 player.setGameMode(GameMode.SPECTATOR);
     
