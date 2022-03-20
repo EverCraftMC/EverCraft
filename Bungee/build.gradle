@@ -2,18 +2,20 @@ plugins {
     id 'java'
 }
 
+project.ext.buildJar = true
+
 repositories {
     mavenCentral()
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/public/" }
 }
 
 dependencies {
-    compileOnly project(':Shared')
+    depencancy project(':Shared')
 
     compileOnly "net.md-5:bungeecord-api:${project.minecraft_release}-${project.bungee_version}"
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
-    compileOnly "net.dv8tion:JDA:${project.jda_version}"
+    depencancy "net.dv8tion:JDA:${project.jda_version}"
 }
 
 processResources {
