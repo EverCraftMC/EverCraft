@@ -9,6 +9,8 @@ archivesBaseName = "evercraft"
 group = "com.kale_ko"
 version = project.plugin_version
 
+project.ext.genFullJar = false
+
 def projects = [":Shared", ":Spigot", ":Bungee"]
 
 projects.collect {
@@ -20,17 +22,38 @@ projects.collect {
             extendsFrom depencancy
         }
     }
+
+    def rootproject = project
+    def curproject = project(it)
+
+    project(it).tasks.register("buildFull", Jar) {
+        sourceCompatibility = JavaVersion.toVersion(project.java_version)
+        targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+        dependsOn curproject.tasks.build
+
+        duplicatesStrategy = "exclude"
+        destinationDirectory = file("\\")
+        archiveBaseName = rootproject.name + "-" + curproject.name + "-" + project.plugin_version
+
+        from files(curproject.sourceSets.main.output)
+        from files(curproject.configurations.depencancy.collect { it.isDirectory() ? it : zipTree(it) })
+    }
 }
 
 tasks.register("buildAll", Jar) {
     sourceCompatibility = JavaVersion.toVersion(project.java_version)
     targetCompatibility = JavaVersion.toVersion(project.java_version)
 
-    dependsOn projects.collect{ it + ":build" }
+    dependsOn projects.collect { project(it).ext.buildJar ? it + ":buildFull" : it + ":build" }
 
     duplicatesStrategy = "exclude"
 
-    destinationDirectory = file("\\")
-    from files(projects.collect { project(it).sourceSets.main.output })
-    from files(projects.collect { project(it).configurations.depencancy.collect { it.isDirectory() ? it : zipTree(it) } })
+    if (project.ext.genFullJar) {
+        destinationDirectory = file("\\")
+        archiveBaseName = project.name
+
+        from files(projects.collect { project(it).sourceSets.main.output })
+        from files(projects.collect { project(it).configurations.depencancy.collect { it.isDirectory() ? it : zipTree(it) } })
+    }
 }

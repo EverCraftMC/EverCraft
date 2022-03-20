@@ -2,12 +2,12 @@ plugins {
     id 'java'
 }
 
+project.ext.buildJar = false
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
     compileOnly "com.google.code.gson:gson:${project.gson_version}"
-
-    depencancy "net.dv8tion:JDA:${project.jda_version}"
 }
