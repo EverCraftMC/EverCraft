@@ -2,6 +2,8 @@ plugins {
     id 'java'
 }
 
+project.ext.buildJar = true
+
 repositories {
     mavenCentral()
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/public/" }
@@ -12,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly project(':Shared')
+    depencancy project(':Shared')
 
     compileOnly "org.spigotmc:spigot-api:${project.minecraft_version}-${project.spigot_version}"
     compileOnly name: "craftbukkit-${project.minecraft_version}"
