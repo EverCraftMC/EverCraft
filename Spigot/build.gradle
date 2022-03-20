@@ -2,7 +2,18 @@ plugins {
     id 'java'
 }
 
-project.ext.buildJar = true
+archivesBaseName = "spigot"
+group = "com.kale_ko.evercraft"
+version = project.spigot_plugin_version
+
+configurations {
+    depencancy
+    depencancy.canBeResolved = true
+
+    compileOnly {
+        extendsFrom depencancy
+    }
+}
 
 repositories {
     mavenCentral()
@@ -24,8 +35,22 @@ dependencies {
     compileOnly "net.luckperms:api:${project.luckperms_version}"
 }
 
+tasks.register("buildFull", Jar) {
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+    dependsOn tasks.build
+
+    duplicatesStrategy = "exclude"
+    destinationDirectory = file("..\\")
+    archiveBaseName = project.rootProject.name + "-" + project.name
+
+    from files(project.sourceSets.main.output)
+    from files(project.configurations.depencancy.collect { it.isDirectory() ? it : zipTree(it) })
+}
+
 processResources {
     filesMatching("plugin.yml") {
-        expand "plugin_version": project.plugin_version
+        expand "plugin_version": project.spigot_plugin_version
     }
 }
