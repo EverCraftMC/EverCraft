@@ -197,7 +197,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.economy.balancetop", "Use /balancetop", PermissionDefault.TRUE));
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.economy.economy", "Use /economy", PermissionDefault.OP));
 
-        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode.*", "Use /gamemode", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.staff.gamemode.use", "evercraft.commands.staff.gamemode.creative", "evercraft.commands.staff.gamemode.survival", "evercraft.commands.staff.gamemode.adventure", "evercraft.commands.staff.gamemode.spectator"), Arrays.asList(true, true, true, true))));
+        getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode.*", "Use /gamemode", PermissionDefault.FALSE, Util.mapFromLists(Arrays.asList("evercraft.commands.staff.gamemode.use", "evercraft.commands.staff.gamemode.creative", "evercraft.commands.staff.gamemode.survival", "evercraft.commands.staff.gamemode.adventure", "evercraft.commands.staff.gamemode.spectator"), Arrays.asList(true, true, true, true, true))));
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode.use", "Use /gamemode", PermissionDefault.OP));
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode.creative", "Use /gmc", PermissionDefault.OP));
         getServer().getPluginManager().addPermission(new Permission("evercraft.commands.staff.gamemode.survival", "Use /gms", PermissionDefault.OP));
