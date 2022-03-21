@@ -34,17 +34,13 @@ import com.kale_ko.evercraft.spigot.commands.warps.SetWarpCommand;
 import com.kale_ko.evercraft.spigot.commands.warps.SpawnCommand;
 import com.kale_ko.evercraft.spigot.commands.warps.WarpCommand;
 import com.kale_ko.evercraft.spigot.commands.warps.WarpsCommand;
-import com.kale_ko.evercraft.spigot.listeners.BannedJoinListener;
 import com.kale_ko.evercraft.spigot.listeners.ChatFormatListener;
 import com.kale_ko.evercraft.spigot.listeners.ChatListener;
 import com.kale_ko.evercraft.spigot.listeners.CommandSpyListener;
 import com.kale_ko.evercraft.spigot.listeners.GlobalMessageListener;
-import com.kale_ko.evercraft.spigot.listeners.MentionListener;
 import com.kale_ko.evercraft.spigot.listeners.MuteListener;
-import com.kale_ko.evercraft.spigot.listeners.PlayerListener;
 import com.kale_ko.evercraft.spigot.listeners.PlayerMoveListener;
 import com.kale_ko.evercraft.spigot.listeners.PvPListener;
-import com.kale_ko.evercraft.spigot.listeners.SeenListener;
 import com.kale_ko.evercraft.spigot.listeners.SignEditorListener;
 import com.kale_ko.evercraft.spigot.listeners.SpawnListener;
 import com.kale_ko.evercraft.spigot.listeners.WelcomeListener;
@@ -221,7 +217,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         Console.info("Loading commands..");
 
-        ((CraftServer) getServer()).getCommandMap().register(getName(), new EverCraftCommand("evercraft", "The main plugin command for EverCraft", Arrays.asList("ku", "ks"), "/evercraft [help, reload]", "evercraft.commands.info.evercraft"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new EverCraftCommand("evercraft", "The main plugin command for EverCraft", Arrays.asList("ec"), "/evercraft [help, reload]", "evercraft.commands.info.evercraft"));
         ((CraftServer) getServer()).getCommandMap().register(getName(), new HelpCommand("help", "See the help", Arrays.asList("h", "howto"), "/help {player (optional)}", "evercraft.commands.info.help"));
         ((CraftServer) getServer()).getCommandMap().register(getName(), new AboutCommand("about", "See the about", Arrays.asList("info", "ip", "discord", "apply", "feedback"), "/about {player (optional)}", "evercraft.commands.info.about"));
         ((CraftServer) getServer()).getCommandMap().register(getName(), new RulesCommand("rules", "See the rules", Arrays.asList("ruleslist"), "/rules {player (optional)}", "evercraft.commands.info.rules"));
@@ -266,15 +262,11 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new GlobalMessageListener());
 
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-        getServer().getPluginManager().registerEvents(new BannedJoinListener(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
         getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
         getServer().getPluginManager().registerEvents(new MuteListener(), this);
         getServer().getPluginManager().registerEvents(new ChatFormatListener(), this);
-        getServer().getPluginManager().registerEvents(new MentionListener(), this);
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
-        getServer().getPluginManager().registerEvents(new SeenListener(), this);
         getServer().getPluginManager().registerEvents(new CommandSpyListener(), this);
         getServer().getPluginManager().registerEvents(new PvPListener(), this);
         getServer().getPluginManager().registerEvents(new SignEditorListener(), this);
