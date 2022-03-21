@@ -6,6 +6,7 @@ import com.kale_ko.evercraft.bungee.commands.server.HubCommand;
 import com.kale_ko.evercraft.bungee.discord.DiscordBot;
 import com.kale_ko.evercraft.bungee.listeners.BannedJoinListener;
 import com.kale_ko.evercraft.bungee.listeners.GlobalMesageListener;
+import com.kale_ko.evercraft.bungee.listeners.MaintenanceListener;
 import com.kale_ko.evercraft.bungee.listeners.PlayerJoinListener;
 import com.kale_ko.evercraft.bungee.listeners.SeenListener;
 import com.kale_ko.evercraft.bungee.listeners.ServerPingListener;
@@ -61,6 +62,8 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         config.addDefault("messages.noconsole", "You can't use that command from the console");
         config.addDefault("messages.allreadyconnected", "You are already connected to that server");
         config.addDefault("messages.playernotfound", "{player} can't be found");
+        config.addDefault("messages.underMaintenance", "&cThe server is currently in maintenance mode, please come back later");
+        config.addDefault("messages.toggleMaintenance", "Maintenance mode is now {status}");
         config.addDefault("messages.usage", "Usage: {usage}");
         config.addDefault("messages.joinMessage", "&e{player} &ehas joined the server!");
         config.addDefault("messages.moveMessage", "&e{player} &ehas moved to {server}");
@@ -97,6 +100,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
         Console.info("Loading event listeners..");
 
         getProxy().getPluginManager().registerListener(this, new BannedJoinListener());
+        getProxy().getPluginManager().registerListener(this, new MaintenanceListener());
         getProxy().getPluginManager().registerListener(this, new PlayerJoinListener());
         getProxy().getPluginManager().registerListener(this, new SeenListener());
         getProxy().getPluginManager().registerListener(this, new GlobalMesageListener());
