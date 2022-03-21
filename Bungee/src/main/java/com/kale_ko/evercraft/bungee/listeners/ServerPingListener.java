@@ -35,9 +35,9 @@ public class ServerPingListener implements Listener {
         players.setSample(playerlist.toArray(new PlayerInfo[] {}));
 
         if (MaintenanceCommand.underMaintenance) {
-            event.setResponse(new ServerPing(protocol, new Players(players.getMax(), 0, new PlayerInfo[] {}), Util.flattenBungeeComponent(Util.stringToBungeeComponent(BungeePlugin.Instance.config.getString("config.maintenanceMotd"))), event.getResponse().getFaviconObject()));
+            event.setResponse(new ServerPing(protocol, new Players(players.getMax(), 0, new PlayerInfo[] {}), Util.flattenBungeeComponent(Util.stringToBungeeComponent(Util.formatMessage(BungeePlugin.Instance.config.getString("config.maintenanceMotd")))), event.getResponse().getFaviconObject()));
         } else {
-            event.setResponse(new ServerPing(protocol, players, Util.flattenBungeeComponent(Util.stringToBungeeComponent(BungeePlugin.Instance.config.getString("config.motd"))), event.getResponse().getFaviconObject()));
+            event.setResponse(new ServerPing(protocol, players, Util.flattenBungeeComponent(Util.stringToBungeeComponent(Util.formatMessage(BungeePlugin.Instance.config.getString("config.motd")))), event.getResponse().getFaviconObject()));
         }
     }
 }
