@@ -41,8 +41,10 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
         config = BungeeConfig.load("config.yml");
 
-        config.addDefault("config.prefix", "&6&l[EverCraft]&r");
+        config.addDefault("config.prefix", "&3&l[EverCraft]&r");
         config.addDefault("config.serverName", "");
+        config.addDefault("config.motd", "&3&lEverCraft!");
+        config.addDefault("config.maintenanceMotd", "&c&lEverCraft!");
         config.addDefault("config.mainServer", "hub");
         config.addDefault("config.broadcastIntervial", 900);
         config.addDefault("config.broadcastMessages", Arrays.asList("&3&lMake sure to join our Discord with /discord!"));
