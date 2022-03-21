@@ -3,6 +3,7 @@ package com.kale_ko.evercraft.bungee;
 import com.kale_ko.evercraft.bungee.broadcast.Broadcast;
 import com.kale_ko.evercraft.bungee.commands.info.EverCraftBungeeCommand;
 import com.kale_ko.evercraft.bungee.commands.server.HubCommand;
+import com.kale_ko.evercraft.bungee.commands.server.MaintenanceCommand;
 import com.kale_ko.evercraft.bungee.discord.DiscordBot;
 import com.kale_ko.evercraft.bungee.listeners.BannedJoinListener;
 import com.kale_ko.evercraft.bungee.listeners.GlobalMesageListener;
@@ -96,6 +97,7 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
         getProxy().getPluginManager().registerCommand(this, new EverCraftBungeeCommand("evercraftbungee", Arrays.asList("ecb"), "evercraft.commands.info.evercraft"));
         getProxy().getPluginManager().registerCommand(this, new HubCommand("hub", Arrays.asList("lobby"), "evercraft.commands.server.hub"));
+        getProxy().getPluginManager().registerCommand(this, new MaintenanceCommand("maintenance", Arrays.asList(), "evercraft.commands.server.maintenance"));
 
         Console.info("Finished loading commands");
 
