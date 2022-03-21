@@ -3,6 +3,8 @@ package com.kale_ko.evercraft.bungee.listeners;
 import java.util.ArrayList;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeePlugin;
+import com.kale_ko.evercraft.bungee.Util;
+import com.kale_ko.evercraft.bungee.commands.server.MaintenanceCommand;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.ServerPing.PlayerInfo;
 import net.md_5.bungee.api.ServerPing.Players;
@@ -32,6 +34,10 @@ public class ServerPingListener implements Listener {
         Players players = event.getResponse().getPlayers();
         players.setSample(playerlist.toArray(new PlayerInfo[] {}));
 
-        event.setResponse(new ServerPing(protocol, players, event.getResponse().getDescriptionComponent(), event.getResponse().getFaviconObject()));
+        if (MaintenanceCommand.underMaintenance) {
+            event.setResponse(new ServerPing(protocol, new Players(players.getMax(), 0, new PlayerInfo[] {}), Util.flattenBungeeComponent(Util.stringToBungeeComponent(BungeePlugin.Instance.config.getString("config.maintenanceMotd"))), event.getResponse().getFaviconObject()));
+        } else {
+            event.setResponse(new ServerPing(protocol, players, Util.flattenBungeeComponent(Util.stringToBungeeComponent(BungeePlugin.Instance.config.getString("config.motd"))), event.getResponse().getFaviconObject()));
+        }
     }
 }
