@@ -4,8 +4,10 @@ import com.kale_ko.evercraft.bungee.broadcast.Broadcast;
 import com.kale_ko.evercraft.bungee.commands.info.EverCraftBungeeCommand;
 import com.kale_ko.evercraft.bungee.commands.server.HubCommand;
 import com.kale_ko.evercraft.bungee.discord.DiscordBot;
+import com.kale_ko.evercraft.bungee.listeners.BannedJoinListener;
 import com.kale_ko.evercraft.bungee.listeners.GlobalMesageListener;
 import com.kale_ko.evercraft.bungee.listeners.PlayerJoinListener;
+import com.kale_ko.evercraft.bungee.listeners.SeenListener;
 import com.kale_ko.evercraft.bungee.listeners.ServerPingListener;
 import com.kale_ko.evercraft.bungee.listeners.WelcomeListener;
 import com.kale_ko.evercraft.shared.mysql.MySQLConfig;
@@ -87,14 +89,16 @@ public class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements c
 
         Console.info("Loading commands..");
 
-        getProxy().getPluginManager().registerCommand(this, new EverCraftBungeeCommand("evercraftbungee", Arrays.asList("kub", "ksb"), "evercraft.commands.info.evercraft"));
+        getProxy().getPluginManager().registerCommand(this, new EverCraftBungeeCommand("evercraftbungee", Arrays.asList("ecb"), "evercraft.commands.info.evercraft"));
         getProxy().getPluginManager().registerCommand(this, new HubCommand("hub", Arrays.asList("lobby"), "evercraft.commands.server.hub"));
 
         Console.info("Finished loading commands");
 
         Console.info("Loading event listeners..");
 
+        getProxy().getPluginManager().registerListener(this, new BannedJoinListener());
         getProxy().getPluginManager().registerListener(this, new PlayerJoinListener());
+        getProxy().getPluginManager().registerListener(this, new SeenListener());
         getProxy().getPluginManager().registerListener(this, new GlobalMesageListener());
         getProxy().getPluginManager().registerListener(this, new ServerPingListener());
         getProxy().getPluginManager().registerListener(this, new WelcomeListener());
