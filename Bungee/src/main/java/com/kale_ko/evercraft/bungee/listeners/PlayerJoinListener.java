@@ -19,6 +19,10 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PostLoginEvent event) {
+        if (BungeePlugin.Instance.players.getString(event.getPlayer().getName() + ".nickname") == null) {
+            BungeePlugin.Instance.players.set(event.getPlayer().getName() + ".nickname", event.getPlayer().getName());
+        }
+
         Util.updatePlayerName(event.getPlayer());
     }
 }

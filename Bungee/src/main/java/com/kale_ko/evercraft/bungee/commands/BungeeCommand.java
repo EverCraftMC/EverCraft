@@ -12,7 +12,5 @@ public class BungeeCommand extends Command {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
-
-    }
+    public void execute(CommandSender sender, String[] args) { }
 }
