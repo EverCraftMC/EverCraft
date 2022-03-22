@@ -18,6 +18,7 @@ configurations {
 repositories {
     mavenCentral()
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/public/" }
+    maven { url "https://jitpack.io/" }
 }
 
 dependencies {
@@ -27,6 +28,8 @@ dependencies {
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
     depencancy "net.dv8tion:JDA:${project.jda_version}"
+
+    compileOnly "com.github.NuVotifier:NuVotifier:${project.votifier_version}"
 }
 
 tasks.register("buildFull", Jar) {
