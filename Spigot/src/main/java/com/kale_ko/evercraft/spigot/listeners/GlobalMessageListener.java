@@ -34,7 +34,7 @@ public class GlobalMessageListener implements PluginMessageListener {
                     String text = in.readUTF();
 
                     for (Player player2 : SpigotPlugin.Instance.getServer().getOnlinePlayers()) {
-                        if (Util.hasPermission(player2, "evercraft.commands.staff.commandspy") && (Util.hasMetadata(player2, "receiveCommandSpy") && Util.getMetadata(player2, "receiveCommandSpy").asBoolean())) {
+                        if (Util.hasPermission(player2, "evercraft.commands.staff.commandspy") && (SpigotPlugin.Instance.players.getBoolean(player.getName() + ".receiveCommandSpy") != null && SpigotPlugin.Instance.players.getBoolean(player.getName() + ".receiveCommandSpy"))) {
                             Util.sendMessage(player2, text, true);
                         }
                     }

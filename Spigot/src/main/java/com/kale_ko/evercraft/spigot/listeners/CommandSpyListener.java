@@ -14,7 +14,7 @@ public class CommandSpyListener implements Listener {
             Util.messageBungee("globalCommandspy", SpigotPlugin.Instance.config.getString("config.serverName"), "[" + SpigotPlugin.Instance.config.getString("config.serverName") + "] " + SpigotPlugin.Instance.config.getString("messages.commandspy").replace("{player}", Util.getPlayerName(event.getPlayer())).replace("{message}", event.getMessage()));
 
             for (Player player : SpigotPlugin.Instance.getServer().getOnlinePlayers()) {
-                if (player != event.getPlayer() && Util.hasPermission(player, "evercraft.commands.staff.commandspy") && (Util.hasMetadata(player, "receiveCommandSpy") && Util.getMetadata(player, "receiveCommandSpy").asBoolean())) {
+                if (player != event.getPlayer() && Util.hasPermission(player, "evercraft.commands.staff.commandspy") && (SpigotPlugin.Instance.players.getBoolean(player.getName() + ".receiveCommandSpy") != null && SpigotPlugin.Instance.players.getBoolean(player.getName() + ".receiveCommandSpy"))) {
                     Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.commandspy").replace("{player}", Util.getPlayerName(event.getPlayer())).replace("{message}", event.getMessage()), true);
                 }
             }
