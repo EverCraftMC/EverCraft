@@ -15,20 +15,14 @@ public class PvPCommand extends SpigotCommand {
     @Override
     public void run(CommandSender sender, String label, String[] args) {
         if (sender instanceof Player player) {
-            if (Util.hasMetadata(player, "enablePvP")) {
-                if (Util.getMetadata(player, "enablePvP").asBoolean()) {
-                    Util.setMetadata(player, "enablePvP", false);
-
-                    Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglepvp").replace("{value}", "off"));
-                } else {
-                    Util.setMetadata(player, "enablePvP", true);
-
-                    Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglepvp").replace("{value}", "on"));
-                }
-            } else {
-                Util.setMetadata(player, "enablePvP", false);
+            if (SpigotPlugin.Instance.players.getBoolean(args[0] + ".enablePvP")) {
+                SpigotPlugin.Instance.players.set(args[0] + ".enablePvP", false);
 
                 Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglepvp").replace("{value}", "off"));
+            } else {
+                SpigotPlugin.Instance.players.set(args[0] + ".enablePvP", true);
+
+                Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglepvp").replace("{value}", "on"));
             }
         } else {
             Util.sendMessage(sender, SpigotPlugin.Instance.config.getString("messages.noconsole"));

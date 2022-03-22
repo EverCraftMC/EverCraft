@@ -15,18 +15,12 @@ public class CommandSpyCommand extends SpigotCommand {
     @Override
     public void run(CommandSender sender, String label, String[] args) {
         if (sender instanceof Player player) {
-            if (Util.hasMetadata(player, "receiveCommandSpy")) {
-                if (Util.getMetadata(player, "receiveCommandSpy").asBoolean()) {
-                    Util.setMetadata(player, "receiveCommandSpy", false);
+            if (SpigotPlugin.Instance.players.getBoolean(args[0] + ".receiveCommandSpy")) {
+                SpigotPlugin.Instance.players.set(args[0] + ".receiveCommandSpy", false);
 
-                    Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglecommandspy").replace("{value}", "off"));
-                } else {
-                    Util.setMetadata(player, "receiveCommandSpy", true);
-
-                    Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglecommandspy").replace("{value}", "on"));
-                }
+                Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglecommandspy").replace("{value}", "off"));
             } else {
-                Util.setMetadata(player, "receiveCommandSpy", true);
+                SpigotPlugin.Instance.players.set(args[0] + ".receiveCommandSpy", true);
 
                 Util.sendMessage(player, SpigotPlugin.Instance.config.getString("messages.togglecommandspy").replace("{value}", "on"));
             }
