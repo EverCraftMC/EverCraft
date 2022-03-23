@@ -9,6 +9,8 @@ import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.Plugin {
+    private static BungeeMain Instance;
+
     private FileConfig config;
     private FileConfig messages;
     private MySQLConfig players;
@@ -16,6 +18,11 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
     private LuckPerms luckPerms;
 
     private DiscordBot bot;
+
+    @Override
+    public void onLoad() {
+        BungeeMain.Instance = this;
+    }
 
     @Override
     public void onEnable() {
@@ -44,6 +51,8 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.getLogger().info("Loading messages..");
 
         this.messages = new FileConfig("messages.json");
+
+        this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
 
         this.getLogger().info("Finished loading messages");
 
@@ -100,6 +109,10 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.onEnable();
 
         this.getLogger().info("Finished reloading plugin");
+    }
+
+    public static BungeeMain getInstance() {
+        return BungeeMain.Instance;
     }
 
     public FileConfig getPluginConfig() {

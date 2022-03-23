@@ -8,11 +8,18 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 
 public class SpigotMain extends JavaPlugin implements Plugin {
+    private static SpigotMain Instance;
+
     private FileConfig config;
     private FileConfig messages;
     private MySQLConfig players;
 
     private LuckPerms luckPerms;
+
+    @Override
+    public void onLoad() {
+        SpigotMain.Instance = this;
+    }
 
     @Override
     public void onEnable() {
@@ -89,6 +96,10 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.onEnable();
 
         this.getLogger().info("Finished reloading plugin");
+    }
+
+    public static SpigotMain getInstance() {
+        return SpigotMain.Instance;
     }
 
     public FileConfig getPluginConfig() {
