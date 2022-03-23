@@ -1,8 +1,11 @@
 package com.kale_ko.evercraft.bungee;
 
+import com.kale_ko.evercraft.bungee.commands.economy.BalanceCommand;
+import com.kale_ko.evercraft.bungee.commands.economy.EconomyCommand;
 import com.kale_ko.evercraft.shared.config.FileConfig;
 import com.kale_ko.evercraft.shared.config.MySQLConfig;
 import com.kale_ko.evercraft.shared.discord.DiscordBot;
+import com.kale_ko.evercraft.shared.economy.Economy;
 import net.dv8tion.jda.api.entities.Activity.ActivityType;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -14,6 +17,8 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
     private FileConfig config;
     private FileConfig messages;
     private MySQLConfig players;
+
+    private Economy economy;
 
     private LuckPerms luckPerms;
 
@@ -53,6 +58,10 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.messages = new FileConfig("messages.json");
 
         this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
+        this.messages.addDefault("error.playerNotFound", "&cCouldn't find player {player}");
+        this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
+        this.messages.addDefault("economy.balance", "&aYou balance is currently {balance}");
+        this.messages.addDefault("economy.economy", "&aSuccessfully set {player}'s balance to {balance}");
 
         this.getLogger().info("Finished loading messages");
 
@@ -62,11 +71,24 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Finished loading player data");
 
+        this.getLogger().info("Loading economy..");
+
+        this.economy = new Economy(this.getPlayerData());
+
+        this.getLogger().info("Finished loading economy");
+
         this.getLogger().info("Loading LuckPerms integration..");
 
         this.luckPerms = LuckPermsProvider.get();
 
         this.getLogger().info("Finished loading LuckPerms integration");
+
+        this.getLogger().info("Loading commands..");
+
+        new BalanceCommand().register();
+        new EconomyCommand().register();
+
+        this.getLogger().info("Finished loading commands");
 
         this.getLogger().info("Finished loading plugin");
 
@@ -125,6 +147,10 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
     public MySQLConfig getPlayerData() {
         return this.players;
+    }
+
+    public Economy getEconomy() {
+        return this.economy;
     }
 
     public LuckPerms getLuckPerms() {

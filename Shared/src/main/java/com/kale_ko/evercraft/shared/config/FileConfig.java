@@ -2,7 +2,7 @@ package com.kale_ko.evercraft.shared.config;
 
 import java.util.List;
 import java.util.Map;
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -81,8 +81,7 @@ public class FileConfig extends AbstractConfig {
             }
             reader.close();
 
-            objects = new Gson().fromJson(contents.toString(), new TypeToken<Map<String, Object>>() {
-            }.getType());
+            objects = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create().fromJson(contents.toString(), new TypeToken<Map<String, Object>>() {}.getType());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -91,7 +90,7 @@ public class FileConfig extends AbstractConfig {
     public void save() {
         try {
             BufferedWriter writter = new BufferedWriter(new FileWriter(file));
-            writter.write(new Gson().toJson(objects));
+            writter.write(new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create().toJson(objects));
             writter.close();
         } catch (IOException e) {
             e.printStackTrace();

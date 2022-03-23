@@ -1,14 +1,13 @@
-package com.kale_ko.evercraft.bungee.commands;
+package com.kale_ko.evercraft.spigot.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.kale_ko.evercraft.bungee.BungeeMain;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.TabExecutor;
+import com.kale_ko.evercraft.spigot.SpigotMain;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 
-public abstract class BungeeCommand extends Command implements TabExecutor {
+public abstract class SpigotCommand extends Command {
     public static final String name = null;
     public static final String description = "";
 
@@ -16,24 +15,33 @@ public abstract class BungeeCommand extends Command implements TabExecutor {
 
     public static final String permission = null;
 
-    protected BungeeCommand() {
-        super(name, permission, aliases.toArray(new String[] {}));
-        this.setPermissionMessage(BungeeMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission));
+    protected SpigotCommand() {
+        super(name);
+        this.setLabel(name);
+        this.setName(name);
+        this.setDescription(description);
+        this.setAliases(aliases);
+        this.setPermission(permission);
+        this.setPermissionMessage(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission));
+
+        this.register();
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (sender.hasPermission(permission)) {
             this.run(sender, args);
         } else {
-            sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission)));
+            sender.sendMessage(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission));
         }
+
+        return true;
     }
 
     public void run(CommandSender sender, String[] args) { }
 
     @Override
-    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
         return null;
     }
 
@@ -60,6 +68,6 @@ public abstract class BungeeCommand extends Command implements TabExecutor {
     }
 
     public void register() {
-        BungeeMain.getInstance().getProxy().getPluginManager().registerCommand(BungeeMain.getInstance(), this);
+        ((CraftServer) SpigotMain.getInstance().getServer()).getCommandMap().register(SpigotMain.getInstance().getName(), this);
     }
 }

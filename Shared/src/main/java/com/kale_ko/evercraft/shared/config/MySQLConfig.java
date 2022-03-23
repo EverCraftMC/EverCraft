@@ -1,7 +1,7 @@
 package com.kale_ko.evercraft.shared.config;
 
 import java.util.List;
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kale_ko.evercraft.shared.mysql.MySQL;
 import java.util.Arrays;
 
@@ -30,17 +30,17 @@ public class MySQLConfig extends AbstractConfig {
     }
 
     public <T> T getSerializable(String key, Class<T> clazz) {
-        return new Gson().fromJson(getRaw(key), clazz);
+        return new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create().fromJson(getRaw(key), clazz);
     }
 
     public <T> List<T> getSerializableList(String key, Class<T> clazz) {
-        return Arrays.asList(new Gson().fromJson(getRaw(key), clazz));
+        return Arrays.asList(new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create().fromJson(getRaw(key), clazz));
     }
 
     public void set(String key, Object value) {
         String json = null;
         if (value != null) {
-            json = new Gson().toJson(value);
+            json = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create().toJson(value);
         }
 
         if (json != null && mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'") == null) {
