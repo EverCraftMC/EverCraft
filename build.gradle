@@ -9,8 +9,6 @@ archivesBaseName = "evercraft"
 group = "com.kale_ko"
 version = project.project_version
 
-def projects = [":Shared", ":Spigot", ":Bungee"]
-
 tasks.register("buildAll") {
-    dependsOn projects.collect { it + ":buildFull" }
+    dependsOn subprojects.collect { it.tasks.buildFull }
 }

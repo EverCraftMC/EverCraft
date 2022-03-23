@@ -1,10 +1,24 @@
-package com.kale_ko.evercraft.shared;
+package com.kale_ko.evercraft.shared.config;
 
 import java.util.Collection;
 import java.util.List;
 
-public interface PluginConfig {
-    public Collection<String> getKeys();
+public interface Config {
+    public Collection<String> getKeys(String path, Boolean deep);
+
+    public default Collection<String> getKeys(String path) {
+        return this.getKeys(path, false);
+    }
+
+    public default Collection<String> getKeys(Boolean deep) {
+        return this.getKeys("", deep);
+    }
+
+    public default Collection<String> getKeys() {
+        return this.getKeys("", false);
+    }
+
+    public Boolean exists(String key);
 
     public Object getObject(String key);
 
@@ -32,7 +46,9 @@ public interface PluginConfig {
 
     public List<Boolean> getBooleanList(String key);
 
-    // public <T> T getSerializable(String key, T clazz);
+    public <T> T getSerializable(String key, Class<T> clazz);
+
+    public <T> List<T> getSerializableList(String key, Class<T> clazz);
 
     public void set(String key, Object value);
 
@@ -43,4 +59,6 @@ public interface PluginConfig {
     public void reload();
 
     public void save();
+
+    public void close();
 }
