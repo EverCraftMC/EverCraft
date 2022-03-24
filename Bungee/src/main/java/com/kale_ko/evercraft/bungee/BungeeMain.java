@@ -3,6 +3,7 @@ package com.kale_ko.evercraft.bungee;
 import com.kale_ko.evercraft.bungee.commands.economy.BalanceCommand;
 import com.kale_ko.evercraft.bungee.commands.economy.EconomyCommand;
 import com.kale_ko.evercraft.bungee.commands.player.NickNameCommand;
+import com.kale_ko.evercraft.bungee.listeners.MessageListener;
 import com.kale_ko.evercraft.shared.config.FileConfig;
 import com.kale_ko.evercraft.shared.config.MySQLConfig;
 import com.kale_ko.evercraft.shared.discord.DiscordBot;
@@ -93,6 +94,12 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Finished loading commands");
 
+        this.getLogger().info("Loading listeners..");
+
+        this.getProxy().getPluginManager().registerListener(this, new MessageListener());
+
+        this.getLogger().info("Finished loading listeners");
+
         this.getLogger().info("Finished loading plugin");
 
         this.getLogger().info("Starting Discord bot..");
@@ -121,6 +128,12 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         players.close();
 
         this.getLogger().info("Finished closing player data..");
+
+        this.getLogger().info("Unloading listeners..");
+
+        this.getProxy().getPluginManager().unregisterListeners(this);
+
+        this.getLogger().info("Finished unloading listeners");
 
         this.getLogger().info("Finished disabling plugin");
     }

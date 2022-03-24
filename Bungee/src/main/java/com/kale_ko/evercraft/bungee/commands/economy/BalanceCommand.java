@@ -30,6 +30,8 @@ public class BalanceCommand extends BungeeCommand {
         } else {
             if (sender instanceof ProxiedPlayer player) {
                 player.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("economy.balance").replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()).toString())));
+            } else {
+                sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole")));
             }
         }
     }

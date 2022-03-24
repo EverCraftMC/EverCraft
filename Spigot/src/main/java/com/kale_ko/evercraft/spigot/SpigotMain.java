@@ -1,9 +1,13 @@
 package com.kale_ko.evercraft.spigot;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.kale_ko.evercraft.shared.Plugin;
 import com.kale_ko.evercraft.shared.config.FileConfig;
 import com.kale_ko.evercraft.shared.config.MySQLConfig;
 import com.kale_ko.evercraft.shared.economy.Economy;
+import com.kale_ko.evercraft.spigot.listeners.MessageListener;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -18,6 +22,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
     private Economy economy;
 
     private LuckPerms luckPerms;
+
+    private String serverName;
 
     @Override
     public void onLoad() {
@@ -68,7 +74,24 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Finished loading LuckPerms integration");
 
+        // this.getLogger().info("Loading commands..");
+
+        // this.getLogger().info("Finished loading commands");
+
+        this.getLogger().info("Loading listeners..");
+
+        this.getServer().getPluginManager().registerEvents(new MessageListener(), this);
+
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+        this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
+
+        this.getLogger().info("Finished loading listeners");
+
         this.getLogger().info("Finished loading plugin");
+
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("GetServer");
+        this.getServer().sendPluginMessage(this, "BungeeCord", out.toByteArray());
     }
 
     @Override
@@ -92,6 +115,15 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         players.close();
 
         this.getLogger().info("Finished closing player data..");
+
+        this.getLogger().info("Unloading listeners..");
+
+        HandlerList.unregisterAll(this);
+
+        this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
+        this.getServer().getMessenger().unregisterIncomingPluginChannel(this);
+
+        this.getLogger().info("Finished unloading listeners");
 
         this.getLogger().info("Finished disabling plugin");
     }
@@ -129,5 +161,13 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     public LuckPerms getLuckPerms() {
         return this.luckPerms;
+    }
+
+    public String getServerName() {
+        return this.serverName;
+    }
+
+    public void setServerName(String value) {
+        this.serverName = value;
     }
 }
