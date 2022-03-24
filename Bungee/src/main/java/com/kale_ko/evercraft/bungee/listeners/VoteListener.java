@@ -12,10 +12,8 @@ public class VoteListener implements Listener {
     public void onPlayerJoin(VotifierEvent event) {
         ProxiedPlayer player = BungeePlugin.Instance.getProxy().getPlayer(event.getVote().getUsername());
 
-        BungeePlugin.Instance.Console.info("Received vote from " + event.getVote().getServiceName() + " (" + event.getVote().getAddress() + ") as user " + event.getVote().getUsername());
-
         if (player != null) {
-            Util.broadcastMessage("&c&lThanks for voting " + event.getVote().getUsername() + "! /vote");
+            Util.broadcastMessage("&cThanks for voting " + event.getVote().getUsername() + "! It helps us a lot if you just do /vote");
         }
     }
 }
