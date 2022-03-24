@@ -3,6 +3,7 @@ package com.kale_ko.evercraft.spigot;
 import com.kale_ko.evercraft.shared.Plugin;
 import com.kale_ko.evercraft.shared.config.FileConfig;
 import com.kale_ko.evercraft.shared.config.MySQLConfig;
+import com.kale_ko.evercraft.shared.economy.Economy;
 import org.bukkit.plugin.java.JavaPlugin;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -13,6 +14,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
     private FileConfig config;
     private FileConfig messages;
     private MySQLConfig players;
+
+    private Economy economy;
 
     private LuckPerms luckPerms;
 
@@ -52,6 +55,12 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.players = new MySQLConfig(this.config.getString("database.host"), this.config.getInt("database.port"), this.config.getString("database.name"), "players", this.config.getString("database.username"), this.config.getString("database.password"));
 
         this.getLogger().info("Finished loading player data");
+
+        this.getLogger().info("Loading economy..");
+
+        this.economy = new Economy(this.getPlayerData());
+
+        this.getLogger().info("Finished loading economy");
 
         this.getLogger().info("Loading LuckPerms integration..");
 
@@ -112,6 +121,10 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     public MySQLConfig getPlayerData() {
         return this.players;
+    }
+
+    public Economy getEconomy() {
+        return this.economy;
     }
 
     public LuckPerms getLuckPerms() {

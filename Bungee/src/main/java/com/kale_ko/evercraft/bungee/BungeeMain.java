@@ -2,6 +2,7 @@ package com.kale_ko.evercraft.bungee;
 
 import com.kale_ko.evercraft.bungee.commands.economy.BalanceCommand;
 import com.kale_ko.evercraft.bungee.commands.economy.EconomyCommand;
+import com.kale_ko.evercraft.bungee.commands.player.NickNameCommand;
 import com.kale_ko.evercraft.shared.config.FileConfig;
 import com.kale_ko.evercraft.shared.config.MySQLConfig;
 import com.kale_ko.evercraft.shared.discord.DiscordBot;
@@ -84,6 +85,8 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.getLogger().info("Finished loading LuckPerms integration");
 
         this.getLogger().info("Loading commands..");
+
+        new NickNameCommand().register();
 
         new BalanceCommand().register();
         new EconomyCommand().register();
