@@ -219,7 +219,7 @@ public class SpigotPlugin extends JavaPlugin implements Plugin {
 
         ((CraftServer) getServer()).getCommandMap().register(getName(), new EverCraftCommand("evercraft", "The main plugin command for EverCraft", Arrays.asList("ec"), "/evercraft [help, reload]", "evercraft.commands.info.evercraft"));
         ((CraftServer) getServer()).getCommandMap().register(getName(), new HelpCommand("help", "See the help", Arrays.asList("h", "howto"), "/help {player (optional)}", "evercraft.commands.info.help"));
-        ((CraftServer) getServer()).getCommandMap().register(getName(), new AboutCommand("about", "See the about", Arrays.asList("info", "ip", "discord", "apply", "feedback"), "/about {player (optional)}", "evercraft.commands.info.about"));
+        ((CraftServer) getServer()).getCommandMap().register(getName(), new AboutCommand("about", "See the about", Arrays.asList("info", "ip", "discord", "apply", "vote"), "/about {player (optional)}", "evercraft.commands.info.about"));
         ((CraftServer) getServer()).getCommandMap().register(getName(), new RulesCommand("rules", "See the rules", Arrays.asList("ruleslist"), "/rules {player (optional)}", "evercraft.commands.info.rules"));
         ((CraftServer) getServer()).getCommandMap().register(getName(), new StaffCommand("staff", "See the staff", Arrays.asList("stafflist"), "/staff {player (optional)}", "evercraft.commands.info.staff"));
         ((CraftServer) getServer()).getCommandMap().register(getName(), new ListCommand("list", "See the list", Arrays.asList("players", "playerlist", "listplayers"), "/list {player (optional)}", "evercraft.commands.info.list"));
