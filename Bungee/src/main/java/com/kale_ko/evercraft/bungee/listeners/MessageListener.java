@@ -23,7 +23,7 @@ public class MessageListener implements Listener {
                     ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
                     out.writeUTF("globalMessage");
-                    out.writeUTF("[" + in.readUTF() + "]" + BungeeMain.getInstance().getProxy().getPlayer(UUID.fromString(in.readUTF())) + " > " + in.readUTF());
+                    out.writeUTF("[" + in.readUTF() + "] " + BungeeMain.getInstance().getProxy().getPlayer(UUID.fromString(in.readUTF())) + " > " + in.readUTF());
 
                     server.sendData("BungeeCord", out.toByteArray());
                 }
