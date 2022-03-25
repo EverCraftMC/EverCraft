@@ -11,7 +11,11 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(ServerConnectEvent event) {
         if (event.getReason().equals(ServerConnectEvent.Reason.JOIN_PROXY)) {
-            event.setTarget(BungeePlugin.Instance.getProxy().getServerInfo(BungeePlugin.Instance.config.getString("config.mainServer")));
+            if (BungeePlugin.Instance.getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostString().split("\\.")[0]) != null) {
+                event.setTarget(BungeePlugin.Instance.getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostString().split("\\.")[0]));
+            } else {
+                event.setTarget(BungeePlugin.Instance.getProxy().getServerInfo(BungeePlugin.Instance.config.getString("config.mainServer")));
+            }
         }
 
         event.getPlayer().setReconnectServer(BungeePlugin.Instance.getProxy().getServerInfo(BungeePlugin.Instance.config.getString("config.mainServer")));
