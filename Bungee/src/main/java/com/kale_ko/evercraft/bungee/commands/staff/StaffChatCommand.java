@@ -37,6 +37,7 @@ public class StaffChatCommand extends BungeeCommand {
 
         out.writeUTF("globalPermMessage");
         out.writeUTF(senderName + " > " + message);
+        out.writeUTF(permission);
 
         for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
             server.sendData("BungeeCord", out.toByteArray());

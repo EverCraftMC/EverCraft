@@ -3,6 +3,7 @@ package com.kale_ko.evercraft.bungee;
 import com.kale_ko.evercraft.bungee.commands.economy.BalanceCommand;
 import com.kale_ko.evercraft.bungee.commands.economy.EconomyCommand;
 import com.kale_ko.evercraft.bungee.commands.player.NickNameCommand;
+import com.kale_ko.evercraft.bungee.commands.staff.StaffChatCommand;
 import com.kale_ko.evercraft.bungee.listeners.MessageListener;
 import com.kale_ko.evercraft.shared.config.FileConfig;
 import com.kale_ko.evercraft.shared.config.MySQLConfig;
@@ -11,7 +12,6 @@ import com.kale_ko.evercraft.shared.economy.Economy;
 import net.dv8tion.jda.api.entities.Activity.ActivityType;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.Plugin {
@@ -92,6 +92,8 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         new BalanceCommand().register();
         new EconomyCommand().register();
+
+        new StaffChatCommand().register();
 
         this.getLogger().info("Finished loading commands");
 
