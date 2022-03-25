@@ -20,13 +20,11 @@ public class NickNameCommand extends BungeeCommand {
     public void run(CommandSender sender, String[] args) {
         if (args.length > 0) {
             if (sender instanceof ProxiedPlayer player) {
-                StringBuilder nick = new StringBuilder();
-
-                for (String arg : args) {
-                    nick.append(arg + " ");
+                if (args[0].length() < 16) {
+                    BungeeMain.getInstance().getPlayerData().set("players." + player.getUniqueId(), args[0]);
+                } else {
+                    sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
                 }
-
-                BungeeMain.getInstance().getPlayerData().set("players." + player.getUniqueId(), nick.substring(0, nick.length() - 1));
             } else {
                 sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole")));
             }

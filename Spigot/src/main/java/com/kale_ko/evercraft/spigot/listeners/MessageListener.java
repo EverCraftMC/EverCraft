@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.server.BroadcastMessageEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 public class MessageListener implements Listener, PluginMessageListener {
@@ -25,18 +24,6 @@ public class MessageListener implements Listener, PluginMessageListener {
         SpigotMain.getInstance().getServer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
     }
 
-    @EventHandler
-    public void onBroadcastMessage(BroadcastMessageEvent event) {
-        event.setCancelled(true);
-
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("globalMessage");
-        out.writeUTF(SpigotMain.getInstance().getServerName());
-        out.writeUTF(event.getMessage());
-
-        SpigotMain.getInstance().getServer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
-    }
-
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         if (channel.equals("BungeeCord")) {
@@ -47,6 +34,8 @@ public class MessageListener implements Listener, PluginMessageListener {
                 SpigotMain.getInstance().setServerName(in.readUTF());
             } else if (subChannel.equals("globalMessage")) {
                 SpigotMain.getInstance().getServer().broadcastMessage(in.readUTF());
+            } else if (subChannel.equals("globalPermMessage")) {
+                SpigotMain.getInstance().getServer().broadcast(in.readUTF(), in.readUTF());
             }
         }
     }

@@ -42,17 +42,21 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + "config.json");
 
-        this.config.addDefault("database.host", "localhost");
-        this.config.addDefault("database.port", 3306);
-        this.config.addDefault("database.name", "evercraft");
-        this.config.addDefault("database.username", "root");
-        this.config.addDefault("database.password", "");
+        // this.config.addDefault("database.host", "localhost");
+        // this.config.addDefault("database.port", 3306);
+        // this.config.addDefault("database.name", "evercraft");
+        // this.config.addDefault("database.username", "root");
+        // this.config.addDefault("database.password", "");
 
         this.getLogger().info("Finished loading config");
 
         this.getLogger().info("Loading messages..");
 
         this.messages = new FileConfig("messages.json");
+
+        this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
+        this.messages.addDefault("error.playerNotFound", "&cCouldn't find player {player}");
+        this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
 
         this.getLogger().info("Finished loading messages");
 
