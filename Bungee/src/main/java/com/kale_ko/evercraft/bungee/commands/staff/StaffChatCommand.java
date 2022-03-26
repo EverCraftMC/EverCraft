@@ -37,14 +37,14 @@ public class StaffChatCommand extends BungeeCommand {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
         out.writeUTF("globalPermMessage");
-        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", message)));
+        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", message.substring(0, message.length() - 1))));
         out.writeUTF(permission);
 
         for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
             server.sendData("BungeeCord", out.toByteArray());
         }
 
-        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.staffChannelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", message))).queue();
+        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.staffChannelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", message.substring(0, message.length() - 1)))).queue();
     }
 
     @Override

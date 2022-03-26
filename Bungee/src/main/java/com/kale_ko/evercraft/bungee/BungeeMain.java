@@ -85,6 +85,8 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.messages.addDefault("economy.yourBalance", "&aYou balance is currently {balance}");
         this.messages.addDefault("economy.otherBalance", "&a{player}'s balance is currently {balance}");
         this.messages.addDefault("economy.economy", "&aSuccessfully set {player}'s balance to {balance}");
+        this.messages.addDefault("moderation.kick.noreason", "&cYou where kicked by {player}");
+        this.messages.addDefault("moderation.kick.reason", "&cYou where kicked by {player} for {reason}");
         this.messages.addDefault("commandspy", "&cSuccessfully toggled your commandspy {value}");
 
         this.getLogger().info("Finished loading messages");

@@ -19,4 +19,9 @@ public class AboutCommand extends BungeeCommand {
     public void run(CommandSender sender, String[] args) {
         sender.sendMessage(TextComponent.fromLegacyText(BungeeMain.getInstance().getPluginMessages().getString("info.about")));
     }
+
+    @Override
+    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+        return Arrays.asList();
+    }
 }

@@ -49,6 +49,10 @@ public class BalanceCommand extends BungeeCommand {
             return Arrays.asList();
         }
 
-        return BungeeCommand.StringUtil.copyPartialMatches(args[args.length - 1], list);
+        if (args.length > 0) {
+            return BungeeCommand.StringUtil.copyPartialMatches(args[args.length - 1], list);
+        } else {
+            return list;
+        }
     }
 }
