@@ -1,6 +1,6 @@
 package com.kale_ko.evercraft.bungee.commands;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.shared.PluginCommand;
@@ -14,7 +14,7 @@ public abstract class BungeeCommand extends Command implements PluginCommand, Ta
     public static final String name = null;
     public static final String description = "";
 
-    public static final List<String> aliases = new ArrayList<String>();
+    public static final List<String> aliases = Arrays.asList();
 
     public static final String permission = null;
 
@@ -37,28 +37,6 @@ public abstract class BungeeCommand extends Command implements PluginCommand, Ta
     @Override
     public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
         return null;
-    }
-
-    public class StringUtil {
-        public static List<String> copyPartialMatches(String token, List<String> originals) {
-            List<String> results = new ArrayList<String>();
-
-            for (String string : originals) {
-                if (startsWithIgnoreCase(string, token)) {
-                    results.add(string);
-                }
-            }
-
-            return results;
-        }
-
-        public static boolean startsWithIgnoreCase(String string, String prefix) {
-            if (string.length() < prefix.length()) {
-                return false;
-            }
-
-            return string.regionMatches(true, 0, prefix, 0, prefix.length());
-        }
     }
 
     public BungeeCommand register() {

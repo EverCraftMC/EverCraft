@@ -2,7 +2,6 @@ package com.kale_ko.evercraft.bungee;
 
 import java.util.Arrays;
 import java.util.List;
-import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
 import com.kale_ko.evercraft.bungee.commands.economy.BalanceCommand;
 import com.kale_ko.evercraft.bungee.commands.economy.EconomyCommand;
 import com.kale_ko.evercraft.bungee.commands.info.AboutCommand;
@@ -13,11 +12,15 @@ import com.kale_ko.evercraft.bungee.commands.moderation.KickCommand;
 import com.kale_ko.evercraft.bungee.commands.player.NickNameCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.CommandSpyCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.StaffChatCommand;
+import com.kale_ko.evercraft.bungee.commands.warp.HubCommand;
+import com.kale_ko.evercraft.bungee.commands.warp.ServerCommand;
 import com.kale_ko.evercraft.bungee.listeners.BungeeListener;
 import com.kale_ko.evercraft.bungee.listeners.MessageListener;
 import com.kale_ko.evercraft.bungee.listeners.PingListener;
+import com.kale_ko.evercraft.bungee.listeners.VoteListener;
 import com.kale_ko.evercraft.bungee.listeners.JoinListener;
 import com.kale_ko.evercraft.bungee.scoreboard.ScoreBoard;
+import com.kale_ko.evercraft.shared.PluginCommand;
 import com.kale_ko.evercraft.shared.config.FileConfig;
 import com.kale_ko.evercraft.shared.config.MySQLConfig;
 import com.kale_ko.evercraft.shared.discord.DiscordBot;
@@ -37,7 +40,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
     private DiscordBot bot;
 
-    private List<BungeeCommand> commands;
+    private List<PluginCommand> commands;
     private List<BungeeListener> listeners;
     private List<Closable> assets;
 
@@ -97,6 +100,9 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.messages.addDefault("economy.yourBalance", "&aYou balance is currently {balance}");
         this.messages.addDefault("economy.otherBalance", "&a{player}'s balance is currently {balance}");
         this.messages.addDefault("economy.economy", "&aSuccessfully set {player}'s balance to {balance}");
+        this.messages.addDefault("vote", "&aThanks so much for voting {player}! /vote");
+        this.messages.addDefault("warp.hub", "&aSuccessfully went to the hub");
+        this.messages.addDefault("warp.alreadyConnected", "&cYou are already in the hub");
         this.messages.addDefault("moderation.kick.noreason", "&cYou where kicked by {player}");
         this.messages.addDefault("moderation.kick.reason", "&cYou where kicked by {player} for {reason}");
         this.messages.addDefault("commandspy", "&cSuccessfully toggled your commandspy {value}");
@@ -127,6 +133,12 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.commands.add(new BalanceCommand().register());
         this.commands.add(new EconomyCommand().register());
 
+        this.commands.add(new HubCommand().register());
+
+        for (String server : this.getProxy().getServers().keySet()) {
+            this.commands.add(new ServerCommand(server).register());
+        }
+
         this.commands.add(new KickCommand().register());
 
         this.commands.add(new StaffChatCommand().register());
@@ -140,6 +152,8 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.listeners.add(new PingListener().register());
 
         this.listeners.add(new MessageListener().register());
+
+        this.listeners.add(new VoteListener().register());
 
         this.getLogger().info("Finished loading listeners");
 
@@ -181,7 +195,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Unregistering commands..");
 
-        for (BungeeCommand command : this.commands) {
+        for (PluginCommand command : this.commands) {
             command.unregister();
         }
 

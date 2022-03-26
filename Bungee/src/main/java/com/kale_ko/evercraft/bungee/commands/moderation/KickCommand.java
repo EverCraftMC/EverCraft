@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
+import com.kale_ko.evercraft.shared.util.StringUtils;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -44,6 +45,8 @@ public class KickCommand extends BungeeCommand {
                 }
 
                 player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.reason").replace("{player}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
+
+                // TODO Kick message
             }
         } else {
             sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
@@ -63,7 +66,7 @@ public class KickCommand extends BungeeCommand {
         }
 
         if (args.length > 0) {
-            return BungeeCommand.StringUtil.copyPartialMatches(args[args.length - 1], list);
+            return StringUtils.matchPartial(args[args.length - 1], list);
         } else {
             return list;
         }
