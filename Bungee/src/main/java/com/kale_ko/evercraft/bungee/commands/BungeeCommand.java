@@ -36,7 +36,11 @@ public abstract class BungeeCommand extends Command implements PluginCommand, Ta
 
     @Override
     public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
-        return null;
+        return tabComplete(sender, args);
+    }
+
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return Arrays.asList();
     }
 
     public BungeeCommand register() {

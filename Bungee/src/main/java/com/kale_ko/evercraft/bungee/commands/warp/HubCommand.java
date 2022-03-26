@@ -33,7 +33,7 @@ public class HubCommand extends BungeeCommand {
     }
 
     @Override
-    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> tabComplete(CommandSender sender, String[] args) {
         return Arrays.asList();
     }
 }

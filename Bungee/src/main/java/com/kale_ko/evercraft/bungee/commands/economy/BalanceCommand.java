@@ -39,7 +39,7 @@ public class BalanceCommand extends BungeeCommand {
     }
 
     @Override
-    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> tabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 0) {

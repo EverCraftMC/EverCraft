@@ -53,7 +53,11 @@ public class ServerCommand extends Command implements PluginCommand, TabExecutor
 
     @Override
     public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
-        return null;
+        return tabComplete(sender, args);
+    }
+
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return Arrays.asList();
     }
 
     public ServerCommand register() {

@@ -34,10 +34,10 @@ public class PermBanCommand extends BungeeCommand {
             if (player != null) {
                 BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{time}", "forever"))));
 
-                BungeeMain.getInstance().getPlayerData().set("players." + player.getUniqueId() + ".ban.banned", true);
-                BungeeMain.getInstance().getPlayerData().set("players." + player.getUniqueId() + ".ban.reason", null);
-                BungeeMain.getInstance().getPlayerData().set("players." + player.getUniqueId() + ".ban.by", senderName);
-                BungeeMain.getInstance().getPlayerData().set("players." + player.getUniqueId() + ".ban.until", "forever");
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", true);
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", null);
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", senderName);
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", "forever");
 
                 player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.noreason").replace("{moderator}", senderName).replace("{time}", "forever"))));
             }
@@ -53,10 +53,10 @@ public class PermBanCommand extends BungeeCommand {
 
                 BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.brodcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)).replace("{time}", "forever"))));
 
-                BungeeMain.getInstance().getPlayerData().set("players." + player.getUniqueId() + ".ban.banned", true);
-                BungeeMain.getInstance().getPlayerData().set("players." + player.getUniqueId() + ".ban.reason", reason.substring(0, reason.length() - 1));
-                BungeeMain.getInstance().getPlayerData().set("players." + player.getUniqueId() + ".ban.by", senderName);
-                BungeeMain.getInstance().getPlayerData().set("players." + player.getUniqueId() + ".ban.until", "forever");
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", true);
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", reason.substring(0, reason.length() - 1));
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", senderName);
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", "forever");
 
                 player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.reason").replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)).replace("{time}", "forever"))));
             }
@@ -66,7 +66,7 @@ public class PermBanCommand extends BungeeCommand {
     }
 
     @Override
-    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> tabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 0) {

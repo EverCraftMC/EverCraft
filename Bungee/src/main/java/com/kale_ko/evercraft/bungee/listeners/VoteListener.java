@@ -15,16 +15,16 @@ public class VoteListener extends BungeeListener {
         if (player != null) {
             player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("vote").replace("{player}", event.getVote().getUsername()))));
 
-            if (BungeeMain.getInstance().getPlayerData().getFloat("votes." + event.getVote().getUsername() + ".total") == null) {
-                BungeeMain.getInstance().getPlayerData().set("votes." + event.getVote().getUsername() + ".total", 1);
+            if (BungeeMain.getInstance().getData().getFloat("votes." + event.getVote().getUsername() + ".total") == null) {
+                BungeeMain.getInstance().getData().set("votes." + event.getVote().getUsername() + ".total", 1);
             } else {
-                BungeeMain.getInstance().getPlayerData().set("votes." + event.getVote().getUsername() + ".total", BungeeMain.getInstance().getPlayerData().getFloat("votes." + event.getVote().getUsername() + ".total") + 1);
+                BungeeMain.getInstance().getData().set("votes." + event.getVote().getUsername() + ".total", BungeeMain.getInstance().getData().getFloat("votes." + event.getVote().getUsername() + ".total") + 1);
             }
         } else {
-            if (BungeeMain.getInstance().getPlayerData().getFloat("votes." + event.getVote().getUsername() + ".total") == null) {
-                BungeeMain.getInstance().getPlayerData().set("votes." + event.getVote().getUsername() + ".toProcess", 1);
+            if (BungeeMain.getInstance().getData().getFloat("votes." + event.getVote().getUsername() + ".total") == null) {
+                BungeeMain.getInstance().getData().set("votes." + event.getVote().getUsername() + ".toProcess", 1);
             } else {
-                BungeeMain.getInstance().getPlayerData().set("votes." + event.getVote().getUsername() + ".toProcess", BungeeMain.getInstance().getPlayerData().getFloat("votes." + event.getVote().getUsername() + ".toProcess") + 1);
+                BungeeMain.getInstance().getData().set("votes." + event.getVote().getUsername() + ".toProcess", BungeeMain.getInstance().getData().getFloat("votes." + event.getVote().getUsername() + ".toProcess") + 1);
             }
         }
     }

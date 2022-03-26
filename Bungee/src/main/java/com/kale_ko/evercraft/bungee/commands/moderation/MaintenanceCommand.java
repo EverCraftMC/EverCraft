@@ -23,12 +23,12 @@ public class MaintenanceCommand extends BungeeCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof ProxiedPlayer player) {
             if (args.length == 0) {
-                if (BungeeMain.getInstance().getPlayerData().getBoolean("maintenance")) {
-                    BungeeMain.getInstance().getPlayerData().set("maintenance", false);
+                if (BungeeMain.getInstance().getData().getBoolean("maintenance")) {
+                    BungeeMain.getInstance().getData().set("maintenance", false);
 
                     player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "off"))));
                 } else {
-                    BungeeMain.getInstance().getPlayerData().set("maintenance", true);
+                    BungeeMain.getInstance().getData().set("maintenance", true);
 
                     for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                         if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
@@ -40,7 +40,7 @@ public class MaintenanceCommand extends BungeeCommand {
                 }
             } else {
                 if (args[0].equalsIgnoreCase("on")) {
-                    BungeeMain.getInstance().getPlayerData().set("maintenance", true);
+                    BungeeMain.getInstance().getData().set("maintenance", true);
 
                     for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                         if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
@@ -50,7 +50,7 @@ public class MaintenanceCommand extends BungeeCommand {
 
                     player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "on"))));
                 } else if (args[0].equalsIgnoreCase("off")) {
-                    BungeeMain.getInstance().getPlayerData().set("maintenance", false);
+                    BungeeMain.getInstance().getData().set("maintenance", false);
 
                     player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "off"))));
                 }
@@ -61,7 +61,7 @@ public class MaintenanceCommand extends BungeeCommand {
     }
 
     @Override
-    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> tabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 0) {

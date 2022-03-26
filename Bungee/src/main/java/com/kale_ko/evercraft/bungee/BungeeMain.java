@@ -37,7 +37,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
     private FileConfig config;
     private FileConfig messages;
-    private MySQLConfig players;
+    private MySQLConfig data;
 
     private Economy economy;
 
@@ -86,9 +86,10 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Loading messages..");
 
-        this.messages = new FileConfig("messages.json");
+        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + "messages.json");
 
         this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
+        this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
         this.messages.addDefault("error.playerNotFound", "&cCouldn't find player {player}");
         this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
         this.messages.addDefault("globalMessage", "&f[{server}] &r{message}");
@@ -129,13 +130,13 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Loading player data..");
 
-        this.players = new MySQLConfig(this.config.getString("database.host"), this.config.getInt("database.port"), this.config.getString("database.name"), "players", this.config.getString("database.username"), this.config.getString("database.password"));
+        this.data = new MySQLConfig(this.config.getString("database.host"), this.config.getInt("database.port"), this.config.getString("database.name"), "data", this.config.getString("database.username"), this.config.getString("database.password"));
 
         this.getLogger().info("Finished loading player data");
 
         this.getLogger().info("Loading economy..");
 
-        this.economy = new Economy(this.getPlayerData());
+        this.economy = new Economy(this.getData());
 
         this.getLogger().info("Finished loading economy");
 
@@ -210,7 +211,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Closing player data..");
 
-        players.close();
+        data.close();
 
         this.getLogger().info("Finished closing player data..");
 
@@ -264,8 +265,8 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         return this.messages;
     }
 
-    public MySQLConfig getPlayerData() {
-        return this.players;
+    public MySQLConfig getData() {
+        return this.data;
     }
 
     public Economy getEconomy() {

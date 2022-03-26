@@ -25,7 +25,7 @@ public class MessageListener extends BungeeListener {
 
                 ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(UUID.fromString(in.readUTF()));
 
-                if (!BungeeMain.getInstance().getPlayerData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
+                if (!BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
                     for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
                         if (server.getName().equals(sender)) {
                             ByteArrayDataOutput out = ByteStreams.newDataOutput();
@@ -46,12 +46,12 @@ public class MessageListener extends BungeeListener {
 
                     BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", in.readUTF())))).queue();
                 } else {
-                    String time = BungeeMain.getInstance().getPlayerData().getString("players." + player.getUniqueId() + ".mute.until");
+                    String time = BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.until");
 
-                    if (BungeeMain.getInstance().getPlayerData().getString("players." + player.getUniqueId() + ".mute.reason") != null) {
-                        player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.reason").replace("{reason}", BungeeMain.getInstance().getPlayerData().getString("players." + player.getUniqueId() + ".mute.reason")).replace("{moderator}", BungeeMain.getInstance().getPlayerData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
+                    if (BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.reason") != null) {
+                        player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.reason").replace("{reason}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.reason")).replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
                     } else {
-                        player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.noreason").replace("{moderator}", BungeeMain.getInstance().getPlayerData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
+                        player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.noreason").replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
                     }
 
                     event.setCancelled(true);

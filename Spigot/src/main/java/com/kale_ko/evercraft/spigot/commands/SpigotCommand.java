@@ -44,6 +44,10 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
+        return tabComplete(sender, args);
+    }
+
+    public List<String> tabComplete(CommandSender sender, String[] args) {
         return null;
     }
 

@@ -22,7 +22,7 @@ public class NickNameCommand extends BungeeCommand {
         if (args.length > 0) {
             if (sender instanceof ProxiedPlayer player) {
                 if (args[0].length() < 16) {
-                    BungeeMain.getInstance().getPlayerData().set("players." + player.getUniqueId() + ".nickname", args[0]);
+                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".nickname", args[0]);
 
                     player.setDisplayName(TextFormatter.translateColors(args[0]));
 
@@ -39,7 +39,7 @@ public class NickNameCommand extends BungeeCommand {
     }
 
     @Override
-    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> tabComplete(CommandSender sender, String[] args) {
         return Arrays.asList();
     }
 }

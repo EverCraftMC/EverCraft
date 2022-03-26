@@ -9,6 +9,7 @@ import com.kale_ko.evercraft.shared.config.MySQLConfig;
 import com.kale_ko.evercraft.shared.economy.Economy;
 import com.kale_ko.evercraft.shared.util.Closable;
 import com.kale_ko.evercraft.spigot.commands.SpigotCommand;
+import com.kale_ko.evercraft.spigot.commands.warp.WarpCommand;
 import com.kale_ko.evercraft.spigot.listeners.MessageListener;
 import com.kale_ko.evercraft.spigot.listeners.SpigotListener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,7 +19,9 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     private FileConfig config;
     private FileConfig messages;
-    private MySQLConfig players;
+    private MySQLConfig data;
+
+    private FileConfig warps;
 
     private Economy economy;
 
@@ -55,29 +58,41 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading messages..");
 
-        this.messages = new FileConfig("messages.json");
+        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + "messages.json");
 
         this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
+        this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
         this.messages.addDefault("error.playerNotFound", "&cCouldn't find player {player}");
         this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
+        this.messages.addDefault("warp.warped", "&aSuccessfully warped to {warp}");
+        this.messages.addDefault("warp.setWarp", "&aSuccessfully set warp {warp} to your location");
+        this.messages.addDefault("warp.notFound", "&cWarp {warp} does not exist");
 
         this.getLogger().info("Finished loading messages");
 
         this.getLogger().info("Loading player data..");
 
-        this.players = new MySQLConfig(this.config.getString("database.host"), this.config.getInt("database.port"), this.config.getString("database.name"), "players", this.config.getString("database.username"), this.config.getString("database.password"));
+        this.data = new MySQLConfig(this.config.getString("database.host"), this.config.getInt("database.port"), this.config.getString("database.name"), "data", this.config.getString("database.username"), this.config.getString("database.password"));
 
         this.getLogger().info("Finished loading player data");
 
+        this.getLogger().info("Loading other data..");
+
+        this.warps = new FileConfig(this.getDataFolder().getAbsolutePath() + "warps.json");
+
+        this.getLogger().info("Finished loading other data..");
+
         this.getLogger().info("Loading economy..");
 
-        this.economy = new Economy(this.getPlayerData());
+        this.economy = new Economy(this.getData());
 
         this.getLogger().info("Finished loading economy");
 
-        // this.getLogger().info("Loading commands..");
+        this.getLogger().info("Loading commands..");
 
-        // this.getLogger().info("Finished loading commands");
+        this.commands.add(new WarpCommand().register());
+
+        this.getLogger().info("Finished loading commands");
 
         this.getLogger().info("Loading listeners..");
 
@@ -113,7 +128,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Closing player data..");
 
-        players.close();
+        data.close();
 
         this.getLogger().info("Finished closing player data..");
 
@@ -170,8 +185,12 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         return this.messages;
     }
 
-    public MySQLConfig getPlayerData() {
-        return this.players;
+    public MySQLConfig getData() {
+        return this.data;
+    }
+
+    public FileConfig getWarps() {
+        return this.warps;
     }
 
     public Economy getEconomy() {
