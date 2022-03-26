@@ -103,8 +103,10 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.messages.addDefault("vote", "&aThanks so much for voting {player}! /vote");
         this.messages.addDefault("warp.hub", "&aSuccessfully went to the hub");
         this.messages.addDefault("warp.alreadyConnected", "&cYou are already in the hub");
-        this.messages.addDefault("moderation.kick.noreason", "&cYou where kicked by {player}");
-        this.messages.addDefault("moderation.kick.reason", "&cYou where kicked by {player} for {reason}");
+        this.messages.addDefault("moderation.kick.noreason", "&cYou where kicked by {moderator}");
+        this.messages.addDefault("moderation.kick.reason", "&cYou where kicked by {moderator} &r&cfor {reason}");
+        this.messages.addDefault("moderation.kick.brodcast.noreason", "&f{player} was kicked by {moderator}");
+        this.messages.addDefault("moderation.kick.brodcast.reason", "&f{player} was kicked by {moderator} &r&cfor {reason}");
         this.messages.addDefault("commandspy", "&cSuccessfully toggled your commandspy {value}");
 
         this.getLogger().info("Finished loading messages");

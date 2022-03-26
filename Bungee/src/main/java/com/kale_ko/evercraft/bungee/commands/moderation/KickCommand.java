@@ -32,7 +32,9 @@ public class KickCommand extends BungeeCommand {
             ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
 
             if (player != null) {
-                player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.noreason").replace("{player}", senderName))));
+                BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
+
+                player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.noreason").replace("{moderator}", senderName))));
             }
         } else if (args.length > 1) {
             ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
@@ -44,9 +46,9 @@ public class KickCommand extends BungeeCommand {
                     reason.append(args[i] + " ");
                 }
 
-                player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.reason").replace("{player}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
+                BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.brodcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
 
-                // TODO Kick message
+                player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.reason").replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
             }
         } else {
             sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
