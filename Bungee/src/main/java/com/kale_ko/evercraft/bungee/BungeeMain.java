@@ -9,6 +9,8 @@ import com.kale_ko.evercraft.bungee.commands.info.DiscordCommand;
 import com.kale_ko.evercraft.bungee.commands.info.StaffCommand;
 import com.kale_ko.evercraft.bungee.commands.info.VoteCommand;
 import com.kale_ko.evercraft.bungee.commands.moderation.KickCommand;
+import com.kale_ko.evercraft.bungee.commands.moderation.PermBanCommand;
+import com.kale_ko.evercraft.bungee.commands.moderation.PermMuteCommand;
 import com.kale_ko.evercraft.bungee.commands.player.NickNameCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.CommandSpyCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.StaffChatCommand;
@@ -108,6 +110,14 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.messages.addDefault("moderation.kick.reason", "&cYou where kicked by {moderator} &r&cfor {reason}");
         this.messages.addDefault("moderation.kick.brodcast.noreason", "&f{player} was kicked by {moderator}");
         this.messages.addDefault("moderation.kick.brodcast.reason", "&f{player} was kicked by {moderator} &r&cfor {reason}");
+        this.messages.addDefault("moderation.ban.noreason", "&cYou where banned by {moderator}");
+        this.messages.addDefault("moderation.ban.reason", "&cYou where banned by {moderator} &r&cfor {time} {reason}");
+        this.messages.addDefault("moderation.ban.brodcast.noreason", "&f{player} was banned by {moderator} for {time}");
+        this.messages.addDefault("moderation.ban.brodcast.reason", "&f{player} was banned by {moderator} &r&cfor {time} {reason}");
+        this.messages.addDefault("moderation.mute.noreason", "&cYou where muted by {moderator}");
+        this.messages.addDefault("moderation.mute.reason", "&cYou where muted by {moderator} &r&cfor {time} {reason}");
+        this.messages.addDefault("moderation.mute.brodcast.noreason", "&f{player} was muted by {moderator} for {time}");
+        this.messages.addDefault("moderation.mute.brodcast.reason", "&f{player} was muted by {moderator} &r&cfor {time} {reason}");
         this.messages.addDefault("commandspy", "&cSuccessfully toggled your commandspy {value}");
 
         this.getLogger().info("Finished loading messages");
@@ -143,6 +153,8 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         }
 
         this.commands.add(new KickCommand().register());
+        this.commands.add(new PermBanCommand().register());
+        this.commands.add(new PermMuteCommand().register());
 
         this.commands.add(new StaffChatCommand().register());
         this.commands.add(new CommandSpyCommand().register());

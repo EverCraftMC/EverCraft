@@ -15,6 +15,19 @@ import net.md_5.bungee.event.EventHandler;
 public class JoinListener extends BungeeListener {
     @EventHandler
     public void onPlayerConnect(ServerConnectEvent event) {
+        if (BungeeMain.getInstance().getPlayerData().getBoolean("players." + event.getPlayer().getUniqueId() + ".ban.banned")) {
+            String time = BungeeMain.getInstance().getPlayerData().getString("players." + event.getPlayer().getUniqueId() + ".ban.until");
+
+            if (BungeeMain.getInstance().getPlayerData().getString("players." + event.getPlayer().getUniqueId() + ".ban.reason") != null) {
+                event.getPlayer().disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.reason").replace("{reason}", BungeeMain.getInstance().getPlayerData().getString("players." + event.getPlayer().getUniqueId() + ".ban.reason")).replace("{moderator}", BungeeMain.getInstance().getPlayerData().getString("players." + event.getPlayer().getUniqueId() + ".ban.by")).replace("{time}", time))));
+            } else {
+                event.getPlayer().disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.noreason").replace("{moderator}", BungeeMain.getInstance().getPlayerData().getString("players." + event.getPlayer().getUniqueId() + ".ban.by")).replace("{time}", time))));
+            }
+
+            event.setCancelled(true);
+            return;
+        }
+
         if (event.getReason() == Reason.JOIN_PROXY) {
             if (BungeeMain.getInstance().getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostName().split(".")[0]) != null) {
                 event.setTarget(BungeeMain.getInstance().getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostName().split(".")[0]));
