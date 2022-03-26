@@ -2,6 +2,7 @@ package com.kale_ko.evercraft.spigot.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import com.kale_ko.evercraft.spigot.SpigotMain;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -22,7 +23,7 @@ public abstract class SpigotCommand extends Command {
         this.setDescription(description);
         this.setAliases(aliases);
         this.setPermission(permission);
-        this.setPermissionMessage(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission));
+        this.setPermissionMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission)));
 
         this.register();
     }
@@ -32,7 +33,7 @@ public abstract class SpigotCommand extends Command {
         if (sender.hasPermission(permission)) {
             this.run(sender, args);
         } else {
-            sender.sendMessage(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission));
+            sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission)));
         }
 
         return true;

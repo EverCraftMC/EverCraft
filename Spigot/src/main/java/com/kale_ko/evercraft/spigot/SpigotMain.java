@@ -42,11 +42,11 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + "config.json");
 
-        // this.config.addDefault("database.host", "localhost");
-        // this.config.addDefault("database.port", 3306);
-        // this.config.addDefault("database.name", "evercraft");
-        // this.config.addDefault("database.username", "root");
-        // this.config.addDefault("database.password", "");
+        this.config.addDefault("database.host", "localhost");
+        this.config.addDefault("database.port", 3306);
+        this.config.addDefault("database.name", "evercraft");
+        this.config.addDefault("database.username", "root");
+        this.config.addDefault("database.password", "");
 
         this.getLogger().info("Finished loading config");
 
@@ -84,7 +84,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading listeners..");
 
-        this.getServer().getPluginManager().registerEvents(new MessageListener(), this);
+        new MessageListener().register();
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());

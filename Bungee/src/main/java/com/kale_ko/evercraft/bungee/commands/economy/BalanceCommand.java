@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
+import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -23,15 +24,15 @@ public class BalanceCommand extends BungeeCommand {
             ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
 
             if (player != null) {
-                sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("economy.balance").replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()).toString())));
+                sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("economy.otherBalance").replace("{player}", player.getDisplayName()).replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()).toString()))));
             } else {
-                sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0])));
+                sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
             }
         } else {
             if (sender instanceof ProxiedPlayer player) {
-                player.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("economy.balance").replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()).toString())));
+                player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("economy.yourBalance").replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()).toString()))));
             } else {
-                sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole")));
+                sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole"))));
             }
         }
     }

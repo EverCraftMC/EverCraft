@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
+import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -21,15 +22,17 @@ public class NickNameCommand extends BungeeCommand {
         if (args.length > 0) {
             if (sender instanceof ProxiedPlayer player) {
                 if (args[0].length() < 16) {
-                    BungeeMain.getInstance().getPlayerData().set("players." + player.getUniqueId(), args[0]);
+                    BungeeMain.getInstance().getPlayerData().set("players." + player.getUniqueId() + ".nickname", args[0]);
+
+                    player.setDisplayName(TextFormatter.translateColors(args[0]));
                 } else {
-                    sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
+                    sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
                 }
             } else {
-                sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole")));
+                sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole"))));
             }
         } else {
-            sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
+            sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
         }
     }
 

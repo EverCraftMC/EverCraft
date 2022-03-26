@@ -6,11 +6,10 @@ import com.google.common.io.ByteStreams;
 import com.kale_ko.evercraft.spigot.SpigotMain;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
-public class MessageListener implements Listener, PluginMessageListener {
+public class MessageListener extends SpigotListener implements PluginMessageListener {
     @EventHandler
     public void onChatMessage(AsyncPlayerChatEvent event) {
         event.setCancelled(true);

@@ -5,6 +5,7 @@ import com.kale_ko.evercraft.bungee.commands.economy.EconomyCommand;
 import com.kale_ko.evercraft.bungee.commands.player.NickNameCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.StaffChatCommand;
 import com.kale_ko.evercraft.bungee.listeners.MessageListener;
+import com.kale_ko.evercraft.bungee.listeners.WelcomeListener;
 import com.kale_ko.evercraft.shared.config.FileConfig;
 import com.kale_ko.evercraft.shared.config.MySQLConfig;
 import com.kale_ko.evercraft.shared.discord.DiscordBot;
@@ -51,6 +52,8 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.config.addDefault("database.password", "");
         this.config.addDefault("discord.token", "");
         this.config.addDefault("discord.guildID", "");
+        this.config.addDefault("discord.channelId", "");
+        this.config.addDefault("discord.staffChannelId", "");
         this.config.addDefault("discord.statusType", "PLAYING");
         this.config.addDefault("discord.status", "");
 
@@ -63,7 +66,15 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
         this.messages.addDefault("error.playerNotFound", "&cCouldn't find player {player}");
         this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
-        this.messages.addDefault("economy.balance", "&aYou balance is currently {balance}");
+        this.messages.addDefault("globalMessage", "&f[{server}] &r{message}");
+        this.messages.addDefault("chat.default", "&f{player} &f> {message}");
+        this.messages.addDefault("chat.staff", "&6&l[Staffchat] &r&f{player} &f> {message}");
+        this.messages.addDefault("chat.discord", "&b&l[Discord] &r&f{player} &f> {message}");
+        this.messages.addDefault("welcome.firstJoin", "&fWelcome {player} to the server!");
+        this.messages.addDefault("welcome.join", "&f{player} joined the server");
+        this.messages.addDefault("welcome.quit", "&f{player} left the server");
+        this.messages.addDefault("economy.yourBalance", "&aYou balance is currently {balance}");
+        this.messages.addDefault("economy.otherBalance", "&a{player}'s balance is currently {balance}");
         this.messages.addDefault("economy.economy", "&aSuccessfully set {player}'s balance to {balance}");
 
         this.getLogger().info("Finished loading messages");
@@ -99,7 +110,9 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Loading listeners..");
 
-        this.getProxy().getPluginManager().registerListener(this, new MessageListener());
+        new WelcomeListener().register();
+
+        new MessageListener().register();
 
         this.getLogger().info("Finished loading listeners");
 

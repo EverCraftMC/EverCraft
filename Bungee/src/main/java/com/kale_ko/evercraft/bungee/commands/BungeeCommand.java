@@ -3,6 +3,7 @@ package com.kale_ko.evercraft.bungee.commands;
 import java.util.ArrayList;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
+import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
@@ -18,7 +19,7 @@ public abstract class BungeeCommand extends Command implements TabExecutor {
 
     protected BungeeCommand() {
         super(name, permission, aliases.toArray(new String[] {}));
-        this.setPermissionMessage(BungeeMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission));
+        this.setPermissionMessage(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission)));
     }
 
     @Override
@@ -26,7 +27,7 @@ public abstract class BungeeCommand extends Command implements TabExecutor {
         if (sender.hasPermission(permission)) {
             this.run(sender, args);
         } else {
-            sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission)));
+            sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission))));
         }
     }
 

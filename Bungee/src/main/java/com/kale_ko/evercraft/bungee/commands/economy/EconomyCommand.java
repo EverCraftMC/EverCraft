@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
+import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -28,12 +29,12 @@ public class EconomyCommand extends BungeeCommand {
                         try {
                             BungeeMain.getInstance().getEconomy().setBalance(player.getUniqueId(), Float.parseFloat(args[1]));
                         } catch (NumberFormatException e) {
-                            sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
+                            sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
 
                             return;
                         }
                     } else {
-                        sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
+                        sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
 
                         return;
                     }
@@ -42,12 +43,12 @@ public class EconomyCommand extends BungeeCommand {
                         try {
                             BungeeMain.getInstance().getEconomy().deposit(player.getUniqueId(), Float.parseFloat(args[1]));
                         } catch (NumberFormatException e) {
-                            sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
+                            sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
 
                             return;
                         }
                     } else {
-                        sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
+                        sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
 
                         return;
                     }
@@ -56,27 +57,27 @@ public class EconomyCommand extends BungeeCommand {
                         try {
                             BungeeMain.getInstance().getEconomy().withdraw(player.getUniqueId(), Float.parseFloat(args[1]));
                         } catch (NumberFormatException e) {
-                            sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
+                            sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
 
                             return;
                         }
                     } else {
-                        sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
+                        sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
 
                         return;
                     }
                 } else {
-                    sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
+                    sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
 
                     return;
                 }
 
-                sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("economy.economy").replace("{player}", player.getName()).replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()).toString())));
+                sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("economy.economy").replace("{player}", player.getDisplayName()).replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()).toString()))));
             } else {
-                sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0])));
+                sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
             }
         } else {
-            sender.sendMessage(new TextComponent(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
+            sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
         }
     }
 
