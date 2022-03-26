@@ -2,6 +2,7 @@ package com.kale_ko.evercraft.bungee;
 
 import java.util.Arrays;
 import java.util.List;
+import com.kale_ko.evercraft.bungee.broadcast.Broadcaster;
 import com.kale_ko.evercraft.bungee.commands.economy.BalanceCommand;
 import com.kale_ko.evercraft.bungee.commands.economy.EconomyCommand;
 import com.kale_ko.evercraft.bungee.commands.info.AboutCommand;
@@ -78,6 +79,8 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.config.addDefault("scoreboard.lines", Arrays.asList());
         this.config.addDefault("tablist.header", "");
         this.config.addDefault("tablist.footer", "");
+        this.config.addDefault("broadcaster.intervail", 600);
+        this.config.addDefault("broadcaster.messages", Arrays.asList());
 
         this.getLogger().info("Finished loading config");
 
@@ -118,6 +121,8 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.messages.addDefault("moderation.mute.reason", "&cYou where muted by {moderator} &r&cfor {time} {reason}");
         this.messages.addDefault("moderation.mute.brodcast.noreason", "&f{player} was muted by {moderator} for {time}");
         this.messages.addDefault("moderation.mute.brodcast.reason", "&f{player} was muted by {moderator} &r&cfor {time} {reason}");
+        this.messages.addDefault("moderation.maintenance.toggle", "&aSuccessfully toggled maintenance mode {value}");
+        this.messages.addDefault("moderation.maintenance.kick", "&cSorry but maintenance mode is currently enable, please come back later");
         this.messages.addDefault("commandspy", "&cSuccessfully toggled your commandspy {value}");
 
         this.getLogger().info("Finished loading messages");
@@ -175,6 +180,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.getLogger().info("Loading other assets..");
 
         this.assets.add(new ScoreBoard());
+        this.assets.add(new Broadcaster());
 
         this.getLogger().info("Finished loading other assets..");
 

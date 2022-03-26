@@ -26,6 +26,10 @@ public class JoinListener extends BungeeListener {
 
             event.setCancelled(true);
             return;
+        } else if (BungeeMain.getInstance().getPlayerData().getBoolean("maintenance")) {
+            if (!event.getPlayer().hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
+                event.getPlayer().disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.kick"))));
+            }
         }
 
         if (event.getReason() == Reason.JOIN_PROXY) {
