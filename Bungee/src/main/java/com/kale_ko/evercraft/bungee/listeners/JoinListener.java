@@ -1,5 +1,6 @@
 package com.kale_ko.evercraft.bungee.listeners;
 
+import java.net.InetSocketAddress;
 import java.util.Date;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
@@ -7,13 +8,26 @@ import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.api.event.ServerConnectEvent.Reason;
 import net.md_5.bungee.event.EventHandler;
 
 public class JoinListener extends BungeeListener {
     @EventHandler
+    public void onPlayerConnect(ServerConnectEvent event) {
+        if (event.getReason() == Reason.JOIN_PROXY) {
+            if (BungeeMain.getInstance().getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostName().split(".")[0]) != null) {
+                event.setTarget(BungeeMain.getInstance().getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostName().split(".")[0]));
+            } else {
+                event.setTarget(BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getServerPriority().get(0)));
+            }
+        }
+    }
+
+    @EventHandler
     public void onPlayerJoin(PostLoginEvent event) {
         BungeeMain.getInstance().getPlayerData().set("players." + event.getPlayer().getUniqueId() + ".lastname", event.getPlayer().getName());
-        BungeeMain.getInstance().getPlayerData().set("players." + event.getPlayer().getUniqueId() + ".lastip", event.getPlayer().getSocketAddress().toString());
+        BungeeMain.getInstance().getPlayerData().set("players." + event.getPlayer().getUniqueId() + ".lastip", ((InetSocketAddress) event.getPlayer().getSocketAddress()).getHostString());
 
         if (BungeeMain.getInstance().getPlayerData().getString("players." + event.getPlayer().getUniqueId() + ".nickname") == null) {
             BungeeMain.getInstance().getPlayerData().set("players." + event.getPlayer().getUniqueId() + ".nickname", event.getPlayer().getName());

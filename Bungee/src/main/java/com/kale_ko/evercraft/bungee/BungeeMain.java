@@ -15,6 +15,7 @@ import com.kale_ko.evercraft.bungee.commands.staff.CommandSpyCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.StaffChatCommand;
 import com.kale_ko.evercraft.bungee.listeners.BungeeListener;
 import com.kale_ko.evercraft.bungee.listeners.MessageListener;
+import com.kale_ko.evercraft.bungee.listeners.PingListener;
 import com.kale_ko.evercraft.bungee.listeners.JoinListener;
 import com.kale_ko.evercraft.bungee.scoreboard.ScoreBoard;
 import com.kale_ko.evercraft.shared.config.FileConfig;
@@ -136,6 +137,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.getLogger().info("Loading listeners..");
 
         this.listeners.add(new JoinListener().register());
+        this.listeners.add(new PingListener().register());
 
         this.listeners.add(new MessageListener().register());
 
