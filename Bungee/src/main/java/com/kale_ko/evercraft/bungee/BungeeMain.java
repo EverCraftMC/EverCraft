@@ -97,6 +97,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.messages.addDefault("welcome.firstJoin", "&fWelcome {player} to the server!");
         this.messages.addDefault("welcome.join", "&f{player} joined the server");
         this.messages.addDefault("welcome.quit", "&f{player} left the server");
+        this.messages.addDefault("nickname", "&aSuccessfully changed your nickname to {nickname}");
         this.messages.addDefault("economy.yourBalance", "&aYou balance is currently {balance}");
         this.messages.addDefault("economy.otherBalance", "&a{player}'s balance is currently {balance}");
         this.messages.addDefault("economy.economy", "&aSuccessfully set {player}'s balance to {balance}");

@@ -26,7 +26,7 @@ public class NickNameCommand extends BungeeCommand {
 
                     player.setDisplayName(TextFormatter.translateColors(args[0]));
 
-                    // TODO Nick message
+                    player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("nickname").replace("{nickname}", args[0]))));
                 } else {
                     sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
                 }
