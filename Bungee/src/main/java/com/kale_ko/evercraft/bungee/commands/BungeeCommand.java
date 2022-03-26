@@ -3,13 +3,14 @@ package com.kale_ko.evercraft.bungee.commands;
 import java.util.ArrayList;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
+import com.kale_ko.evercraft.shared.PluginCommand;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 
-public abstract class BungeeCommand extends Command implements TabExecutor {
+public abstract class BungeeCommand extends Command implements PluginCommand, TabExecutor {
     public static final String name = null;
     public static final String description = "";
 

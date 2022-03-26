@@ -2,13 +2,14 @@ package com.kale_ko.evercraft.spigot.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.kale_ko.evercraft.shared.PluginCommand;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import com.kale_ko.evercraft.spigot.SpigotMain;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 
-public abstract class SpigotCommand extends Command {
+public abstract class SpigotCommand extends Command implements PluginCommand {
     public static final String name = null;
     public static final String description = "";
 
@@ -44,28 +45,6 @@ public abstract class SpigotCommand extends Command {
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
         return null;
-    }
-
-    public class StringUtil {
-        public static List<String> copyPartialMatches(String token, List<String> originals) {
-            List<String> results = new ArrayList<String>();
-
-            for (String string : originals) {
-                if (startsWithIgnoreCase(string, token)) {
-                    results.add(string);
-                }
-            }
-
-            return results;
-        }
-
-        public static boolean startsWithIgnoreCase(String string, String prefix) {
-            if (string.length() < prefix.length()) {
-                return false;
-            }
-
-            return string.regionMatches(true, 0, prefix, 0, prefix.length());
-        }
     }
 
     public SpigotCommand register() {
