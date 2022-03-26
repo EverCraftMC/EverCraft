@@ -3,12 +3,7 @@ plugins {
 }
 
 archivesBaseName = "shared"
-group = "com.kale_ko.evercraft"
 version = project.project_version
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     compileOnly "com.google.code.gson:gson:${project.gson_version}"

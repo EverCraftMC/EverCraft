@@ -9,6 +9,27 @@ archivesBaseName = "evercraft"
 group = "com.kale_ko"
 version = project.project_version
 
+subprojects {
+    group = "com.kale_ko.evercraft"
+
+    configurations {
+        depencancy
+        depencancy.canBeResolved = true
+
+        compileOnly {
+            extendsFrom depencancy
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+}
+
 tasks.register("buildAll") {
     dependsOn subprojects.collect { it.tasks.buildFull }
 }
