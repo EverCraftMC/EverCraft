@@ -3,7 +3,7 @@ package com.kale_ko.evercraft.shared.util.formatting;
 import java.util.regex.Pattern;
 
 public class TextFormatter {
-    private static final char COLOR_CHAR = '\u00A7';
+    private static final char COLOR_CHAR = '§';
     private static final String ALL_CODES = "0123456789AaBbCcDdEeFfKkLlMmNnOoRr";
     private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)[" + COLOR_CHAR + "&][0-9A-FK-ORX]");
 
