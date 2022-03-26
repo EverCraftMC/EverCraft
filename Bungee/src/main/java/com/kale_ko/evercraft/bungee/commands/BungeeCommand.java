@@ -60,7 +60,13 @@ public abstract class BungeeCommand extends Command implements TabExecutor {
         }
     }
 
-    public void register() {
+    public BungeeCommand register() {
         BungeeMain.getInstance().getProxy().getPluginManager().registerCommand(BungeeMain.getInstance(), this);
+
+        return this;
+    }
+
+    public void unregister() {
+        BungeeMain.getInstance().getProxy().getPluginManager().unregisterCommand(this);
     }
 }

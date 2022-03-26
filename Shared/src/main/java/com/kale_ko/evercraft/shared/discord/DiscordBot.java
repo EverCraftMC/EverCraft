@@ -1,6 +1,7 @@
 package com.kale_ko.evercraft.shared.discord;
 
 import javax.security.auth.login.LoginException;
+import com.kale_ko.evercraft.shared.util.Closable;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -11,7 +12,7 @@ import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
-public class DiscordBot {
+public class DiscordBot implements Closable {
     private JDA jda;
 
     private String guild;

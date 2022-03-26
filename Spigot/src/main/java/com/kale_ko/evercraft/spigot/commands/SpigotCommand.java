@@ -68,7 +68,13 @@ public abstract class SpigotCommand extends Command {
         }
     }
 
-    public void register() {
+    public SpigotCommand register() {
         ((CraftServer) SpigotMain.getInstance().getServer()).getCommandMap().register(SpigotMain.getInstance().getName(), this);
+
+        return this;
+    }
+
+    public void unregister() {
+        SpigotMain.getInstance().getCommand(name).unregister(((CraftServer) SpigotMain.getInstance().getServer()).getCommandMap());
     }
 }

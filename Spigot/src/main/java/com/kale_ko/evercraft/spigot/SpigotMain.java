@@ -1,16 +1,17 @@
 package com.kale_ko.evercraft.spigot;
 
+import java.util.List;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.kale_ko.evercraft.shared.Plugin;
 import com.kale_ko.evercraft.shared.config.FileConfig;
 import com.kale_ko.evercraft.shared.config.MySQLConfig;
 import com.kale_ko.evercraft.shared.economy.Economy;
+import com.kale_ko.evercraft.shared.util.Closable;
+import com.kale_ko.evercraft.spigot.commands.SpigotCommand;
 import com.kale_ko.evercraft.spigot.listeners.MessageListener;
-import org.bukkit.event.HandlerList;
+import com.kale_ko.evercraft.spigot.listeners.SpigotListener;
 import org.bukkit.plugin.java.JavaPlugin;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
 
 public class SpigotMain extends JavaPlugin implements Plugin {
     private static SpigotMain Instance;
@@ -21,7 +22,9 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     private Economy economy;
 
-    private LuckPerms luckPerms;
+    private List<SpigotCommand> commands;
+    private List<SpigotListener> listeners;
+    private List<Closable> assets;
 
     private String serverName;
 
@@ -72,19 +75,13 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Finished loading economy");
 
-        this.getLogger().info("Loading LuckPerms integration..");
-
-        this.luckPerms = LuckPermsProvider.get();
-
-        this.getLogger().info("Finished loading LuckPerms integration");
-
         // this.getLogger().info("Loading commands..");
 
         // this.getLogger().info("Finished loading commands");
 
         this.getLogger().info("Loading listeners..");
 
-        new MessageListener().register();
+        this.listeners.add(new MessageListener().register());
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
@@ -120,14 +117,32 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Finished closing player data..");
 
-        this.getLogger().info("Unloading listeners..");
+        this.getLogger().info("Unregistering commands..");
 
-        HandlerList.unregisterAll(this);
+        for (SpigotCommand command : this.commands) {
+            command.unregister();
+        }
+
+        this.getLogger().info("Finished unregistering commands..");
+
+        this.getLogger().info("Unregistering listeners..");
+
+        for (SpigotListener listener : this.listeners) {
+            listener.unregister();
+        }
 
         this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
         this.getServer().getMessenger().unregisterIncomingPluginChannel(this);
 
-        this.getLogger().info("Finished unloading listeners");
+        this.getLogger().info("Finished unregistering listeners..");
+
+        this.getLogger().info("Closing assets..");
+
+        for (Closable asset : this.assets) {
+            asset.close();
+        }
+
+        this.getLogger().info("Finished closing assets..");
 
         this.getLogger().info("Finished disabling plugin");
     }
@@ -161,10 +176,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     public Economy getEconomy() {
         return this.economy;
-    }
-
-    public LuckPerms getLuckPerms() {
-        return this.luckPerms;
     }
 
     public String getServerName() {

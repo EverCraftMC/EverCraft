@@ -1,23 +1,27 @@
 package com.kale_ko.evercraft.bungee;
 
+import java.util.List;
+import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
 import com.kale_ko.evercraft.bungee.commands.economy.BalanceCommand;
 import com.kale_ko.evercraft.bungee.commands.economy.EconomyCommand;
 import com.kale_ko.evercraft.bungee.commands.info.AboutCommand;
 import com.kale_ko.evercraft.bungee.commands.info.DiscordCommand;
 import com.kale_ko.evercraft.bungee.commands.info.StaffCommand;
 import com.kale_ko.evercraft.bungee.commands.info.VoteCommand;
+import com.kale_ko.evercraft.bungee.commands.moderation.KickCommand;
 import com.kale_ko.evercraft.bungee.commands.player.NickNameCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.CommandSpyCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.StaffChatCommand;
+import com.kale_ko.evercraft.bungee.listeners.BungeeListener;
 import com.kale_ko.evercraft.bungee.listeners.MessageListener;
 import com.kale_ko.evercraft.bungee.listeners.WelcomeListener;
+import com.kale_ko.evercraft.bungee.scoreboard.ScoreBoard;
 import com.kale_ko.evercraft.shared.config.FileConfig;
 import com.kale_ko.evercraft.shared.config.MySQLConfig;
 import com.kale_ko.evercraft.shared.discord.DiscordBot;
 import com.kale_ko.evercraft.shared.economy.Economy;
+import com.kale_ko.evercraft.shared.util.Closable;
 import net.dv8tion.jda.api.entities.Activity.ActivityType;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.Plugin {
@@ -29,9 +33,11 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
     private Economy economy;
 
-    private LuckPerms luckPerms;
-
     private DiscordBot bot;
+
+    private List<BungeeCommand> commands;
+    private List<BungeeListener> listeners;
+    private List<Closable> assets;
 
     @Override
     public void onLoad() {
@@ -103,42 +109,45 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Finished loading economy");
 
-        this.getLogger().info("Loading LuckPerms integration..");
-
-        this.luckPerms = LuckPermsProvider.get();
-
-        this.getLogger().info("Finished loading LuckPerms integration");
-
         this.getLogger().info("Loading commands..");
 
-        new AboutCommand().register();
-        new VoteCommand().register();
-        new DiscordCommand().register();
-        new StaffCommand().register();
+        this.commands.add(new AboutCommand().register());
+        this.commands.add(new VoteCommand().register());
+        this.commands.add(new DiscordCommand().register());
+        this.commands.add(new StaffCommand().register());
 
-        new NickNameCommand().register();
+        this.commands.add(new NickNameCommand().register());
 
-        new BalanceCommand().register();
-        new EconomyCommand().register();
+        this.commands.add(new BalanceCommand().register());
+        this.commands.add(new EconomyCommand().register());
 
-        new StaffChatCommand().register();
-        new CommandSpyCommand().register();
+        this.commands.add(new KickCommand().register());
+
+        this.commands.add(new StaffChatCommand().register());
+        this.commands.add(new CommandSpyCommand().register());
 
         this.getLogger().info("Finished loading commands");
 
         this.getLogger().info("Loading listeners..");
 
-        new WelcomeListener().register();
+        this.listeners.add(new WelcomeListener().register());
 
-        new MessageListener().register();
+        this.listeners.add(new MessageListener().register());
 
         this.getLogger().info("Finished loading listeners");
+
+        this.getLogger().info("Loading other assets..");
+
+        this.assets.add(new ScoreBoard());
+
+        this.getLogger().info("Finished loading other assets..");
 
         this.getLogger().info("Finished loading plugin");
 
         this.getLogger().info("Starting Discord bot..");
 
         this.bot = new DiscordBot(this.config.getString("discord.token"), this.config.getString("discord.guildID"), ActivityType.valueOf(this.config.getString("discord.statusType")), this.config.getString("discord.status"));
+        this.assets.add(this.bot);
     }
 
     @Override
@@ -163,11 +172,29 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Finished closing player data..");
 
-        this.getLogger().info("Unloading listeners..");
+        this.getLogger().info("Unregistering commands..");
 
-        this.getProxy().getPluginManager().unregisterListeners(this);
+        for (BungeeCommand command : this.commands) {
+            command.unregister();
+        }
 
-        this.getLogger().info("Finished unloading listeners");
+        this.getLogger().info("Finished unregistering commands..");
+
+        this.getLogger().info("Unregistering listeners..");
+
+        for (BungeeListener listener : this.listeners) {
+            listener.unregister();
+        }
+
+        this.getLogger().info("Finished unregistering listeners..");
+
+        this.getLogger().info("Closing assets..");
+
+        for (Closable asset : this.assets) {
+            asset.close();
+        }
+
+        this.getLogger().info("Finished closing assets..");
 
         this.getLogger().info("Finished disabling plugin");
     }
@@ -201,10 +228,6 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
     public Economy getEconomy() {
         return this.economy;
-    }
-
-    public LuckPerms getLuckPerms() {
-        return this.luckPerms;
     }
 
     public DiscordBot getDiscordBot() {

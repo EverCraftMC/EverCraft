@@ -2,8 +2,9 @@ package com.kale_ko.evercraft.shared.config;
 
 import java.util.Collection;
 import java.util.List;
+import com.kale_ko.evercraft.shared.util.Closable;
 
-public interface Config {
+public interface Config extends Closable {
     public Collection<String> getKeys(String path, Boolean deep);
 
     public default Collection<String> getKeys(String path) {
