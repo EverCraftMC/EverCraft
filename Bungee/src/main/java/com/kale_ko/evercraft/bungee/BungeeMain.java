@@ -1,5 +1,6 @@
 package com.kale_ko.evercraft.bungee;
 
+import java.util.Arrays;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
 import com.kale_ko.evercraft.bungee.commands.economy.BalanceCommand;
@@ -14,7 +15,7 @@ import com.kale_ko.evercraft.bungee.commands.staff.CommandSpyCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.StaffChatCommand;
 import com.kale_ko.evercraft.bungee.listeners.BungeeListener;
 import com.kale_ko.evercraft.bungee.listeners.MessageListener;
-import com.kale_ko.evercraft.bungee.listeners.WelcomeListener;
+import com.kale_ko.evercraft.bungee.listeners.JoinListener;
 import com.kale_ko.evercraft.bungee.scoreboard.ScoreBoard;
 import com.kale_ko.evercraft.shared.config.FileConfig;
 import com.kale_ko.evercraft.shared.config.MySQLConfig;
@@ -66,7 +67,11 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.config.addDefault("discord.channelId", "");
         this.config.addDefault("discord.staffChannelId", "");
         this.config.addDefault("discord.statusType", "PLAYING");
-        this.config.addDefault("discord.status", "");
+        this.config.addDefault("discord.status", "on play.evercraft.ga");
+        this.config.addDefault("scoreboard.title", "&3&lEverCraft");
+        this.config.addDefault("scoreboard.lines", Arrays.asList());
+        this.config.addDefault("tablist.header", "");
+        this.config.addDefault("tablist.footer", "");
 
         this.getLogger().info("Finished loading config");
 
@@ -130,7 +135,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Loading listeners..");
 
-        this.listeners.add(new WelcomeListener().register());
+        this.listeners.add(new JoinListener().register());
 
         this.listeners.add(new MessageListener().register());
 

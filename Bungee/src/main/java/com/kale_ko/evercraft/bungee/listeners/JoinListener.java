@@ -9,7 +9,7 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.event.EventHandler;
 
-public class WelcomeListener extends BungeeListener {
+public class JoinListener extends BungeeListener {
     @EventHandler
     public void onPlayerJoin(PostLoginEvent event) {
         BungeeMain.getInstance().getPlayerData().set("players." + event.getPlayer().getUniqueId() + ".lastname", event.getPlayer().getName());
