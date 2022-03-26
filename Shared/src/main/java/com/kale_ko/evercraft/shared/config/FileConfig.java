@@ -81,7 +81,7 @@ public class FileConfig extends AbstractConfig {
             }
             reader.close();
 
-            objects = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create().fromJson(contents.toString(), new TypeToken<Map<String, Object>>() {}.getType());
+            objects = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create().fromJson(contents.toString(), new TypeToken<Map<String, Object>>() { }.getType());
         } catch (IOException e) {
             e.printStackTrace();
         }

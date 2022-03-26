@@ -2,7 +2,12 @@ package com.kale_ko.evercraft.bungee;
 
 import com.kale_ko.evercraft.bungee.commands.economy.BalanceCommand;
 import com.kale_ko.evercraft.bungee.commands.economy.EconomyCommand;
+import com.kale_ko.evercraft.bungee.commands.info.AboutCommand;
+import com.kale_ko.evercraft.bungee.commands.info.DiscordCommand;
+import com.kale_ko.evercraft.bungee.commands.info.StaffCommand;
+import com.kale_ko.evercraft.bungee.commands.info.VoteCommand;
 import com.kale_ko.evercraft.bungee.commands.player.NickNameCommand;
+import com.kale_ko.evercraft.bungee.commands.staff.CommandSpyCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.StaffChatCommand;
 import com.kale_ko.evercraft.bungee.listeners.MessageListener;
 import com.kale_ko.evercraft.bungee.listeners.WelcomeListener;
@@ -70,12 +75,17 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.messages.addDefault("chat.default", "&f{player} &f> {message}");
         this.messages.addDefault("chat.staff", "&6&l[Staffchat] &r&f{player} &f> {message}");
         this.messages.addDefault("chat.discord", "&b&l[Discord] &r&f{player} &f> {message}");
+        this.messages.addDefault("info.about", "&f");
+        this.messages.addDefault("info.discord", "&f");
+        this.messages.addDefault("info.vote", "&f");
+        this.messages.addDefault("info.staff", "&f");
         this.messages.addDefault("welcome.firstJoin", "&fWelcome {player} to the server!");
         this.messages.addDefault("welcome.join", "&f{player} joined the server");
         this.messages.addDefault("welcome.quit", "&f{player} left the server");
         this.messages.addDefault("economy.yourBalance", "&aYou balance is currently {balance}");
         this.messages.addDefault("economy.otherBalance", "&a{player}'s balance is currently {balance}");
         this.messages.addDefault("economy.economy", "&aSuccessfully set {player}'s balance to {balance}");
+        this.messages.addDefault("commandspy", "&cSuccessfully toggled your commandspy {value}");
 
         this.getLogger().info("Finished loading messages");
 
@@ -99,12 +109,18 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Loading commands..");
 
+        new AboutCommand().register();
+        new VoteCommand().register();
+        new DiscordCommand().register();
+        new StaffCommand().register();
+
         new NickNameCommand().register();
 
         new BalanceCommand().register();
         new EconomyCommand().register();
 
         new StaffChatCommand().register();
+        new CommandSpyCommand().register();
 
         this.getLogger().info("Finished loading commands");
 

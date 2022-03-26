@@ -62,6 +62,28 @@ public class MessageListener extends BungeeListener {
                 }
 
                 BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", in.readUTF()))).queue();
+            } else if (subChannel.equals("globalCommandSpy")) {
+                String sender = in.readUTF();
+
+                for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
+                    if (server.getName().equals(sender)) {
+                        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+
+                        out.writeUTF("globalPermMessage");
+                        out.writeUTF(TextFormatter.translateColors(in.readUTF()));
+                        out.writeUTF("evercraft.commands.staff.commandspy");
+
+                        server.sendData("BungeeCord", out.toByteArray());
+                    } else {
+                        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+
+                        out.writeUTF("globalPermMessage");
+                        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", in.readUTF())));
+                        out.writeUTF("evercraft.commands.staff.commandspy");
+
+                        server.sendData("BungeeCord", out.toByteArray());
+                    }
+                }
             }
         }
     }

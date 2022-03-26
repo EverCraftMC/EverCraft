@@ -1,5 +1,6 @@
 package com.kale_ko.evercraft.bungee.listeners;
 
+import java.util.Date;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -11,12 +12,13 @@ public class WelcomeListener extends BungeeListener {
     @EventHandler
     public void onPlayerJoin(PostLoginEvent event) {
         BungeeMain.getInstance().getPlayerData().set("players." + event.getPlayer().getUniqueId() + ".lastname", event.getPlayer().getName());
+        BungeeMain.getInstance().getPlayerData().set("players." + event.getPlayer().getUniqueId() + ".lastip", event.getPlayer().getSocketAddress().toString());
 
         if (BungeeMain.getInstance().getPlayerData().getString("players." + event.getPlayer().getUniqueId() + ".nickname") == null) {
             BungeeMain.getInstance().getPlayerData().set("players." + event.getPlayer().getUniqueId() + ".nickname", event.getPlayer().getName());
         }
 
-        event.getPlayer().setDisplayName(BungeeMain.getInstance().getPlayerData().getString("players." + event.getPlayer().getUniqueId() + ".nickname"));
+        event.getPlayer().setDisplayName(BungeeMain.getInstance().getLuckPerms().getUserManager().getUser(event.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix() + BungeeMain.getInstance().getPlayerData().getString("players." + event.getPlayer().getUniqueId() + ".nickname"));
 
         if (!BungeeMain.getInstance().getPlayerData().getBoolean("players." + event.getPlayer().getUniqueId() + ".joinedBefore")) {
             BungeeMain.getInstance().getPlayerData().set("players." + event.getPlayer().getUniqueId() + ".joinedBefore", true);
@@ -33,6 +35,8 @@ public class WelcomeListener extends BungeeListener {
 
     @EventHandler
     public void onPlayerQuit(PlayerDisconnectEvent event) {
+        BungeeMain.getInstance().getPlayerData().set("players." + event.getPlayer().getUniqueId() + ".lastseen", new Date().getTime());
+
         BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("welcome.quit").replace("{player}", event.getPlayer().getDisplayName()))));
     }
 }

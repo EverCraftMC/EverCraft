@@ -7,6 +7,7 @@ import com.kale_ko.evercraft.spigot.SpigotMain;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 public class MessageListener extends SpigotListener implements PluginMessageListener {
@@ -14,6 +15,17 @@ public class MessageListener extends SpigotListener implements PluginMessageList
     public void onChatMessage(AsyncPlayerChatEvent event) {
         event.setCancelled(true);
 
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("globalChat");
+        out.writeUTF(SpigotMain.getInstance().getServerName());
+        out.writeUTF(event.getPlayer().getUniqueId().toString());
+        out.writeUTF(event.getMessage());
+
+        SpigotMain.getInstance().getServer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
+    }
+
+    @EventHandler
+    public void onCommand(PlayerCommandPreprocessEvent event) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("globalChat");
         out.writeUTF(SpigotMain.getInstance().getServerName());

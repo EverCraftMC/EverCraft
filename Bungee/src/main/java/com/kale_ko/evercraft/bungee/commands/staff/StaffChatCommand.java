@@ -46,4 +46,9 @@ public class StaffChatCommand extends BungeeCommand {
 
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.staffChannelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", message))).queue();
     }
+
+    @Override
+    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+        return Arrays.asList();
+    }
 }
