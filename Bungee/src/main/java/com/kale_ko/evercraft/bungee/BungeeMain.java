@@ -137,6 +137,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.messages.addDefault("moderation.unmute.brodcast.reason", "&f{player} was unmuted by {moderator} &r&cfor {reason}");
         this.messages.addDefault("moderation.maintenance.toggle", "&aSuccessfully toggled maintenance mode {value}");
         this.messages.addDefault("moderation.maintenance.kick", "&cSorry but maintenance mode is currently enable, please come back later");
+        this.messages.addDefault("moderation.maintenance.motd", "             &cCurrently in maintenance mode");
         this.messages.addDefault("commandspy", "&cSuccessfully toggled your commandspy {value}");
 
         this.messages.copyDefaults();

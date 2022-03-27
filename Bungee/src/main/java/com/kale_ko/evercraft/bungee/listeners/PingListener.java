@@ -3,6 +3,7 @@ package com.kale_ko.evercraft.bungee.listeners;
 import java.util.ArrayList;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
+import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.ServerPing.PlayerInfo;
 import net.md_5.bungee.api.ServerPing.Players;
@@ -16,10 +17,14 @@ public class PingListener extends BungeeListener {
     public void onPing(ProxyPingEvent event) {
         ServerPing ping = event.getResponse();
 
-        if (BungeeMain.getInstance().getProxy().getServerInfo(event.getConnection().getVirtualHost().getHostName().split("\\.")[0]) != null) {
-            ping.setDescriptionComponent(new TextComponent(TextComponent.fromLegacyText(BungeeMain.getInstance().getProxy().getServerInfo(event.getConnection().getVirtualHost().getHostName().split("\\.")[0]).getMotd())));
+        if (!BungeeMain.getInstance().getData().getBoolean("maintenance")) {
+            if (BungeeMain.getInstance().getProxy().getServerInfo(event.getConnection().getVirtualHost().getHostName().split("\\.")[0]) != null) {
+                ping.setDescriptionComponent(new TextComponent(TextComponent.fromLegacyText(BungeeMain.getInstance().getProxy().getServerInfo(event.getConnection().getVirtualHost().getHostName().split("\\.")[0]).getMotd())));
+            } else {
+                ping.setDescriptionComponent(new TextComponent(TextComponent.fromLegacyText(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMotd())));
+            }
         } else {
-            ping.setDescriptionComponent(new TextComponent(TextComponent.fromLegacyText(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMotd())));
+            ping.setDescriptionComponent(new TextComponent(TextComponent.fromLegacyText(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMotd().split("\n")[0] + "\n" + TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.motd")))));
         }
 
         List<PlayerInfo> sample = new ArrayList<PlayerInfo>();
