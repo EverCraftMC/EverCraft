@@ -17,7 +17,7 @@ public class ServerCommand extends BungeeCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof ProxiedPlayer player) {
-            if (player.getServer() != BungeeMain.getInstance().getProxy().getServerInfo(this.getName())) {
+            if (!player.getServer().getInfo().getName().equals(this.getName())) {
                 player.connect(BungeeMain.getInstance().getProxy().getServerInfo(this.getName()));
 
                 player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("warp.server").replace("{server}", this.getName()))));

@@ -18,6 +18,7 @@ public class SetWarpCommand extends SpigotCommand {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
                 SpigotMain.getInstance().getWarps().set(args[0], player.getLocation());
+                SpigotMain.getInstance().getWarps().save();
 
                 player.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("warp.setWarp").replace("{warp}", args[0])));
             } else {

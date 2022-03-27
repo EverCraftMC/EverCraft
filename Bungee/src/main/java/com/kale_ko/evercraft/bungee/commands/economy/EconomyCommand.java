@@ -27,7 +27,7 @@ public class EconomyCommand extends BungeeCommand {
                 if (args[0].equalsIgnoreCase("set")) {
                     if (args.length == 2) {
                         try {
-                            BungeeMain.getInstance().getEconomy().setBalance(player.getUniqueId(), Float.parseFloat(args[1]));
+                            BungeeMain.getInstance().getEconomy().setBalance(player.getUniqueId(), Float.parseFloat(args[2]));
                         } catch (NumberFormatException e) {
                             sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
 
@@ -41,7 +41,7 @@ public class EconomyCommand extends BungeeCommand {
                 } else if (args[0].equalsIgnoreCase("deposit")) {
                     if (args.length == 2) {
                         try {
-                            BungeeMain.getInstance().getEconomy().deposit(player.getUniqueId(), Float.parseFloat(args[1]));
+                            BungeeMain.getInstance().getEconomy().deposit(player.getUniqueId(), Float.parseFloat(args[2]));
                         } catch (NumberFormatException e) {
                             sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
 
@@ -55,7 +55,7 @@ public class EconomyCommand extends BungeeCommand {
                 } else if (args[0].equalsIgnoreCase("withdraw")) {
                     if (args.length == 2) {
                         try {
-                            BungeeMain.getInstance().getEconomy().withdraw(player.getUniqueId(), Float.parseFloat(args[1]));
+                            BungeeMain.getInstance().getEconomy().withdraw(player.getUniqueId(), Float.parseFloat(args[2]));
                         } catch (NumberFormatException e) {
                             sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
 

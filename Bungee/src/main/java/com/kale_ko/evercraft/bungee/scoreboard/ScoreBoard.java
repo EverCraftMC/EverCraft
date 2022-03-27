@@ -42,14 +42,29 @@ public class ScoreBoard implements Closable {
                             if (getScore(player, lines.size() - i) != null) {
                                 if (!getScore(player, lines.size() - i).equals(line)) {
                                     player.getScoreboard().removeScore(getScore(player, lines.size() - i));
-                                    player.getScoreboard().addScore(new Score(player.getName(), line, lines.size() - i));
+                                    player.getScoreboard().addScore(new Score(line, player.getName(), lines.size() - i));
                                 }
                             } else {
-                                player.getScoreboard().addScore(new Score(player.getName(), line, lines.size() - i));
+                                player.getScoreboard().addScore(new Score(line, player.getName(), lines.size() - i));
                             }
                         }
 
-                        player.setTabHeader(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.header"))), TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.footer"))));
+                        player.setTabHeader(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.header")
+                            .replace("{player}", player.getDisplayName())
+                            .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
+                            .replace("{ping}", player.getPing() + "")
+                            .replace("{server}", player.getServer().getInfo().getName())
+                            .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
+                            .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
+                            .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))),
+                        TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.footer")
+                            .replace("{player}", player.getDisplayName())
+                            .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
+                            .replace("{ping}", player.getPing() + "")
+                            .replace("{server}", player.getServer().getInfo().getName())
+                            .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
+                            .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
+                            .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))));
                     }
                 }
             }
