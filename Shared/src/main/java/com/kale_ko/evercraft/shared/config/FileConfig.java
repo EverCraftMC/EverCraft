@@ -2,8 +2,7 @@ package com.kale_ko.evercraft.shared.config;
 
 import java.util.List;
 import java.util.Map;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import org.yaml.snakeyaml.Yaml;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,6 +45,7 @@ public class FileConfig extends AbstractConfig {
         return objects.get(key);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T getSerializable(String key, Class<T> clazz) {
         try {
             return (T) getRaw(key);
@@ -54,6 +54,7 @@ public class FileConfig extends AbstractConfig {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public <T> List<T> getSerializableList(String key, Class<T> clazz) {
         try {
             return (List<T>) getRaw(key);
@@ -81,7 +82,7 @@ public class FileConfig extends AbstractConfig {
             }
             reader.close();
 
-            objects = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create().fromJson(contents.toString(), new TypeToken<Map<String, Object>>() { }.getType());
+            objects = new Yaml().load(contents.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,7 +91,7 @@ public class FileConfig extends AbstractConfig {
     public void save() {
         try {
             BufferedWriter writter = new BufferedWriter(new FileWriter(file));
-            writter.write(new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create().toJson(objects));
+            writter.write(new Yaml().dump(objects));
             writter.close();
         } catch (IOException e) {
             e.printStackTrace();

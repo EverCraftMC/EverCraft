@@ -55,7 +55,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading config..");
 
-        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + "config.json");
+        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + "config.yml");
 
         this.config.addDefault("database.host", "localhost");
         this.config.addDefault("database.port", 3306);
@@ -67,7 +67,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading messages..");
 
-        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + "messages.json");
+        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + "messages.yml");
 
         this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
         this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
@@ -88,8 +88,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading other data..");
 
-        this.warps = new FileConfig(this.getDataFolder().getAbsolutePath() + "warps.json");
-        this.kits = new FileConfig(this.getDataFolder().getAbsolutePath() + "kits.json");
+        this.warps = new FileConfig(this.getDataFolder().getAbsolutePath() + "warps.yml");
+        this.kits = new FileConfig(this.getDataFolder().getAbsolutePath() + "kits.yml");
 
         this.getLogger().info("Finished loading other data..");
 

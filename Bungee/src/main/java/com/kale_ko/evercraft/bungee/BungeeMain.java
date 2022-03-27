@@ -62,7 +62,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Loading config..");
 
-        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + "config.json");
+        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + "config.yml");
 
         this.config.addDefault("database.host", "localhost");
         this.config.addDefault("database.port", 3306);
@@ -86,7 +86,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Loading messages..");
 
-        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + "messages.json");
+        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + "messages.yml");
 
         this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
         this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
