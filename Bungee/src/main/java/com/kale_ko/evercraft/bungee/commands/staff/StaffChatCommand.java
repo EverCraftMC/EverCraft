@@ -38,7 +38,9 @@ public class StaffChatCommand extends BungeeCommand {
         out.writeUTF(this.getPermission());
 
         for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
-            server.sendData("BungeeCord", out.toByteArray());
+            if (!server.getPlayers().isEmpty()) {
+                server.sendData("BungeeCord", out.toByteArray());
+            }
         }
 
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.staffChannelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", message.substring(0, message.length() - 1)))).queue();

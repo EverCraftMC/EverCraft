@@ -25,7 +25,7 @@ public class EconomyCommand extends BungeeCommand {
 
             if (player != null) {
                 if (args[0].equalsIgnoreCase("set")) {
-                    if (args.length == 2) {
+                    if (args.length >= 3) {
                         try {
                             BungeeMain.getInstance().getEconomy().setBalance(player.getUniqueId(), Float.parseFloat(args[2]));
                         } catch (NumberFormatException e) {
@@ -39,7 +39,7 @@ public class EconomyCommand extends BungeeCommand {
                         return;
                     }
                 } else if (args[0].equalsIgnoreCase("deposit")) {
-                    if (args.length == 2) {
+                    if (args.length >= 3) {
                         try {
                             BungeeMain.getInstance().getEconomy().deposit(player.getUniqueId(), Float.parseFloat(args[2]));
                         } catch (NumberFormatException e) {
@@ -53,7 +53,7 @@ public class EconomyCommand extends BungeeCommand {
                         return;
                     }
                 } else if (args[0].equalsIgnoreCase("withdraw")) {
-                    if (args.length == 2) {
+                    if (args.length >= 3) {
                         try {
                             BungeeMain.getInstance().getEconomy().withdraw(player.getUniqueId(), Float.parseFloat(args[2]));
                         } catch (NumberFormatException e) {
@@ -89,7 +89,7 @@ public class EconomyCommand extends BungeeCommand {
             list.add("set");
             list.add("deposit");
             list.add("withdraw");
-        } else if (args.length == 2) {
+        } else if (args.length >= 3) {
             for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
                 list.add(player.getName());
             }

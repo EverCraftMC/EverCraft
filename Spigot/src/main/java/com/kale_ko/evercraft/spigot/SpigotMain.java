@@ -18,6 +18,7 @@ import com.kale_ko.evercraft.spigot.commands.staff.gamemode.CreativeCommand;
 import com.kale_ko.evercraft.spigot.commands.staff.gamemode.GameModeCommand;
 import com.kale_ko.evercraft.spigot.commands.staff.gamemode.SpectatorCommand;
 import com.kale_ko.evercraft.spigot.commands.staff.gamemode.SurvivalCommand;
+import com.kale_ko.evercraft.spigot.commands.warp.DelWarpCommand;
 import com.kale_ko.evercraft.spigot.commands.warp.SetWarpCommand;
 import com.kale_ko.evercraft.spigot.commands.warp.SpawnCommand;
 import com.kale_ko.evercraft.spigot.commands.warp.WarpCommand;
@@ -80,6 +81,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
         this.messages.addDefault("warp.warped", "&aSuccessfully warped to {warp}");
         this.messages.addDefault("warp.setWarp", "&aSuccessfully set warp {warp} to your location");
+        this.messages.addDefault("warp.delWarp", "&aSuccessfully deleted warp {warp}");
         this.messages.addDefault("warp.notFound", "&cWarp {warp} does not exist");
         this.messages.addDefault("kit.kit", "&aSuccessfully got kit {kit}");
         this.messages.addDefault("kit.notFound", "&cKit {kit} does not exist");
@@ -115,6 +117,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new WarpCommand("warp", "Teleport to a warp", Arrays.asList(), "evercraft.commands.warp.warp").register());
         this.commands.add(new SpawnCommand("spawn", "Teleport to the spawn", Arrays.asList(), "evercraft.commands.warp.spawn").register());
         this.commands.add(new SetWarpCommand("setwarp", "Set a warp to your location", Arrays.asList(), "evercraft.commands.warp.setwarp").register());
+        this.commands.add(new DelWarpCommand("delwarp", "Delete a warp", Arrays.asList(), "evercraft.commands.warp.delwarp").register());
 
         this.commands.add(new KitCommand("kit", "Get a kit", Arrays.asList(), "evercraft.commands.kit.kit").register());
 
