@@ -12,12 +12,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class MaintenanceCommand extends BungeeCommand {
-    public static final String name = "maintenance";
-    public static final String description = "Turn maintenance mode on";
-
-    public static final List<String> aliases = Arrays.asList();
-
-    public static final String permission = "evercraft.commands.moderation.maintenance";
+    public MaintenanceCommand(String name, String description, List<String> aliases, String permission) {
+        super(name, description, aliases, permission);
+    }
 
     @Override
     public void run(CommandSender sender, String[] args) {
@@ -64,7 +61,7 @@ public class MaintenanceCommand extends BungeeCommand {
     public List<String> tabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<String>();
 
-        if (args.length == 0) {
+        if (args.length == 1) {
             list.add("on");
             list.add("off");
         } else {

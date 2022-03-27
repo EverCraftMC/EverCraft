@@ -1,6 +1,5 @@
 package com.kale_ko.evercraft.spigot.commands;
 
-import java.util.ArrayList;
 import java.util.List;
 import com.kale_ko.evercraft.shared.PluginCommand;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
@@ -10,14 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 
 public abstract class SpigotCommand extends Command implements PluginCommand {
-    public static final String name = null;
-    public static final String description = "";
-
-    public static final List<String> aliases = new ArrayList<String>();
-
-    public static final String permission = null;
-
-    protected SpigotCommand() {
+    protected SpigotCommand(String name, String description, List<String> aliases, String permission) {
         super(name);
         this.setLabel(name);
         this.setName(name);
@@ -31,10 +23,10 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        if (sender.hasPermission(permission)) {
+        if (sender.hasPermission(this.getPermission())) {
             this.run(sender, args);
         } else {
-            sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission)));
+            sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", this.getPermission())));
         }
 
         return true;
@@ -58,6 +50,6 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
     }
 
     public void unregister() {
-        SpigotMain.getInstance().getCommand(name).unregister(((CraftServer) SpigotMain.getInstance().getServer()).getCommandMap());
+        SpigotMain.getInstance().getCommand(this.getName()).unregister(((CraftServer) SpigotMain.getInstance().getServer()).getCommandMap());
     }
 }

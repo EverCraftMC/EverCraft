@@ -12,12 +12,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class KickCommand extends BungeeCommand {
-    public static final String name = "kick";
-    public static final String description = "Kick a player from the server";
-
-    public static final List<String> aliases = Arrays.asList();
-
-    public static final String permission = "evercraft.commands.moderation.kick";
+    public KickCommand(String name, String description, List<String> aliases, String permission) {
+        super(name, description, aliases, permission);
+    }
 
     @Override
     public void run(CommandSender sender, String[] args) {
@@ -35,6 +32,8 @@ public class KickCommand extends BungeeCommand {
                 BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
 
                 player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.noreason").replace("{moderator}", senderName))));
+            } else {
+                sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
             }
         } else if (args.length > 1) {
             ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
@@ -49,6 +48,8 @@ public class KickCommand extends BungeeCommand {
                 BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.brodcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
 
                 player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.reason").replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
+            } else {
+                sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
             }
         } else {
             sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
@@ -59,7 +60,7 @@ public class KickCommand extends BungeeCommand {
     public List<String> tabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<String>();
 
-        if (args.length == 0) {
+        if (args.length == 1) {
             for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
                 list.add(player.getName());
             }

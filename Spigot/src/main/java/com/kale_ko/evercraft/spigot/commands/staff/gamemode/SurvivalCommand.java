@@ -10,12 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SurvivalCommand extends SpigotCommand {
-    public static final String name = "gms";
-    public static final String description = "Change your gamemode to survival";
-
-    public static final List<String> aliases = Arrays.asList();
-
-    public static final String permission = "evercraft.commands.staff.gamemode.survival";
+    public SurvivalCommand(String name, String description, List<String> aliases, String permission) {
+        super(name, description, aliases, permission);
+    }
 
     @Override
     public void run(CommandSender sender, String[] args) {

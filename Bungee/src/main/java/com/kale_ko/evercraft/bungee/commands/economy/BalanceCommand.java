@@ -7,22 +7,21 @@ import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
 import com.kale_ko.evercraft.shared.util.StringUtils;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
+import com.kale_ko.evercraft.shared.util.player.PlayerResolver;
+import com.kale_ko.evercraft.shared.util.player.SimplePlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BalanceCommand extends BungeeCommand {
-    public static final String name = "balance";
-    public static final String description = "Get your current balance";
-
-    public static final List<String> aliases = Arrays.asList("bal");
-
-    public static final String permission = "evercraft.commands.economy.balance";
+    public BalanceCommand(String name, String description, List<String> aliases, String permission) {
+        super(name, description, aliases, permission);
+    }
 
     @Override
     public void run(CommandSender sender, String[] args) {
         if (args.length > 0) {
-            ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
+            SimplePlayer player = PlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
 
             if (player != null) {
                 sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("economy.otherBalance").replace("{player}", player.getDisplayName()).replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()).toString()))));
@@ -42,7 +41,7 @@ public class BalanceCommand extends BungeeCommand {
     public List<String> tabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<String>();
 
-        if (args.length == 0) {
+        if (args.length == 1) {
             for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
                 list.add(player.getName());
             }

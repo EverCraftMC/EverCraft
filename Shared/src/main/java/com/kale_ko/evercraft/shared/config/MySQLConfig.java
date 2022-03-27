@@ -3,6 +3,7 @@ package com.kale_ko.evercraft.shared.config;
 import java.util.List;
 import com.google.gson.GsonBuilder;
 import com.kale_ko.evercraft.shared.mysql.MySQL;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MySQLConfig extends AbstractConfig {
@@ -22,7 +23,15 @@ public class MySQLConfig extends AbstractConfig {
     }
 
     public List<String> getKeys(String path, Boolean deep) {
-        return Arrays.asList(mysql.selectAll(this.tableName, new String[] { "key" }).split("\n"));
+        List<String> keys = new ArrayList<>();
+
+        for (String key : mysql.selectAll(this.tableName, new String[] { "keyid" }).split("\n")) {
+            if (deep && key.startsWith(path + ".") || (!deep && key.startsWith(path + ".") && key.split("\\.").length - 1 == path.split("\\.").length + 1)) {
+                keys.add(String.join(".", Arrays.asList(key.split("\\.")).subList(0, path.split("\\.").length + 1)));
+            }
+        }
+
+        return keys;
     }
 
     private String getRaw(String key) {
@@ -54,9 +63,11 @@ public class MySQLConfig extends AbstractConfig {
         }
     }
 
-    public void reload() { }
+    public void reload() {
+    }
 
-    public void save() { }
+    public void save() {
+    }
 
     public void close() {
         mysql.close();
