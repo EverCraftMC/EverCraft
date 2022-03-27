@@ -9,6 +9,7 @@ import com.kale_ko.evercraft.bungee.commands.economy.BalanceCommand;
 import com.kale_ko.evercraft.bungee.commands.economy.EconomyCommand;
 import com.kale_ko.evercraft.bungee.commands.info.InfoCommand;
 import com.kale_ko.evercraft.bungee.commands.moderation.KickCommand;
+import com.kale_ko.evercraft.bungee.commands.moderation.MaintenanceCommand;
 import com.kale_ko.evercraft.bungee.commands.moderation.PermBanCommand;
 import com.kale_ko.evercraft.bungee.commands.moderation.PermMuteCommand;
 import com.kale_ko.evercraft.bungee.commands.moderation.UnBanCommand;
@@ -179,6 +180,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.commands.add(new UnBanCommand("unban", "Unban a player from the server", Arrays.asList(), "evercraft.commands.moderation.unban").register());
         this.commands.add(new PermMuteCommand("permmute", "Mute a player on the server", Arrays.asList("mute"), "evercraft.commands.moderation.permmute").register());
         this.commands.add(new UnMuteCommand("unmute", "Unmute a player on the server", Arrays.asList(), "evercraft.commands.moderation.unmute").register());
+        this.commands.add(new MaintenanceCommand("maintenance", "Toggle maintainance mode", Arrays.asList(), "evercraft.commands.moderation.maintenance").register());
 
         this.commands.add(new StaffChatCommand("staffchat", "Send a message to the staffchat", Arrays.asList("sc"), "evercraft.commands.staff.staffchat").register());
         this.commands.add(new CommandSpyCommand("commandspy", "Toggle your commandspy", Arrays.asList("cs"), "evercraft.commands.staff.commandspy").register());
