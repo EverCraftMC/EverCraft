@@ -3,15 +3,12 @@ plugins {
 }
 
 archivesBaseName = "shared"
-group = "com.kale_ko.evercraft"
 version = project.project_version
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     compileOnly "com.google.code.gson:gson:${project.gson_version}"
+
+    compileOnly "net.dv8tion:JDA:${project.jda_version}"
 }
 
 tasks.register("buildFull") {

@@ -3,22 +3,10 @@ plugins {
 }
 
 archivesBaseName = "spigot"
-group = "com.kale_ko.evercraft"
 version = project.spigot_plugin_version
 
-configurations {
-    depencancy
-    depencancy.canBeResolved = true
-
-    compileOnly {
-        extendsFrom depencancy
-    }
-}
-
 repositories {
-    mavenCentral()
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/public/" }
-    maven { url = "https://libraries.minecraft.net/" }
     flatDir {
         dirs 'lib'
     }
@@ -29,8 +17,6 @@ dependencies {
 
     compileOnly "org.spigotmc:spigot-api:${project.minecraft_version}-${project.spigot_version}"
     compileOnly name: "craftbukkit-${project.minecraft_version}"
-    compileOnly "com.mojang:authlib:${project.authlib_version}"
-    compileOnly "com.mojang:brigadier:${project.brigadier_version}"
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
 }

@@ -3,20 +3,9 @@ plugins {
 }
 
 archivesBaseName = "bungee"
-group = "com.kale_ko.evercraft"
 version = project.bungee_plugin_version
 
-configurations {
-    depencancy
-    depencancy.canBeResolved = true
-
-    compileOnly {
-        extendsFrom depencancy
-    }
-}
-
 repositories {
-    mavenCentral()
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/public/" }
     maven { url "https://jitpack.io/" }
 }
