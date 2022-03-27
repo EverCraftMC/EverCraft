@@ -5,13 +5,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import com.kale_ko.evercraft.shared.util.Closable;
 
-public class MySQL {
+public class MySQL implements Closable {
     private Connection connection;
 
-    public MySQL(String url, Integer port, String database, String username, String password) {
+    public MySQL(String host, Integer port, String database, String username, String password) {
         try {
-            this.connection = DriverManager.getConnection("jdbc:mysql://" + url + ":" + port + "/" + database + "?autoReconnect=true", username, password);
+            this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true", username, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
