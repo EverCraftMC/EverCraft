@@ -9,7 +9,7 @@ dependencies {
     compileOnly "com.google.code.gson:gson:${project.gson_version}"
     compileOnly "org.yaml:snakeyaml:${project.snakeyaml_version}"
 
-    compileOnly "net.dv8tion:JDA:${project.jda_version}"
+    depencancy "net.dv8tion:JDA:${project.jda_version}"
 }
 
 tasks.register("buildFull") {
