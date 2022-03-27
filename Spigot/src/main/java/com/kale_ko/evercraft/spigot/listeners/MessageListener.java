@@ -36,17 +36,55 @@ public class MessageListener extends SpigotListener implements PluginMessageList
     }
 
     @Override
-    public void onPluginMessageReceived(String channel, Player player, byte[] message) {
+    public void onPluginMessageReceived(String channel, Player sender, byte[] data) {
         if (channel.equals("BungeeCord")) {
-            ByteArrayDataInput in = ByteStreams.newDataInput(message);
+            ByteArrayDataInput in = ByteStreams.newDataInput(data);
 
             String subChannel = in.readUTF();
             if (subChannel.equals("GetServer")) {
                 SpigotMain.getInstance().setServerName(in.readUTF());
             } else if (subChannel.equals("globalMessage")) {
-                SpigotMain.getInstance().getServer().broadcastMessage(in.readUTF());
+                String message = in.readUTF();
+
+                for (Player player : SpigotMain.getInstance().getServer().getOnlinePlayers()) {
+                    player.sendMessage(message);
+                }
+
+                SpigotMain.getInstance().getServer().getConsoleSender().sendMessage(message);
             } else if (subChannel.equals("globalPermMessage")) {
-                SpigotMain.getInstance().getServer().broadcast(in.readUTF(), in.readUTF());
+                String message = in.readUTF();
+                String perm = in.readUTF();
+
+                for (Player player : SpigotMain.getInstance().getServer().getOnlinePlayers()) {
+                    if (player.hasPermission(perm)) {
+                        player.sendMessage(message);
+                    }
+                }
+
+                SpigotMain.getInstance().getServer().getConsoleSender().sendMessage(message);
+            } else if (subChannel.equals("globalCondMessage")) {
+                String message = in.readUTF();
+                String cond = in.readUTF();
+
+                for (Player player : SpigotMain.getInstance().getServer().getOnlinePlayers()) {
+                    if (SpigotMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + "." + cond) != null && SpigotMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + "." + cond)) {
+                        player.sendMessage(message);
+                    }
+                }
+
+                SpigotMain.getInstance().getServer().getConsoleSender().sendMessage(message);
+            } else if (subChannel.equals("globalPermCondMessage")) {
+                String message = in.readUTF();
+                String perm = in.readUTF();
+                String cond = in.readUTF();
+
+                for (Player player : SpigotMain.getInstance().getServer().getOnlinePlayers()) {
+                    if (player.hasPermission(perm) && SpigotMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + "." + cond) != null && SpigotMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + "." + cond)) {
+                        player.sendMessage(message);
+                    }
+                }
+
+                SpigotMain.getInstance().getServer().getConsoleSender().sendMessage(message);
             }
         }
     }

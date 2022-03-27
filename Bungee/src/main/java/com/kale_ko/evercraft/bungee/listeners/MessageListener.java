@@ -50,6 +50,8 @@ public class MessageListener extends BungeeListener {
                 } else {
                     String time = BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.until");
 
+                    // TODO Fix replacment null
+
                     if (BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.reason") != null) {
                         player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.reason").replace("{reason}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.reason")).replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
                     } else {
@@ -86,23 +88,27 @@ public class MessageListener extends BungeeListener {
             } else if (subChannel.equals("globalCommandSpy")) {
                 String sender = in.readUTF();
 
+                ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(UUID.fromString(in.readUTF()));
+
                 String message = in.readUTF();
 
                 for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
                     if (server.getName().equals(sender)) {
                         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
-                        out.writeUTF("globalPermMessage");
-                        out.writeUTF(TextFormatter.translateColors(message));
+                        out.writeUTF("globalPermCondMessage");
+                        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.commandSpy").replace("{player}", player.getDisplayName()).replace("{message}", message)));
                         out.writeUTF("evercraft.commands.staff.commandspy");
+                        out.writeUTF("commandspy");
 
                         server.sendData("BungeeCord", out.toByteArray());
                     } else {
                         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
-                        out.writeUTF("globalPermMessage");
-                        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message)));
+                        out.writeUTF("globalPermCondMessage");
+                        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.commandSpy").replace("{player}", player.getDisplayName()).replace("{message}", message))));
                         out.writeUTF("evercraft.commands.staff.commandspy");
+                        out.writeUTF("commandspy");
 
                         server.sendData("BungeeCord", out.toByteArray());
                     }
