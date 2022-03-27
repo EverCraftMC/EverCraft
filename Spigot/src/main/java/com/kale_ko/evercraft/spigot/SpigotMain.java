@@ -9,6 +9,13 @@ import com.kale_ko.evercraft.shared.config.MySQLConfig;
 import com.kale_ko.evercraft.shared.economy.Economy;
 import com.kale_ko.evercraft.shared.util.Closable;
 import com.kale_ko.evercraft.spigot.commands.SpigotCommand;
+import com.kale_ko.evercraft.spigot.commands.staff.gamemode.AdventureCommand;
+import com.kale_ko.evercraft.spigot.commands.staff.gamemode.CreativeCommand;
+import com.kale_ko.evercraft.spigot.commands.staff.gamemode.GameModeCommand;
+import com.kale_ko.evercraft.spigot.commands.staff.gamemode.SpectatorCommand;
+import com.kale_ko.evercraft.spigot.commands.staff.gamemode.SurvivalCommand;
+import com.kale_ko.evercraft.spigot.commands.warp.SetWarpCommand;
+import com.kale_ko.evercraft.spigot.commands.warp.SpawnCommand;
 import com.kale_ko.evercraft.spigot.commands.warp.WarpCommand;
 import com.kale_ko.evercraft.spigot.listeners.MessageListener;
 import com.kale_ko.evercraft.spigot.listeners.SpigotListener;
@@ -67,6 +74,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.messages.addDefault("warp.warped", "&aSuccessfully warped to {warp}");
         this.messages.addDefault("warp.setWarp", "&aSuccessfully set warp {warp} to your location");
         this.messages.addDefault("warp.notFound", "&cWarp {warp} does not exist");
+        this.messages.addDefault("staff.gamemode", "&cSuccessfully set your gamemode to {gamemode}");
 
         this.getLogger().info("Finished loading messages");
 
@@ -91,6 +99,14 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.getLogger().info("Loading commands..");
 
         this.commands.add(new WarpCommand().register());
+        this.commands.add(new SpawnCommand().register());
+        this.commands.add(new SetWarpCommand().register());
+
+        this.commands.add(new GameModeCommand().register());
+        this.commands.add(new SurvivalCommand().register());
+        this.commands.add(new CreativeCommand().register());
+        this.commands.add(new AdventureCommand().register());
+        this.commands.add(new SpectatorCommand().register());
 
         this.getLogger().info("Finished loading commands");
 

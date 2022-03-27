@@ -12,6 +12,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class WarpCommand extends SpigotCommand {
+    public static final String name = "warp";
+    public static final String description = "Go to a warp";
+
+    public static final List<String> aliases = Arrays.asList();
+
+    public static final String permission = "evercraft.commands.warp.warp";
+
     @Override
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
