@@ -30,7 +30,7 @@ public class FileConfig extends AbstractConfig {
 
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setAllowUnicode(true);
-        dumperOptions.setCanonical(true);
+        dumperOptions.setCanonical(false);
         dumperOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
         dumperOptions.setIndent(2);
         dumperOptions.setNonPrintableStyle(NonPrintableStyle.ESCAPE);
