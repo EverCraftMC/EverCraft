@@ -27,7 +27,7 @@ public class MessageListener extends SpigotListener implements PluginMessageList
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("globalChat");
+        out.writeUTF("globalCommandSpy");
         out.writeUTF(SpigotMain.getInstance().getServerName());
         out.writeUTF(event.getPlayer().getUniqueId().toString());
         out.writeUTF(event.getMessage());
