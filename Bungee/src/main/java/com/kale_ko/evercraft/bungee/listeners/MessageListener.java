@@ -25,33 +25,35 @@ public class MessageListener extends BungeeListener {
 
                 ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(UUID.fromString(in.readUTF()));
 
+                String message = in.readUTF();
+
                 if (!BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
                     for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
                         if (server.getName().equals(sender)) {
                             ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
                             out.writeUTF("globalMessage");
-                            out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", in.readUTF())));
+                            out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message)));
 
                             server.sendData("BungeeCord", out.toByteArray());
                         } else {
                             ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
                             out.writeUTF("globalMessage");
-                            out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", in.readUTF()))));
+                            out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message))));
 
                             server.sendData("BungeeCord", out.toByteArray());
                         }
                     }
 
-                    BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", in.readUTF())))).queue();
+                    BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message)))).queue();
                 } else {
                     String time = BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.until");
 
                     if (BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.reason") != null) {
-                        player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.reason").replace("{reason}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.reason")).replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
+                        player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.reason").replace("{reason}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.reason")).replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
                     } else {
-                        player.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.noreason").replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
+                        player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.noreason").replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
                     }
 
                     event.setCancelled(true);
@@ -60,19 +62,21 @@ public class MessageListener extends BungeeListener {
             } else if (subChannel.equals("globalMessage")) {
                 String sender = in.readUTF();
 
+                String message = in.readUTF();
+
                 for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
                     if (server.getName().equals(sender)) {
                         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
                         out.writeUTF("globalMessage");
-                        out.writeUTF(TextFormatter.translateColors(in.readUTF()));
+                        out.writeUTF(TextFormatter.translateColors(message));
 
                         server.sendData("BungeeCord", out.toByteArray());
                     } else {
                         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
                         out.writeUTF("globalMessage");
-                        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", in.readUTF())));
+                        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message)));
 
                         server.sendData("BungeeCord", out.toByteArray());
                     }
@@ -82,12 +86,14 @@ public class MessageListener extends BungeeListener {
             } else if (subChannel.equals("globalCommandSpy")) {
                 String sender = in.readUTF();
 
+                String message = in.readUTF();
+
                 for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
                     if (server.getName().equals(sender)) {
                         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
                         out.writeUTF("globalPermMessage");
-                        out.writeUTF(TextFormatter.translateColors(in.readUTF()));
+                        out.writeUTF(TextFormatter.translateColors(message));
                         out.writeUTF("evercraft.commands.staff.commandspy");
 
                         server.sendData("BungeeCord", out.toByteArray());
@@ -95,7 +101,7 @@ public class MessageListener extends BungeeListener {
                         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
                         out.writeUTF("globalPermMessage");
-                        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", in.readUTF())));
+                        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message)));
                         out.writeUTF("evercraft.commands.staff.commandspy");
 
                         server.sendData("BungeeCord", out.toByteArray());

@@ -1,5 +1,8 @@
 package com.kale_ko.evercraft.spigot;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -38,7 +41,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
     private List<SpigotListener> listeners;
     private List<Closable> assets;
 
-    private String serverName;
+    private String serverName = "unknown";
 
     @Override
     public void onLoad() {
@@ -55,7 +58,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading config..");
 
-        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + "config.yml");
+        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
 
         this.config.addDefault("database.host", "localhost");
         this.config.addDefault("database.port", 3306);
@@ -63,11 +66,13 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.config.addDefault("database.username", "root");
         this.config.addDefault("database.password", "");
 
+        this.config.copyDefaults();
+
         this.getLogger().info("Finished loading config");
 
         this.getLogger().info("Loading messages..");
 
-        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + "messages.yml");
+        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "messages.yml");
 
         this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
         this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
@@ -76,7 +81,11 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.messages.addDefault("warp.warped", "&aSuccessfully warped to {warp}");
         this.messages.addDefault("warp.setWarp", "&aSuccessfully set warp {warp} to your location");
         this.messages.addDefault("warp.notFound", "&cWarp {warp} does not exist");
-        this.messages.addDefault("staff.gamemode", "&cSuccessfully set your gamemode to {gamemode}");
+        this.messages.addDefault("kit.kit", "&aSuccessfully got kit {kit}");
+        this.messages.addDefault("kit.notFound", "&cKit {kit} does not exist");
+        this.messages.addDefault("staff.gamemode", "&aSuccessfully set your gamemode to {gamemode}");
+
+        this.messages.copyDefaults();
 
         this.getLogger().info("Finished loading messages");
 
@@ -88,8 +97,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading other data..");
 
-        this.warps = new FileConfig(this.getDataFolder().getAbsolutePath() + "warps.yml");
-        this.kits = new FileConfig(this.getDataFolder().getAbsolutePath() + "kits.yml");
+        this.warps = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "warps.yml");
+        this.kits = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "kits.yml");
 
         this.getLogger().info("Finished loading other data..");
 
@@ -101,21 +110,25 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading commands..");
 
-        this.commands.add(new WarpCommand().register());
-        this.commands.add(new SpawnCommand().register());
-        this.commands.add(new SetWarpCommand().register());
+        this.commands = new ArrayList<SpigotCommand>();
 
-        this.commands.add(new KitCommand().register());
+        this.commands.add(new WarpCommand("warp", "Teleport to a warp", Arrays.asList(), "evercraft.commands.warp.warp").register());
+        this.commands.add(new SpawnCommand("spawn", "Teleport to the spawn", Arrays.asList(), "evercraft.commands.warp.spawn").register());
+        this.commands.add(new SetWarpCommand("setwarp", "Set a warp to your location", Arrays.asList(), "evercraft.commands.warp.setwarp").register());
 
-        this.commands.add(new GameModeCommand().register());
-        this.commands.add(new SurvivalCommand().register());
-        this.commands.add(new CreativeCommand().register());
-        this.commands.add(new AdventureCommand().register());
-        this.commands.add(new SpectatorCommand().register());
+        this.commands.add(new KitCommand("kit", "Get a kit", Arrays.asList(), "evercraft.commands.kit.kit").register());
+
+        this.commands.add(new GameModeCommand("gamemode", "Change your gamemode", Arrays.asList("gm"), "evercraft.commands.gamemode.use").register());
+        this.commands.add(new SurvivalCommand("gms", "Change your gamemode to survival", Arrays.asList("gm0"), "evercraft.commands.gamemode.survival").register());
+        this.commands.add(new CreativeCommand("gmc", "Change your gamemode to creative", Arrays.asList("gm1"), "evercraft.commands.gamemode.creative").register());
+        this.commands.add(new AdventureCommand("gma", "Change your gamemode to adventure", Arrays.asList("gm2"), "evercraft.commands.gamemode.adventure").register());
+        this.commands.add(new SpectatorCommand("gmsp", "Change your gamemode to spectator", Arrays.asList("gm3"), "evercraft.commands.gamemode.spectator").register());
 
         this.getLogger().info("Finished loading commands");
 
         this.getLogger().info("Loading listeners..");
+
+        this.listeners = new ArrayList<SpigotListener>();
 
         this.listeners.add(new MessageListener().register());
 
@@ -123,6 +136,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
 
         this.getLogger().info("Finished loading listeners");
+
+        this.assets = new ArrayList<Closable>();
 
         this.getLogger().info("Finished loading plugin");
 

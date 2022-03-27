@@ -12,12 +12,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class GameModeCommand extends SpigotCommand {
-    public static final String name = "gamemode";
-    public static final String description = "Change your gamemode";
-
-    public static final List<String> aliases = Arrays.asList();
-
-    public static final String permission = "evercraft.commands.staff.gamemode.use";
+    public GameModeCommand(String name, String description, List<String> aliases, String permission) {
+        super(name, description, aliases, permission);
+    }
 
     @Override
     public void run(CommandSender sender, String[] args) {
@@ -52,7 +49,7 @@ public class GameModeCommand extends SpigotCommand {
     public List<String> tabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<String>();
 
-        if (args.length == 0) {
+        if (args.length == 1) {
             list.add("survival");
             list.add("s");
             list.add("0");

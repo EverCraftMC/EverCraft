@@ -7,22 +7,21 @@ import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
 import com.kale_ko.evercraft.shared.util.StringUtils;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
+import com.kale_ko.evercraft.shared.util.player.PlayerResolver;
+import com.kale_ko.evercraft.shared.util.player.SimplePlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class EconomyCommand extends BungeeCommand {
-    public static final String name = "economy";
-    public static final String description = "Modify someones balance";
-
-    public static final List<String> aliases = Arrays.asList("eco");
-
-    public static final String permission = "evercraft.commands.economy.economy";
+    public EconomyCommand(String name, String description, List<String> aliases, String permission) {
+        super(name, description, aliases, permission);
+    }
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        if (args.length > 0) {
-            ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
+        if (args.length >= 3) {
+            SimplePlayer player = PlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[1]);
 
             if (player != null) {
                 if (args[0].equalsIgnoreCase("set")) {

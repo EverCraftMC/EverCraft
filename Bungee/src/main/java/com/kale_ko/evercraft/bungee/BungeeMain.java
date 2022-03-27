@@ -1,17 +1,18 @@
 package com.kale_ko.evercraft.bungee;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.broadcast.Broadcaster;
 import com.kale_ko.evercraft.bungee.commands.economy.BalanceCommand;
 import com.kale_ko.evercraft.bungee.commands.economy.EconomyCommand;
-import com.kale_ko.evercraft.bungee.commands.info.AboutCommand;
-import com.kale_ko.evercraft.bungee.commands.info.DiscordCommand;
-import com.kale_ko.evercraft.bungee.commands.info.StaffCommand;
-import com.kale_ko.evercraft.bungee.commands.info.VoteCommand;
+import com.kale_ko.evercraft.bungee.commands.info.InfoCommand;
 import com.kale_ko.evercraft.bungee.commands.moderation.KickCommand;
 import com.kale_ko.evercraft.bungee.commands.moderation.PermBanCommand;
 import com.kale_ko.evercraft.bungee.commands.moderation.PermMuteCommand;
+import com.kale_ko.evercraft.bungee.commands.moderation.UnBanCommand;
+import com.kale_ko.evercraft.bungee.commands.moderation.UnMuteCommand;
 import com.kale_ko.evercraft.bungee.commands.player.NickNameCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.CommandSpyCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.StaffChatCommand;
@@ -62,7 +63,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Loading config..");
 
-        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + "config.yml");
+        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
 
         this.config.addDefault("database.host", "localhost");
         this.config.addDefault("database.port", 3306);
@@ -82,11 +83,13 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.config.addDefault("broadcaster.intervail", 600);
         this.config.addDefault("broadcaster.messages", Arrays.asList());
 
+        this.config.copyDefaults();
+
         this.getLogger().info("Finished loading config");
 
         this.getLogger().info("Loading messages..");
 
-        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + "messages.yml");
+        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "messages.yml");
 
         this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
         this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
@@ -109,6 +112,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.messages.addDefault("economy.economy", "&aSuccessfully set {player}'s balance to {balance}");
         this.messages.addDefault("vote", "&aThanks so much for voting {player}! /vote");
         this.messages.addDefault("warp.hub", "&aSuccessfully went to the hub");
+        this.messages.addDefault("warp.server", "&aSuccessfully went to {server}");
         this.messages.addDefault("warp.alreadyConnected", "&cYou are already in the hub");
         this.messages.addDefault("moderation.kick.noreason", "&cYou where kicked by {moderator}");
         this.messages.addDefault("moderation.kick.reason", "&cYou where kicked by {moderator} &r&cfor {reason}");
@@ -118,13 +122,23 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.messages.addDefault("moderation.ban.reason", "&cYou where banned by {moderator} &r&cfor {time} {reason}");
         this.messages.addDefault("moderation.ban.brodcast.noreason", "&f{player} was banned by {moderator} for {time}");
         this.messages.addDefault("moderation.ban.brodcast.reason", "&f{player} was banned by {moderator} &r&cfor {time} {reason}");
+        this.messages.addDefault("moderation.unban.noreason", "&cYou where unbanned by {moderator}");
+        this.messages.addDefault("moderation.unban.reason", "&cYou where unbanned by {moderator} &r&cfor {reason}");
+        this.messages.addDefault("moderation.unban.brodcast.noreason", "&f{player} was unbanned by {moderator} for {time}");
+        this.messages.addDefault("moderation.unban.brodcast.reason", "&f{player} was unbanned by {moderator} &r&cfor {reason}");
         this.messages.addDefault("moderation.mute.noreason", "&cYou where muted by {moderator}");
         this.messages.addDefault("moderation.mute.reason", "&cYou where muted by {moderator} &r&cfor {time} {reason}");
         this.messages.addDefault("moderation.mute.brodcast.noreason", "&f{player} was muted by {moderator} for {time}");
         this.messages.addDefault("moderation.mute.brodcast.reason", "&f{player} was muted by {moderator} &r&cfor {time} {reason}");
+        this.messages.addDefault("moderation.unmute.noreason", "&cYou where unmuted by {moderator}");
+        this.messages.addDefault("moderation.unmute.reason", "&cYou where unmuted by {moderator} &r&cfor {reason}");
+        this.messages.addDefault("moderation.unmute.brodcast.noreason", "&f{player} was unmuted by {moderator}");
+        this.messages.addDefault("moderation.unmute.brodcast.reason", "&f{player} was unmuted by {moderator} &r&cfor {reason}");
         this.messages.addDefault("moderation.maintenance.toggle", "&aSuccessfully toggled maintenance mode {value}");
         this.messages.addDefault("moderation.maintenance.kick", "&cSorry but maintenance mode is currently enable, please come back later");
         this.messages.addDefault("commandspy", "&cSuccessfully toggled your commandspy {value}");
+
+        this.messages.copyDefaults();
 
         this.getLogger().info("Finished loading messages");
 
@@ -142,32 +156,38 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Loading commands..");
 
-        this.commands.add(new AboutCommand().register());
-        this.commands.add(new VoteCommand().register());
-        this.commands.add(new DiscordCommand().register());
-        this.commands.add(new StaffCommand().register());
+        this.commands = new ArrayList<PluginCommand>();
 
-        this.commands.add(new NickNameCommand().register());
+        this.commands.add(new InfoCommand("about", "Get the server about", Arrays.asList("info"), "evercraft.commands.info.about").register());
+        this.commands.add(new InfoCommand("discord", "Get the server discord link", Arrays.asList("community"), "evercraft.commands.info.discord").register());
+        this.commands.add(new InfoCommand("vote", "Get the server vote link", Arrays.asList(), "evercraft.commands.info.vote").register());
+        this.commands.add(new InfoCommand("staff", "Get the server staff", Arrays.asList(), "evercraft.commands.info.staff").register());
 
-        this.commands.add(new BalanceCommand().register());
-        this.commands.add(new EconomyCommand().register());
+        this.commands.add(new NickNameCommand("nickname", "Change your nickname", Arrays.asList("nick"), "evercraft.commands.player.nickname").register());
 
-        this.commands.add(new HubCommand().register());
+        this.commands.add(new BalanceCommand("balance", "Check your balance", Arrays.asList("bal"), "evercraft.commands.economy.balance").register());
+        this.commands.add(new EconomyCommand("economy", "Modify someones balance", Arrays.asList("eco"), "evercraft.commands.economy.economy").register());
+
+        this.commands.add(new HubCommand("hub", "Go to the hub", Arrays.asList("lobby"), "evercraft.commands.warp.hub").register());
 
         for (String server : this.getProxy().getServers().keySet()) {
-            this.commands.add(new ServerCommand(server).register());
+            this.commands.add(new ServerCommand(server, "Go to the " + server + " server", Arrays.asList(), "evercraft.commands.warp.server").register());
         }
 
-        this.commands.add(new KickCommand().register());
-        this.commands.add(new PermBanCommand().register());
-        this.commands.add(new PermMuteCommand().register());
+        this.commands.add(new KickCommand("kick", "Kick a player from the server", Arrays.asList(), "evercraft.commands.moderation.kick").register());
+        this.commands.add(new PermBanCommand("permban", "Ban a player from the server", Arrays.asList("ban"), "evercraft.commands.moderation.permban").register());
+        this.commands.add(new UnBanCommand("unban", "Unban a player from the server", Arrays.asList(), "evercraft.commands.moderation.unban").register());
+        this.commands.add(new PermMuteCommand("permmute", "Mute a player on the server", Arrays.asList("mute"), "evercraft.commands.moderation.permmute").register());
+        this.commands.add(new UnMuteCommand("unmute", "Unmute a player on the server", Arrays.asList(), "evercraft.commands.moderation.unmute").register());
 
-        this.commands.add(new StaffChatCommand().register());
-        this.commands.add(new CommandSpyCommand().register());
+        this.commands.add(new StaffChatCommand("staffchat", "Send a message to the staffchat", Arrays.asList("sc"), "evercraft.commands.staff.staffchat").register());
+        this.commands.add(new CommandSpyCommand("commandspy", "Toggle your commandspy", Arrays.asList("cs"), "evercraft.commands.staff.commandspy").register());
 
         this.getLogger().info("Finished loading commands");
 
         this.getLogger().info("Loading listeners..");
+
+        this.listeners = new ArrayList<BungeeListener>();
 
         this.listeners.add(new JoinListener().register());
         this.listeners.add(new PingListener().register());
@@ -179,6 +199,8 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.getLogger().info("Finished loading listeners");
 
         this.getLogger().info("Loading other assets..");
+
+        this.assets = new ArrayList<Closable>();
 
         this.assets.add(new ScoreBoard());
         this.assets.add(new Broadcaster());

@@ -11,7 +11,13 @@ public class Economy {
     }
 
     public Float getBalance(UUID uuid) {
-        return this.config.getFloat("players." + uuid + ".balance");
+        if (this.config.getFloat("players." + uuid + ".balance") != null) {
+            return this.config.getFloat("players." + uuid + ".balance");
+        } else {
+            this.setBalance(uuid, 0f);
+
+            return 0f;
+        }
     }
 
     public void setBalance(UUID uuid, Float balance) {

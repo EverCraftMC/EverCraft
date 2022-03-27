@@ -12,12 +12,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class WarpCommand extends SpigotCommand {
-    public static final String name = "warp";
-    public static final String description = "Go to a warp";
-
-    public static final List<String> aliases = Arrays.asList();
-
-    public static final String permission = "evercraft.commands.warp.warp";
+    public WarpCommand(String name, String description, List<String> aliases, String permission) {
+        super(name, description, aliases, permission);
+    }
 
     @Override
     public void run(CommandSender sender, String[] args) {
@@ -42,7 +39,7 @@ public class WarpCommand extends SpigotCommand {
     public List<String> tabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<String>();
 
-        if (args.length == 0) {
+        if (args.length == 1) {
             list = Arrays.asList(SpigotMain.getInstance().getWarps().getKeys(false).toArray(new String[] {}));
         } else {
             return Arrays.asList();

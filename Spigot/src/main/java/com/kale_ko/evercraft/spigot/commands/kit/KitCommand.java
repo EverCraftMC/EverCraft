@@ -13,12 +13,9 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public class KitCommand extends SpigotCommand {
-    public static final String name = "kit";
-    public static final String description = "Get a kit";
-
-    public static final List<String> aliases = Arrays.asList();
-
-    public static final String permission = "evercraft.commands.kit.kit";
+    public KitCommand(String name, String description, List<String> aliases, String permission) {
+        super(name, description, aliases, permission);
+    }
 
     @Override
     public void run(CommandSender sender, String[] args) {
@@ -26,16 +23,22 @@ public class KitCommand extends SpigotCommand {
             if (args.length >= 1) {
                 List<ItemStack> items = SpigotMain.getInstance().getKits().getSerializableList(args[0], ItemStack.class);
 
-                for (ItemStack item : items) {
-                    if (item.getType().getEquipmentSlot() != null && item.getType().getEquipmentSlot() != EquipmentSlot.HAND && item.getType().getEquipmentSlot() != EquipmentSlot.OFF_HAND) {
-                        if (player.getInventory().getItem(item.getType().getEquipmentSlot()) == null || player.getInventory().getItem(item.getType().getEquipmentSlot()).getType().isAir()) {
-                            player.getInventory().setItem(item.getType().getEquipmentSlot(), item);
+                if (items != null) {
+                    for (ItemStack item : items) {
+                        if (item.getType().getEquipmentSlot() != null && item.getType().getEquipmentSlot() != EquipmentSlot.HAND && item.getType().getEquipmentSlot() != EquipmentSlot.OFF_HAND) {
+                            if (player.getInventory().getItem(item.getType().getEquipmentSlot()) == null || player.getInventory().getItem(item.getType().getEquipmentSlot()).getType().isAir()) {
+                                player.getInventory().setItem(item.getType().getEquipmentSlot(), item);
+                            } else {
+                                player.getInventory().addItem(item);
+                            }
                         } else {
                             player.getInventory().addItem(item);
                         }
-                    } else {
-                        player.getInventory().addItem(item);
                     }
+
+                    player.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.kit").replace("{kit}", args[0])));
+                } else {
+                    player.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.notFound").replace("{kit}", args[0])));
                 }
             } else {
                 sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
@@ -49,7 +52,7 @@ public class KitCommand extends SpigotCommand {
     public List<String> tabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<String>();
 
-        if (args.length == 0) {
+        if (args.length == 1) {
             list = Arrays.asList(SpigotMain.getInstance().getKits().getKeys(false).toArray(new String[] {}));
         } else {
             return Arrays.asList();

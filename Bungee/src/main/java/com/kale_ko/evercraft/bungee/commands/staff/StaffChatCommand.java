@@ -12,12 +12,9 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class StaffChatCommand extends BungeeCommand {
-    public static final String name = "staffchat";
-    public static final String description = "Message the other staff";
-
-    public static final List<String> aliases = Arrays.asList("sc");
-
-    public static final String permission = "evercraft.commands.staff.staffchat";
+    public StaffChatCommand(String name, String description, List<String> aliases, String permission) {
+        super(name, description, aliases, permission);
+    }
 
     @Override
     public void run(CommandSender sender, String[] args) {
@@ -38,7 +35,7 @@ public class StaffChatCommand extends BungeeCommand {
 
         out.writeUTF("globalPermMessage");
         out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", message.substring(0, message.length() - 1))));
-        out.writeUTF(permission);
+        out.writeUTF(this.getPermission());
 
         for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
             server.sendData("BungeeCord", out.toByteArray());

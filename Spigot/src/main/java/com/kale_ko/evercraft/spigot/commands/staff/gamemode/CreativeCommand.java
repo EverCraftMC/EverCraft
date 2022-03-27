@@ -10,12 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CreativeCommand extends SpigotCommand {
-    public static final String name = "gmc";
-    public static final String description = "Change your gamemode to creative";
-
-    public static final List<String> aliases = Arrays.asList();
-
-    public static final String permission = "evercraft.commands.staff.gamemode.creative";
+    public CreativeCommand(String name, String description, List<String> aliases, String permission) {
+        super(name, description, aliases, permission);
+    }
 
     @Override
     public void run(CommandSender sender, String[] args) {
