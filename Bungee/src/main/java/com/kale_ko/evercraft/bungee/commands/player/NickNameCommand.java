@@ -5,6 +5,7 @@ import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
+import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -21,7 +22,7 @@ public class NickNameCommand extends BungeeCommand {
                 if (args[0].length() < 16) {
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".nickname", args[0]);
 
-                    player.setDisplayName(TextFormatter.translateColors(args[0]));
+                    player.setDisplayName(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + args[0]));
 
                     player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("nickname").replace("{nickname}", args[0]))));
                 } else {
