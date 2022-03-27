@@ -2,7 +2,13 @@ package com.kale_ko.evercraft.shared.config;
 
 import java.util.List;
 import java.util.Map;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.DumperOptions.FlowStyle;
+import org.yaml.snakeyaml.DumperOptions.NonPrintableStyle;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.representer.Representer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,6 +19,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FileConfig extends AbstractConfig {
+    private static Yaml yaml;
+
+    static {
+        LoaderOptions loaderOptions = new LoaderOptions();
+        loaderOptions.setAllowDuplicateKeys(false);
+        loaderOptions.setAllowRecursiveKeys(true);
+        loaderOptions.setEnumCaseSensitive(false);
+        loaderOptions.setProcessComments(false);
+
+        DumperOptions dumperOptions = new DumperOptions();
+        dumperOptions.setAllowUnicode(true);
+        dumperOptions.setCanonical(true);
+        dumperOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
+        dumperOptions.setIndent(2);
+        dumperOptions.setNonPrintableStyle(NonPrintableStyle.ESCAPE);
+        dumperOptions.setPrettyFlow(true);
+        dumperOptions.setProcessComments(false);
+        dumperOptions.setSplitLines(false);
+
+        FileConfig.yaml = new Yaml(new Constructor(loaderOptions), new Representer(dumperOptions), dumperOptions, loaderOptions);
+    }
+
     private File file;
 
     private Map<String, Object> objects = new HashMap<String, Object>();
@@ -90,7 +118,7 @@ public class FileConfig extends AbstractConfig {
             }
             reader.close();
 
-            objects = new Yaml().load(contents.toString());
+            objects = yaml.load(contents.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,7 +127,7 @@ public class FileConfig extends AbstractConfig {
     public void save() {
         try {
             BufferedWriter writter = new BufferedWriter(new FileWriter(file));
-            writter.write(new Yaml().dump(objects));
+            writter.write(yaml.dump(objects));
             writter.close();
         } catch (IOException e) {
             e.printStackTrace();
