@@ -29,20 +29,22 @@ public class MessageListener extends BungeeListener {
 
                 if (!BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
                     for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
-                        if (server.getName().equals(sender)) {
-                            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                        if (!server.getPlayers().isEmpty()) {
+                            if (server.getName().equals(sender)) {
+                                ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
-                            out.writeUTF("globalMessage");
-                            out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message)));
+                                out.writeUTF("globalMessage");
+                                out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message)));
 
-                            server.sendData("BungeeCord", out.toByteArray());
-                        } else {
-                            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                                server.sendData("BungeeCord", out.toByteArray());
+                            } else {
+                                ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
-                            out.writeUTF("globalMessage");
-                            out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message))));
+                                out.writeUTF("globalMessage");
+                                out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message))));
 
-                            server.sendData("BungeeCord", out.toByteArray());
+                                server.sendData("BungeeCord", out.toByteArray());
+                            }
                         }
                     }
 
@@ -67,20 +69,22 @@ public class MessageListener extends BungeeListener {
                 String message = in.readUTF();
 
                 for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
-                    if (server.getName().equals(sender)) {
-                        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                    if (!server.getPlayers().isEmpty()) {
+                        if (server.getName().equals(sender)) {
+                            ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
-                        out.writeUTF("globalMessage");
-                        out.writeUTF(TextFormatter.translateColors(message));
+                            out.writeUTF("globalMessage");
+                            out.writeUTF(TextFormatter.translateColors(message));
 
-                        server.sendData("BungeeCord", out.toByteArray());
-                    } else {
-                        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                            server.sendData("BungeeCord", out.toByteArray());
+                        } else {
+                            ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
-                        out.writeUTF("globalMessage");
-                        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message)));
+                            out.writeUTF("globalMessage");
+                            out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message)));
 
-                        server.sendData("BungeeCord", out.toByteArray());
+                            server.sendData("BungeeCord", out.toByteArray());
+                        }
                     }
                 }
 
@@ -93,24 +97,26 @@ public class MessageListener extends BungeeListener {
                 String message = in.readUTF();
 
                 for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
-                    if (server.getName().equals(sender)) {
-                        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                    if (!server.getPlayers().isEmpty()) {
+                        if (server.getName().equals(sender)) {
+                            ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
-                        out.writeUTF("globalPermCondMessage");
-                        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.commandSpy").replace("{player}", player.getDisplayName()).replace("{message}", message)));
-                        out.writeUTF("evercraft.commands.staff.commandspy");
-                        out.writeUTF("commandspy");
+                            out.writeUTF("globalPermCondMessage");
+                            out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.commandSpy").replace("{player}", player.getDisplayName()).replace("{message}", message)));
+                            out.writeUTF("evercraft.commands.staff.commandspy");
+                            out.writeUTF("commandspy");
 
-                        server.sendData("BungeeCord", out.toByteArray());
-                    } else {
-                        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                            server.sendData("BungeeCord", out.toByteArray());
+                        } else {
+                            ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
-                        out.writeUTF("globalPermCondMessage");
-                        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.commandSpy").replace("{player}", player.getDisplayName()).replace("{message}", message))));
-                        out.writeUTF("evercraft.commands.staff.commandspy");
-                        out.writeUTF("commandspy");
+                            out.writeUTF("globalPermCondMessage");
+                            out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.commandSpy").replace("{player}", player.getDisplayName()).replace("{message}", message))));
+                            out.writeUTF("evercraft.commands.staff.commandspy");
+                            out.writeUTF("commandspy");
 
-                        server.sendData("BungeeCord", out.toByteArray());
+                            server.sendData("BungeeCord", out.toByteArray());
+                        }
                     }
                 }
             }
