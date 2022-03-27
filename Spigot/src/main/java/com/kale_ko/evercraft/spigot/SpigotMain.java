@@ -9,6 +9,7 @@ import com.kale_ko.evercraft.shared.config.MySQLConfig;
 import com.kale_ko.evercraft.shared.economy.Economy;
 import com.kale_ko.evercraft.shared.util.Closable;
 import com.kale_ko.evercraft.spigot.commands.SpigotCommand;
+import com.kale_ko.evercraft.spigot.commands.kit.KitCommand;
 import com.kale_ko.evercraft.spigot.commands.staff.gamemode.AdventureCommand;
 import com.kale_ko.evercraft.spigot.commands.staff.gamemode.CreativeCommand;
 import com.kale_ko.evercraft.spigot.commands.staff.gamemode.GameModeCommand;
@@ -29,6 +30,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
     private MySQLConfig data;
 
     private FileConfig warps;
+    private FileConfig kits;
 
     private Economy economy;
 
@@ -87,6 +89,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.getLogger().info("Loading other data..");
 
         this.warps = new FileConfig(this.getDataFolder().getAbsolutePath() + "warps.json");
+        this.kits = new FileConfig(this.getDataFolder().getAbsolutePath() + "kits.json");
 
         this.getLogger().info("Finished loading other data..");
 
@@ -101,6 +104,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new WarpCommand().register());
         this.commands.add(new SpawnCommand().register());
         this.commands.add(new SetWarpCommand().register());
+
+        this.commands.add(new KitCommand().register());
 
         this.commands.add(new GameModeCommand().register());
         this.commands.add(new SurvivalCommand().register());
@@ -207,6 +212,10 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     public FileConfig getWarps() {
         return this.warps;
+    }
+
+    public FileConfig getKits() {
+        return this.kits;
     }
 
     public Economy getEconomy() {
