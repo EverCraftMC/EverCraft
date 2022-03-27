@@ -19,36 +19,38 @@ public class ScoreBoard implements Closable {
         task = BungeeMain.getInstance().getProxy().getScheduler().schedule(BungeeMain.getInstance(), new Runnable() {
             public void run() {
                 for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
-                    player.getScoreboard().setName(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("scoreboard.title")));
-                    player.getScoreboard().setPosition(Position.SIDEBAR);
+                    if (player.getServer() != null) {
+                        player.getScoreboard().setName(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("scoreboard.title")));
+                        player.getScoreboard().setPosition(Position.SIDEBAR);
 
-                    if (player.getScoreboard().getObjective(player.getName()) == null) {
-                        player.getScoreboard().addObjective(new Objective(player.getName(), "dummy", "integer"));
-                    }
+                        if (player.getScoreboard().getObjective(player.getName()) == null) {
+                            player.getScoreboard().addObjective(new Objective(player.getName(), "dummy", "integer"));
+                        }
 
-                    List<String> lines = BungeeMain.getInstance().getPluginConfig().getStringList("scoreboard.lines");
+                        List<String> lines = BungeeMain.getInstance().getPluginConfig().getStringList("scoreboard.lines");
 
-                    for (int i = 0; i < lines.size(); i++) {
-                        String line = TextFormatter.translateColors(lines.get(i)
-                            .replace("{player}", player.getDisplayName())
-                            .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
-                            .replace("{ping}", player.getPing() + "")
-                            .replace("{server}", player.getServer().getInfo().getName())
-                            .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
-                            .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
-                            .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""));
+                        for (int i = 0; i < lines.size(); i++) {
+                            String line = TextFormatter.translateColors(lines.get(i)
+                                .replace("{player}", player.getDisplayName())
+                                .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
+                                .replace("{ping}", player.getPing() + "")
+                                .replace("{server}", player.getServer().getInfo().getName())
+                                .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
+                                .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
+                                .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""));
 
-                        if (getScore(player, lines.size() - i) != null) {
-                            if (!getScore(player, lines.size() - i).equals(line)) {
-                                player.getScoreboard().removeScore(getScore(player, lines.size() - i));
+                            if (getScore(player, lines.size() - i) != null) {
+                                if (!getScore(player, lines.size() - i).equals(line)) {
+                                    player.getScoreboard().removeScore(getScore(player, lines.size() - i));
+                                    player.getScoreboard().addScore(new Score(player.getName(), line, lines.size() - i));
+                                }
+                            } else {
                                 player.getScoreboard().addScore(new Score(player.getName(), line, lines.size() - i));
                             }
-                        } else {
-                            player.getScoreboard().addScore(new Score(player.getName(), line, lines.size() - i));
                         }
-                    }
 
-                    player.setTabHeader(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("tablist.header"))), TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("tablist.footer"))));
+                        player.setTabHeader(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.header"))), TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.footer"))));
+                    }
                 }
             }
         }, 0, 1, TimeUnit.SECONDS);

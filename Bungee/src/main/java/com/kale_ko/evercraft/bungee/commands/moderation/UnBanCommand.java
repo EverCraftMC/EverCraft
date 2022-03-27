@@ -13,8 +13,8 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class PermBanCommand extends BungeeCommand {
-    public PermBanCommand(String name, String description, List<String> aliases, String permission) {
+public class UnBanCommand extends BungeeCommand {
+    public UnBanCommand(String name, String description, List<String> aliases, String permission) {
         super(name, description, aliases, permission);
     }
 
@@ -31,17 +31,12 @@ public class PermBanCommand extends BungeeCommand {
             SimplePlayer player = PlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
 
             if (player != null) {
-                BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{time}", "forever"))));
+                BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
 
-                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", true);
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", null);
                 BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", null);
-                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", senderName);
-                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", "forever");
-
-                ProxiedPlayer bungeeplayer = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
-                if (bungeeplayer != null) {
-                    bungeeplayer.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.noreason").replace("{moderator}", senderName).replace("{time}", "forever"))));
-                }
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", null);
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", null);
             } else {
                 sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
             }
@@ -55,17 +50,12 @@ public class PermBanCommand extends BungeeCommand {
                     reason.append(args[i] + " ");
                 }
 
-                BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.brodcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)).replace("{time}", "forever"))));
+                BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.brodcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
 
-                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", true);
-                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", reason.substring(0, reason.length() - 1));
-                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", senderName);
-                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", "forever");
-
-                ProxiedPlayer bungeeplayer = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
-                if (bungeeplayer != null) {
-                    bungeeplayer.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.reason").replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)).replace("{time}", "forever"))));
-                }
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", null);
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", null);
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", null);
+                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", null);
             } else {
                 sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
             }

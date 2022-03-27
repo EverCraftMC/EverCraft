@@ -1,11 +1,11 @@
 package com.kale_ko.evercraft.shared.config;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import com.kale_ko.evercraft.shared.util.KeyValuePair;
 
 public abstract class AbstractConfig implements Config {
-    private Map<String, Object> defaults = new HashMap<String, Object>();
+    private List<KeyValuePair<String, Object>> defaults = new ArrayList<KeyValuePair<String, Object>>();
 
     public Object getObject(String key) {
         return getSerializable(key, Object.class);
@@ -52,7 +52,13 @@ public abstract class AbstractConfig implements Config {
     }
 
     public Boolean getBoolean(String key) {
-        return getSerializable(key, Boolean.class);
+        Boolean value = getSerializable(key, Boolean.class);
+
+        if (value != null) {
+            return value;
+        } else {
+            return false;
+        }
     }
 
     public List<Boolean> getBooleanList(String key) {
@@ -60,12 +66,16 @@ public abstract class AbstractConfig implements Config {
     }
 
     public void addDefault(String key, Object value) {
-        this.defaults.put(key, value);
+        this.defaults.add(new KeyValuePair<String, Object>(key, value));
     }
 
     public void copyDefaults() {
-        for (Map.Entry<String, Object> entry : this.defaults.entrySet()) {
-            this.set(entry.getKey(), entry.getValue());
+        for (KeyValuePair<String, Object> entry : this.defaults) {
+            if (!this.exists(entry.key())) {
+                this.set(entry.key(), entry.value());
+            }
         }
+
+        this.save();
     }
 }

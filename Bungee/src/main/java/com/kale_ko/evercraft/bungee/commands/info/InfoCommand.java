@@ -4,20 +4,18 @@ import java.util.Arrays;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
+import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class AboutCommand extends BungeeCommand {
-    public static final String name = "about";
-    public static final String description = "Get info about the server";
-
-    public static final List<String> aliases = Arrays.asList("info");
-
-    public static final String permission = "evercraft.commands.info.about";
+public class InfoCommand extends BungeeCommand {
+    public InfoCommand(String name, String description, List<String> aliases, String permission) {
+        super(name, description, aliases, permission);
+    }
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        sender.sendMessage(TextComponent.fromLegacyText(BungeeMain.getInstance().getPluginMessages().getString("info.about")));
+        sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("info." + this.getName()))));
     }
 
     @Override

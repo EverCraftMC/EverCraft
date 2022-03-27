@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FileConfig extends AbstractConfig {
@@ -38,7 +38,15 @@ public class FileConfig extends AbstractConfig {
     }
 
     public List<String> getKeys(String path, Boolean deep) {
-        return Arrays.asList(objects.keySet().toArray(new String[] {}));
+        List<String> keys = new ArrayList<>();
+
+        for (String key : objects.keySet().toArray(new String[] {})) {
+            if (deep && key.startsWith(path + ".") || (!deep && key.startsWith(path + ".") && key.split("\\.").length == path.split("\\.").length + 1)) {
+                keys.add(key);
+            }
+        }
+
+        return keys;
     }
 
     private Object getRaw(String key) {

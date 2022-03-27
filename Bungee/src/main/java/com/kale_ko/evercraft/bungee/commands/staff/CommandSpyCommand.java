@@ -12,12 +12,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class CommandSpyCommand extends BungeeCommand {
-    public static final String name = "commandspy";
-    public static final String description = "Toggles your command spy";
-
-    public static final List<String> aliases = Arrays.asList("cs");
-
-    public static final String permission = "evercraft.commands.staff.commandspy";
+    public CommandSpyCommand(String name, String description, List<String> aliases, String permission) {
+        super(name, description, aliases, permission);
+    }
 
     @Override
     public void run(CommandSender sender, String[] args) {
@@ -52,7 +49,7 @@ public class CommandSpyCommand extends BungeeCommand {
     public List<String> tabComplete(CommandSender sender, String[] args) {
         List<String> list = new ArrayList<String>();
 
-        if (args.length == 0) {
+        if (args.length == 1) {
             list.add("on");
             list.add("off");
         } else {

@@ -10,17 +10,14 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class HubCommand extends BungeeCommand {
-    public static final String name = "hub";
-    public static final String description = "Sends you to the hub/lobby server";
-
-    public static final List<String> aliases = Arrays.asList("lobby");
-
-    public static final String permission = "evercraft.commands.warp.hub";
+    public HubCommand(String name, String description, List<String> aliases, String permission) {
+        super(name, description, aliases, permission);
+    }
 
     @Override
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof ProxiedPlayer player) {
-            if (player.getServer() != BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getServerPriority().get(0))) {
+            if (!player.getServer().getInfo().getName().equals(BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getServerPriority().get(0)).getName())) {
                 player.connect(BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getServerPriority().get(0)));
 
                 player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("warp.hub"))));
