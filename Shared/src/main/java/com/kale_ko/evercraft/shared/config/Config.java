@@ -21,15 +21,15 @@ public interface Config extends Closable {
 
     public Boolean exists(String key);
 
-    public Object getObject(String key);
+    public Object getRaw(String key);
 
     public String getString(String key);
 
     public List<String> getStringList(String key);
 
-    public Integer getInt(String key);
+    public Integer getInteger(String key);
 
-    public List<Integer> getIntList(String key);
+    public List<Integer> getIntegerList(String key);
 
     public Float getFloat(String key);
 

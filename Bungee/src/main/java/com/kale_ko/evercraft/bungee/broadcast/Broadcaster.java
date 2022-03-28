@@ -18,7 +18,7 @@ public class Broadcaster implements Closable {
             public void run() {
                 BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getStringList("broadcaster.messages").get(random.nextInt(BungeeMain.getInstance().getPluginConfig().getStringList("broadcaster.messages").size())))));
             }
-        }, 0, BungeeMain.getInstance().getPluginConfig().getInt("broadcaster.intervail"), TimeUnit.SECONDS);
+        }, 0, BungeeMain.getInstance().getPluginConfig().getInteger("broadcaster.intervail"), TimeUnit.SECONDS);
     }
 
     public void close() {

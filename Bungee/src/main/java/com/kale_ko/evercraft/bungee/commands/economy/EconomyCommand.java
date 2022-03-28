@@ -89,7 +89,7 @@ public class EconomyCommand extends BungeeCommand {
             list.add("set");
             list.add("deposit");
             list.add("withdraw");
-        } else if (args.length >= 3) {
+        } else if (args.length == 2) {
             for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
                 list.add(player.getName());
             }
