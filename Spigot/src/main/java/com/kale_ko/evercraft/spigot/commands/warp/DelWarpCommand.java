@@ -1,7 +1,9 @@
 package com.kale_ko.evercraft.spigot.commands.warp;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import com.kale_ko.evercraft.shared.util.StringUtils;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import com.kale_ko.evercraft.spigot.SpigotMain;
 import com.kale_ko.evercraft.spigot.commands.SpigotCommand;
@@ -36,6 +38,18 @@ public class DelWarpCommand extends SpigotCommand {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        return Arrays.asList();
+        List<String> list = new ArrayList<String>();
+
+        if (args.length == 1) {
+            list = new ArrayList<String>(SpigotMain.getInstance().getWarps().getKeys(false));
+        } else {
+            return Arrays.asList();
+        }
+
+        if (args.length > 0) {
+            return StringUtils.matchPartial(args[args.length - 1], list);
+        } else {
+            return list;
+        }
     }
 }
