@@ -40,7 +40,7 @@ public class WarpCommand extends SpigotCommand {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 1) {
-            list = Arrays.asList(SpigotMain.getInstance().getWarps().getKeys(false).toArray(new String[] {}));
+            list = new ArrayList<String>(SpigotMain.getInstance().getWarps().getKeys(false));
         } else {
             return Arrays.asList();
         }
