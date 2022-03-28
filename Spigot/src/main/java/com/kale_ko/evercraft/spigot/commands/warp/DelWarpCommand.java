@@ -5,7 +5,7 @@ import java.util.List;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import com.kale_ko.evercraft.spigot.SpigotMain;
 import com.kale_ko.evercraft.spigot.commands.SpigotCommand;
-import org.bukkit.Location;
+import com.kale_ko.evercraft.spigot.util.types.SerializableLocation;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,7 +18,7 @@ public class DelWarpCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
-                if (SpigotMain.getInstance().getWarps().getSerializable(args[0], Location.class) != null) {
+                if (SpigotMain.getInstance().getWarps().getSerializable(args[0], SerializableLocation.class) != null) {
                     SpigotMain.getInstance().getWarps().set(args[0], null);
                     SpigotMain.getInstance().getWarps().save();
 
