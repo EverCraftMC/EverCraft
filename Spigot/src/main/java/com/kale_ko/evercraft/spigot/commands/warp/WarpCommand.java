@@ -7,7 +7,7 @@ import com.kale_ko.evercraft.shared.util.StringUtils;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import com.kale_ko.evercraft.spigot.SpigotMain;
 import com.kale_ko.evercraft.spigot.commands.SpigotCommand;
-import org.bukkit.Location;
+import com.kale_ko.evercraft.spigot.util.types.SerializableLocation;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -20,8 +20,8 @@ public class WarpCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
-                if (SpigotMain.getInstance().getWarps().getSerializable(args[0], Location.class) != null) {
-                    player.teleport(SpigotMain.getInstance().getWarps().getSerializable(args[0], Location.class));
+                if (SpigotMain.getInstance().getWarps().getSerializable(args[0], SerializableLocation.class) != null) {
+                    player.teleport(SpigotMain.getInstance().getWarps().getSerializable(args[0], SerializableLocation.class).toBukkitLocation());
 
                     player.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("warp.warped").replace("{warp}", args[0])));
                 } else {
