@@ -18,7 +18,7 @@ public class FileConfig extends AbstractConfig {
     private static Gson gson;
 
     static {
-        FileConfig.gson = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create();
+        FileConfig.gson = new GsonBuilder().setPrettyPrinting().serializeNulls().serializeSpecialFloatingPointValues().create();
     }
 
     private File file;
@@ -41,6 +41,16 @@ public class FileConfig extends AbstractConfig {
     @Override
     public Boolean exists(String key) {
         return this.objects.containsKey(key);
+    }
+
+    @Override
+    public Integer getInteger(String key) {
+        return Math.round(getFloat(key));
+    }
+
+    @Override
+    public Float getFloat(String key) {
+        return (float) ((double) getDouble(key));
     }
 
     public List<String> getKeys(String path, Boolean deep) {
