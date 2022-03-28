@@ -53,7 +53,7 @@ public class KitCommand extends SpigotCommand {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 1) {
-            list = Arrays.asList(SpigotMain.getInstance().getKits().getKeys(false).toArray(new String[] {}));
+            list = new ArrayList<String>(SpigotMain.getInstance().getKits().getKeys(false));
         } else {
             return Arrays.asList();
         }

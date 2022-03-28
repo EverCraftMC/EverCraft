@@ -54,10 +54,14 @@ public class FileConfig extends AbstractConfig {
     }
 
     public List<String> getKeys(String path, Boolean deep) {
+        if (path.equalsIgnoreCase("")) {
+            path = null;
+        }
+
         List<String> keys = new ArrayList<>();
 
         for (String key : this.objects.keySet().toArray(new String[] {})) {
-            if (deep && key.startsWith(path + ".") || (!deep && key.startsWith(path + ".") && key.split("\\.").length == path.split("\\.").length + 1)) {
+            if (deep && (path == null || key.startsWith(path + ".")) || (!deep && (path == null || key.startsWith(path + ".")) && key.split("\\.").length == path.split("\\.").length + 1)) {
                 keys.add(key);
             }
         }
