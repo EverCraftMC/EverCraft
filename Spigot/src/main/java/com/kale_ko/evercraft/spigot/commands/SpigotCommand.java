@@ -25,7 +25,7 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        if (sender.hasPermission(this.getPermission())) {
+        if (this.getPermission() == null || sender.hasPermission(this.getPermission()) || sender.isOp()) {
             this.run(sender, args);
         } else {
             sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", this.getPermission())));

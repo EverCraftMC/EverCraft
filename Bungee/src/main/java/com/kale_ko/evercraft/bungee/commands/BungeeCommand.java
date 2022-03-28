@@ -20,7 +20,7 @@ public abstract class BungeeCommand extends Command implements PluginCommand, Ta
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (sender.hasPermission(this.getPermission())) {
+        if (this.getPermission() == null || sender.hasPermission(this.getPermission())) {
             this.run(sender, args);
         } else {
             sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", this.getPermission()))));
