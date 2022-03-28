@@ -15,6 +15,7 @@ import com.kale_ko.evercraft.bungee.commands.moderation.PermMuteCommand;
 import com.kale_ko.evercraft.bungee.commands.moderation.UnBanCommand;
 import com.kale_ko.evercraft.bungee.commands.moderation.UnMuteCommand;
 import com.kale_ko.evercraft.bungee.commands.player.NickNameCommand;
+import com.kale_ko.evercraft.bungee.commands.player.SpigotCommandCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.CommandSpyCommand;
 import com.kale_ko.evercraft.bungee.commands.staff.StaffChatCommand;
 import com.kale_ko.evercraft.bungee.commands.warp.HubCommand;
@@ -190,6 +191,8 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.commands.add(new StaffChatCommand("staffchat", "Send a message to the staffchat", Arrays.asList("sc"), "evercraft.commands.staff.staffchat").register());
         this.commands.add(new CommandSpyCommand("commandspy", "Toggle your commandspy", Arrays.asList("cs"), "evercraft.commands.staff.commandspy").register());
+
+        this.commands.add(new SpigotCommandCommand("spigotcommand", "Run a command on the spigot server", Arrays.asList(), null).register());
 
         this.getLogger().info("Finished loading commands");
 
