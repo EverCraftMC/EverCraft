@@ -60,7 +60,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading config..");
 
-        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
+        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
 
         this.config.addDefault("database.host", "localhost");
@@ -75,7 +75,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading messages..");
 
-        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "messages.yml");
+        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
         this.messages.reload();
 
         this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
@@ -102,9 +102,9 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading other data..");
 
-        this.warps = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "warps.yml");
+        this.warps = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "warps.json");
 
-        this.kits = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "kits.yml");
+        this.kits = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "kits.json");
 
         this.getLogger().info("Finished loading other data..");
 

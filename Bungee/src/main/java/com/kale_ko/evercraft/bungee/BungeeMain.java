@@ -64,7 +64,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Loading config..");
 
-        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
+        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
 
         this.config.addDefault("database.host", "localhost");
@@ -91,7 +91,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Loading messages..");
 
-        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "messages.yml");
+        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
         this.messages.reload();
 
         this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
@@ -140,7 +140,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.messages.addDefault("moderation.unmute.brodcast.reason", "&a{player} was unmuted by {moderator} &r&afor {reason}");
         this.messages.addDefault("moderation.maintenance.toggle", "&aSuccessfully toggled maintenance mode {value}");
         this.messages.addDefault("moderation.maintenance.kick", "&cSorry but the server is currently in maintenance mode, please come back later");
-        this.messages.addDefault("moderation.maintenance.motd", "                &cCurrently under maintenance");
+        this.messages.addDefault("moderation.maintenance.motd", "              &cCurrently under maintenance");
         this.messages.addDefault("commandspy", "&aSuccessfully toggled your commandspy {value}");
 
         this.messages.copyDefaults();
