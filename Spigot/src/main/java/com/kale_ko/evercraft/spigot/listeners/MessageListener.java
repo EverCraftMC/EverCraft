@@ -1,5 +1,6 @@
 package com.kale_ko.evercraft.spigot.listeners;
 
+import java.util.UUID;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -85,6 +86,12 @@ public class MessageListener extends SpigotListener implements PluginMessageList
                 }
 
                 SpigotMain.getInstance().getServer().getConsoleSender().sendMessage(message);
+            } else if (subChannel.equals("crossCommand")) {
+                Player player = SpigotMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
+
+                String command = in.readUTF();
+
+                SpigotMain.getInstance().getServer().dispatchCommand(player, command);
             }
         }
     }
