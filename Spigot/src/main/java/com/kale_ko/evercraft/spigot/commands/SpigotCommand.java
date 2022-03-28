@@ -16,7 +16,9 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
         this.setDescription(description);
         this.setAliases(aliases);
         this.setPermission(permission);
-        this.setPermissionMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission)));
+        if (permission != null) {
+            this.setPermissionMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission)));
+        }
 
         this.register();
     }
