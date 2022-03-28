@@ -103,8 +103,10 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.getLogger().info("Loading other data..");
 
         this.warps = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "warps.json");
+        this.warps.reload();
 
         this.kits = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "kits.json");
+        this.kits.reload();
 
         this.getLogger().info("Finished loading other data..");
 
