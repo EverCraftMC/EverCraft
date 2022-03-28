@@ -13,6 +13,7 @@ import com.kale_ko.evercraft.shared.economy.Economy;
 import com.kale_ko.evercraft.shared.util.Closable;
 import com.kale_ko.evercraft.spigot.commands.SpigotCommand;
 import com.kale_ko.evercraft.spigot.commands.kit.KitCommand;
+import com.kale_ko.evercraft.spigot.commands.player.BungeeCommandCommand;
 import com.kale_ko.evercraft.spigot.commands.staff.gamemode.AdventureCommand;
 import com.kale_ko.evercraft.spigot.commands.staff.gamemode.CreativeCommand;
 import com.kale_ko.evercraft.spigot.commands.staff.gamemode.GameModeCommand;
@@ -132,6 +133,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new CreativeCommand("gmc", "Change your gamemode to creative", Arrays.asList("gm1"), "evercraft.commands.gamemode.creative").register());
         this.commands.add(new AdventureCommand("gma", "Change your gamemode to adventure", Arrays.asList("gm2"), "evercraft.commands.gamemode.adventure").register());
         this.commands.add(new SpectatorCommand("gmsp", "Change your gamemode to spectator", Arrays.asList("gm3"), "evercraft.commands.gamemode.spectator").register());
+
+        this.commands.add(new BungeeCommandCommand("bungeecommand", "Run a command on the bungee sever", Arrays.asList(), null).register());
 
         this.getLogger().info("Finished loading commands");
 
