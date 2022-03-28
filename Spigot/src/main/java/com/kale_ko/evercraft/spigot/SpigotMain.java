@@ -22,9 +22,14 @@ import com.kale_ko.evercraft.spigot.commands.warp.DelWarpCommand;
 import com.kale_ko.evercraft.spigot.commands.warp.SetWarpCommand;
 import com.kale_ko.evercraft.spigot.commands.warp.SpawnCommand;
 import com.kale_ko.evercraft.spigot.commands.warp.WarpCommand;
+import com.kale_ko.evercraft.spigot.listeners.JoinListener;
 import com.kale_ko.evercraft.spigot.listeners.MessageListener;
 import com.kale_ko.evercraft.spigot.listeners.SpigotListener;
+
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.yaml.snakeyaml.TypeDescription;
 
 public class SpigotMain extends JavaPlugin implements Plugin {
     private static SpigotMain Instance;
@@ -60,6 +65,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.getLogger().info("Loading config..");
 
         this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
+        this.config.reload();
 
         this.config.addDefault("database.host", "localhost");
         this.config.addDefault("database.port", 3306);
@@ -74,6 +80,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.getLogger().info("Loading messages..");
 
         this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "messages.yml");
+        this.messages.reload();
 
         this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
         this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
@@ -93,13 +100,23 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading player data..");
 
-        this.data = new MySQLConfig(this.config.getString("database.host"), this.config.getInt("database.port"), this.config.getString("database.name"), "data", this.config.getString("database.username"), this.config.getString("database.password"));
+        this.data = new MySQLConfig(this.config.getString("database.host"), this.config.getInteger("database.port"), this.config.getString("database.name"), "data", this.config.getString("database.username"), this.config.getString("database.password"));
 
         this.getLogger().info("Finished loading player data");
 
         this.getLogger().info("Loading other data..");
 
         this.warps = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "warps.yml");
+        TypeDescription locationType = new TypeDescription(Location.class);
+        locationType.addPropertyParameters("world", String.class);
+        locationType.addPropertyParameters("x", Double.class);
+        locationType.addPropertyParameters("y", Double.class);
+        locationType.addPropertyParameters("z", Double.class);
+        locationType.addPropertyParameters("yaw", Float.class);
+        locationType.addPropertyParameters("pitch", Float.class);
+        // locationType.substituteProperty("world", CraftWorld.class, "getName", null, String.class);
+        this.warps.addType(locationType);
+
         this.kits = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "kits.yml");
 
         this.getLogger().info("Finished loading other data..");
@@ -134,6 +151,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.listeners = new ArrayList<SpigotListener>();
 
         this.listeners.add(new MessageListener().register());
+        this.listeners.add(new JoinListener().register());
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
