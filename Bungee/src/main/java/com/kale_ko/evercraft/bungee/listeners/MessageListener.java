@@ -119,6 +119,12 @@ public class MessageListener extends BungeeListener {
                         }
                     }
                 }
+            } else if (subChannel.equals("crossCommand")) {
+                ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(UUID.fromString(in.readUTF()));
+
+                String command = in.readUTF();
+
+                BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player, command);
             }
         }
     }
