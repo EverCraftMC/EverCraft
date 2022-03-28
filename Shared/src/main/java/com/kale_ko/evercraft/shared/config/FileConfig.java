@@ -2,14 +2,9 @@ package com.kale_ko.evercraft.shared.config;
 
 import java.util.List;
 import java.util.Map;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.TypeDescription;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.DumperOptions.FlowStyle;
-import org.yaml.snakeyaml.DumperOptions.NonPrintableStyle;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.representer.Representer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,7 +15,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FileConfig extends AbstractConfig {
-    private Yaml yaml;
+    private static Gson gson;
+
+    static {
+        FileConfig.gson = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create();
+    }
 
     private File file;
 
@@ -37,35 +36,17 @@ public class FileConfig extends AbstractConfig {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        LoaderOptions loaderOptions = new LoaderOptions();
-        loaderOptions.setAllowDuplicateKeys(false);
-        loaderOptions.setAllowRecursiveKeys(false);
-        loaderOptions.setEnumCaseSensitive(false);
-        loaderOptions.setProcessComments(false);
-
-        DumperOptions dumperOptions = new DumperOptions();
-        dumperOptions.setAllowUnicode(false);
-        dumperOptions.setCanonical(false);
-        dumperOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
-        dumperOptions.setIndent(2);
-        dumperOptions.setNonPrintableStyle(NonPrintableStyle.ESCAPE);
-        dumperOptions.setPrettyFlow(true);
-        dumperOptions.setProcessComments(false);
-        dumperOptions.setSplitLines(false);
-
-        this.yaml = new Yaml(new Constructor(loaderOptions), new Representer(dumperOptions), dumperOptions, loaderOptions);
     }
 
     @Override
     public Boolean exists(String key) {
-        return objects.containsKey(key);
+        return this.objects.containsKey(key);
     }
 
     public List<String> getKeys(String path, Boolean deep) {
         List<String> keys = new ArrayList<>();
 
-        for (String key : objects.keySet().toArray(new String[] {})) {
+        for (String key : this.objects.keySet().toArray(new String[] {})) {
             if (deep && key.startsWith(path + ".") || (!deep && key.startsWith(path + ".") && key.split("\\.").length == path.split("\\.").length + 1)) {
                 keys.add(key);
             }
@@ -75,7 +56,7 @@ public class FileConfig extends AbstractConfig {
     }
 
     public Object getRaw(String key) {
-        return objects.get(key);
+        return this.objects.get(key);
     }
 
     @SuppressWarnings("unchecked")
@@ -96,16 +77,12 @@ public class FileConfig extends AbstractConfig {
         }
     }
 
-    public void addType(TypeDescription type) {
-        this.yaml.addTypeDescription(type);
-    }
-
     public void set(String key, Object value) {
         if (!exists(key)) {
-            objects.put(key, value);
+            this.objects.put(key, value);
         } else {
-            objects.remove(key);
-            objects.put(key, value);
+            this.objects.remove(key);
+            this.objects.put(key, value);
         }
     }
 
@@ -119,7 +96,7 @@ public class FileConfig extends AbstractConfig {
             }
             reader.close();
 
-            objects = yaml.load(contents.toString());
+            this.objects = gson.fromJson(contents.toString(), new TypeToken<Map<String, Object>>() { }.getType());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -128,7 +105,7 @@ public class FileConfig extends AbstractConfig {
     public void save() {
         try {
             BufferedWriter writter = new BufferedWriter(new FileWriter(file));
-            writter.write(yaml.dump(objects));
+            writter.write(gson.toJson(this.objects));
             writter.close();
         } catch (IOException e) {
             e.printStackTrace();

@@ -3,6 +3,7 @@ package com.kale_ko.evercraft.shared.config;
 import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.kale_ko.evercraft.shared.mysql.MySQL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,11 +47,11 @@ public class MySQLConfig extends AbstractConfig {
     }
 
     public <T> T getSerializable(String key, Class<T> clazz) {
-        return gson.fromJson(getRaw(key), clazz);
+        return gson.fromJson(getRaw(key), new TypeToken<T>() { }.getType());
     }
 
     public <T> List<T> getSerializableList(String key, Class<T> clazz) {
-        return Arrays.asList(gson.fromJson(getRaw(key), clazz));
+        return gson.fromJson(getRaw(key), new TypeToken<List<T>>() { }.getType());
     }
 
     public void set(String key, Object value) {
@@ -70,11 +71,9 @@ public class MySQLConfig extends AbstractConfig {
         }
     }
 
-    public void reload() {
-    }
+    public void reload() { }
 
-    public void save() {
-    }
+    public void save() { }
 
     public void close() {
         mysql.close();
