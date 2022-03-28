@@ -13,7 +13,9 @@ import net.md_5.bungee.api.plugin.TabExecutor;
 public abstract class BungeeCommand extends Command implements PluginCommand, TabExecutor {
     protected BungeeCommand(String name, String description, List<String> aliases, String permission) {
         super(name, permission, aliases.toArray(new String[] {}));
-        this.setPermissionMessage(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission)));
+        if (permission != null) {
+            this.setPermissionMessage(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission)));
+        }
     }
 
     @Override
