@@ -31,9 +31,14 @@ public class JoinListener extends BungeeListener {
             } else {
                 event.setTarget(BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getServerPriority().get(0)));
             }
+        } else {
+            BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("welcome.move").replace("{player}", event.getPlayer().getDisplayName())).replace("{server}", event.getTarget().getName())));
+
+            BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("welcome.move").replace("{player}", event.getPlayer().getDisplayName()).replace("{server}", event.getTarget().getName()))).queue();
         }
     }
 
+    @EventHandler
     public void onPlayerConnect(ServerConnectedEvent event) {
         connectionStatuses.remove(event.getPlayer());
         connectionStatuses.put(event.getPlayer(), ConnectionStatus.CONNECTED);

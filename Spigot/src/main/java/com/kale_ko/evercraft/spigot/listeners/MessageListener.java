@@ -21,7 +21,7 @@ public class MessageListener extends SpigotListener implements PluginMessageList
         out.writeUTF(event.getPlayer().getUniqueId().toString());
         out.writeUTF(event.getMessage());
 
-        SpigotMain.getInstance().getServer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
+        event.getPlayer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
     }
 
     @EventHandler
@@ -32,7 +32,7 @@ public class MessageListener extends SpigotListener implements PluginMessageList
         out.writeUTF(event.getPlayer().getUniqueId().toString());
         out.writeUTF(event.getMessage());
 
-        SpigotMain.getInstance().getServer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
+        event.getPlayer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
     }
 
     @Override
