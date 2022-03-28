@@ -65,6 +65,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.getLogger().info("Loading config..");
 
         this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
+        this.config.reload();
 
         this.config.addDefault("database.host", "localhost");
         this.config.addDefault("database.port", 3306);
@@ -91,6 +92,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.getLogger().info("Loading messages..");
 
         this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "messages.yml");
+        this.messages.reload();
 
         this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
         this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
@@ -147,7 +149,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.getLogger().info("Loading player data..");
 
-        this.data = new MySQLConfig(this.config.getString("database.host"), this.config.getInt("database.port"), this.config.getString("database.name"), "data", this.config.getString("database.username"), this.config.getString("database.password"));
+        this.data = new MySQLConfig(this.config.getString("database.host"), this.config.getInteger("database.port"), this.config.getString("database.name"), "data", this.config.getString("database.username"), this.config.getString("database.password"));
 
         this.getLogger().info("Finished loading player data");
 

@@ -7,10 +7,6 @@ import com.kale_ko.evercraft.shared.util.KeyValuePair;
 public abstract class AbstractConfig implements Config {
     private List<KeyValuePair<String, Object>> defaults = new ArrayList<KeyValuePair<String, Object>>();
 
-    public Object getObject(String key) {
-        return getSerializable(key, Object.class);
-    }
-
     public String getString(String key) {
         return getSerializable(key, String.class);
     }
@@ -19,11 +15,11 @@ public abstract class AbstractConfig implements Config {
         return getSerializableList(key, String.class);
     }
 
-    public Integer getInt(String key) {
+    public Integer getInteger(String key) {
         return getSerializable(key, Integer.class);
     }
 
-    public List<Integer> getIntList(String key) {
+    public List<Integer> getIntegerList(String key) {
         return getSerializableList(key, Integer.class);
     }
 

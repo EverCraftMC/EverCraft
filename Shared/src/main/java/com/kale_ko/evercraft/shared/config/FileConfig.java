@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.DumperOptions.NonPrintableStyle;
@@ -19,27 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FileConfig extends AbstractConfig {
-    private static Yaml yaml;
-
-    static {
-        LoaderOptions loaderOptions = new LoaderOptions();
-        loaderOptions.setAllowDuplicateKeys(false);
-        loaderOptions.setAllowRecursiveKeys(true);
-        loaderOptions.setEnumCaseSensitive(false);
-        loaderOptions.setProcessComments(false);
-
-        DumperOptions dumperOptions = new DumperOptions();
-        dumperOptions.setAllowUnicode(true);
-        dumperOptions.setCanonical(false);
-        dumperOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
-        dumperOptions.setIndent(2);
-        dumperOptions.setNonPrintableStyle(NonPrintableStyle.ESCAPE);
-        dumperOptions.setPrettyFlow(true);
-        dumperOptions.setProcessComments(false);
-        dumperOptions.setSplitLines(false);
-
-        FileConfig.yaml = new Yaml(new Constructor(loaderOptions), new Representer(dumperOptions), dumperOptions, loaderOptions);
-    }
+    private Yaml yaml;
 
     private File file;
 
@@ -57,7 +38,23 @@ public class FileConfig extends AbstractConfig {
             e.printStackTrace();
         }
 
-        this.reload();
+        LoaderOptions loaderOptions = new LoaderOptions();
+        loaderOptions.setAllowDuplicateKeys(false);
+        loaderOptions.setAllowRecursiveKeys(false);
+        loaderOptions.setEnumCaseSensitive(false);
+        loaderOptions.setProcessComments(false);
+
+        DumperOptions dumperOptions = new DumperOptions();
+        dumperOptions.setAllowUnicode(false);
+        dumperOptions.setCanonical(false);
+        dumperOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
+        dumperOptions.setIndent(2);
+        dumperOptions.setNonPrintableStyle(NonPrintableStyle.ESCAPE);
+        dumperOptions.setPrettyFlow(true);
+        dumperOptions.setProcessComments(false);
+        dumperOptions.setSplitLines(false);
+
+        this.yaml = new Yaml(new Constructor(loaderOptions), new Representer(dumperOptions), dumperOptions, loaderOptions);
     }
 
     @Override
@@ -77,7 +74,7 @@ public class FileConfig extends AbstractConfig {
         return keys;
     }
 
-    private Object getRaw(String key) {
+    public Object getRaw(String key) {
         return objects.get(key);
     }
 
@@ -97,6 +94,10 @@ public class FileConfig extends AbstractConfig {
         } catch (ClassCastException e) {
             return null;
         }
+    }
+
+    public void addType(TypeDescription type) {
+        this.yaml.addTypeDescription(type);
     }
 
     public void set(String key, Object value) {

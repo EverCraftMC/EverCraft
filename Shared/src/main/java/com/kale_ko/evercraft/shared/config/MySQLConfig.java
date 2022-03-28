@@ -1,12 +1,19 @@
 package com.kale_ko.evercraft.shared.config;
 
 import java.util.List;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kale_ko.evercraft.shared.mysql.MySQL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MySQLConfig extends AbstractConfig {
+    private static Gson gson;
+
+    static {
+        MySQLConfig.gson = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create();
+    }
+
     private MySQL mysql;
     private String tableName;
 
@@ -34,22 +41,22 @@ public class MySQLConfig extends AbstractConfig {
         return keys;
     }
 
-    private String getRaw(String key) {
+    public String getRaw(String key) {
         return mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'");
     }
 
     public <T> T getSerializable(String key, Class<T> clazz) {
-        return new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create().fromJson(getRaw(key), clazz);
+        return gson.fromJson(getRaw(key), clazz);
     }
 
     public <T> List<T> getSerializableList(String key, Class<T> clazz) {
-        return Arrays.asList(new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create().fromJson(getRaw(key), clazz));
+        return Arrays.asList(gson.fromJson(getRaw(key), clazz));
     }
 
     public void set(String key, Object value) {
         String json = null;
         if (value != null) {
-            json = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create().toJson(value);
+            json = gson.toJson(value);
         }
 
         if (json != null && mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'") == null) {
