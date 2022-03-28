@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -61,7 +62,7 @@ public class FileConfig extends AbstractConfig {
         List<String> keys = new ArrayList<>();
 
         for (String key : this.objects.keySet().toArray(new String[] {})) {
-            if (deep && (path == null || key.startsWith(path + ".")) || (!deep && (path == null || key.startsWith(path + ".")) && key.split("\\.").length == path.split("\\.").length + 1)) {
+            if (deep && (path == null || key.startsWith(path + ".")) || (!deep && (path == null || key.startsWith(path + ".")) && ((path == null && key.split("\\.").length == 1) || key.split("\\.").length == path.split("\\.").length + 1))) {
                 keys.add(key);
             }
         }
@@ -76,7 +77,16 @@ public class FileConfig extends AbstractConfig {
     @SuppressWarnings("unchecked")
     public <T> T getSerializable(String key, Class<T> clazz) {
         try {
-            return (T) getRaw(key);
+            Object obj = getRaw(key);
+
+            if (obj instanceof LinkedTreeMap) {
+                LinkedTreeMap<String, Object> tree = (LinkedTreeMap<String, Object>) obj;
+
+                return gson.fromJson(tree.toString(), new TypeToken<T>() {
+                }.getType());
+            } else {
+                return (T) obj;
+            }
         } catch (ClassCastException e) {
             return null;
         }
@@ -85,7 +95,16 @@ public class FileConfig extends AbstractConfig {
     @SuppressWarnings("unchecked")
     public <T> List<T> getSerializableList(String key, Class<T> clazz) {
         try {
-            return (List<T>) getRaw(key);
+            Object obj = getRaw(key);
+
+            if (obj instanceof LinkedTreeMap) {
+                LinkedTreeMap<String, Object> tree = (LinkedTreeMap<String, Object>) obj;
+
+                return gson.fromJson(tree.toString(), new TypeToken<List<T>>() {
+                }.getType());
+            } else {
+                return (List<T>) obj;
+            }
         } catch (ClassCastException e) {
             return null;
         }
