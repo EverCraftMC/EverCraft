@@ -38,7 +38,7 @@ public class MySQLConfig extends AbstractConfig {
         List<String> keys = new ArrayList<>();
 
         for (String key : mysql.selectAll(this.tableName, new String[] { "keyid" }).split("\n")) {
-            if (deep && (path == null || key.startsWith(path + ".")) || (!deep && (path == null || key.startsWith(path + ".")) && key.split("\\.").length == path.split("\\.").length + 1)) {
+            if (deep && (path == null || key.startsWith(path + ".")) || (!deep && (path == null || key.startsWith(path + ".")) && ((path == null && key.split("\\.").length == 1) || key.split("\\.").length == path.split("\\.").length + 1))) {
                 keys.add(String.join(".", Arrays.asList(key.split("\\.")).subList(0, path.split("\\.").length + 1)));
             }
         }
