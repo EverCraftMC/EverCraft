@@ -16,7 +16,23 @@ public abstract class AbstractConfig implements Config {
     }
 
     public Integer getInteger(String key) {
-        return getSerializable(key, Integer.class);
+        try {
+            return getSerializable(key, Integer.class);
+        } catch (ClassCastException e) {
+            try {
+                return Math.round((float) ((double) getSerializable(key, Double.class)));
+            } catch (ClassCastException e2) {
+                try {
+                    return Math.round(getSerializable(key, Float.class));
+                } catch (ClassCastException e3) {
+                    try {
+                        return Math.round(getSerializable(key, Long.class));
+                    } catch (ClassCastException e4) {
+                        return null;
+                    }
+                }
+            }
+        }
     }
 
     public List<Integer> getIntegerList(String key) {
@@ -24,7 +40,23 @@ public abstract class AbstractConfig implements Config {
     }
 
     public Float getFloat(String key) {
-        return getSerializable(key, Float.class);
+        try {
+            return getSerializable(key, Float.class);
+        } catch (ClassCastException e) {
+            try {
+                return (float) ((double) getSerializable(key, Double.class));
+            } catch (ClassCastException e2) {
+                try {
+                    return (float) ((double) getSerializable(key, Long.class));
+                } catch (ClassCastException e3) {
+                    try {
+                        return (float) ((double) getSerializable(key, Integer.class));
+                    } catch (ClassCastException e4) {
+                        return null;
+                    }
+                }
+            }
+        }
     }
 
     public List<Float> getFloatList(String key) {
@@ -32,7 +64,23 @@ public abstract class AbstractConfig implements Config {
     }
 
     public Double getDouble(String key) {
-        return getSerializable(key, Double.class);
+        try {
+            return getSerializable(key, Double.class);
+        } catch (ClassCastException e) {
+            try {
+                return (double) getSerializable(key, Float.class);
+            } catch (ClassCastException e2) {
+                try {
+                    return (double) getSerializable(key, Long.class);
+                } catch (ClassCastException e3) {
+                    try {
+                        return (double) getSerializable(key, Integer.class);
+                    } catch (ClassCastException e4) {
+                        return null;
+                    }
+                }
+            }
+        }
     }
 
     public List<Double> getDoubleList(String key) {
@@ -40,7 +88,23 @@ public abstract class AbstractConfig implements Config {
     }
 
     public Long getLong(String key) {
-        return getSerializable(key, Long.class);
+        try {
+            return getSerializable(key, Long.class);
+        } catch (ClassCastException e) {
+            try {
+                return (long) ((int) getSerializable(key, Integer.class));
+            } catch (ClassCastException e2) {
+                try {
+                    return (long) ((double) getSerializable(key, Double.class));
+                } catch (ClassCastException e3) {
+                    try {
+                        return (long) ((double) getSerializable(key, Float.class));
+                    } catch (ClassCastException e4) {
+                        return null;
+                    }
+                }
+            }
+        }
     }
 
     public List<Long> getLongList(String key) {
