@@ -76,36 +76,34 @@ public class FileConfig extends AbstractConfig {
 
     @SuppressWarnings("unchecked")
     public <T> T getSerializable(String key, Class<T> clazz) {
-        try {
-            Object obj = getRaw(key);
+        Object obj = getRaw(key);
 
-            if (obj instanceof LinkedTreeMap) {
-                LinkedTreeMap<String, Object> tree = (LinkedTreeMap<String, Object>) obj;
+        if (obj == null) {
+            return null;
+        }
 
-                return gson.fromJson(tree.toString(), new TypeToken<T>() {
-                }.getType());
-            } else {
-                return (T) obj;
-            }
-        } catch (ClassCastException e) {
+        if (obj instanceof LinkedTreeMap) {
+            LinkedTreeMap<String, Object> tree = (LinkedTreeMap<String, Object>) obj;
+
+            return gson.fromJson(gson.toJsonTree(tree).toString(), clazz);
+        } else if (obj instanceof String || obj instanceof Float || obj instanceof Double || obj instanceof Integer || obj instanceof Long || obj instanceof Boolean) {
+            return (T) obj;
+        } else {
             return null;
         }
     }
 
     @SuppressWarnings("unchecked")
     public <T> List<T> getSerializableList(String key, Class<T> clazz) {
-        try {
-            Object obj = getRaw(key);
+        Object obj = getRaw(key);
 
-            if (obj instanceof LinkedTreeMap) {
-                LinkedTreeMap<String, Object> tree = (LinkedTreeMap<String, Object>) obj;
+        if (obj == null) {
+            return null;
+        }
 
-                return gson.fromJson(tree.toString(), new TypeToken<List<T>>() {
-                }.getType());
-            } else {
-                return (List<T>) obj;
-            }
-        } catch (ClassCastException e) {
+        if (obj instanceof List) {
+            return (List<T>) obj;
+        } else {
             return null;
         }
     }
