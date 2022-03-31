@@ -13,8 +13,6 @@ public class PlayerResolver {
     }
 
     public static SimplePlayer getPlayer(Config config, String name) {
-        System.out.println(getUUIDFromName(config, name));
-
         if (getUUIDFromName(config, name) != null) {
             return new SimplePlayer(getUUIDFromName(config, name), name, getDisplayName(config, getUUIDFromName(config, name)));
         } else {
