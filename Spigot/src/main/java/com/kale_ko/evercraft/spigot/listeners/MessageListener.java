@@ -7,6 +7,7 @@ import com.google.common.io.ByteStreams;
 import com.kale_ko.evercraft.spigot.SpigotMain;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -23,6 +24,19 @@ public class MessageListener extends SpigotListener implements PluginMessageList
         out.writeUTF(event.getMessage());
 
         event.getPlayer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
+    }
+
+    @EventHandler
+    public void onDeathMessage(PlayerDeathEvent event) {
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("globalDeathMessage");
+        out.writeUTF(SpigotMain.getInstance().getServerName());
+        out.writeUTF(event.getEntity().getUniqueId().toString());
+        out.writeUTF(event.getDeathMessage().replace(event.getEntity().getName(), "{player}"));
+
+        event.getEntity().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
+
+        event.setDeathMessage("");
     }
 
     @EventHandler
@@ -44,48 +58,6 @@ public class MessageListener extends SpigotListener implements PluginMessageList
             String subChannel = in.readUTF();
             if (subChannel.equals("GetServer")) {
                 SpigotMain.getInstance().setServerName(in.readUTF());
-            } else if (subChannel.equals("globalMessage")) {
-                String message = in.readUTF();
-
-                for (Player player : SpigotMain.getInstance().getServer().getOnlinePlayers()) {
-                    player.sendMessage(message);
-                }
-
-                SpigotMain.getInstance().getServer().getConsoleSender().sendMessage(message);
-            } else if (subChannel.equals("globalPermMessage")) {
-                String message = in.readUTF();
-                String perm = in.readUTF();
-
-                for (Player player : SpigotMain.getInstance().getServer().getOnlinePlayers()) {
-                    if (player.hasPermission(perm)) {
-                        player.sendMessage(message);
-                    }
-                }
-
-                SpigotMain.getInstance().getServer().getConsoleSender().sendMessage(message);
-            } else if (subChannel.equals("globalCondMessage")) {
-                String message = in.readUTF();
-                String cond = in.readUTF();
-
-                for (Player player : SpigotMain.getInstance().getServer().getOnlinePlayers()) {
-                    if (SpigotMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + "." + cond) != null && SpigotMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + "." + cond)) {
-                        player.sendMessage(message);
-                    }
-                }
-
-                SpigotMain.getInstance().getServer().getConsoleSender().sendMessage(message);
-            } else if (subChannel.equals("globalPermCondMessage")) {
-                String message = in.readUTF();
-                String perm = in.readUTF();
-                String cond = in.readUTF();
-
-                for (Player player : SpigotMain.getInstance().getServer().getOnlinePlayers()) {
-                    if (player.hasPermission(perm) && SpigotMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + "." + cond) != null && SpigotMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + "." + cond)) {
-                        player.sendMessage(message);
-                    }
-                }
-
-                SpigotMain.getInstance().getServer().getConsoleSender().sendMessage(message);
             } else if (subChannel.equals("crossCommand")) {
                 Player player = SpigotMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
 

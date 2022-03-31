@@ -1,21 +1,28 @@
 package com.kale_ko.evercraft.shared.discord;
 
+import java.util.function.Consumer;
 import javax.security.auth.login.LoginException;
 import com.kale_ko.evercraft.shared.util.Closable;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.entities.Activity.ActivityType;
+import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
-public class DiscordBot implements Closable {
+public class DiscordBot implements Closable, EventListener {
     private JDA jda;
 
     private String guild;
+
+    private Consumer<Message> callback = null;
 
     public DiscordBot(String token, String guild, ActivityType statusType, String status) {
         try {
@@ -25,12 +32,26 @@ public class DiscordBot implements Closable {
                 .setMemberCachePolicy(MemberCachePolicy.NONE)
                 .setCompression(Compression.ZLIB)
                 .setActivity(Activity.of(statusType, status))
+                .addEventListeners(this)
                 .build();
         } catch (LoginException e) {
             e.printStackTrace();
         }
 
         this.guild = guild;
+    }
+
+    public void setMessageCallback(Consumer<Message> callback) {
+        this.callback = callback;
+    }
+
+    @Override
+    public void onEvent(GenericEvent rawevent) {
+        if (rawevent instanceof MessageReceivedEvent event) {
+            if (this.callback != null) {
+                this.callback.accept(event.getMessage());
+            }
+        }
     }
 
     public JDA getJDA() {

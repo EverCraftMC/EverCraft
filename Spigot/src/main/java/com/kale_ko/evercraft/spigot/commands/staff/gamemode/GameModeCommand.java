@@ -7,7 +7,6 @@ import com.kale_ko.evercraft.shared.util.StringUtils;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import com.kale_ko.evercraft.spigot.SpigotMain;
 import com.kale_ko.evercraft.spigot.commands.SpigotCommand;
-import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -21,21 +20,13 @@ public class GameModeCommand extends SpigotCommand {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
                 if (args[0].equalsIgnoreCase("survival") || args[0].equalsIgnoreCase("s") || args[0].equalsIgnoreCase("0")) {
-                    player.setGameMode(GameMode.SURVIVAL);
-
-                    player.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("staff.gamemode").replace("{gamemode}", "survival")));
+                    SpigotMain.getInstance().getServer().dispatchCommand(player, "gms");
                 } else if (args[0].equalsIgnoreCase("creative") || args[0].equalsIgnoreCase("c") || args[0].equalsIgnoreCase("1")) {
-                    player.setGameMode(GameMode.CREATIVE);
-
-                    player.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("staff.gamemode").replace("{gamemode}", "creative")));
+                    SpigotMain.getInstance().getServer().dispatchCommand(player, "gmc");
                 } else if (args[0].equalsIgnoreCase("adventure") || args[0].equalsIgnoreCase("a") || args[0].equalsIgnoreCase("2")) {
-                    player.setGameMode(GameMode.ADVENTURE);
-
-                    player.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("staff.gamemode").replace("{gamemode}", "adventure")));
+                    SpigotMain.getInstance().getServer().dispatchCommand(player, "gma");
                 } else if (args[0].equalsIgnoreCase("spectator") || args[0].equalsIgnoreCase("sp") || args[0].equalsIgnoreCase("3")) {
-                    player.setGameMode(GameMode.SPECTATOR);
-
-                    player.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("staff.gamemode").replace("{gamemode}", "spectator")));
+                    SpigotMain.getInstance().getServer().dispatchCommand(player, "gmsp");
                 }
             } else {
                 sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs")));

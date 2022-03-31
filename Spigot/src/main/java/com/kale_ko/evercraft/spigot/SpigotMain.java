@@ -154,6 +154,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Finished loading plugin");
 
+        // TODO Fix getting server name
+
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("GetServer");
         this.getServer().sendPluginMessage(this, "BungeeCord", out.toByteArray());
