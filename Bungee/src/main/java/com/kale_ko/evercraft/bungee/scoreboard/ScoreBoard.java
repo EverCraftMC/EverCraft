@@ -3,9 +3,9 @@ package com.kale_ko.evercraft.bungee.scoreboard;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import com.kale_ko.evercraft.bungee.BungeeMain;
+import com.kale_ko.evercraft.bungee.util.formatting.ComponentFormatter;
 import com.kale_ko.evercraft.shared.util.Closable;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 import net.md_5.bungee.api.score.Objective;
@@ -49,7 +49,7 @@ public class ScoreBoard implements Closable {
                             }
                         }
 
-                        player.setTabHeader(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.header")
+                        player.setTabHeader(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.header")
                             .replace("{player}", player.getDisplayName())
                             .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
                             .replace("{ping}", player.getPing() + "")
@@ -57,7 +57,7 @@ public class ScoreBoard implements Closable {
                             .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
                             .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
                             .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))),
-                        TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.footer")
+                        ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.footer")
                             .replace("{player}", player.getDisplayName())
                             .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
                             .replace("{ping}", player.getPing() + "")
