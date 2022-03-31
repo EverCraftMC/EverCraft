@@ -38,8 +38,6 @@ public class MessageListener extends BungeeListener {
                 } else {
                     String time = BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.until");
 
-                    // TODO Fix replacement null
-
                     if (BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.reason") != null) {
                         player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.reason").replace("{reason}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.reason")).replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
                     } else {
