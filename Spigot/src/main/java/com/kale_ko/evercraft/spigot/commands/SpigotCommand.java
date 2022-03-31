@@ -4,9 +4,9 @@ import java.util.List;
 import com.kale_ko.evercraft.shared.PluginCommand;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import com.kale_ko.evercraft.spigot.SpigotMain;
+import com.kale_ko.evercraft.spigot.util.formatting.ComponentFormatter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 
 public abstract class SpigotCommand extends Command implements PluginCommand {
     protected SpigotCommand(String name, String description, List<String> aliases, String permission) {
@@ -17,7 +17,7 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
         this.setAliases(aliases);
         this.setPermission(permission);
         if (permission != null) {
-            this.setPermissionMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission)));
+            this.permissionMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission))));
         }
 
         this.register();
@@ -37,7 +37,7 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
         if (this.testPermissionSilent(sender)) {
             return true;
         } else {
-            sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", this.getPermission())));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", this.getPermission()))));
 
             return false;
         }
@@ -60,12 +60,12 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
     }
 
     public SpigotCommand register() {
-        ((CraftServer) SpigotMain.getInstance().getServer()).getCommandMap().register(SpigotMain.getInstance().getName(), this);
+        SpigotMain.getInstance().getServer().getCommandMap().register(SpigotMain.getInstance().getName(), this);
 
         return this;
     }
 
     public void unregister() {
-        SpigotMain.getInstance().getCommand(this.getName()).unregister(((CraftServer) SpigotMain.getInstance().getServer()).getCommandMap());
+        SpigotMain.getInstance().getCommand(this.getName()).unregister(SpigotMain.getInstance().getServer().getCommandMap());
     }
 }

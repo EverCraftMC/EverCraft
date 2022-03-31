@@ -7,6 +7,7 @@ import com.kale_ko.evercraft.shared.util.StringUtils;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import com.kale_ko.evercraft.spigot.SpigotMain;
 import com.kale_ko.evercraft.spigot.commands.SpigotCommand;
+import com.kale_ko.evercraft.spigot.util.formatting.ComponentFormatter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -36,15 +37,15 @@ public class KitCommand extends SpigotCommand {
                         }
                     }
 
-                    player.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.kit").replace("{kit}", args[0])));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.kit").replace("{kit}", args[0]))));
                 } else {
-                    player.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.notFound").replace("{kit}", args[0])));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.notFound").replace("{kit}", args[0]))));
                 }
             } else {
-                sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
             }
         } else {
-            sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noConsole")));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noConsole"))));
         }
     }
 

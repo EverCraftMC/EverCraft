@@ -5,6 +5,7 @@ import java.util.List;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import com.kale_ko.evercraft.spigot.SpigotMain;
 import com.kale_ko.evercraft.spigot.commands.SpigotCommand;
+import com.kale_ko.evercraft.spigot.util.formatting.ComponentFormatter;
 import com.kale_ko.evercraft.spigot.util.types.SerializableLocation;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,12 +22,12 @@ public class SetWarpCommand extends SpigotCommand {
                 SpigotMain.getInstance().getWarps().set(args[0], SerializableLocation.fromBukkitLocation(player.getLocation()));
                 SpigotMain.getInstance().getWarps().save();
 
-                player.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("warp.setWarp").replace("{warp}", args[0])));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("warp.setWarp").replace("{warp}", args[0]))));
             } else {
-                sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs")));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
             }
         } else {
-            sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noConsole")));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noConsole"))));
         }
     }
 

@@ -1,9 +1,9 @@
 package com.kale_ko.evercraft.bungee.listeners;
 
 import com.kale_ko.evercraft.bungee.BungeeMain;
+import com.kale_ko.evercraft.bungee.util.formatting.ComponentFormatter;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import com.vexsoftware.votifier.bungee.events.VotifierEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.event.EventHandler;
 
@@ -24,7 +24,7 @@ public class VoteListener extends BungeeListener {
     }
 
     public static void process(ProxiedPlayer player) {
-        BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("vote").replace("{player}", player.getDisplayName()))));
+        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("vote").replace("{player}", player.getDisplayName()))));
 
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("vote").replace("{player}", player.getDisplayName()))).queue();
 

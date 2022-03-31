@@ -26,6 +26,7 @@ import com.kale_ko.evercraft.bungee.listeners.PingListener;
 import com.kale_ko.evercraft.bungee.listeners.VoteListener;
 import com.kale_ko.evercraft.bungee.listeners.JoinListener;
 import com.kale_ko.evercraft.bungee.scoreboard.ScoreBoard;
+import com.kale_ko.evercraft.bungee.util.formatting.ComponentFormatter;
 import com.kale_ko.evercraft.shared.PluginCommand;
 import com.kale_ko.evercraft.shared.config.FileConfig;
 import com.kale_ko.evercraft.shared.config.MySQLConfig;
@@ -35,7 +36,6 @@ import com.kale_ko.evercraft.shared.util.Closable;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Activity.ActivityType;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -182,7 +182,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
 
         this.commands.add(new HubCommand("hub", "Go to the hub", Arrays.asList("lobby"), "evercraft.commands.warp.hub").register());
 
-        for (String server : this.getProxy().getServers().keySet()) {
+        for (String server : this.getProxy().getServersCopy().keySet()) {
             this.commands.add(new ServerCommand(server, "Go to the " + server + " server", Arrays.asList(), "evercraft.commands.warp.server").register());
         }
 
@@ -230,12 +230,12 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.bot.setMessageCallback((Message message) -> {
             if (message.getChannel().getId().equals(this.getPluginConfig().getString("discord.channelId"))) {
                 for (ProxiedPlayer player : this.getProxy().getPlayers()) {
-                    player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(this.getPluginMessages().getString("chat.discord").replace("{player}", message.getMember().getEffectiveName()).replace("{message}", message.getContentDisplay()))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(this.getPluginMessages().getString("chat.discord").replace("{player}", message.getMember().getEffectiveName()).replace("{message}", message.getContentDisplay()))));
                 }
             } else if (message.getChannel().getId().equals(this.getPluginConfig().getString("discord.staffChannelId"))) {
                 for (ProxiedPlayer player : this.getProxy().getPlayers()) {
                     if (player.hasPermission("evercraft.commands.staff.staffchat")) {
-                        player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", message.getMember().getEffectiveName()).replace("{message}", message.getContentDisplay()))));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", message.getMember().getEffectiveName()).replace("{message}", message.getContentDisplay()))));
                     }
                 }
             }
