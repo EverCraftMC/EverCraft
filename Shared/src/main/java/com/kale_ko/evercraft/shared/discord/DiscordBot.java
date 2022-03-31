@@ -48,7 +48,7 @@ public class DiscordBot implements Closable, EventListener {
     @Override
     public void onEvent(GenericEvent rawevent) {
         if (rawevent instanceof MessageReceivedEvent event) {
-            if (this.callback != null) {
+            if (event.getAuthor() != this.getJDA().getSelfUser() && this.callback != null) {
                 this.callback.accept(event.getMessage());
             }
         }
