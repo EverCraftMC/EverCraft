@@ -34,7 +34,7 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
 
     @Override
     public boolean testPermission(CommandSender sender) {
-        if (this.testPermission(sender)) {
+        if (this.testPermissionSilent(sender)) {
             return true;
         } else {
             sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", this.getPermission())));
