@@ -4,8 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import com.kale_ko.evercraft.spigot.SpigotMain;
 import com.kale_ko.evercraft.spigot.commands.SpigotCommand;
+import com.kale_ko.evercraft.spigot.util.formatting.ComponentFormatter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -16,19 +18,23 @@ public class BungeeCommandCommand extends SpigotCommand {
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        if (sender instanceof Player player) {
-            StringBuilder command = new StringBuilder();
+        if (args.length > 0) {
+            if (sender instanceof Player player) {
+                StringBuilder command = new StringBuilder();
 
-            for (String arg : args) {
-                command.append(arg + " ");
+                for (String arg : args) {
+                    command.append(arg + " ");
+                }
+
+                ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                out.writeUTF("crossCommand");
+                out.writeUTF(player.getUniqueId().toString());
+                out.writeUTF(command.substring(0, command.length() - 1));
+
+                player.sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
             }
-
-            ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("crossCommand");
-            out.writeUTF(player.getUniqueId().toString());
-            out.writeUTF(command.substring(0, command.length() - 1));
-
-            player.sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
+        } else {
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
         }
     }
 
