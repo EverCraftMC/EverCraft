@@ -25,13 +25,27 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        if (this.getPermission() == null || sender.hasPermission(this.getPermission()) || sender.isOp()) {
+        if (this.testPermission(sender)) {
             this.run(sender, args);
-        } else {
-            sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", this.getPermission())));
         }
 
         return true;
+    }
+
+    @Override
+    public boolean testPermission(CommandSender sender) {
+        if (this.testPermission(sender)) {
+            return true;
+        } else {
+            sender.sendMessage(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", this.getPermission())));
+
+            return false;
+        }
+    }
+
+    @Override
+    public boolean testPermissionSilent(CommandSender sender) {
+        return this.getPermission() == null || sender.hasPermission(this.getPermission()) || sender.isOp();
     }
 
     public void run(CommandSender sender, String[] args) { }

@@ -2,13 +2,11 @@ package com.kale_ko.evercraft.bungee.commands.staff;
 
 import java.util.Arrays;
 import java.util.List;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class StaffChatCommand extends BungeeCommand {
@@ -25,25 +23,19 @@ public class StaffChatCommand extends BungeeCommand {
             senderName = "CONSOLE";
         }
 
-        StringBuilder message = new StringBuilder();
+        StringBuilder command = new StringBuilder();
 
         for (String arg : args) {
-            message.append(arg + " ");
+            command.append(arg + " ");
         }
 
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-
-        out.writeUTF("globalPermMessage");
-        out.writeUTF(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", message.substring(0, message.length() - 1))));
-        out.writeUTF(this.getPermission());
-
-        for (ServerInfo server : BungeeMain.getInstance().getProxy().getServers().values()) {
-            if (!server.getPlayers().isEmpty()) {
-                server.sendData("BungeeCord", out.toByteArray());
+        for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
+            if (player.hasPermission(this.getPermission())) {
+                player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", command.substring(0, command.length() - 1)))));
             }
         }
 
-        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.staffChannelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", message.substring(0, message.length() - 1)))).queue();
+        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.staffChannelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", command.substring(0, command.length() - 1)))).queue();
     }
 
     @Override
