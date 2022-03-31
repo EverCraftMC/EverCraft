@@ -230,7 +230,7 @@ public class BungeeMain extends Plugin implements com.kale_ko.evercraft.shared.P
         this.bot.setMessageCallback((Message message) -> {
             if (message.getChannel().getId().equals(this.getPluginConfig().getString("discord.channelId"))) {
                 for (ProxiedPlayer player : this.getProxy().getPlayers()) {
-                    player.sendMessage(TextComponent.fromLegacyText(this.getPluginMessages().getString("chat.discord").replace("{player}", message.getMember().getEffectiveName()).replace("{message}", message.getContentDisplay())));
+                    player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(this.getPluginMessages().getString("chat.discord").replace("{player}", message.getMember().getEffectiveName()).replace("{message}", message.getContentDisplay()))));
                 }
             } else if (message.getChannel().getId().equals(this.getPluginConfig().getString("discord.staffChannelId"))) {
                 for (ProxiedPlayer player : this.getProxy().getPlayers()) {
