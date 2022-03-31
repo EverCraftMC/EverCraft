@@ -4,6 +4,7 @@ import java.util.UUID;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import com.kale_ko.evercraft.spigot.SpigotMain;
 import com.kale_ko.evercraft.spigot.util.formatting.ComponentFormatter;
 import org.bukkit.entity.Player;
@@ -13,6 +14,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
+import net.luckperms.api.LuckPermsProvider;
 
 public class MessageListener extends SpigotListener implements PluginMessageListener {
     @EventHandler
@@ -66,6 +68,10 @@ public class MessageListener extends SpigotListener implements PluginMessageList
                 String command = in.readUTF();
 
                 SpigotMain.getInstance().getServer().dispatchCommand(player, command);
+            } else if (subChannel.equals("updateName")) {
+                Player player = SpigotMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
+
+                player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + SpigotMain.getInstance().getData().getString("players." + player.getUniqueId() + ".nickname"))));
             }
         }
     }

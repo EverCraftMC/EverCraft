@@ -2,6 +2,8 @@ package com.kale_ko.evercraft.bungee.commands.player;
 
 import java.util.Arrays;
 import java.util.List;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
 import com.kale_ko.evercraft.bungee.util.formatting.ComponentFormatter;
@@ -24,7 +26,11 @@ public class NickNameCommand extends BungeeCommand {
 
                     player.setDisplayName(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + args[0]));
 
-                    // TODO Send name update to spigot server
+                    ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                    out.writeUTF("updateName");
+                    out.writeUTF(player.getUniqueId().toString());
+
+                    player.getServer().sendData("BungeeCord", out.toByteArray());
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("nickname").replace("{nickname}", args[0]))));
                 } else {
