@@ -18,7 +18,7 @@ public class PingListener extends BungeeListener {
         ServerPing ping = event.getResponse();
 
         if (!BungeeMain.getInstance().getData().getBoolean("maintenance")) {
-            if (BungeeMain.getInstance().getProxy().getServerInfo(event.getConnection().getVirtualHost().getHostName().split("\\.")[0]) != null) {
+            if (event.getConnection().getVirtualHost() != null && BungeeMain.getInstance().getProxy().getServerInfo(event.getConnection().getVirtualHost().getHostName().split("\\.")[0]) != null) {
                 ping.setDescriptionComponent(ComponentFormatter.flatenComponent(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getProxy().getServerInfo(event.getConnection().getVirtualHost().getHostName().split("\\.")[0]).getMotd()))));
             } else {
                 ping.setDescriptionComponent(ComponentFormatter.flatenComponent(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMotd()))));
