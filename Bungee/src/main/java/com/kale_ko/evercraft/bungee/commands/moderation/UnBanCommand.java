@@ -5,12 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
+import com.kale_ko.evercraft.bungee.util.formatting.ComponentFormatter;
 import com.kale_ko.evercraft.shared.util.StringUtils;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import com.kale_ko.evercraft.shared.util.player.PlayerResolver;
 import com.kale_ko.evercraft.shared.util.player.SimplePlayer;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class UnBanCommand extends BungeeCommand {
@@ -31,14 +31,14 @@ public class UnBanCommand extends BungeeCommand {
             SimplePlayer player = PlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
 
             if (player != null) {
-                BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
 
                 BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", null);
                 BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", null);
                 BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", null);
                 BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", null);
             } else {
-                sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
             }
         } else if (args.length > 1) {
             SimplePlayer player = PlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
@@ -50,17 +50,17 @@ public class UnBanCommand extends BungeeCommand {
                     reason.append(args[i] + " ");
                 }
 
-                BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.brodcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.brodcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
 
                 BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", null);
                 BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", null);
                 BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", null);
                 BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", null);
             } else {
-                sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
             }
         } else {
-            sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
         }
     }
 

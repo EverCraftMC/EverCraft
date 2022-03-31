@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
+import com.kale_ko.evercraft.bungee.util.formatting.ComponentFormatter;
 import com.kale_ko.evercraft.shared.util.StringUtils;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class CommandSpyCommand extends BungeeCommand {
@@ -23,25 +23,25 @@ public class CommandSpyCommand extends BungeeCommand {
                 if (BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".commandspy")) {
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".commandspy", false);
 
-                    player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("commandspy").replace("{value}", "off"))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("commandspy").replace("{value}", "off"))));
                 } else {
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".commandspy", true);
 
-                    player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("commandspy").replace("{value}", "on"))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("commandspy").replace("{value}", "on"))));
                 }
             } else {
                 if (args[0].equalsIgnoreCase("on")) {
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".commandspy", true);
 
-                    player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("commandspy").replace("{value}", "on"))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("commandspy").replace("{value}", "on"))));
                 } else if (args[0].equalsIgnoreCase("off")) {
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".commandspy", false);
 
-                    player.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("commandspy").replace("{value}", "off"))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("commandspy").replace("{value}", "off"))));
                 }
             }
         } else {
-            sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole"))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole"))));
         }
     }
 

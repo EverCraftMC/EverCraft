@@ -5,23 +5,25 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.kale_ko.evercraft.spigot.SpigotMain;
+import com.kale_ko.evercraft.spigot.util.formatting.ComponentFormatter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.Component;
 
 public class MessageListener extends SpigotListener implements PluginMessageListener {
     @EventHandler
-    public void onChatMessage(AsyncPlayerChatEvent event) {
+    public void onChatMessage(AsyncChatEvent event) {
         event.setCancelled(true);
 
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("globalChat");
         out.writeUTF(SpigotMain.getInstance().getServerName());
         out.writeUTF(event.getPlayer().getUniqueId().toString());
-        out.writeUTF(event.getMessage());
+        out.writeUTF(ComponentFormatter.componentToString(event.message()));
 
         event.getPlayer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
     }
@@ -32,11 +34,11 @@ public class MessageListener extends SpigotListener implements PluginMessageList
         out.writeUTF("globalDeathMessage");
         out.writeUTF(SpigotMain.getInstance().getServerName());
         out.writeUTF(event.getEntity().getUniqueId().toString());
-        out.writeUTF(event.getDeathMessage().replace(event.getEntity().getName(), "{player}"));
+        out.writeUTF(ComponentFormatter.componentToString(event.deathMessage()).replace(event.getEntity().getName(), "{player}"));
 
         event.getEntity().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
 
-        event.setDeathMessage("");
+        event.deathMessage(Component.empty());
     }
 
     @EventHandler

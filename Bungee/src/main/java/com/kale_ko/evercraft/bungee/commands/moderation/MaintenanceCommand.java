@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
+import com.kale_ko.evercraft.bungee.util.formatting.ComponentFormatter;
 import com.kale_ko.evercraft.shared.util.StringUtils;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class MaintenanceCommand extends BungeeCommand {
@@ -23,17 +23,17 @@ public class MaintenanceCommand extends BungeeCommand {
                 if (BungeeMain.getInstance().getData().getBoolean("maintenance")) {
                     BungeeMain.getInstance().getData().set("maintenance", false);
 
-                    BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "off"))));
+                    BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "off"))));
                 } else {
                     BungeeMain.getInstance().getData().set("maintenance", true);
 
                     for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                         if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
-                            player2.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.kick"))));
+                            player2.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.kick"))));
                         }
                     }
 
-                    BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "on"))));
+                    BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "on"))));
                 }
             } else {
                 if (args[0].equalsIgnoreCase("on")) {
@@ -41,19 +41,19 @@ public class MaintenanceCommand extends BungeeCommand {
 
                     for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                         if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
-                            player2.disconnect(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.kick"))));
+                            player2.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.kick"))));
                         }
                     }
 
-                    BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "on"))));
+                    BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "on"))));
                 } else if (args[0].equalsIgnoreCase("off")) {
                     BungeeMain.getInstance().getData().set("maintenance", false);
 
-                    BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "off"))));
+                    BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "off"))));
                 }
             }
         } else {
-            sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole"))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole"))));
         }
     }
 

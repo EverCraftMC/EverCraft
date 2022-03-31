@@ -15,6 +15,8 @@ public class SpigotCommandCommand extends BungeeCommand {
 
     @Override
     public void run(CommandSender sender, String[] args) {
+        // TODO Check args length
+
         if (sender instanceof ProxiedPlayer player) {
             StringBuilder command = new StringBuilder();
 

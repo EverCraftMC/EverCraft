@@ -6,17 +6,13 @@ archivesBaseName = "spigot"
 version = project.spigot_plugin_version
 
 repositories {
-    maven { url "https://hub.spigotmc.org/nexus/content/repositories/public/" }
-    flatDir {
-        dirs 'lib'
-    }
+    maven { url "https://repo.purpurmc.org/snapshots/" }
 }
 
 dependencies {
     depencancy project(':Shared')
 
-    compileOnly "org.spigotmc:spigot-api:${project.minecraft_version}-${project.spigot_version}"
-    compileOnly name: "craftbukkit-${project.minecraft_version}"
+    compileOnly "org.purpurmc.purpur:purpur-api:${project.minecraft_version}-${project.purpur_version}"
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
 }

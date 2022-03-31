@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import com.kale_ko.evercraft.bungee.BungeeMain;
 import com.kale_ko.evercraft.bungee.commands.BungeeCommand;
+import com.kale_ko.evercraft.bungee.util.formatting.ComponentFormatter;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
 
 public class InfoCommand extends BungeeCommand {
     public InfoCommand(String name, String description, List<String> aliases, String permission) {
@@ -15,7 +15,7 @@ public class InfoCommand extends BungeeCommand {
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        sender.sendMessage(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("info." + this.getName()))));
+        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("info." + this.getName()))));
     }
 
     @Override
