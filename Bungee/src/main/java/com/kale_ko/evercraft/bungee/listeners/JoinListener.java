@@ -2,14 +2,10 @@ package com.kale_ko.evercraft.bungee.listeners;
 
 import java.net.InetSocketAddress;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import com.kale_ko.evercraft.bungee.BungeeMain;
-import com.kale_ko.evercraft.bungee.util.ConnectionStatus;
 import com.kale_ko.evercraft.shared.util.formatting.TextFormatter;
 import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
@@ -18,36 +14,19 @@ import net.md_5.bungee.api.event.ServerConnectEvent.Reason;
 import net.md_5.bungee.event.EventHandler;
 
 public class JoinListener extends BungeeListener {
-    private Map<ProxiedPlayer, ConnectionStatus> connectionStatuses = new HashMap<ProxiedPlayer, ConnectionStatus>();
-
     @EventHandler
     public void onPlayerConnect(ServerConnectEvent event) {
         if (event.getReason() == Reason.JOIN_PROXY) {
-            connectionStatuses.remove(event.getPlayer());
-            connectionStatuses.put(event.getPlayer(), ConnectionStatus.CONNECTING);
-
             if (BungeeMain.getInstance().getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostName().split("\\.")[0]) != null) {
                 event.setTarget(BungeeMain.getInstance().getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostName().split("\\.")[0]));
             } else {
                 event.setTarget(BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getServerPriority().get(0)));
             }
-        } else {
-            BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("welcome.move").replace("{player}", event.getPlayer().getDisplayName())).replace("{server}", event.getTarget().getName())));
-
-            BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("welcome.move").replace("{player}", event.getPlayer().getDisplayName()).replace("{server}", event.getTarget().getName()))).queue();
         }
     }
 
     @EventHandler
-    public void onPlayerConnect(ServerConnectedEvent event) {
-        connectionStatuses.remove(event.getPlayer());
-        connectionStatuses.put(event.getPlayer(), ConnectionStatus.CONNECTED);
-    }
-
-    @EventHandler
     public void onPlayerJoin(PostLoginEvent event) {
-        connectionStatuses.put(event.getPlayer(), ConnectionStatus.LOGGEDIN);
-
         if (BungeeMain.getInstance().getData().getBoolean("players." + event.getPlayer().getUniqueId() + ".ban.banned")) {
             String time = BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.until");
 
@@ -86,16 +65,29 @@ public class JoinListener extends BungeeListener {
         BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("welcome.join").replace("{player}", event.getPlayer().getDisplayName()))));
 
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("welcome.join").replace("{player}", event.getPlayer().getDisplayName()))).queue();
+
+        if (BungeeMain.getInstance().getData().getFloat("votes." + event.getPlayer().getName() + ".toProcess") != null) {
+            for (int i = BungeeMain.getInstance().getData().getInteger("votes." + event.getPlayer().getName() + ".toProcess"); i > 0; i--) {
+                VoteListener.process(event.getPlayer());
+            }
+
+            BungeeMain.getInstance().getData().set("votes." + event.getPlayer().getName() + ".toProcess", null);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerConnect(ServerConnectedEvent event) {
+        BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("welcome.move").replace("{player}", event.getPlayer().getDisplayName())).replace("{server}", event.getServer().getInfo().getName())));
+
+        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("welcome.move").replace("{player}", event.getPlayer().getDisplayName()).replace("{server}", event.getServer().getInfo().getName()))).queue();
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerDisconnectEvent event) {
-        if (connectionStatuses.get(event.getPlayer()) != ConnectionStatus.LOGGEDIN) {
-            BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".lastseen", new Date().getTime());
+        BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".lastseen", new Date().getTime());
 
-            BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("welcome.quit").replace("{player}", event.getPlayer().getDisplayName()))));
+        BungeeMain.getInstance().getProxy().broadcast(TextComponent.fromLegacyText(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("welcome.quit").replace("{player}", event.getPlayer().getDisplayName()))));
 
-            BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("welcome.quit").replace("{player}", event.getPlayer().getDisplayName()))).queue();
-        }
+        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("welcome.quit").replace("{player}", event.getPlayer().getDisplayName()))).queue();
     }
 }
