@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class FileConfig extends AbstractConfig {
@@ -62,8 +63,10 @@ public class FileConfig extends AbstractConfig {
         List<String> keys = new ArrayList<>();
 
         for (String key : this.objects.keySet().toArray(new String[] {})) {
-            if (deep && (path == null || key.startsWith(path + ".")) || (!deep && (path == null || key.startsWith(path + ".")) && ((path == null && key.split("\\.").length == 1) || key.split("\\.").length == path.split("\\.").length + 1))) {
+            if ((deep && (path == null || key.startsWith(path + ".")))) {
                 keys.add(key);
+            } else if (!deep && (path == null || key.startsWith(path + "."))) {
+                keys.add(String.join(".", Arrays.asList(key.split("\\.")).subList(0, path.split("\\.").length + 1)));
             }
         }
 
