@@ -16,7 +16,7 @@ sourceCompatibility = JavaVersion.toVersion(project.java_version)
 targetCompatibility = JavaVersion.toVersion(project.java_version)
 
 archivesBaseName = "evercraft"
-group = "com.kale_ko"
+group = "io.github.evercraftmc"
 version = project.project_version
 
 repositories {
@@ -24,7 +24,7 @@ repositories {
 }
 
 subprojects {
-    group = "com.kale_ko.evercraft"
+    group = "io.github.evercraftmc.evercraft"
 
     configurations {
         depencancy
