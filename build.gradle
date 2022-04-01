@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.hierynomus:sshj:0.32.0"
+    }
+}
+
 plugins {
     id 'java'
 }
@@ -8,6 +18,10 @@ targetCompatibility = JavaVersion.toVersion(project.java_version)
 archivesBaseName = "evercraft"
 group = "com.kale_ko"
 version = project.project_version
+
+repositories {
+    mavenCentral()
+}
 
 subprojects {
     group = "com.kale_ko.evercraft"
@@ -32,4 +46,40 @@ subprojects {
 
 tasks.register("buildAll") {
     dependsOn subprojects.collect { it.tasks.buildFull }
+}
+
+import net.schmizz.sshj.SSHClient
+import net.schmizz.sshj.sftp.SFTPClient
+
+tasks.register("upload") {
+    dependsOn tasks.buildAll
+
+    file(".env").readLines().each() {
+        def (key, value) = it.tokenize("=")
+        ext[key] = value
+    }
+
+    def servers = ext.SERVERS.split(";")
+
+    servers.each() {
+        def server = it
+
+        SSHClient ssh = new SSHClient()
+        ssh.loadKnownHosts()
+        ssh.connect(ext.FTP_HOST, Integer.parseInt(ext.FTP_PORT))
+        ssh.authPassword(ext.FTP_USERNAME + "." + server.split(":")[0], ext.FTP_PASSWORD)
+
+        SFTPClient ftp = ssh.newSFTPClient()
+
+        ftp.ls("/plugins").each() {
+            if (it.getName().startsWith("EverCraft-") && it.getName().endsWith(".jar") && it.isRegularFile()) {
+                ftp.rm(it.getPath())
+            }
+        }
+
+        ftp.put(project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getPath(), "/plugins/" + project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getName())
+
+        ftp.close()
+        ssh.disconnect()
+    }
 }
