@@ -1,4 +1,4 @@
-main: com.kale_ko.evercraft.spigot.SpigotMain
+main: io.github.evercraftmc.evercraft.spigot.SpigotMain
 
 name: EverCraft
 version: ${plugin_version}

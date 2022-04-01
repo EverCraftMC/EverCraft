@@ -1,4 +1,4 @@
-main: com.kale_ko.evercraft.bungee.BungeeMain
+main: io.github.evercraftmc.evercraft.bungee.BungeeMain
 
 name: EverCraft
 version: ${plugin_version}
