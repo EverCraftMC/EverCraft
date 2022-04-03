@@ -31,12 +31,16 @@ public class UnBanCommand extends BungeeCommand {
             SimplePlayer player = PlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
 
             if (player != null) {
-                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
+                if (BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".ban.banned")) {
+                    BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
 
-                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", null);
-                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", null);
-                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", null);
-                BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", null);
+                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", null);
+                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", null);
+                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", null);
+                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", null);
+                } else {
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.notbanned").replace("{player}", player.getDisplayName()))));
+                }
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
             }

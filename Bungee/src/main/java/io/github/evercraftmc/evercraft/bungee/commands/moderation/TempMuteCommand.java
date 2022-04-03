@@ -13,8 +13,8 @@ import io.github.evercraftmc.evercraft.shared.util.player.SimplePlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class PermMuteCommand extends BungeeCommand {
-    public PermMuteCommand(String name, String description, List<String> aliases, String permission) {
+public class TempMuteCommand extends BungeeCommand {
+    public TempMuteCommand(String name, String description, List<String> aliases, String permission) {
         super(name, description, aliases, permission);
     }
 
