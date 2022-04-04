@@ -38,7 +38,7 @@ public class TempBanCommand extends BungeeCommand {
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", true);
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", null);
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", senderName);
-                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", TimeUtil.parseFuture(args[1]));
+                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", TimeUtil.parseFuture(args[1]).toString());
 
                     ProxiedPlayer bungeeplayer = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
                     if (bungeeplayer != null) {
@@ -66,7 +66,7 @@ public class TempBanCommand extends BungeeCommand {
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", true);
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", reason.substring(0, reason.length() - 1));
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", senderName);
-                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", TimeUtil.parseFuture(args[1]));
+                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", TimeUtil.parseFuture(args[1]).toString());
 
                     ProxiedPlayer bungeeplayer = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
                     if (bungeeplayer != null) {
