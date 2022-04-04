@@ -1,6 +1,7 @@
 package io.github.evercraftmc.evercraft.bungee.listeners;
 
 import java.net.InetSocketAddress;
+import java.time.Instant;
 import java.util.Date;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
@@ -30,10 +31,17 @@ public class JoinListener extends BungeeListener {
         if (BungeeMain.getInstance().getData().getBoolean("players." + event.getPlayer().getUniqueId() + ".ban.banned")) {
             String time = BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.until");
 
-            if (BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.reason") != null) {
-                event.getPlayer().disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.reason").replace("{reason}", BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.reason")).replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.by")).replace("{time}", time))));
-            } else {
-                event.getPlayer().disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.noreason").replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.by")).replace("{time}", time))));
+            if (time.equalsIgnoreCase("forever") || Instant.parse(time).isAfter(Instant.now())) {
+                if (BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.reason") != null) {
+                    event.getPlayer().disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.reason").replace("{reason}", BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.reason")).replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.by")).replace("{time}", time))));
+                } else {
+                    event.getPlayer().disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.noreason").replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.by")).replace("{time}", time))));
+                }
+            } else if (Instant.parse(time).isBefore(Instant.now())) {
+                BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".ban.banned", null);
+                BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".ban.reason", null);
+                BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".ban.by", null);
+                BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".ban.until", null);
             }
 
             return;
