@@ -57,7 +57,7 @@ public class TempBanCommand extends BungeeCommand {
                 if (!BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".ban.banned")) {
                     StringBuilder reason = new StringBuilder();
 
-                    for (Integer i = 1; i < args.length; i++) {
+                    for (Integer i = 2; i < args.length; i++) {
                         reason.append(args[i] + " ");
                     }
 
