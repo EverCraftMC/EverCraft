@@ -3,9 +3,12 @@ package io.github.evercraftmc.evercraft.spigot.listeners;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.spigot.util.types.SerializableLocation;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPermsProvider;
 
@@ -18,6 +21,30 @@ public class JoinListener extends SpigotListener {
         event.getPlayer().customName(event.getPlayer().displayName());
         event.getPlayer().setCustomNameVisible(true);
         event.getPlayer().playerListName(event.getPlayer().displayName());
+    }
+
+    @EventHandler
+    public void onPlayerSpawn(PlayerSpawnLocationEvent event) {
+        if (SpigotMain.getInstance().getPluginConfig().getBoolean("warp.overidespawn")) {
+            event.setSpawnLocation(SpigotMain.getInstance().getWarps().getSerializable("spawn", SerializableLocation.class).toBukkitLocation());
+
+            if (SpigotMain.getInstance().getPluginConfig().getBoolean("warp.clearonwarp")) {
+                event.getPlayer().getInventory().clear();
+                event.getPlayer().getActivePotionEffects().clear();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        if (SpigotMain.getInstance().getPluginConfig().getBoolean("warp.overidespawn")) {
+            event.setRespawnLocation(SpigotMain.getInstance().getWarps().getSerializable("spawn", SerializableLocation.class).toBukkitLocation());
+
+            if (SpigotMain.getInstance().getPluginConfig().getBoolean("warp.clearonwarp")) {
+                event.getPlayer().getInventory().clear();
+                event.getPlayer().getActivePotionEffects().clear();
+            }
+        }
     }
 
     @EventHandler
