@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee.listeners;
 
+import java.time.Instant;
 import java.util.UUID;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
@@ -38,10 +39,17 @@ public class MessageListener extends BungeeListener {
                 } else {
                     String time = BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.until");
 
-                    if (BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.reason") != null) {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.reason").replace("{reason}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.reason")).replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
+                    if (time.equalsIgnoreCase("forever") || Instant.parse(time).isAfter(Instant.now())) {
+                        if (BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.reason") != null) {
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.reason").replace("{reason}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.reason")).replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
+                        } else {
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.noreason").replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
+                        }
                     } else {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.noreason").replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
+                        BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.muted", null);
+                        BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.reason", null);
+                        BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.by", null);
+                        BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.until", null);
                     }
                 }
             } else if (subChannel.equals("globalDeathMessage")) {
