@@ -64,6 +64,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
 
+        this.config.addDefault("warp.overidespawn", true);
+        this.config.addDefault("warp.clearonwarp", false);
         this.config.addDefault("database.host", "localhost");
         this.config.addDefault("database.port", 3306);
         this.config.addDefault("database.name", "evercraft");
