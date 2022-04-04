@@ -21,6 +21,11 @@ public class SpawnCommand extends SpigotCommand {
             if (SpigotMain.getInstance().getWarps().getSerializable("spawn", SerializableLocation.class) != null) {
                 player.teleport(SpigotMain.getInstance().getWarps().getSerializable("spawn", SerializableLocation.class).toBukkitLocation());
 
+                if (SpigotMain.getInstance().getPluginConfig().getBoolean("warp.clearonwarp")) {
+                    player.getInventory().clear();
+                    player.getActivePotionEffects().clear();
+                }
+
                 player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("warp.warped").replace("{warp}", "spawn"))));
             } else {
                 player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("warp.notFound").replace("{warp}", "spawn"))));
