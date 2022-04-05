@@ -19,8 +19,8 @@ public class NickNameCommand extends BungeeCommand {
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        if (args.length > 0) {
-            if (sender instanceof ProxiedPlayer player) {
+        if (sender instanceof ProxiedPlayer player) {
+            if (args.length > 0) {
                 if (args[0].length() < 16) {
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".nickname", args[0]);
 
@@ -37,10 +37,10 @@ public class NickNameCommand extends BungeeCommand {
                     sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole"))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole"))));
         }
     }
 

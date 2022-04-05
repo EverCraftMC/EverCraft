@@ -8,6 +8,7 @@ import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.spigot.util.types.SerializableItemStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -22,9 +23,14 @@ public class KitCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
-                List<ItemStack> items = SpigotMain.getInstance().getKits().getSerializableList(args[0], ItemStack.class);
+                List<SerializableItemStack> serializableitems = SpigotMain.getInstance().getKits().getSerializableList(args[0], SerializableItemStack.class);
+                if (serializableitems != null) {
+                    List<ItemStack> items = new ArrayList<ItemStack>();
 
-                if (items != null) {
+                    for (SerializableItemStack item : serializableitems) {
+                        items.add(item.toBukkitItemStack());
+                    }
+
                     for (ItemStack item : items) {
                         if (item.getType().getEquipmentSlot() != null && item.getType().getEquipmentSlot() != EquipmentSlot.HAND && item.getType().getEquipmentSlot() != EquipmentSlot.OFF_HAND) {
                             if (player.getInventory().getItem(item.getType().getEquipmentSlot()) == null || player.getInventory().getItem(item.getType().getEquipmentSlot()).getType().isAir()) {

@@ -18,8 +18,8 @@ public class SpigotCommandCommand extends BungeeCommand {
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        if (args.length > 0) {
-            if (sender instanceof ProxiedPlayer player) {
+        if (sender instanceof ProxiedPlayer player) {
+            if (args.length > 0) {
                 StringBuilder command = new StringBuilder();
 
                 for (String arg : args) {
@@ -32,9 +32,11 @@ public class SpigotCommandCommand extends BungeeCommand {
                 out.writeUTF(command.substring(0, command.length() - 1));
 
                 player.getServer().sendData("BungeeCord", out.toByteArray());
+            } else {
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole"))));
         }
     }
 

@@ -66,6 +66,8 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
     }
 
     public void unregister() {
-        SpigotMain.getInstance().getCommand(this.getName()).unregister(SpigotMain.getInstance().getServer().getCommandMap());
+        if (SpigotMain.getInstance().getCommand(this.getName()) != null) {
+            SpigotMain.getInstance().getCommand(this.getName()).unregister(SpigotMain.getInstance().getServer().getCommandMap());
+        }
     }
 }

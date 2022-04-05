@@ -12,7 +12,9 @@ import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
 import io.github.evercraftmc.evercraft.shared.economy.Economy;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.kit.DelKitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.kit.SetKitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.BungeeCommandCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.AdventureCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.CreativeCommand;
@@ -90,6 +92,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.messages.addDefault("warp.delWarp", "&aSuccessfully deleted warp {warp}");
         this.messages.addDefault("warp.notFound", "&cWarp {warp} does not exist");
         this.messages.addDefault("kit.kit", "&aSuccessfully got kit {kit}");
+        this.messages.addDefault("kit.setkit", "&aSuccessfully set kit {kit} to your inventory");
+        this.messages.addDefault("kit.delkit", "&cSuccessfully deleted kit {kit}");
         this.messages.addDefault("kit.notFound", "&cKit {kit} does not exist");
         this.messages.addDefault("staff.gamemode", "&aSuccessfully set your gamemode to {gamemode}");
 
@@ -129,6 +133,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new DelWarpCommand("delwarp", "Delete a warp", Arrays.asList(), "evercraft.commands.warp.delwarp").register());
 
         this.commands.add(new KitCommand("kit", "Get a kit", Arrays.asList(), "evercraft.commands.kit.kit").register());
+        this.commands.add(new SetKitCommand("setkit", "Set a kit", Arrays.asList(), "evercraft.commands.kit.setkit").register());
+        this.commands.add(new DelKitCommand("delkit", "Delete a kit", Arrays.asList(), "evercraft.commands.kit.delkit").register());
 
         this.commands.add(new GameModeCommand("gamemode", "Change your gamemode", Arrays.asList("gm"), "evercraft.commands.gamemode.use").register());
         this.commands.add(new SurvivalCommand("gms", "Change your gamemode to survival", Arrays.asList("gm0"), "evercraft.commands.gamemode.survival").register());
@@ -156,7 +162,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Finished loading plugin");
 
-        // TODO Fix getting server name
+        // TODO Don't ask for server name until first logon
 
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("GetServer");

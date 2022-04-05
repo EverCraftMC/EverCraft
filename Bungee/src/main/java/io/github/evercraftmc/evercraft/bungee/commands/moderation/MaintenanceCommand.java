@@ -18,42 +18,38 @@ public class MaintenanceCommand extends BungeeCommand {
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        if (sender instanceof ProxiedPlayer player) {
-            if (args.length == 0) {
-                if (BungeeMain.getInstance().getData().getBoolean("maintenance")) {
-                    BungeeMain.getInstance().getData().set("maintenance", false);
+        if (args.length == 0) {
+            if (BungeeMain.getInstance().getData().getBoolean("maintenance")) {
+                BungeeMain.getInstance().getData().set("maintenance", false);
 
-                    BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "off"))));
-                } else {
-                    BungeeMain.getInstance().getData().set("maintenance", true);
-
-                    for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
-                        if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
-                            player2.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.kick"))));
-                        }
-                    }
-
-                    BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "on"))));
-                }
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "off"))));
             } else {
-                if (args[0].equalsIgnoreCase("on")) {
-                    BungeeMain.getInstance().getData().set("maintenance", true);
+                BungeeMain.getInstance().getData().set("maintenance", true);
 
-                    for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
-                        if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
-                            player2.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.kick"))));
-                        }
+                for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
+                    if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
+                        player2.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.kick"))));
                     }
-
-                    BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "on"))));
-                } else if (args[0].equalsIgnoreCase("off")) {
-                    BungeeMain.getInstance().getData().set("maintenance", false);
-
-                    BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "off"))));
                 }
+
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "on"))));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole"))));
+            if (args[0].equalsIgnoreCase("on")) {
+                BungeeMain.getInstance().getData().set("maintenance", true);
+
+                for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
+                    if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
+                        player2.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.kick"))));
+                    }
+                }
+
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "on"))));
+            } else if (args[0].equalsIgnoreCase("off")) {
+                BungeeMain.getInstance().getData().set("maintenance", false);
+
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "off"))));
+            }
         }
     }
 
