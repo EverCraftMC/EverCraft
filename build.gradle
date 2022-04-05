@@ -46,6 +46,22 @@ subprojects {
 
 tasks.register("buildAll") {
     dependsOn subprojects.collect { it.tasks.buildFull }
+
+    fileTree(project.projectDir).visit(details -> {
+        if (details.file.path.startsWith("${project.projectDir}\\EverCraft-")) {
+            def isCurrent = false
+
+            subprojects.each {
+                if (it.tasks.buildFull.outputs.files.size() > 0 && it.tasks.buildFull.outputs.files[0].getPath() == details.file.path) {
+                    isCurrent = true
+                }
+            }
+
+            if (!isCurrent) {
+                delete(details.file.path)
+            }
+        }
+    })
 }
 
 import net.schmizz.sshj.SSHClient

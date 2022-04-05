@@ -115,11 +115,59 @@ public class FileConfig extends AbstractConfig {
         if (obj instanceof LinkedTreeMap) {
             LinkedTreeMap<String, Object> tree = (LinkedTreeMap<String, Object>) obj;
 
-            return gson.fromJson(gson.toJsonTree(tree).toString(), List.class);
+            List<Object> list = gson.fromJson(gson.toJsonTree(tree).toString(), List.class);
+
+            List<T> parsedList = new ArrayList<T>();
+
+            for (Object item : list) {
+                if (item != null) {
+                    if (item instanceof LinkedTreeMap) {
+                        LinkedTreeMap<String, Object> itemtree = (LinkedTreeMap<String, Object>) item;
+
+                        parsedList.add(gson.fromJson(gson.toJsonTree(itemtree).toString(), clazz));
+                    } else if (item instanceof String || item instanceof Float || item instanceof Double || item instanceof Integer || item instanceof Long || item instanceof Boolean) {
+                        parsedList.add((T) item);
+                    }
+                }
+            }
+
+            return parsedList;
         } else if (obj instanceof List) {
-            return (List<T>) obj;
+            List<Object> list = (List<Object>) obj;
+
+            List<T> parsedList = new ArrayList<T>();
+
+            for (Object item : list) {
+                if (item != null) {
+                    if (item instanceof LinkedTreeMap) {
+                        LinkedTreeMap<String, Object> itemtree = (LinkedTreeMap<String, Object>) item;
+
+                        parsedList.add(gson.fromJson(gson.toJsonTree(itemtree).toString(), clazz));
+                    } else if (item instanceof String || item instanceof Float || item instanceof Double || item instanceof Integer || item instanceof Long || item instanceof Boolean) {
+                        parsedList.add((T) item);
+                    }
+                }
+            }
+
+            return parsedList;
         } else if (obj instanceof Object[]) {
-            return Arrays.asList((T[]) obj);
+            Object[] list = (Object[]) obj;
+
+            List<T> parsedList = new ArrayList<T>();
+
+            for (Object item : list) {
+                if (item != null) {
+                    if (item instanceof LinkedTreeMap) {
+                        LinkedTreeMap<String, Object> itemtree = (LinkedTreeMap<String, Object>) item;
+
+                        parsedList.add(gson.fromJson(gson.toJsonTree(itemtree).toString(), clazz));
+                    } else if (item instanceof String || item instanceof Float || item instanceof Double || item instanceof Integer || item instanceof Long || item instanceof Boolean) {
+                        parsedList.add((T) item);
+                    }
+                }
+            }
+
+            return parsedList;
         } else {
             return null;
         }
