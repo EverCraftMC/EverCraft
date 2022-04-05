@@ -72,7 +72,7 @@ public class SerializableItemStack {
         stack.lore(loreComponents);
 
         for (SerializableEnchantment enchantment : this.getEnchantments()) {
-            stack.addEnchant(enchantment.getEnchantment(), enchantment.getLevel(), true);
+            stack.addEnchantment(enchantment.getEnchantment(), enchantment.getLevel());
         }
 
         return stack;
