@@ -29,6 +29,6 @@ tasks.register("buildFull", Jar) {
     from files(project.configurations.depencancy.collect { it.isDirectory() ? it : zipTree(it) })
 
     manifest {
-        attributes "Main-Class": "io.github.evercraftmc.evercraft.discord.Main"
+        attributes "Main-Class": "io.github.evercraftmc.evercraft.discord.BotMain"
     }
 }

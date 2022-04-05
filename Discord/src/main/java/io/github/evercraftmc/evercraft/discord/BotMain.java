@@ -376,4 +376,8 @@ public class BotMain implements EventListener {
             }
         }
     }
+
+    public static void main(String[] args) {
+        new BotMain("config.json", "data.json");
+    }
 }
