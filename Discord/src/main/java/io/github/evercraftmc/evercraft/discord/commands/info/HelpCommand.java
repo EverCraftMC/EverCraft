@@ -1,6 +1,7 @@
 package io.github.evercraftmc.evercraft.discord.commands.info;
 
-import io.github.evercraftmc.evercraft.discord.DiscordBot;
+import java.util.Arrays;
+import io.github.evercraftmc.evercraft.discord.BotMain;
 import io.github.evercraftmc.evercraft.discord.args.ArgsValidator;
 import io.github.evercraftmc.evercraft.discord.commands.Command;
 import net.dv8tion.jda.api.Permission;
@@ -8,17 +9,17 @@ import net.dv8tion.jda.api.entities.Message;
 
 public class HelpCommand extends Command {
     public HelpCommand() {
-        super("help", new ArgsValidator.Arg[] {}, new Permission[] {});
+        super("help", Arrays.asList(), Arrays.asList(), Arrays.asList());
     }
 
     @Override
     public void run(Message message) {
         StringBuilder helpString = new StringBuilder();
 
-        for (Command command : DiscordBot.Instance.commands) {
+        for (Command command : BotMain.Instance.commands) {
             StringBuilder args = new StringBuilder("");
 
-            for (ArgsValidator.Arg arg : command.args) {
+            for (ArgsValidator.Arg arg : command.getArgs()) {
                 if (!arg.optional()) {
                     args.append(arg.type().toString().toLowerCase() + " ");
                 } else {
@@ -26,19 +27,19 @@ public class HelpCommand extends Command {
                 }
             }
 
-            if (command.permissions.length > 0) {
+            if (!command.getPermissions().isEmpty()) {
                 StringBuilder permissions = new StringBuilder("");
 
-                for (Permission permission : command.permissions) {
+                for (Permission permission : command.getPermissions()) {
                     permissions.append(permission.toString().toLowerCase() + " ");
                 }
 
-                helpString.append((DiscordBot.Instance.getConfig().getPrefix() + command.name + " " + args.toString()).trim() + " - " + permissions.toString().trim() + "\n");
+                helpString.append((BotMain.Instance.getConfig().getPrefix() + command.getName() + " " + args.toString()).trim() + " - " + permissions.toString().trim() + "\n");
             } else {
-                helpString.append((DiscordBot.Instance.getConfig().getPrefix() + command.name + " " + args.toString()).trim() + "\n");
+                helpString.append((BotMain.Instance.getConfig().getPrefix() + command.getName() + " " + args.toString()).trim() + "\n");
             }
         }
 
-        DiscordBot.Instance.sendEmbed(message.getTextChannel(), "Help", helpString.toString().trim(), message.getAuthor());
+        BotMain.Instance.sendEmbed(message.getTextChannel(), "Help", helpString.toString().trim(), message.getAuthor());
     }
 }

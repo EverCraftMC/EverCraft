@@ -1,6 +1,7 @@
 package io.github.evercraftmc.evercraft.discord.commands.logs;
 
-import io.github.evercraftmc.evercraft.discord.DiscordBot;
+import java.util.Arrays;
+import io.github.evercraftmc.evercraft.discord.BotMain;
 import io.github.evercraftmc.evercraft.discord.args.ArgsParser;
 import io.github.evercraftmc.evercraft.discord.args.ArgsValidator;
 import io.github.evercraftmc.evercraft.discord.commands.Command;
@@ -12,7 +13,7 @@ import net.dv8tion.jda.api.entities.Message;
 
 public class HistoryCommand extends Command {
     public HistoryCommand() {
-        super("history", new ArgsValidator.Arg[] { new ArgsValidator.Arg(ArgsValidator.ArgType.Member, false) }, new Permission[] { Permission.MODERATE_MEMBERS });
+        super("history", Arrays.asList("lookup"), Arrays.asList(new ArgsValidator.Arg(ArgsValidator.ArgType.Member, false)), Arrays.asList(Permission.MODERATE_MEMBERS));
     }
 
     @Override
@@ -21,52 +22,52 @@ public class HistoryCommand extends Command {
 
         StringBuilder modsString = new StringBuilder();
 
-        for (ModCase modcase : DiscordBot.Instance.getData().history) {
-            if (modcase.user != null && modcase.user.equals(member.getId())) {
-                if (modcase.reason != null && !modcase.reason.equals("")) {
-                    if (modcase.type == ModType.WARN) {
-                        modsString.append("Warned by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + " for " + modcase.reason + "\n");
-                    } else if (modcase.type == ModType.REMOVEWARN) {
-                        modsString.append("Unwarned by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + " for " + modcase.reason + "\n");
-                    } else if (modcase.type == ModType.KICK) {
-                        modsString.append("Kicked by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + " for " + modcase.reason + "\n");
-                    } else if (modcase.type == ModType.BAN) {
-                        modsString.append("Banned by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + " for " + modcase.reason + "\n");
-                    } else if (modcase.type == ModType.UNBAN) {
-                        modsString.append("Unbanned by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + " for " + modcase.reason + "\n");
-                    } else if (modcase.type == ModType.MUTE) {
-                        modsString.append("Muted by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + " for " + modcase.reason + "\n");
-                    } else if (modcase.type == ModType.UNMUTE) {
-                        modsString.append("Unmuted by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + " for " + modcase.reason + "\n");
-                    } else if (modcase.type == ModType.CLEARMESSAGES) {
-                        modsString.append("Messages cleared by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + " in " + message.getGuild().getTextChannelById(modcase.reason).getAsMention() + "\n");
-                    } else if (modcase.type == ModType.CHANGENICK) {
-                        modsString.append("Nick was changed by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + " for " + modcase.reason + "\n");
+        for (ModCase modcase : BotMain.Instance.getData().history) {
+            if (modcase.getUser() != null && modcase.getUser().equals(member.getId())) {
+                if (modcase.getReason() != null && !modcase.getReason().equals("")) {
+                    if (modcase.getType() == ModType.WARN) {
+                        modsString.append("Warned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                    } else if (modcase.getType() == ModType.REMOVEWARN) {
+                        modsString.append("Unwarned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                    } else if (modcase.getType() == ModType.KICK) {
+                        modsString.append("Kicked by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                    } else if (modcase.getType() == ModType.BAN) {
+                        modsString.append("Banned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                    } else if (modcase.getType() == ModType.UNBAN) {
+                        modsString.append("Unbanned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                    } else if (modcase.getType() == ModType.MUTE) {
+                        modsString.append("Muted by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                    } else if (modcase.getType() == ModType.UNMUTE) {
+                        modsString.append("Unmuted by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                    } else if (modcase.getType() == ModType.CLEARMESSAGES) {
+                        modsString.append("Messages cleared by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " in " + message.getGuild().getTextChannelById(modcase.getReason()).getAsMention() + "\n");
+                    } else if (modcase.getType() == ModType.CHANGENICK) {
+                        modsString.append("Nick was changed by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
                     }
                 } else {
-                    if (modcase.type == ModType.WARN) {
-                        modsString.append("Warned by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + "\n");
-                    } else if (modcase.type == ModType.REMOVEWARN) {
-                        modsString.append("Unwarned by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + "\n");
-                    } else if (modcase.type == ModType.KICK) {
-                        modsString.append("Kicked by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + "\n");
-                    } else if (modcase.type == ModType.BAN) {
-                        modsString.append("Banned by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + "\n");
-                    } else if (modcase.type == ModType.UNBAN) {
-                        modsString.append("Unbanned by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + "\n");
-                    } else if (modcase.type == ModType.MUTE) {
-                        modsString.append("Muted by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + "\n");
-                    } else if (modcase.type == ModType.UNMUTE) {
-                        modsString.append("Unmuted by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + "\n");
-                    } else if (modcase.type == ModType.CLEARMESSAGES) {
-                        modsString.append("Messages cleared by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + " in " + message.getGuild().getTextChannelById(modcase.reason).getAsMention() + "\n");
-                    } else if (modcase.type == ModType.CHANGENICK) {
-                        modsString.append("Nick was changed by " + message.getJDA().retrieveUserById(modcase.mod).complete().getAsMention() + "\n");
+                    if (modcase.getType() == ModType.WARN) {
+                        modsString.append("Warned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                    } else if (modcase.getType() == ModType.REMOVEWARN) {
+                        modsString.append("Unwarned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                    } else if (modcase.getType() == ModType.KICK) {
+                        modsString.append("Kicked by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                    } else if (modcase.getType() == ModType.BAN) {
+                        modsString.append("Banned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                    } else if (modcase.getType() == ModType.UNBAN) {
+                        modsString.append("Unbanned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                    } else if (modcase.getType() == ModType.MUTE) {
+                        modsString.append("Muted by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                    } else if (modcase.getType() == ModType.UNMUTE) {
+                        modsString.append("Unmuted by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                    } else if (modcase.getType() == ModType.CLEARMESSAGES) {
+                        modsString.append("Messages cleared by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " in " + message.getGuild().getTextChannelById(modcase.getReason()).getAsMention() + "\n");
+                    } else if (modcase.getType() == ModType.CHANGENICK) {
+                        modsString.append("Nick was changed by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
                     }
                 }
             }
         }
 
-        DiscordBot.Instance.sendEmbed(message.getTextChannel(), "History", modsString.toString().trim(), message.getAuthor());
+        BotMain.Instance.sendEmbed(message.getTextChannel(), "History", modsString.toString().trim(), message.getAuthor());
     }
 }
