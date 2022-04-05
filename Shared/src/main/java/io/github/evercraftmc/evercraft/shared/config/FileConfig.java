@@ -20,7 +20,7 @@ public class FileConfig extends AbstractConfig {
     private static Gson gson;
 
     static {
-        FileConfig.gson = new GsonBuilder().setPrettyPrinting().serializeNulls().serializeSpecialFloatingPointValues().create();
+        FileConfig.gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls().serializeSpecialFloatingPointValues().create();
     }
 
     private File file;
@@ -62,11 +62,19 @@ public class FileConfig extends AbstractConfig {
 
         List<String> keys = new ArrayList<>();
 
-        for (String key : this.objects.keySet().toArray(new String[] {})) {
-            if ((deep && (path == null || key.startsWith(path + ".")))) {
+        for (String rawkey : this.objects.keySet().toArray(new String[] {})) {
+            String key;
+
+            if ((deep && (path == null || rawkey.startsWith(path + ".")))) {
+                key = rawkey;
+            } else if (!deep && (path == null || rawkey.startsWith(path + "."))) {
+                key = String.join(".", Arrays.asList(rawkey.split("\\.")).subList(0, path != null ? path.split("\\.").length + 1 : 1));
+            } else {
+                continue;
+            }
+
+            if (!keys.contains(key)) {
                 keys.add(key);
-            } else if (!deep && (path == null || key.startsWith(path + "."))) {
-                keys.add(String.join(".", Arrays.asList(key.split("\\.")).subList(0, path.split("\\.").length + 1)));
             }
         }
 
@@ -104,19 +112,31 @@ public class FileConfig extends AbstractConfig {
             return null;
         }
 
-        if (obj instanceof List) {
+        if (obj instanceof LinkedTreeMap) {
+            LinkedTreeMap<String, Object> tree = (LinkedTreeMap<String, Object>) obj;
+
+            return gson.fromJson(gson.toJsonTree(tree).toString(), List.class);
+        } else if (obj instanceof List) {
             return (List<T>) obj;
+        } else if (obj instanceof Object[]) {
+            return Arrays.asList((T[]) obj);
         } else {
             return null;
         }
     }
 
     public void set(String key, Object value) {
-        if (!exists(key)) {
-            this.objects.put(key, value);
+        if (value != null) {
+            if (!exists(key)) {
+                this.objects.put(key, value);
+            } else {
+                this.objects.remove(key);
+                this.objects.put(key, value);
+            }
         } else {
-            this.objects.remove(key);
-            this.objects.put(key, value);
+            if (exists(key)) {
+                this.objects.remove(key);
+            }
         }
     }
 
@@ -131,6 +151,14 @@ public class FileConfig extends AbstractConfig {
             reader.close();
 
             this.objects = gson.fromJson(contents.toString(), new TypeToken<Map<String, Object>>() { }.getType());
+
+            for (Map.Entry<String, Object> entry : this.objects.entrySet()) {
+                if (entry.getValue() == null) {
+                    this.objects.remove(entry.getKey());
+                }
+            }
+
+            this.save();
         } catch (IOException e) {
             e.printStackTrace();
         }

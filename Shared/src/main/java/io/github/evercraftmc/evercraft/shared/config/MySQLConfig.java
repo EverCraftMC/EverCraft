@@ -12,7 +12,7 @@ public class MySQLConfig extends AbstractConfig {
     private static Gson gson;
 
     static {
-        MySQLConfig.gson = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create();
+        MySQLConfig.gson = new GsonBuilder().disableHtmlEscaping().serializeNulls().serializeSpecialFloatingPointValues().create();
     }
 
     private MySQL mysql;
@@ -37,11 +37,19 @@ public class MySQLConfig extends AbstractConfig {
 
         List<String> keys = new ArrayList<>();
 
-        for (String key : mysql.selectAll(this.tableName, new String[] { "keyid" }).split("\n")) {
-            if ((deep && (path == null || key.startsWith(path + ".")))) {
+        for (String rawkey : mysql.selectAll(this.tableName, new String[] { "keyid" }).split("\n")) {
+            String key;
+
+            if ((deep && (path == null || rawkey.startsWith(path + ".")))) {
+                key = rawkey;
+            } else if (!deep && (path == null || rawkey.startsWith(path + "."))) {
+                key = String.join(".", Arrays.asList(rawkey.split("\\.")).subList(0, path != null ? path.split("\\.").length + 1 : 1));
+            } else {
+                continue;
+            }
+
+            if (!keys.contains(key)) {
                 keys.add(key);
-            } else if (!deep && (path == null || key.startsWith(path + "."))) {
-                keys.add(String.join(".", Arrays.asList(key.split("\\.")).subList(0, path.split("\\.").length + 1)));
             }
         }
 
