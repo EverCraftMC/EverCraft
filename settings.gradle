@@ -1,5 +1,8 @@
 rootProject.name = 'EverCraft'
 
 include 'Shared'
+
 include 'Spigot'
 include 'Bungee'
+
+include 'Discord'
