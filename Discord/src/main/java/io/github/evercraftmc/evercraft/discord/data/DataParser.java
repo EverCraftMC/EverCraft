@@ -9,23 +9,24 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import io.github.evercraftmc.evercraft.discord.Main;
+import io.github.evercraftmc.evercraft.discord.BotMain;
 
 public class DataParser<T extends DataParseable> {
-    private String fileName;
+    private static Gson gson;
 
-    private Gson gson;
+    static {
+        DataParser.gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls().serializeSpecialFloatingPointValues().create();
+    }
+
+    private String fileName;
 
     private T data;
 
     public DataParser(Class<T> clazz, String fileName) {
         this.fileName = fileName;
 
-        this.gson = new GsonBuilder().setPrettyPrinting().serializeNulls().serializeSpecialFloatingPointValues().create();
-
         try {
-            File file = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().resolve(fileName));
+            File file = new File(BotMain.class.getProtectionDomain().getCodeSource().getLocation().toURI().resolve(fileName));
 
             if (!file.exists()) {
                 file.createNewFile();
@@ -62,7 +63,7 @@ public class DataParser<T extends DataParseable> {
 
     public void save() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().resolve(fileName))));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File(BotMain.class.getProtectionDomain().getCodeSource().getLocation().toURI().resolve(fileName))));
             writer.write(gson.toJson(data));
             writer.close();
         } catch (IOException | URISyntaxException e) {
