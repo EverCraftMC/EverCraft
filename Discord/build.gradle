@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+}
+
+archivesBaseName = "discord"
+version = project.discord_bot_version
+
+dependencies {
+    depencancy project(':Shared')
+
+    depencancy "com.google.code.gson:gson:${project.gson_version}"
+    depencancy "org.slf4j:slf4j-simple:${project.slf4j_version}"
+
+    depencancy "net.dv8tion:JDA:${project.jda_version}"
+    compileOnly "net.sf.trove4j:trove4j:3.0.3"
+    depencancy "club.minnced:discord-webhooks:${project.webhooks_version}"
+}
+
+tasks.register("buildFull", Jar) {
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+    dependsOn tasks.build
+
+    duplicatesStrategy = "exclude"
+    destinationDirectory = file("../")
+    archiveFileName = "${project.rootProject.name}-${project.name}-${project.version}-${project.project_version}.jar"
+
+    from files(project.sourceSets.main.output)
+    from files(project.configurations.depencancy.collect { it.isDirectory() ? it : zipTree(it) })
+
+    manifest {
+        attributes "Main-Class": "io.github.evercraftmc.evercraft.discord.Main"
+    }
+}
