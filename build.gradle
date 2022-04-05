@@ -87,13 +87,13 @@ tasks.register("upload") {
 
         SFTPClient ftp = ssh.newSFTPClient()
 
-        ftp.ls("/plugins").each() {
+        ftp.ls(server.split(":")[2]).each() {
             if (it.getName().startsWith("EverCraft-") && it.getName().endsWith(".jar") && it.isRegularFile()) {
                 ftp.rm(it.getPath())
             }
         }
 
-        ftp.put(project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getPath(), "/plugins/" + project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getName())
+        ftp.put(project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getPath(), server.split(":")[2] + "/" + project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getName())
 
         ftp.close()
         ssh.disconnect()
