@@ -24,10 +24,13 @@ public class SetKitCommand extends SpigotCommand {
                 List<SerializableItemStack> items = new ArrayList<SerializableItemStack>();
 
                 for (ItemStack item : player.getInventory().getContents()) {
-                    items.add(SerializableItemStack.fromBukkitItemStack(item));
+                    if (item != null) {
+                        items.add(SerializableItemStack.fromBukkitItemStack(item));
+                    }
                 }
 
                 SpigotMain.getInstance().getKits().set(args[0], items);
+                SpigotMain.getInstance().getKits().save();
 
                 player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.setkit").replace("{kit}", args[0]))));
             } else {

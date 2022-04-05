@@ -21,6 +21,7 @@ public class DelKitCommand extends SpigotCommand {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
                 SpigotMain.getInstance().getKits().set(args[0], null);
+                SpigotMain.getInstance().getKits().save();
 
                 player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.delkit").replace("{kit}", args[0]))));
             } else {

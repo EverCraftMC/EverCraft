@@ -1,18 +1,19 @@
 package io.github.evercraftmc.evercraft.spigot.util.types;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 
 public class SerializableEnchantment {
-    private Enchantment enchantment;
+    private String enchantment;
     private Integer level;
 
     public SerializableEnchantment(Enchantment enchantment, Integer level) {
-        this.enchantment = enchantment;
+        this.enchantment = enchantment.getKey().getKey().toUpperCase();
         this.level = level;
     }
 
     public Enchantment getEnchantment() {
-        return this.enchantment;
+        return Enchantment.getByKey(NamespacedKey.minecraft(this.enchantment.toLowerCase()));
     }
 
     public Integer getLevel() {
