@@ -1,11 +1,11 @@
 package io.github.evercraftmc.evercraft.discord.data.types.data;
 
 public class ModCase {
-    public String user = "";
-    public String mod = "";
+    private String user = "";
+    private String mod = "";
 
-    public ModType type = ModType.OTHER;
-    public String reason = "";
+    private ModType type = ModType.OTHER;
+    private String reason = "";
 
     public ModCase(String user, String mod, ModType type, String reason) {
         this.user = user;
@@ -13,5 +13,21 @@ public class ModCase {
 
         this.type = type;
         this.reason = reason;
+    }
+
+    public String getUser() {
+        return this.user;
+    }
+
+    public String getMod() {
+        return this.mod;
+    }
+
+    public ModType getType() {
+        return this.type;
+    }
+
+    public String getReason() {
+        return this.reason;
     }
 }

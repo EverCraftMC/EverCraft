@@ -76,8 +76,8 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.dv8tion.jda.internal.entities.ReceivedMessage;
 
-public class DiscordBot implements EventListener {
-    public static DiscordBot Instance;
+public class BotMain implements EventListener {
+    public static BotMain Instance;
 
     private Config config;
     private Data data;
@@ -88,8 +88,8 @@ public class DiscordBot implements EventListener {
     private Map<String, Message> messageCache = new HashMap<String, Message>();
     private Map<Member, List<Message>> latestMessages = new HashMap<Member, List<Message>>();
 
-    public DiscordBot(String configFileName, String dataFileName) {
-        DiscordBot.Instance = this;
+    public BotMain(String configFileName, String dataFileName) {
+        BotMain.Instance = this;
 
         System.out.println("Loading config..");
 
@@ -168,7 +168,7 @@ public class DiscordBot implements EventListener {
     }
 
     public void log(String message) {
-        DiscordBot.Instance.jda.getTextChannelById(config.getLogChannel()).sendMessageEmbeds(buildEmbed("Log", message)).queue();
+        BotMain.Instance.jda.getTextChannelById(config.getLogChannel()).sendMessageEmbeds(buildEmbed("Log", message)).queue();
     }
 
     @Override
@@ -184,7 +184,7 @@ public class DiscordBot implements EventListener {
                 Command regcommand = null;
 
                 for (Command regedcommand : commands) {
-                    if (regedcommand.name.equals(command.getName())) {
+                    if (regedcommand.getName().equals(command.getName())) {
                         regcommand = regedcommand;
                     }
                 }
@@ -195,9 +195,9 @@ public class DiscordBot implements EventListener {
             }
 
             for (Command command : commands) {
-                jda.getGuildById(getConfig().getGuildId()).upsertCommand(command.name, DiscordBot.Instance.getConfig().getPrefix() + command.name).queue((net.dv8tion.jda.api.interactions.commands.Command fetchedCommand) -> {
+                jda.getGuildById(getConfig().getGuildId()).upsertCommand(command.getName(), BotMain.Instance.getConfig().getPrefix() + command.getName()).queue((net.dv8tion.jda.api.interactions.commands.Command fetchedCommand) -> {
                     CommandEditAction editor = fetchedCommand.editCommand();
-                    for (ArgsValidator.Arg arg : command.args) {
+                    for (ArgsValidator.Arg arg : command.getArgs()) {
                         editor.addOption(arg.toOption(), arg.type().toString().toLowerCase(), arg.type().toString(), !arg.optional());
                     }
                     editor.queue();
@@ -249,8 +249,8 @@ public class DiscordBot implements EventListener {
                             if (!event.getMember().getRoles().isEmpty() && event.getMember().getRoles().get(0).getPosition() <= event.getGuild().getSelfMember().getRoles().get(0).getPosition()) {
                                 event.getMember().timeoutFor(Duration.ofMinutes(5)).queue();
 
-                                DiscordBot.Instance.sendEmbed(event.getTextChannel(), "Mute", event.getMember().getAsMention() + " was muted for 5m bad words");
-                                DiscordBot.Instance.log(event.getMember().getAsMention() + " was muted by AutoMod for 5m bad words");
+                                BotMain.Instance.sendEmbed(event.getTextChannel(), "Mute", event.getMember().getAsMention() + " was muted for 5m bad words");
+                                BotMain.Instance.log(event.getMember().getAsMention() + " was muted by AutoMod for 5m bad words");
                             }
 
                             event.getMessage().delete().queue();
@@ -265,19 +265,19 @@ public class DiscordBot implements EventListener {
 
             if (event.getMessage().getContentRaw().trim().startsWith(config.getPrefix()) && event.getMessage().getContentRaw().trim().length() > 1 && !event.getAuthor().isBot()) {
                 for (Command command : commands) {
-                    if (ArgsParser.getWordArg(event.getMessage(), 0).equalsIgnoreCase(config.getPrefix() + command.name)) {
+                    if (ArgsParser.getWordArg(event.getMessage(), 0).equalsIgnoreCase(config.getPrefix() + command.getName())) {
                         isCommand = true;
 
                         Boolean hasPerms = true;
 
-                        for (Permission permission : command.permissions) {
+                        for (Permission permission : command.getPermissions()) {
                             if (!event.getMember().getPermissions().contains(permission)) {
                                 hasPerms = false;
                             }
                         }
 
                         if (hasPerms) {
-                            if (ArgsValidator.validateArgs(event.getMessage(), command.args)) {
+                            if (ArgsValidator.validateArgs(event.getMessage(), command.getArgs())) {
                                 command.run(event.getMessage());
                             }
                         } else {
@@ -300,10 +300,10 @@ public class DiscordBot implements EventListener {
             event.deferReply().queue();
 
             for (Command command : commands) {
-                if (event.getName().equals(command.name)) {
+                if (event.getName().equals(command.getName())) {
                     Boolean hasPerms = true;
 
-                    for (Permission permission : command.permissions) {
+                    for (Permission permission : command.getPermissions()) {
                         if (!event.getMember().getPermissions().contains(permission)) {
                             hasPerms = false;
                         }
@@ -316,7 +316,7 @@ public class DiscordBot implements EventListener {
                         }
                         Message message = new ReceivedMessage(event.getIdLong(), event.getChannel(), MessageType.SLASH_COMMAND, new MessageReference(event.getIdLong(), event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(content.toString().trim()).build(), jda), false, false, new TLongHashSet(), new TLongHashSet(), false, false, content.toString().trim(), event.getId(), event.getUser(), event.getMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, new Interaction(event.getIdLong(), event.getTypeRaw(), event.getName(), event.getUser(), event.getMember()));
 
-                        if (ArgsValidator.validateArgs(message, command.args)) {
+                        if (ArgsValidator.validateArgs(message, command.getArgs())) {
                             command.run(message);
 
                             event.getHook().sendMessage("Ran!").queue();
@@ -338,12 +338,12 @@ public class DiscordBot implements EventListener {
             log("User " + event.getUser().getAsMention() + " left the server");
         } else if (rawevent instanceof GuildBanEvent event) {
             if (event.getGuild().retrieveBan(event.getUser()).complete().getReason() == null) {
-                DiscordBot.Instance.log(event.getUser().getAsMention() + " was banned");
+                BotMain.Instance.log(event.getUser().getAsMention() + " was banned");
             } else {
-                DiscordBot.Instance.log(event.getUser().getAsMention() + " was banned for " + event.getGuild().retrieveBan(event.getUser()).complete().getReason());
+                BotMain.Instance.log(event.getUser().getAsMention() + " was banned for " + event.getGuild().retrieveBan(event.getUser()).complete().getReason());
             }
         } else if (rawevent instanceof GuildUnbanEvent event) {
-            DiscordBot.Instance.log(event.getUser().getAsMention() + " was unbanned");
+            BotMain.Instance.log(event.getUser().getAsMention() + " was unbanned");
         } else if (rawevent instanceof GuildMemberRoleAddEvent event) {
             for (Role role : event.getRoles()) {
                 log("User " + event.getUser().getAsMention() + " was added to " + role.getAsMention());
