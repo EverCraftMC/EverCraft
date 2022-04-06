@@ -260,7 +260,7 @@ public class BotMain implements EventListener {
                                 warnings.put(event.getMember(), 1);
                             }
 
-                            if (!event.getMember().getRoles().isEmpty() && event.getMember().getRoles().get(0).getPosition() <= event.getGuild().getSelfMember().getRoles().get(0).getPosition()) {
+                            if (event.getMember().getRoles().isEmpty() || event.getMember().getRoles().get(0).getPosition() <= event.getGuild().getSelfMember().getRoles().get(0).getPosition()) {
                                 if (warnings.get(event.getMember()) == 1) {
                                     sendEmbed(event.getTextChannel(), ":(", "**Hey don't say that :(**");
                                 } else if (warnings.get(event.getMember()) == 2) {
