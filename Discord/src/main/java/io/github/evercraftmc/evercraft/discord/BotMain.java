@@ -41,6 +41,7 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.EmbedType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageActivity;
@@ -250,34 +251,46 @@ public class BotMain implements EventListener {
                     BotMain.Instance.sendEmbed(event.getTextChannel(), "Mute", event.getMember().getAsMention() + " was muted for 15m Saying the freaking n word");
                     BotMain.Instance.log(event.getMember().getAsMention() + " was muted by AutoMod for 15m Saying the freaking n word");
                 } else {
-                    for (String word : ArgsParser.getRawArgs(event.getMessage())) {
-                        if (ModerationUtil.isInappropriateWord(word)) {
-                            if (warnings.containsKey(event.getMember())) {
-                                Integer value = warnings.get(event.getMember()) + 1;
-                                warnings.remove(event.getMember());
-                                warnings.put(event.getMember(), value);
-                            } else {
-                                warnings.put(event.getMember(), 1);
+                    StringBuilder message = new StringBuilder(event.getMessage().getContentRaw());
+
+                    for (MessageEmbed embed : event.getMessage().getEmbeds()) {
+                        if (embed.getType() == EmbedType.LINK) {
+                            message.append(" " + embed.getTitle() + " " + embed.getDescription() + " " + embed.getUrl().replace("-", " ").replace("_", " "));
+                        } else if (embed.getType() == EmbedType.IMAGE || embed.getType() == EmbedType.VIDEO) {
+                            message.append(" " + embed.getUrl().replace("-", " ").replace("_", " "));
+                        }
+                    }
+
+                    for (Attachment attachment : event.getMessage().getAttachments()) {
+                        message.append(" " + attachment.getUrl().replace("-", " ").replace("_", " ") + " " + attachment.getFileName() + " " + attachment.getDescription());
+                    }
+
+                    if (ModerationUtil.isInappropriateString(message.toString().trim())) {
+                        if (warnings.containsKey(event.getMember())) {
+                            Integer value = warnings.get(event.getMember()) + 1;
+                            warnings.remove(event.getMember());
+                            warnings.put(event.getMember(), value);
+                        } else {
+                            warnings.put(event.getMember(), 1);
+                        }
+
+                        if (event.getMember().getRoles().isEmpty() || event.getMember().getRoles().get(0).getPosition() <= event.getGuild().getSelfMember().getRoles().get(0).getPosition()) {
+                            if (warnings.get(event.getMember()) == 1) {
+                                sendEmbed(event.getTextChannel(), ":(", "**Hey don't say that :(**");
+                            } else if (warnings.get(event.getMember()) == 2) {
+                                sendEmbed(event.getTextChannel(), ":(", "**Seriously don't say that**");
+                            } else if (warnings.get(event.getMember()) == 3) {
+                                sendEmbed(event.getTextChannel(), ":(", "**This is your last warning, do not say that**");
+                            } else if (warnings.get(event.getMember()) >= 4) {
+                                event.getMember().timeoutFor(Duration.ofMinutes(5 * (warnings.get(event.getMember()) - 3))).queue();
+
+                                BotMain.Instance.sendEmbed(event.getTextChannel(), "Mute", event.getMember().getAsMention() + " was muted for " + (5 * (warnings.get(event.getMember()) - 3)) + "m Inappropriate language");
+                                BotMain.Instance.log(event.getMember().getAsMention() + " was muted by AutoMod for " + (5 * (warnings.get(event.getMember()) - 3)) + "m Inappropriate language");
                             }
 
-                            if (event.getMember().getRoles().isEmpty() || event.getMember().getRoles().get(0).getPosition() <= event.getGuild().getSelfMember().getRoles().get(0).getPosition()) {
-                                if (warnings.get(event.getMember()) == 1) {
-                                    sendEmbed(event.getTextChannel(), ":(", "**Hey don't say that :(**");
-                                } else if (warnings.get(event.getMember()) == 2) {
-                                    sendEmbed(event.getTextChannel(), ":(", "**Seriously don't say that**");
-                                } else if (warnings.get(event.getMember()) == 3) {
-                                    sendEmbed(event.getTextChannel(), ":(", "**This is your last warning, do not say that**");
-                                } else if (warnings.get(event.getMember()) >= 4) {
-                                    event.getMember().timeoutFor(Duration.ofMinutes(5 * (warnings.get(event.getMember()) - 3))).queue();
+                            event.getMessage().delete().queue();
 
-                                    BotMain.Instance.sendEmbed(event.getTextChannel(), "Mute", event.getMember().getAsMention() + " was muted for " + (5 * (warnings.get(event.getMember()) - 3)) + "m Inappropriate language");
-                                    BotMain.Instance.log(event.getMember().getAsMention() + " was muted by AutoMod for " + (5 * (warnings.get(event.getMember()) - 3)) + "m Inappropriate language");
-                                }
-
-                                event.getMessage().delete().queue();
-
-                                return;
-                            }
+                            return;
                         }
                     }
                 }
