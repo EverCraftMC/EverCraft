@@ -33,6 +33,7 @@ import io.github.evercraftmc.evercraft.discord.commands.moderation.WarnCommand;
 import io.github.evercraftmc.evercraft.discord.data.DataParser;
 import io.github.evercraftmc.evercraft.discord.data.types.config.Config;
 import io.github.evercraftmc.evercraft.discord.data.types.data.Data;
+import io.github.evercraftmc.evercraft.shared.util.ModerationUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -87,6 +88,8 @@ public class BotMain implements EventListener {
     private JDA jda;
     private Map<String, Message> messageCache = new HashMap<String, Message>();
     private Map<Member, List<Message>> latestMessages = new HashMap<Member, List<Message>>();
+
+    public Map<Member, Integer> warnings = new HashMap<Member, Integer>();
 
     public BotMain(String configFileName, String dataFileName) {
         BotMain.Instance = this;
@@ -241,21 +244,40 @@ public class BotMain implements EventListener {
                     return;
                 }
 
-                for (String bannedWord : config.getBannedWords()) {
+                if (event.getMessage().getContentRaw().contains("nigger")) {
+                    event.getMember().timeoutFor(Duration.ofMinutes(15)).queue();
+
+                    BotMain.Instance.sendEmbed(event.getTextChannel(), "Mute", event.getMember().getAsMention() + " was muted for 15m Saying the freaking n word");
+                    BotMain.Instance.log(event.getMember().getAsMention() + " was muted by AutoMod for 15m Saying the freaking n word");
+                } else {
                     for (String word : ArgsParser.getRawArgs(event.getMessage())) {
-                        if (word.matches(bannedWord)) {
-                            sendEmbed(event.getTextChannel(), ":(", "Hey why would you say that :(");
-
-                            if (!event.getMember().getRoles().isEmpty() && event.getMember().getRoles().get(0).getPosition() <= event.getGuild().getSelfMember().getRoles().get(0).getPosition()) {
-                                event.getMember().timeoutFor(Duration.ofMinutes(5)).queue();
-
-                                BotMain.Instance.sendEmbed(event.getTextChannel(), "Mute", event.getMember().getAsMention() + " was muted for 5m bad words");
-                                BotMain.Instance.log(event.getMember().getAsMention() + " was muted by AutoMod for 5m bad words");
+                        if (ModerationUtil.isInappropriateWord(word)) {
+                            if (warnings.containsKey(event.getMember())) {
+                                Integer value = warnings.get(event.getMember()) + 1;
+                                warnings.remove(event.getMember());
+                                warnings.put(event.getMember(), value);
+                            } else {
+                                warnings.put(event.getMember(), 1);
                             }
 
-                            event.getMessage().delete().queue();
+                            if (!event.getMember().getRoles().isEmpty() && event.getMember().getRoles().get(0).getPosition() <= event.getGuild().getSelfMember().getRoles().get(0).getPosition()) {
+                                if (warnings.get(event.getMember()) == 1) {
+                                    sendEmbed(event.getTextChannel(), ":(", "**Hey don't say that :(**");
+                                } else if (warnings.get(event.getMember()) == 2) {
+                                    sendEmbed(event.getTextChannel(), ":(", "**Seriously don't say that**");
+                                } else if (warnings.get(event.getMember()) == 3) {
+                                    sendEmbed(event.getTextChannel(), ":(", "**This is your last warning, do not say that**");
+                                } else if (warnings.get(event.getMember()) >= 4) {
+                                    event.getMember().timeoutFor(Duration.ofMinutes(5 * (warnings.get(event.getMember()) - 3))).queue();
 
-                            return;
+                                    BotMain.Instance.sendEmbed(event.getTextChannel(), "Mute", event.getMember().getAsMention() + " was muted for " + (5 * (warnings.get(event.getMember()) - 3)) + "m Inappropriate language");
+                                    BotMain.Instance.log(event.getMember().getAsMention() + " was muted by AutoMod for " + (5 * (warnings.get(event.getMember()) - 3)) + "m Inappropriate language");
+                                }
+
+                                event.getMessage().delete().queue();
+
+                                return;
+                            }
                         }
                     }
                 }

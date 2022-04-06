@@ -18,8 +18,6 @@ public class Config extends DataParseable {
     private String logChannel = "";
     private String botCommandsChannel = "";
 
-    private String[] bannedWords = new String[] {};
-
     public String getToken() {
         return this.token;
     }
@@ -54,9 +52,5 @@ public class Config extends DataParseable {
 
     public String getBotCommandsChannel() {
         return this.botCommandsChannel;
-    }
-
-    public String[] getBannedWords() {
-        return this.bannedWords;
     }
 }
