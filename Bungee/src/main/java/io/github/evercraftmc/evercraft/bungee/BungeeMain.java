@@ -153,6 +153,9 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.messages.addDefault("moderation.maintenance.toggle", "&aSuccessfully toggled maintenance mode {value}");
         this.messages.addDefault("moderation.maintenance.kick", "&cSorry but the server is currently in maintenance mode, please come back later");
         this.messages.addDefault("moderation.maintenance.motd", "              &cCurrently under maintenance");
+        this.messages.addDefault("moderation.chat.warning1", "&c&lHey don't say that :(");
+        this.messages.addDefault("moderation.chat.warning2", "&c&lSeriously don't say that");
+        this.messages.addDefault("moderation.chat.warning3", "&c&lThis is your last warning, do not say that");
         this.messages.addDefault("commandspy", "&aSuccessfully toggled your commandspy {value}");
 
         this.messages.copyDefaults();
