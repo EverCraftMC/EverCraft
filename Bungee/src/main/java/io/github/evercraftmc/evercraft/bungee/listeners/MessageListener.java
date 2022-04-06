@@ -1,17 +1,22 @@
 package io.github.evercraftmc.evercraft.bungee.listeners;
 
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.shared.util.ModerationUtil;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.event.EventHandler;
 
 public class MessageListener extends BungeeListener {
+    public Map<UUID, Integer> warnings = new HashMap<UUID, Integer>();
+
     @EventHandler
     public void onMessage(PluginMessageEvent event) {
         if (event.getTag().equals("BungeeCord")) {
@@ -27,15 +32,37 @@ public class MessageListener extends BungeeListener {
                 String message = in.readUTF();
 
                 if (!BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
-                    for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
-                        if (player2.getServer().getInfo().getName().equals(sender)) {
-                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message))));
+                    if (!ModerationUtil.isInappropriateString(message)) {
+                        for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
+                            if (player2.getServer().getInfo().getName().equals(sender)) {
+                                player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message))));
+                            } else {
+                                player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message)))));
+                            }
+                        }
+
+                        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message)))).queue();
+                    } else if (message.matches("nigg(a)?(s)?") || message.contains("nig(g)?er(s)?")) {
+                        BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(BungeeMain.getInstance().getProxy().getConsole(), "tempmute " + player.getName() + " 15m Saying the freaking n word");
+                    } else {
+                        if (warnings.containsKey(player.getUniqueId())) {
+                            Integer value = warnings.get(player.getUniqueId()) + 1;
+                            warnings.remove(player.getUniqueId());
+                            warnings.put(player.getUniqueId(), value);
                         } else {
-                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message)))));
+                            warnings.put(player.getUniqueId(), 1);
+                        }
+
+                        if (warnings.get(player.getUniqueId()) == 1) {
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.chat.warning1"))));
+                        } else if (warnings.get(player.getUniqueId()) == 2) {
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.chat.warning2"))));
+                        } else if (warnings.get(player.getUniqueId()) == 3) {
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.chat.warning3"))));
+                        } else if (warnings.get(player.getUniqueId()) >= 4) {
+                            BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(BungeeMain.getInstance().getProxy().getConsole(), "tempmute " + player.getName() + " " + (5 * (warnings.get(player.getUniqueId()) - 3)) + "m Inappropriate language");
                         }
                     }
-
-                    BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message)))).queue();
                 } else {
                     String time = BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.until");
 
