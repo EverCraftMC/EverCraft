@@ -40,6 +40,8 @@ public class TempMuteCommand extends BungeeCommand {
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.by", senderName);
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.until", TimeUtil.parseFuture(args[1]).toString());
                 } else {
+                    // Fix really weird mute message
+
                     sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.alreadymuted").replace("{player}", player.getDisplayName()))));
                 }
             } else {
