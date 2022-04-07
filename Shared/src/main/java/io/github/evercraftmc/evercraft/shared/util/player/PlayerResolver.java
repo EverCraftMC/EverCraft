@@ -35,6 +35,10 @@ public class PlayerResolver {
     }
 
     public static String getDisplayName(Config config, UUID uuid) {
-        return config.getString("players." + uuid.toString() + ".nickname");
+        if (config.getString("players." + uuid.toString() + ".nickname") != null) {
+            return config.getString("players." + uuid.toString() + ".nickname");
+        } else {
+            return getNameFromUUID(config, uuid);
+        }
     }
 }

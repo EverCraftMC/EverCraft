@@ -9,7 +9,7 @@ import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.TimeUtil;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
-import io.github.evercraftmc.evercraft.shared.util.player.PlayerResolver;
+import io.github.evercraftmc.evercraft.bungee.util.player.BungeePlayerResolver;
 import io.github.evercraftmc.evercraft.shared.util.player.SimplePlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -29,7 +29,7 @@ public class TempMuteCommand extends BungeeCommand {
         }
 
         if (args.length == 2) {
-            SimplePlayer player = PlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
+            SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
 
             if (player != null) {
                 if (!BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
@@ -48,7 +48,7 @@ public class TempMuteCommand extends BungeeCommand {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
             }
         } else if (args.length > 2) {
-            SimplePlayer player = PlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
+            SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
 
             if (player != null) {
                 if (!BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {

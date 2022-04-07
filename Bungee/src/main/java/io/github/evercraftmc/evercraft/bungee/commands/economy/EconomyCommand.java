@@ -8,7 +8,7 @@ import io.github.evercraftmc.evercraft.bungee.commands.BungeeCommand;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
-import io.github.evercraftmc.evercraft.shared.util.player.PlayerResolver;
+import io.github.evercraftmc.evercraft.bungee.util.player.BungeePlayerResolver;
 import io.github.evercraftmc.evercraft.shared.util.player.SimplePlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -21,7 +21,7 @@ public class EconomyCommand extends BungeeCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (args.length >= 3) {
-            SimplePlayer player = PlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[1]);
+            SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[1]);
 
             if (player != null) {
                 if (args[0].equalsIgnoreCase("set")) {
