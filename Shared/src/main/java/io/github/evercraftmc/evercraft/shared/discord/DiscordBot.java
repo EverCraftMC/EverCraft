@@ -1,15 +1,17 @@
 package io.github.evercraftmc.evercraft.shared.discord;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 import javax.security.auth.login.LoginException;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.GenericEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.entities.Activity.ActivityType;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -22,15 +24,19 @@ public class DiscordBot implements Closable, EventListener {
 
     private String guild;
 
-    private Consumer<Message> callback = null;
+    private List<Consumer<GenericEvent>> listeners = new ArrayList<Consumer<GenericEvent>>();
 
-    public DiscordBot(String token, String guild, ActivityType statusType, String status) {
+    public DiscordBot(String token, String guild, GatewayIntent[] intents, CacheFlag[] caches, MemberCachePolicy memberCachePolicy, ActivityType statusType, String status) {
         try {
-            this.jda = JDABuilder.create(token, GatewayIntent.GUILD_MESSAGES)
+            this.jda = JDABuilder.createDefault(token)
                 .setAutoReconnect(true)
+                .disableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_MESSAGE_TYPING, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_WEBHOOKS, GatewayIntent.GUILD_BANS, GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGE_TYPING)
+                .enableIntents(Arrays.asList(intents))
                 .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.EMOTE, CacheFlag.MEMBER_OVERRIDES, CacheFlag.ONLINE_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.VOICE_STATE)
-                .setMemberCachePolicy(MemberCachePolicy.NONE)
+                .enableCache(Arrays.asList(caches))
+                .setMemberCachePolicy(memberCachePolicy)
                 .setCompression(Compression.ZLIB)
+                .setStatus(OnlineStatus.ONLINE)
                 .setActivity(Activity.of(statusType, status))
                 .addEventListeners(this)
                 .build();
@@ -41,16 +47,14 @@ public class DiscordBot implements Closable, EventListener {
         this.guild = guild;
     }
 
-    public void setMessageCallback(Consumer<Message> callback) {
-        this.callback = callback;
+    public void addListener(Consumer<GenericEvent> listener) {
+        this.listeners.add(listener);
     }
 
     @Override
-    public void onEvent(GenericEvent rawevent) {
-        if (rawevent instanceof MessageReceivedEvent event) {
-            if (event.getAuthor() != this.getJDA().getSelfUser() && this.callback != null) {
-                this.callback.accept(event.getMessage());
-            }
+    public void onEvent(GenericEvent event) {
+        for (Consumer<GenericEvent> listener : this.listeners) {
+            listener.accept(event);
         }
     }
 

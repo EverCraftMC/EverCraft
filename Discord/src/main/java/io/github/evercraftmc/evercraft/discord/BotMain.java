@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import javax.security.auth.login.LoginException;
 import gnu.trove.set.hash.TLongHashSet;
 import io.github.evercraftmc.evercraft.discord.args.ArgsParser;
 import io.github.evercraftmc.evercraft.discord.args.ArgsValidator;
@@ -34,14 +33,12 @@ import io.github.evercraftmc.evercraft.discord.commands.util.SudoCommand;
 import io.github.evercraftmc.evercraft.discord.data.DataParser;
 import io.github.evercraftmc.evercraft.discord.data.types.config.Config;
 import io.github.evercraftmc.evercraft.discord.data.types.data.Data;
+import io.github.evercraftmc.evercraft.shared.discord.DiscordBot;
 import io.github.evercraftmc.evercraft.shared.util.ModerationUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.EmbedType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -74,7 +71,6 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandEditAction;
-import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.dv8tion.jda.internal.entities.ReceivedMessage;
@@ -87,7 +83,7 @@ public class BotMain implements EventListener {
 
     public List<Command> commands;
 
-    private JDA jda;
+    private DiscordBot bot;
     private Map<String, Message> messageCache = new HashMap<String, Message>();
     private Map<Member, List<Message>> latestMessages = new HashMap<Member, List<Message>>();
 
@@ -125,24 +121,23 @@ public class BotMain implements EventListener {
         commands.add(new NickCommand());
         commands.add(new SudoCommand());
 
-        try {
-            this.jda = JDABuilder.createDefault(this.getConfig().getToken())
-                .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_BANS)
-                .disableCache(CacheFlag.VOICE_STATE)
-                .setMemberCachePolicy(MemberCachePolicy.ALL)
-                .setAutoReconnect(true)
-                .setCompression(Compression.ZLIB)
-                .setActivity(Activity.of(config.getStatusType(), config.getStatus()))
-                .setStatus(OnlineStatus.ONLINE)
-                .addEventListeners(this)
-                .build();
-        } catch (LoginException e) {
-            e.printStackTrace();
-        }
+        this.bot = new DiscordBot(this.getConfig().getToken(), config.getGuildId(), new GatewayIntent[] { GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_BANS }, new CacheFlag[] { CacheFlag.MEMBER_OVERRIDES }, MemberCachePolicy.ONLINE, config.getStatusType(), config.getStatus());
+
+        this.bot.addListener((GenericEvent rawevent) -> {
+            if (rawevent instanceof ReadyEvent event) {
+                System.out.println("Finished starting bot..");
+            }
+        });
+
+        this.getJDA().addEventListener(this);
+    }
+
+    public DiscordBot getBot() {
+        return this.bot;
     }
 
     public JDA getJDA() {
-        return this.jda;
+        return this.getBot().getJDA();
     }
 
     public Config getConfig() {
@@ -154,7 +149,7 @@ public class BotMain implements EventListener {
     }
 
     public MessageEmbed buildEmbed(String title, String description) {
-        return new EmbedBuilder().setTitle(title).setDescription(description).setAuthor(jda.getGuildById(config.getGuildId()).getSelfMember().getNickname() != null ? jda.getGuildById(config.getGuildId()).getSelfMember().getNickname() : jda.getSelfUser().getName(), null, jda.getSelfUser().getAvatarUrl()).setFooter((jda.getGuildById(config.getGuildId()).getSelfMember().getNickname() != null ? jda.getGuildById(config.getGuildId()).getSelfMember().getNickname() : jda.getSelfUser().getName())).setTimestamp(new Date().toInstant()).setColor(config.getColor().toColor()).build();
+        return new EmbedBuilder().setTitle(title).setDescription(description).setAuthor(this.getBot().getGuild().getSelfMember().getNickname() != null ? this.getBot().getGuild().getSelfMember().getNickname() : this.getJDA().getSelfUser().getName(), null, this.getJDA().getSelfUser().getAvatarUrl()).setFooter((this.getBot().getGuild().getSelfMember().getNickname() != null ? this.getBot().getGuild().getSelfMember().getNickname() : this.getJDA().getSelfUser().getName())).setTimestamp(new Date().toInstant()).setColor(config.getColor().toColor()).build();
     }
 
     public void sendEmbed(TextChannel channel, String title, String message) {
@@ -174,17 +169,15 @@ public class BotMain implements EventListener {
     }
 
     public void log(String message) {
-        BotMain.Instance.jda.getTextChannelById(config.getLogChannel()).sendMessageEmbeds(buildEmbed("Log", message)).queue();
+        this.getJDA().getTextChannelById(config.getLogChannel()).sendMessageEmbeds(buildEmbed("Log", message)).queue();
     }
 
     @Override
     public void onEvent(GenericEvent rawevent) {
         if (rawevent instanceof ReadyEvent event) {
-            System.out.println("Finished starting bot..");
-
             System.out.println("Registering commands..");
 
-            List<net.dv8tion.jda.api.interactions.commands.Command> fetchedCommands = jda.getGuildById(getConfig().getGuildId()).retrieveCommands().complete();
+            List<net.dv8tion.jda.api.interactions.commands.Command> fetchedCommands = this.getJDA().getGuildById(getConfig().getGuildId()).retrieveCommands().complete();
 
             for (net.dv8tion.jda.api.interactions.commands.Command command : fetchedCommands) {
                 Command regcommand = null;
@@ -201,7 +194,7 @@ public class BotMain implements EventListener {
             }
 
             for (Command command : commands) {
-                jda.getGuildById(getConfig().getGuildId()).upsertCommand(command.getName(), BotMain.Instance.getConfig().getPrefix() + command.getName()).queue((net.dv8tion.jda.api.interactions.commands.Command fetchedCommand) -> {
+                this.getJDA().getGuildById(getConfig().getGuildId()).upsertCommand(command.getName(), BotMain.Instance.getConfig().getPrefix() + command.getName()).queue((net.dv8tion.jda.api.interactions.commands.Command fetchedCommand) -> {
                     CommandEditAction editor = fetchedCommand.editCommand();
                     for (ArgsValidator.Arg arg : command.getArgs()) {
                         editor.addOption(arg.toOption(), arg.type().toString().toLowerCase(), arg.type().toString(), !arg.optional());
@@ -212,7 +205,7 @@ public class BotMain implements EventListener {
 
             System.out.println("Loading message chache..");
 
-            for (TextChannel channel : jda.getGuildById(config.getGuildId()).getTextChannels()) {
+            for (TextChannel channel : this.getBot().getGuild().getTextChannels()) {
                 channel.getHistoryBefore(channel.getLatestMessageId(), 100).queue((MessageHistory history) -> {
                     for (Message message : history.getRetrievedHistory()) {
                         messageCache.put(message.getId(), message);
@@ -351,7 +344,7 @@ public class BotMain implements EventListener {
                         for (OptionMapping option : event.getOptions()) {
                             content.append(" " + option.getAsString());
                         }
-                        Message message = new ReceivedMessage(event.getIdLong(), event.getChannel(), MessageType.SLASH_COMMAND, new MessageReference(event.getIdLong(), event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(content.toString().trim()).build(), jda), false, false, new TLongHashSet(), new TLongHashSet(), false, false, content.toString().trim(), event.getId(), event.getUser(), event.getMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, new Interaction(event.getIdLong(), event.getTypeRaw(), event.getName(), event.getUser(), event.getMember()));
+                        Message message = new ReceivedMessage(event.getIdLong(), event.getChannel(), MessageType.SLASH_COMMAND, new MessageReference(event.getIdLong(), event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(content.toString().trim()).build(), this.getJDA()), false, false, new TLongHashSet(), new TLongHashSet(), false, false, content.toString().trim(), event.getId(), event.getUser(), event.getMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, new Interaction(event.getIdLong(), event.getTypeRaw(), event.getName(), event.getUser(), event.getMember()));
 
                         if (ArgsValidator.validateArgs(message, command.getArgs())) {
                             command.run(message);
