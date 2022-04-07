@@ -13,6 +13,7 @@ dependencies {
 
     depencancy "net.dv8tion:JDA:${project.jda_version}"
     compileOnly "net.sf.trove4j:trove4j:3.0.3"
+    depencancy "club.minnced:discord-webhooks:${project.webhooks_version}"
 }
 
 tasks.register("buildFull", Jar) {
