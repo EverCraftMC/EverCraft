@@ -39,13 +39,13 @@ public class SudoCommand extends BungeeCommand {
                         if (command.getValue().getName().equalsIgnoreCase(args[1].substring(1))) {
                             found = true;
 
-                            BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player, message.toString().trim());
+                            BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player, message.toString().trim().substring(1));
                         } else {
                             for (String alias : command.getValue().getAliases()) {
                                 if (alias.equalsIgnoreCase(args[1].substring(1))) {
                                     found = true;
 
-                                    BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player, message.toString().trim());
+                                    BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player, message.toString().trim().substring(1));
 
                                     return;
                                 }
