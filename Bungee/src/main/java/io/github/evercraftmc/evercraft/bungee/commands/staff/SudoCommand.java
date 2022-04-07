@@ -25,7 +25,7 @@ public class SudoCommand extends BungeeCommand {
         if (args.length > 1) {
             ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
 
-            if (player != null) {
+            if (player != null || args[0].equalsIgnoreCase("*")) {
                 StringBuilder message = new StringBuilder();
 
                 for (Integer i = 1; i < args.length; i++) {
@@ -39,13 +39,17 @@ public class SudoCommand extends BungeeCommand {
                         if (command.getValue().getName().equalsIgnoreCase(args[1].substring(1))) {
                             found = true;
 
-                            BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player, message.toString().trim().substring(1));
+                            for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
+                                BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player2, message.toString().trim().substring(1));
+                            }
                         } else {
                             for (String alias : command.getValue().getAliases()) {
                                 if (alias.equalsIgnoreCase(args[1].substring(1))) {
                                     found = true;
 
-                                    BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player, message.toString().trim().substring(1));
+                                    for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
+                                        BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player2, message.toString().trim().substring(1));
+                                    }
 
                                     return;
                                 }
@@ -54,17 +58,21 @@ public class SudoCommand extends BungeeCommand {
                     }
 
                     if (!found) {
-                        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-                        out.writeUTF("crossCommand");
-                        out.writeUTF(player.getUniqueId().toString());
-                        out.writeUTF(message.toString().trim().substring(1));
+                        for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
+                            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                            out.writeUTF("crossCommand");
+                            out.writeUTF(player2.getUniqueId().toString());
+                            out.writeUTF(message.toString().trim().substring(1));
 
-                        player.getServer().sendData("BungeeCord", out.toByteArray());
+                            player2.getServer().sendData("BungeeCord", out.toByteArray());
+                        }
                     }
 
                     sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("sudo.command").replace("{command}", message.toString().trim()).replace("{player}", player.getDisplayName()))));
                 } else {
-                    player.chat(message.toString().trim());
+                    for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
+                        player2.chat(message.toString().trim());
+                    }
 
                     sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("sudo.message").replace("{message}", message.toString().trim()).replace("{player}", player.getDisplayName()))));
                 }
@@ -81,6 +89,8 @@ public class SudoCommand extends BungeeCommand {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 1) {
+            list.add("*");
+
             for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
                 list.add(player.getName());
             }
