@@ -30,6 +30,7 @@ import io.github.evercraftmc.evercraft.discord.commands.moderation.UnBanCommand;
 import io.github.evercraftmc.evercraft.discord.commands.moderation.UnLockChannelCommand;
 import io.github.evercraftmc.evercraft.discord.commands.moderation.UnMuteCommand;
 import io.github.evercraftmc.evercraft.discord.commands.moderation.WarnCommand;
+import io.github.evercraftmc.evercraft.discord.commands.util.SudoCommand;
 import io.github.evercraftmc.evercraft.discord.data.DataParser;
 import io.github.evercraftmc.evercraft.discord.data.types.config.Config;
 import io.github.evercraftmc.evercraft.discord.data.types.data.Data;
@@ -122,6 +123,7 @@ public class BotMain implements EventListener {
         commands.add(new UnLockChannelCommand());
         commands.add(new ClearCommand());
         commands.add(new NickCommand());
+        commands.add(new SudoCommand());
 
         try {
             this.jda = JDABuilder.createDefault(this.getConfig().getToken())
