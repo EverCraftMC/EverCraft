@@ -37,8 +37,12 @@ import io.github.evercraftmc.evercraft.shared.discord.DiscordBot;
 import io.github.evercraftmc.evercraft.shared.economy.Economy;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Activity.ActivityType;
+import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -241,16 +245,18 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.getLogger().info("Starting Discord bot..");
 
-        this.bot = new DiscordBot(this.config.getString("discord.token"), this.config.getString("discord.guildID"), ActivityType.valueOf(this.config.getString("discord.statusType")), this.config.getString("discord.status"));
-        this.bot.setMessageCallback((Message message) -> {
-            if (message.getChannel().getId().equals(this.getPluginConfig().getString("discord.channelId"))) {
-                for (ProxiedPlayer player : this.getProxy().getPlayers()) {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(this.getPluginMessages().getString("chat.discord").replace("{player}", message.getMember().getEffectiveName()).replace("{message}", message.getContentDisplay()))));
-                }
-            } else if (message.getChannel().getId().equals(this.getPluginConfig().getString("discord.staffChannelId"))) {
-                for (ProxiedPlayer player : this.getProxy().getPlayers()) {
-                    if (player.hasPermission("evercraft.commands.staff.staffchat")) {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", message.getMember().getEffectiveName()).replace("{message}", message.getContentDisplay()))));
+        this.bot = new DiscordBot(this.config.getString("discord.token"), this.config.getString("discord.guildID"), new GatewayIntent[] { GatewayIntent.GUILD_MESSAGES }, new CacheFlag[] {}, MemberCachePolicy.NONE, ActivityType.valueOf(this.config.getString("discord.statusType")), this.config.getString("discord.status"));
+        this.bot.addListener((GenericEvent rawevent) -> {
+            if (rawevent instanceof MessageReceivedEvent event) {
+                if (event.getMessage().getChannel().getId().equals(this.getPluginConfig().getString("discord.channelId"))) {
+                    for (ProxiedPlayer player : this.getProxy().getPlayers()) {
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(this.getPluginMessages().getString("chat.discord").replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
+                    }
+                } else if (event.getMessage().getChannel().getId().equals(this.getPluginConfig().getString("discord.staffChannelId"))) {
+                    for (ProxiedPlayer player : this.getProxy().getPlayers()) {
+                        if (player.hasPermission("evercraft.commands.staff.staffchat")) {
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
+                        }
                     }
                 }
             }
