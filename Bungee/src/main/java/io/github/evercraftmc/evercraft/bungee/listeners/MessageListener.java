@@ -8,9 +8,11 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.bungee.util.player.BungeePlayerResolver;
 import io.github.evercraftmc.evercraft.shared.util.ModerationUtil;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.event.EventHandler;
 
@@ -133,6 +135,24 @@ public class MessageListener extends BungeeListener {
                 String command = in.readUTF();
 
                 BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player, command);
+            }
+        }
+    }
+
+    public void onCommand(ChatEvent event) {
+        if (event.isProxyCommand()) {
+            if (!event.getMessage().equalsIgnoreCase("/") && !event.getMessage().equalsIgnoreCase("/ ")) {
+                ProxiedPlayer player = BungeePlayerResolver.bungeePlayerFromPlayer(BungeePlayerResolver.playerFromConnection(event.getSender()));
+
+                for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
+                    if (player2 != player && player2.hasPermission("evercraft.commands.staff.commandspy") && BungeeMain.getInstance().getData().getBoolean("players." + player2.getUniqueId() + ".commandspy")) {
+                        if (player2.getServer().getInfo().getName().equals(player.getServer().getInfo().getName())) {
+                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.commandSpy").replace("{player}", player.getDisplayName()).replace("{message}", event.getMessage()))));
+                        } else {
+                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", player.getServer().getInfo().getName()).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.commandSpy").replace("{player}", player.getDisplayName()).replace("{message}", event.getMessage())))));
+                        }
+                    }
+                }
             }
         }
     }
