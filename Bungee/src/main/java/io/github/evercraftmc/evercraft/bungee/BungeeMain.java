@@ -20,6 +20,7 @@ import io.github.evercraftmc.evercraft.bungee.commands.player.NickNameCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SpigotCommandCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.CommandSpyCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.StaffChatCommand;
+import io.github.evercraftmc.evercraft.bungee.commands.staff.SudoCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.warp.HubCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.warp.ServerCommand;
 import io.github.evercraftmc.evercraft.bungee.listeners.BungeeListener;
@@ -116,7 +117,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.messages.addDefault("info.staff", "&f");
         this.messages.addDefault("welcome.firstJoin", "&b&lWelcome {player} &r&l&bto the server!");
         this.messages.addDefault("welcome.join", "&e{player} &r&ejoined the server");
-        this.messages.addDefault("welcome.move", "&c{player} &r&e has moved to {server}");
+        this.messages.addDefault("welcome.move", "&c{player} &r&ehas moved to {server}");
         this.messages.addDefault("welcome.quit", "&e{player} &r&eleft the server");
         this.messages.addDefault("nickname", "&aSuccessfully changed your nickname to {nickname}");
         this.messages.addDefault("economy.yourBalance", "&aYou balance is currently {balance}");
@@ -157,6 +158,8 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.messages.addDefault("moderation.chat.warning2", "&c&lSeriously don't say that");
         this.messages.addDefault("moderation.chat.warning3", "&c&lThis is your last warning, do not say that");
         this.messages.addDefault("commandspy", "&aSuccessfully toggled your commandspy {value}");
+        this.messages.addDefault("sudo.message", "&aSuccessfully said {message} as {player}");
+        this.messages.addDefault("sudo.command", "&aSuccessfully ran {command} as {player}");
 
         this.messages.copyDefaults();
 
@@ -208,6 +211,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.commands.add(new CommandSpyCommand("commandspy", "Toggle your commandspy", Arrays.asList("cs"), "evercraft.commands.staff.commandspy").register());
 
         this.commands.add(new SpigotCommandCommand("spigotcommand", "Run a command on the spigot server", Arrays.asList(), null).register());
+        this.commands.add(new SudoCommand("sudo", "Run a command or send a message as another player", Arrays.asList(), "evercraft.commands.staff.sudo").register());
 
         this.getLogger().info("Finished loading commands");
 
