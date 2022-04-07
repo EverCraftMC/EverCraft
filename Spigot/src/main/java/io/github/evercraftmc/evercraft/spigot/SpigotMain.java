@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import io.github.evercraftmc.evercraft.shared.Plugin;
 import io.github.evercraftmc.evercraft.shared.config.FileConfig;
 import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
@@ -161,12 +159,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.assets = new ArrayList<Closable>();
 
         this.getLogger().info("Finished loading plugin");
-
-        // TODO Don't ask for server name until first logon
-
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("GetServer");
-        this.getServer().sendPluginMessage(this, "BungeeCord", out.toByteArray());
     }
 
     @Override
