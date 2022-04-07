@@ -118,7 +118,7 @@ public class MessageListener extends BungeeListener {
 
                 if (!message.equalsIgnoreCase("/") && !message.equalsIgnoreCase("/ ")) {
                     for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
-                        if (player2 != player && player2.hasPermission("evercraft.commands.staff.commandspy") && BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".commandspy")) {
+                        if (player2 != player && player2.hasPermission("evercraft.commands.staff.commandspy") && BungeeMain.getInstance().getData().getBoolean("players." + player2.getUniqueId() + ".commandspy")) {
                             if (player2.getServer().getInfo().getName().equals(sender)) {
                                 player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.commandSpy").replace("{player}", player.getDisplayName()).replace("{message}", message))));
                             } else {
