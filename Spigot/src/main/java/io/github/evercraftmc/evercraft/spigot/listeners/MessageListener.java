@@ -33,7 +33,7 @@ public class MessageListener extends SpigotListener implements PluginMessageList
     @EventHandler
     public void onDeathMessage(PlayerDeathEvent event) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("globalDeathMessage");
+        out.writeUTF("globalPlayerMessage");
         out.writeUTF(SpigotMain.getInstance().getServerName());
         out.writeUTF(event.getEntity().getUniqueId().toString());
         out.writeUTF(ComponentFormatter.componentToString(event.deathMessage()).replace(event.getEntity().getName(), "{player}"));
