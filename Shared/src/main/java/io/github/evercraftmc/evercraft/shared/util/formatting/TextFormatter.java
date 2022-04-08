@@ -38,6 +38,6 @@ public class TextFormatter {
     }
 
     public static String discordFormat(String input) {
-        return removeColors(input.replace("*", "\\*").replace("_", "\\_").replace("~", "\\~").replace("`", "\\`").replace(">", "\\>").replace("|", "\\|"));
+        return removeColors(input.replace("*", "\\*").replace("_", "\\_").replace("~", "\\~").replace("`", "\\`").replace(">", "\\>").replace("|", "\\|").replace("@", "\\@"));
     }
 }
