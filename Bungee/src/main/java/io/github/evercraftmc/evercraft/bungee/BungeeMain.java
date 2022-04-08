@@ -248,14 +248,16 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.bot = new DiscordBot(this.config.getString("discord.token"), this.config.getString("discord.guildID"), new GatewayIntent[] { GatewayIntent.GUILD_MESSAGES }, new CacheFlag[] {}, MemberCachePolicy.NONE, ActivityType.valueOf(this.config.getString("discord.statusType")), this.config.getString("discord.status"));
         this.bot.addListener((GenericEvent rawevent) -> {
             if (rawevent instanceof MessageReceivedEvent event) {
-                if (event.getMessage().getChannel().getId().equals(this.getPluginConfig().getString("discord.channelId"))) {
-                    for (ProxiedPlayer player : this.getProxy().getPlayers()) {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(this.getPluginMessages().getString("chat.discord").replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
-                    }
-                } else if (event.getMessage().getChannel().getId().equals(this.getPluginConfig().getString("discord.staffChannelId"))) {
-                    for (ProxiedPlayer player : this.getProxy().getPlayers()) {
-                        if (player.hasPermission("evercraft.commands.staff.staffchat")) {
-                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
+                if (event.getAuthor() != this.bot.getJDA().getSelfUser()) {
+                    if (event.getMessage().getChannel().getId().equals(this.getPluginConfig().getString("discord.channelId"))) {
+                        for (ProxiedPlayer player : this.getProxy().getPlayers()) {
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(this.getPluginMessages().getString("chat.discord").replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
+                        }
+                    } else if (event.getMessage().getChannel().getId().equals(this.getPluginConfig().getString("discord.staffChannelId"))) {
+                        for (ProxiedPlayer player : this.getProxy().getPlayers()) {
+                            if (player.hasPermission("evercraft.commands.staff.staffchat")) {
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
+                            }
                         }
                     }
                 }
