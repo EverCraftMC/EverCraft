@@ -39,7 +39,7 @@ public class SudoCommand extends BungeeCommand {
                         if (command.getValue().getName().equalsIgnoreCase(args[1].substring(1))) {
                             found = true;
 
-                            if (!args[0].equalsIgnoreCase("*")) {
+                            if (args[0].equalsIgnoreCase("*")) {
                                 for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                                     BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player2, message.toString().trim().substring(1));
                                 }
@@ -53,7 +53,7 @@ public class SudoCommand extends BungeeCommand {
                                 if (alias.equalsIgnoreCase(args[1].substring(1))) {
                                     found = true;
 
-                                    if (!args[0].equalsIgnoreCase("*")) {
+                                    if (args[0].equalsIgnoreCase("*")) {
                                         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                                             BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player2, message.toString().trim().substring(1));
                                         }
@@ -68,7 +68,7 @@ public class SudoCommand extends BungeeCommand {
                     }
 
                     if (!found) {
-                        if (!args[0].equalsIgnoreCase("*")) {
+                        if (args[0].equalsIgnoreCase("*")) {
                             for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                                 ByteArrayDataOutput out = ByteStreams.newDataOutput();
                                 out.writeUTF("crossCommand");
@@ -87,13 +87,13 @@ public class SudoCommand extends BungeeCommand {
                         }
                     }
 
-                    if (!args[0].equalsIgnoreCase("*")) {
+                    if (args[0].equalsIgnoreCase("*")) {
                         sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("sudo.command").replace("{command}", message.toString().trim()).replace("{player}", player.getDisplayName()))));
                     } else {
                         sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("sudo.command").replace("{command}", message.toString().trim()).replace("{player}", "*"))));
                     }
                 } else {
-                    if (!args[0].equalsIgnoreCase("*")) {
+                    if (args[0].equalsIgnoreCase("*")) {
                         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                             player2.chat(message.toString().trim());
                         }
@@ -101,7 +101,7 @@ public class SudoCommand extends BungeeCommand {
                         player.chat(message.toString().trim());
                     }
 
-                    if (!args[0].equalsIgnoreCase("*")) {
+                    if (args[0].equalsIgnoreCase("*")) {
                         sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("sudo.message").replace("{message}", message.toString().trim()).replace("{player}", player.getDisplayName()))));
                     } else {
                         sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("sudo.message").replace("{message}", message.toString().trim()).replace("{player}", "*"))));
