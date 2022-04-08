@@ -16,26 +16,30 @@ public class StaffChatCommand extends BungeeCommand {
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        String senderName;
-        if (sender instanceof ProxiedPlayer player) {
-            senderName = player.getDisplayName();
-        } else {
-            senderName = "CONSOLE";
-        }
-
-        StringBuilder command = new StringBuilder();
-
-        for (String arg : args) {
-            command.append(arg + " ");
-        }
-
-        for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
-            if (player.hasPermission(this.getPermission())) {
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", command.substring(0, command.length() - 1)))));
+        if (args.length > 0) {
+            String senderName;
+            if (sender instanceof ProxiedPlayer player) {
+                senderName = player.getDisplayName();
+            } else {
+                senderName = "CONSOLE";
             }
-        }
 
-        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.staffChannelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", command.substring(0, command.length() - 1)))).queue();
+            StringBuilder command = new StringBuilder();
+
+            for (String arg : args) {
+                command.append(arg + " ");
+            }
+
+            for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
+                if (player.hasPermission(this.getPermission())) {
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", command.substring(0, command.length() - 1)))));
+                }
+            }
+
+            BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.staffChannelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", command.substring(0, command.length() - 1)))).queue();
+        } else {
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+        }
     }
 
     @Override

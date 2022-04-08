@@ -10,6 +10,7 @@ import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -41,6 +42,19 @@ public class MessageListener extends SpigotListener implements PluginMessageList
         event.getEntity().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
 
         event.deathMessage(Component.empty());
+    }
+
+    @EventHandler
+    public void onAdvancementMessage(PlayerAdvancementDoneEvent event) {
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("globalPlayerMessage");
+        out.writeUTF(SpigotMain.getInstance().getServerName());
+        out.writeUTF(event.getPlayer().getUniqueId().toString());
+        out.writeUTF(ComponentFormatter.componentToString(event.message()).replace(event.getPlayer().getName(), "{player}"));
+
+        event.getPlayer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
+
+        event.message(Component.empty());
     }
 
     @EventHandler
