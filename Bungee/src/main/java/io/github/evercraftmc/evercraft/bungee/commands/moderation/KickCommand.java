@@ -29,9 +29,13 @@ public class KickCommand extends BungeeCommand {
             ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
 
             if (player != null) {
-                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
+                if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId() == player.getUniqueId()) {
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.cantkickself"))));
+                } else {
+                    BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
 
-                player.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.noreason").replace("{moderator}", senderName))));
+                    player.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.noreason").replace("{moderator}", senderName))));
+                }
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
             }
@@ -41,13 +45,23 @@ public class KickCommand extends BungeeCommand {
             if (player != null) {
                 StringBuilder reason = new StringBuilder();
 
+                Boolean confirm = false;
+
                 for (Integer i = 1; i < args.length; i++) {
-                    reason.append(args[i] + " ");
+                    if (args[i].equalsIgnoreCase("--confirm")) {
+                        confirm = true;
+                    } else {
+                        reason.append(args[i] + " ");
+                    }
                 }
 
-                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.brodcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
+                if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId() == player.getUniqueId() && !confirm) {
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.cantkickself"))));
+                } else {
+                    BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.brodcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
 
-                player.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.reason").replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
+                    player.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.reason").replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
+                }
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
             }

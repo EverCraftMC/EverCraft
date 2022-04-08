@@ -135,26 +135,31 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.messages.addDefault("moderation.kick.reason", "&cYou where kicked by {moderator} &r&cfor {reason}");
         this.messages.addDefault("moderation.kick.brodcast.noreason", "&a{player}&r&a was kicked by {moderator}");
         this.messages.addDefault("moderation.kick.brodcast.reason", "&a{player}&r&a was kicked by {moderator} &r&afor {reason}");
+        this.messages.addDefault("moderation.kick.cantkickself", "&cYou can't kick yourself (If you are absolutely sure you want to kick yourself add --confirm to the end of the command");
         this.messages.addDefault("moderation.ban.noreason", "&cYou where banned by {moderator}");
         this.messages.addDefault("moderation.ban.reason", "&cYou where banned by {moderator} &r&cfor {time} {reason}");
         this.messages.addDefault("moderation.ban.brodcast.noreason", "&a{player}&r&a was banned by {moderator}");
         this.messages.addDefault("moderation.ban.brodcast.reason", "&a{player}&r&a was banned by {moderator} &r&afor {reason}");
         this.messages.addDefault("moderation.ban.alreadybanned", "&c{player}&r&c is already banned");
+        this.messages.addDefault("moderation.ban.cantbanself", "&cYou can't ban yourself (If you are absolutely sure you want to ban yourself (You can't unban yourself) add --confirm to the end of the command");
         this.messages.addDefault("moderation.unban.noreason", "&cYou where unbanned by {moderator}");
         this.messages.addDefault("moderation.unban.reason", "&cYou where unbanned by {moderator} &r&cfor {reason}");
         this.messages.addDefault("moderation.unban.brodcast.noreason", "&a{player} was unbanned by {moderator}");
         this.messages.addDefault("moderation.unban.brodcast.reason", "&a{player} was unbanned by {moderator} &r&afor {reason}");
         this.messages.addDefault("moderation.unban.notbanned", "&c{player}&r&c is not banned");
+        this.messages.addDefault("moderation.unban.cantunbanself", "&cYou can't unban yourself");
         this.messages.addDefault("moderation.mute.noreason", "&cYou where muted by {moderator}");
         this.messages.addDefault("moderation.mute.reason", "&cYou where muted by {moderator} &r&cfor {time} {reason}");
         this.messages.addDefault("moderation.mute.brodcast.noreason", "&a{player} was muted by {moderator} for {time}");
         this.messages.addDefault("moderation.mute.brodcast.reason", "&a{player} was muted by {moderator} &r&afor {time} {reason}");
         this.messages.addDefault("moderation.mute.alreadymuted", "&c{player}&r&c is already muted");
+        this.messages.addDefault("moderation.mute.cantmuteself", "&cYou can't mute yourself (If you are absolutely sure you want to mute yourself (You can't unmute yourself) add --confirm to the end of the command");
         this.messages.addDefault("moderation.unmute.noreason", "&cYou where unmuted by {moderator}");
         this.messages.addDefault("moderation.unmute.reason", "&cYou where unmuted by {moderator} &r&cfor {reason}");
         this.messages.addDefault("moderation.unmute.brodcast.noreason", "&a{player} was unmuted by {moderator}");
         this.messages.addDefault("moderation.unmute.brodcast.reason", "&a{player} was unmuted by {moderator} &r&afor {reason}");
         this.messages.addDefault("moderation.unmute.notmuted", "&c{player}&r&c is not muted");
+        this.messages.addDefault("moderation.unmute.cantunmuteself", "&cYou can't unmute yourself");
         this.messages.addDefault("moderation.maintenance.toggle", "&aSuccessfully toggled maintenance mode {value}");
         this.messages.addDefault("moderation.maintenance.kick", "&cSorry but the server is currently in maintenance mode, please come back later");
         this.messages.addDefault("moderation.maintenance.motd", "              &cCurrently under maintenance");
@@ -203,11 +208,11 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         }
 
         this.commands.add(new KickCommand("kick", "Kick a player from the server", Arrays.asList(), "evercraft.commands.moderation.kick").register());
-        this.commands.add(new TempBanCommand("tempban", "Temporarily ban a player from the server", Arrays.asList("ban"), "evercraft.commands.moderation.tempban").register());
-        this.commands.add(new PermBanCommand("permban", "Ban a player from the server", Arrays.asList(), "evercraft.commands.moderation.permban").register());
+        this.commands.add(new TempBanCommand("tempban", "Temporarily ban a player from the server", Arrays.asList(), "evercraft.commands.moderation.tempban").register());
+        this.commands.add(new PermBanCommand("permban", "Ban a player from the server", Arrays.asList("ban"), "evercraft.commands.moderation.permban").register());
         this.commands.add(new UnBanCommand("unban", "Unban a player from the server", Arrays.asList(), "evercraft.commands.moderation.unban").register());
-        this.commands.add(new TempMuteCommand("tempmute", "Temporarily mute a player on the server", Arrays.asList("mute"), "evercraft.commands.moderation.tempmute").register());
-        this.commands.add(new PermMuteCommand("permmute", "Mute a player on the server", Arrays.asList(), "evercraft.commands.moderation.permmute").register());
+        this.commands.add(new TempMuteCommand("tempmute", "Temporarily mute a player on the server", Arrays.asList(), "evercraft.commands.moderation.tempmute").register());
+        this.commands.add(new PermMuteCommand("permmute", "Mute a player on the server", Arrays.asList("mute"), "evercraft.commands.moderation.permmute").register());
         this.commands.add(new UnMuteCommand("unmute", "Unmute a player on the server", Arrays.asList(), "evercraft.commands.moderation.unmute").register());
         this.commands.add(new MaintenanceCommand("maintenance", "Toggle maintainance mode", Arrays.asList(), "evercraft.commands.moderation.maintenance").register());
 
