@@ -81,7 +81,7 @@ public class MessageListener extends BungeeListener {
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.until", null);
                     }
                 }
-            } else if (subChannel.equals("globalDeathMessage")) {
+            } else if (subChannel.equals("globalPlayerMessage")) {
                 String sender = in.readUTF();
 
                 ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(UUID.fromString(in.readUTF()));
@@ -92,7 +92,7 @@ public class MessageListener extends BungeeListener {
                     if (player2.getServer().getInfo().getName().equals(sender)) {
                         player2.sendMessage(ComponentFormatter.stringToComponent(message.replace("{player}", player.getDisplayName())));
                     } else {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message.replace("{player}", player.getDisplayName())))));
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message.replace("{player}", player.getDisplayName() + "&r")))));
                     }
                 }
 
