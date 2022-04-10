@@ -118,6 +118,10 @@ public class MessageListener extends BungeeListener {
 
                 String message = in.readUTF();
 
+                if (message.startsWith("/bungeecommand")) {
+                    message = "/" + message.substring(15);
+                }
+
                 if (!message.equalsIgnoreCase("/") && !message.equalsIgnoreCase("/ ")) {
                     for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                         if (player2 != player && player2.hasPermission("evercraft.commands.staff.commandspy") && BungeeMain.getInstance().getData().getBoolean("players." + player2.getUniqueId() + ".commandspy")) {
@@ -141,15 +145,21 @@ public class MessageListener extends BungeeListener {
 
     public void onCommand(ChatEvent event) {
         if (event.isProxyCommand()) {
-            if (!event.getMessage().equalsIgnoreCase("/") && !event.getMessage().equalsIgnoreCase("/ ")) {
+            String message = event.getMessage();
+
+            if (message.startsWith("/bungeecommand")) {
+                message = "/" + message.substring(15);
+            }
+
+            if (!message.equalsIgnoreCase("/") && !message.equalsIgnoreCase("/ ")) {
                 ProxiedPlayer player = BungeePlayerResolver.bungeePlayerFromPlayer(BungeePlayerResolver.playerFromConnection(event.getSender()));
 
                 for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                     if (player2 != player && player2.hasPermission("evercraft.commands.staff.commandspy") && BungeeMain.getInstance().getData().getBoolean("players." + player2.getUniqueId() + ".commandspy")) {
                         if (player2.getServer().getInfo().getName().equals(player.getServer().getInfo().getName())) {
-                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.commandSpy").replace("{player}", player.getDisplayName()).replace("{message}", event.getMessage()))));
+                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.commandSpy").replace("{player}", player.getDisplayName()).replace("{message}", message))));
                         } else {
-                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", player.getServer().getInfo().getName()).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.commandSpy").replace("{player}", player.getDisplayName()).replace("{message}", event.getMessage())))));
+                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", player.getServer().getInfo().getName()).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.commandSpy").replace("{player}", player.getDisplayName()).replace("{message}", message)))));
                         }
                     }
                 }
