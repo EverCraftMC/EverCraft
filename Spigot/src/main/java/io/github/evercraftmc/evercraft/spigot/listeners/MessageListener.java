@@ -7,6 +7,7 @@ import com.google.common.io.ByteStreams;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
+import org.bukkit.GameRule;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -33,28 +34,32 @@ public class MessageListener extends SpigotListener implements PluginMessageList
 
     @EventHandler
     public void onDeathMessage(PlayerDeathEvent event) {
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("globalPlayerMessage");
-        out.writeUTF(SpigotMain.getInstance().getServerName());
-        out.writeUTF(event.getEntity().getUniqueId().toString());
-        out.writeUTF(ComponentFormatter.componentToString(event.deathMessage()).replace(event.getEntity().getName(), "{player}"));
+        if (event.getPlayer().getWorld().getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES)) {
+            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+            out.writeUTF("globalPlayerMessage");
+            out.writeUTF(SpigotMain.getInstance().getServerName());
+            out.writeUTF(event.getEntity().getUniqueId().toString());
+            out.writeUTF(ComponentFormatter.componentToString(event.deathMessage()).replace(event.getEntity().getName(), "{player}"));
 
-        event.getEntity().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
+            event.getEntity().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
 
-        event.deathMessage(Component.empty());
+            event.deathMessage(Component.empty());
+        }
     }
 
     @EventHandler
     public void onAdvancementMessage(PlayerAdvancementDoneEvent event) {
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("globalPlayerMessage");
-        out.writeUTF(SpigotMain.getInstance().getServerName());
-        out.writeUTF(event.getPlayer().getUniqueId().toString());
-        out.writeUTF(ComponentFormatter.componentToString(event.message()).replace(event.getPlayer().getName(), "{player}"));
+        if (event.getPlayer().getWorld().getGameRuleValue(GameRule.ANNOUNCE_ADVANCEMENTS)) {
+            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+            out.writeUTF("globalPlayerMessage");
+            out.writeUTF(SpigotMain.getInstance().getServerName());
+            out.writeUTF(event.getPlayer().getUniqueId().toString());
+            out.writeUTF(ComponentFormatter.componentToString(event.message()).replace(event.getPlayer().getName(), "{player}"));
 
-        event.getPlayer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
+            event.getPlayer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
 
-        event.message(Component.empty());
+            event.message(Component.empty());
+        }
     }
 
     @EventHandler

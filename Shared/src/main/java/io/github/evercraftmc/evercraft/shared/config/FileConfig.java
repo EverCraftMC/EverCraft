@@ -60,7 +60,7 @@ public class FileConfig extends AbstractConfig {
             path = null;
         }
 
-        List<String> keys = new ArrayList<>();
+        List<String> keys = new ArrayList<String>();
 
         for (String rawkey : this.objects.keySet().toArray(new String[] {})) {
             String key;
