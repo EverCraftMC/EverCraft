@@ -35,7 +35,7 @@ public class MySQLConfig extends AbstractConfig {
             path = null;
         }
 
-        List<String> keys = new ArrayList<>();
+        List<String> keys = new ArrayList<String>();
 
         for (String rawkey : mysql.selectAll(this.tableName, new String[] { "keyid" }).split("\n")) {
             String key;
