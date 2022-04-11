@@ -363,7 +363,7 @@ public class BotMain implements EventListener {
 
             log("User " + event.getUser().getAsMention() + " joined the server");
         } else if (rawevent instanceof GuildMemberRemoveEvent event) {
-            sendEmbed(event.getGuild().getTextChannelById(config.getWelcomeChannel()), "Bye", "Sad to see you go " + event.getMember().getAsMention());
+            sendEmbed(event.getGuild().getTextChannelById(config.getWelcomeChannel()), "Bye", "Sad to see you go " + event.getUser().getAsTag());
 
             log("User " + event.getUser().getAsMention() + " left the server");
         } else if (rawevent instanceof GuildBanEvent event) {
