@@ -85,7 +85,9 @@ public class MySQLConfig extends AbstractConfig {
         }
     }
 
-    public void reload() { }
+    public void reload() {
+        mysql.reconnect();
+    }
 
     public void save() { }
 

@@ -9,11 +9,13 @@ import io.github.evercraftmc.evercraft.shared.config.FileConfig;
 import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
 import io.github.evercraftmc.evercraft.shared.economy.Economy;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
+import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.DelKitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.SetKitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.BungeeCommandCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.AdventureCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.CreativeCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.GameModeCommand;
@@ -26,6 +28,9 @@ import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 import io.github.evercraftmc.evercraft.spigot.listeners.JoinListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.SpigotListener;
+import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
+import net.luckperms.api.LuckPermsProvider;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SpigotMain extends JavaPlugin implements Plugin {
@@ -85,6 +90,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
         this.messages.addDefault("error.playerNotFound", "&cCouldn't find player {player}");
         this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
+        this.messages.addDefault("reload.reloading", "&aReloading plugin..");
+        this.messages.addDefault("reload.reloaded", "&aSuccessfully reloaded");
         this.messages.addDefault("warp.warped", "&aSuccessfully warped to {warp}");
         this.messages.addDefault("warp.setWarp", "&aSuccessfully set warp {warp} to your location");
         this.messages.addDefault("warp.delWarp", "&aSuccessfully deleted warp {warp}");
@@ -142,6 +149,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.commands.add(new BungeeCommandCommand("bungeecommand", "Run a command on the bungee sever", Arrays.asList(), null).register());
 
+        this.commands.add(new ReloadCommand("evercraftreload", "Reload the plugin", Arrays.asList("ecreload"), "evercraft.commands.staff.reload").register());
+
         this.getLogger().info("Finished loading commands");
 
         this.getLogger().info("Loading listeners..");
@@ -156,7 +165,18 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Finished loading listeners");
 
+        this.getLogger().info("Loading other assets..");
+
         this.assets = new ArrayList<Closable>();
+
+        for (Player player : this.getServer().getOnlinePlayers()) {
+            player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + SpigotMain.getInstance().getData().getString("players." + player.getUniqueId() + ".nickname"))));
+            player.customName(player.displayName());
+            player.setCustomNameVisible(true);
+            player.playerListName(player.displayName());
+        }
+
+        this.getLogger().info("Finished loading other assets..");
 
         this.getLogger().info("Finished loading plugin");
     }
@@ -206,6 +226,13 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         for (Closable asset : this.assets) {
             asset.close();
+        }
+
+        for (Player player : this.getServer().getOnlinePlayers()) {
+            player.displayName(null);
+            player.customName(null);
+            player.setCustomNameVisible(false);
+            player.playerListName(null);
         }
 
         this.getLogger().info("Finished closing assets..");
