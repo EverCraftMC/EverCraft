@@ -48,16 +48,14 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
         return this.getPermission() == null || sender.hasPermission(this.getPermission()) || sender.isOp();
     }
 
-    public void run(CommandSender sender, String[] args) { }
+    public abstract void run(CommandSender sender, String[] args);
 
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
         return tabComplete(sender, args);
     }
 
-    public List<String> tabComplete(CommandSender sender, String[] args) {
-        return null;
-    }
+    public abstract List<String> tabComplete(CommandSender sender, String[] args);
 
     public SpigotCommand register() {
         SpigotMain.getInstance().getServer().getCommandMap().register(SpigotMain.getInstance().getName(), this);

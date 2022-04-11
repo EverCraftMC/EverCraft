@@ -5,7 +5,7 @@ import io.github.evercraftmc.evercraft.discord.args.ArgsValidator;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 
-public class Command {
+public abstract class Command {
     private String name;
     private List<String> aliases;
 
@@ -13,7 +13,7 @@ public class Command {
 
     private List<Permission> permissions;
 
-    public Command(String name, List<String> aliases, List<ArgsValidator.Arg> args, List<Permission> permissions) {
+    protected Command(String name, List<String> aliases, List<ArgsValidator.Arg> args, List<Permission> permissions) {
         this.name = name;
         this.aliases = aliases;
 
@@ -47,5 +47,5 @@ public class Command {
         return this.permissions;
     }
 
-    public void run(Message message) { }
+    public abstract void run(Message message);
 }
