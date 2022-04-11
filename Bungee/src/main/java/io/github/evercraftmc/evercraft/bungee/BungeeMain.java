@@ -19,6 +19,7 @@ import io.github.evercraftmc.evercraft.bungee.commands.moderation.UnMuteCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.NickNameCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SpigotCommandCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.CommandSpyCommand;
+import io.github.evercraftmc.evercraft.bungee.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.StaffChatCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.SudoCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.warp.HubCommand;
@@ -43,6 +44,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -110,6 +112,8 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
         this.messages.addDefault("error.playerNotFound", "&cCouldn't find player {player}");
         this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
+        this.messages.addDefault("reload.reloading", "&aReloading plugin..");
+        this.messages.addDefault("reload.reloaded", "&aSuccessfully reloaded");
         this.messages.addDefault("globalMessage", "&f[{server}] &r{message}");
         this.messages.addDefault("chat.default", "&f{player} &r&f> {message}");
         this.messages.addDefault("chat.staff", "&d&l[Staffchat] &r&f{player} &r&f> {message}");
@@ -222,6 +226,8 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.commands.add(new SpigotCommandCommand("spigotcommand", "Run a command on the spigot server", Arrays.asList(), null).register());
         this.commands.add(new SudoCommand("sudo", "Run a command or send a message as another player", Arrays.asList(), "evercraft.commands.staff.sudo").register());
 
+        this.commands.add(new ReloadCommand("evercraftbungeereload", "Reload the plugin", Arrays.asList("ecbreload"), "evercraft.commands.staff.reload").register());
+
         this.getLogger().info("Finished loading commands");
 
         this.getLogger().info("Loading listeners..");
@@ -243,6 +249,10 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.assets.add(new ScoreBoard());
         this.assets.add(new Broadcaster());
+
+        for (ProxiedPlayer player : this.getProxy().getPlayers()) {
+            player.setDisplayName(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".nickname")));
+        }
 
         this.getLogger().info("Finished loading other assets..");
 
@@ -313,6 +323,10 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         for (Closable asset : this.assets) {
             asset.close();
+        }
+
+        for (ProxiedPlayer player : this.getProxy().getPlayers()) {
+            player.setDisplayName(null);
         }
 
         this.getLogger().info("Finished closing assets..");

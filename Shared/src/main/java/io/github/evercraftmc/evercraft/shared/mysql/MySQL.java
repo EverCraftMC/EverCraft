@@ -4,15 +4,30 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLTimeoutException;
 import java.sql.Statement;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 
 public class MySQL implements Closable {
+    private String host;
+    private Integer port;
+    private String database;
+
+    private String username;
+    private String password;
+
     private Connection connection;
 
     public MySQL(String host, Integer port, String database, String username, String password) {
+        this.host = host;
+        this.port = port;
+        this.database = database;
+
+        this.username = username;
+        this.password = password;
+
         try {
-            this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true", username, password);
+            this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -24,6 +39,10 @@ public class MySQL implements Closable {
             Statement statement = this.connection.createStatement();
 
             statement.executeUpdate(createStatement);
+        } catch (SQLTimeoutException e) {
+            this.reconnect();
+
+            this.createTable(name, data);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -51,6 +70,10 @@ public class MySQL implements Closable {
 
             statement.close();
             result.close();
+        } catch (SQLTimeoutException e) {
+            this.reconnect();
+
+            return this.select(table, fields, condition);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -71,6 +94,10 @@ public class MySQL implements Closable {
 
             statement.close();
             result.close();
+        } catch (SQLTimeoutException e) {
+            this.reconnect();
+
+            return this.selectFirst(table, field, condition);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -85,6 +112,10 @@ public class MySQL implements Closable {
 
             statement.executeUpdate(insertStatement);
             statement.close();
+        } catch (SQLTimeoutException e) {
+            this.reconnect();
+
+            this.insert(table, values);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -97,6 +128,10 @@ public class MySQL implements Closable {
 
             statement.executeUpdate(insertStatement);
             statement.close();
+        } catch (SQLTimeoutException e) {
+            this.reconnect();
+
+            this.insert(table, keys, values);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -109,6 +144,10 @@ public class MySQL implements Closable {
 
             statement.executeUpdate(updateStatement);
             statement.close();
+        } catch (SQLTimeoutException e) {
+            this.reconnect();
+
+            this.update(table, set, condition);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -121,6 +160,20 @@ public class MySQL implements Closable {
 
             statement.executeUpdate(deleteStatement);
             statement.close();
+        } catch (SQLTimeoutException e) {
+            this.reconnect();
+
+            this.delete(table, condition);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void reconnect() {
+        this.close();
+
+        try {
+            this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
