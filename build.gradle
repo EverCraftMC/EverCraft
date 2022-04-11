@@ -70,20 +70,15 @@ import net.schmizz.sshj.sftp.SFTPClient
 tasks.register("upload") {
     dependsOn tasks.buildAll
 
-    file(".env").readLines().each() {
-        def (key, value) = it.tokenize("=")
-        ext[key] = value
-    }
-
-    def servers = ext.SERVERS.split(";")
+    def servers = System.getenv("EVERCRAFT_SERVERS").split(";")
 
     servers.each() {
         def server = it
 
         SSHClient ssh = new SSHClient()
         ssh.loadKnownHosts()
-        ssh.connect(ext.FTP_HOST, Integer.parseInt(ext.FTP_PORT))
-        ssh.authPassword(ext.FTP_USERNAME + "." + server.split(":")[0], ext.FTP_PASSWORD)
+        ssh.connect(System.getenv("EVERCRAFT_FTP_HOST").split(":")[0], Integer.parseInt(System.getenv("EVERCRAFT_FTP_HOST").split(":")[1]))
+        ssh.authPassword(System.getenv("EVERCRAFT_FTP_USERNAME") + "." + server.split(":")[0], System.getenv("EVERCRAFT_FTP_PASSWORD"))
 
         SFTPClient ftp = ssh.newSFTPClient()
 
