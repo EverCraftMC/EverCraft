@@ -15,6 +15,7 @@ import io.github.evercraftmc.evercraft.spigot.commands.kit.DelKitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.SetKitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.BungeeCommandCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.player.PassiveCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.AdventureCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.CreativeCommand;
@@ -27,6 +28,7 @@ import io.github.evercraftmc.evercraft.spigot.commands.warp.SpawnCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 import io.github.evercraftmc.evercraft.spigot.listeners.JoinListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.MessageListener;
+import io.github.evercraftmc.evercraft.spigot.listeners.PvPListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.SpigotListener;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import net.luckperms.api.LuckPermsProvider;
@@ -71,6 +73,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.config.addDefault("warp.overidespawn", true);
         this.config.addDefault("warp.clearonwarp", false);
+        this.config.addDefault("passiveEnabled", false);
         this.config.addDefault("database.host", "localhost");
         this.config.addDefault("database.port", 3306);
         this.config.addDefault("database.name", "evercraft");
@@ -100,6 +103,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.messages.addDefault("kit.setkit", "&aSuccessfully set kit {kit} to your inventory");
         this.messages.addDefault("kit.delkit", "&cSuccessfully deleted kit {kit}");
         this.messages.addDefault("kit.notFound", "&cKit {kit} does not exist");
+        this.messages.addDefault("passive", "&aSuccessfully toggled passive mode {value}");
         this.messages.addDefault("staff.gamemode", "&aSuccessfully set your gamemode to {gamemode}");
 
         this.messages.copyDefaults();
@@ -141,6 +145,10 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new SetKitCommand("setkit", "Set a kit", Arrays.asList(), "evercraft.commands.kit.setkit").register());
         this.commands.add(new DelKitCommand("delkit", "Delete a kit", Arrays.asList(), "evercraft.commands.kit.delkit").register());
 
+        if (this.getPluginConfig().getBoolean("passiveEnabled")) {
+            this.commands.add(new PassiveCommand("passive", "Toggle passive mode on/off", Arrays.asList("togglepassive", "pvp"), "evercraft.commands.player.passive").register());
+        }
+
         this.commands.add(new GameModeCommand("gamemode", "Change your gamemode", Arrays.asList("gm"), "evercraft.commands.gamemode.use").register());
         this.commands.add(new SurvivalCommand("gms", "Change your gamemode to survival", Arrays.asList("gm0"), "evercraft.commands.gamemode.survival").register());
         this.commands.add(new CreativeCommand("gmc", "Change your gamemode to creative", Arrays.asList("gm1"), "evercraft.commands.gamemode.creative").register());
@@ -159,6 +167,10 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.listeners.add(new MessageListener().register());
         this.listeners.add(new JoinListener().register());
+
+        if (this.getPluginConfig().getBoolean("passiveEnabled")) {
+            this.listeners.add(new PvPListener().register());
+        }
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
