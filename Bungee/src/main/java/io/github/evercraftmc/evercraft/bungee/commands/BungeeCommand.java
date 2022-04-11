@@ -1,6 +1,5 @@
 package io.github.evercraftmc.evercraft.bungee.commands;
 
-import java.util.Arrays;
 import java.util.List;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
@@ -32,16 +31,14 @@ public abstract class BungeeCommand extends Command implements PluginCommand, Ta
         return this.getPermission() == null || sender.hasPermission(this.getPermission());
     }
 
-    public void run(CommandSender sender, String[] args) { }
+    public abstract void run(CommandSender sender, String[] args);
 
     @Override
     public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
         return tabComplete(sender, args);
     }
 
-    public List<String> tabComplete(CommandSender sender, String[] args) {
-        return Arrays.asList();
-    }
+    public abstract List<String> tabComplete(CommandSender sender, String[] args);
 
     public BungeeCommand register() {
         BungeeMain.getInstance().getProxy().getPluginManager().registerCommand(BungeeMain.getInstance(), this);
