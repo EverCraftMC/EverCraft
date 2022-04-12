@@ -18,6 +18,8 @@ public class MySQL implements Closable {
 
     private Connection connection;
 
+    private Boolean closed = false;
+
     public MySQL(String host, Integer port, String database, String username, String password) {
         this.host = host;
         this.port = port;
@@ -35,10 +37,16 @@ public class MySQL implements Closable {
 
     public void createTable(String name, String data) {
         try {
-            String createStatement = "CREATE TABLE IF NOT EXISTS " + name + " " + data + ";";
-            Statement statement = this.connection.createStatement();
+            if (!this.connection.isClosed()) {
+                String createStatement = "CREATE TABLE IF NOT EXISTS " + name + " " + data + ";";
+                Statement statement = this.connection.createStatement();
 
-            statement.executeUpdate(createStatement);
+                statement.executeUpdate(createStatement);
+            } else {
+                this.reconnect();
+
+                this.createTable(name, data);
+            }
         } catch (SQLTimeoutException e) {
             this.reconnect();
 
@@ -57,19 +65,25 @@ public class MySQL implements Closable {
         StringBuilder ret = new StringBuilder();
 
         try {
-            Statement statement = this.connection.createStatement();
-            ResultSet result = statement.executeQuery(selectStatement);
+            if (!this.connection.isClosed()) {
+                Statement statement = this.connection.createStatement();
+                ResultSet result = statement.executeQuery(selectStatement);
 
-            while (result.next()) {
-                for (String field : fields) {
-                    ret.append(result.getString(field) + "\t");
+                while (result.next()) {
+                    for (String field : fields) {
+                        ret.append(result.getString(field) + "\t");
+                    }
+
+                    ret = new StringBuilder(ret.substring(0, ret.length() - 1) + "\n");
                 }
 
-                ret = new StringBuilder(ret.substring(0, ret.length() - 1) + "\n");
-            }
+                statement.close();
+                result.close();
+            } else {
+                this.reconnect();
 
-            statement.close();
-            result.close();
+                return this.select(table, fields, condition);
+            }
         } catch (SQLTimeoutException e) {
             this.reconnect();
 
@@ -85,15 +99,21 @@ public class MySQL implements Closable {
         String selectStatement = "SELECT * FROM " + table + " " + "WHERE " + condition + ";";
 
         try {
-            Statement statement = this.connection.createStatement();
-            ResultSet result = statement.executeQuery(selectStatement);
+            if (!this.connection.isClosed()) {
+                Statement statement = this.connection.createStatement();
+                ResultSet result = statement.executeQuery(selectStatement);
 
-            while (result.next()) {
-                return result.getString(field);
+                while (result.next()) {
+                    return result.getString(field);
+                }
+
+                statement.close();
+                result.close();
+            } else {
+                this.reconnect();
+
+                return this.selectFirst(table, field, condition);
             }
-
-            statement.close();
-            result.close();
         } catch (SQLTimeoutException e) {
             this.reconnect();
 
@@ -107,11 +127,17 @@ public class MySQL implements Closable {
 
     public void insert(String table, String values) {
         try {
-            String insertStatement = "INSERT INTO " + table + " VALUES " + values + ";";
-            Statement statement = this.connection.createStatement();
+            if (!this.connection.isClosed()) {
+                String insertStatement = "INSERT INTO " + table + " VALUES " + values + ";";
+                Statement statement = this.connection.createStatement();
 
-            statement.executeUpdate(insertStatement);
-            statement.close();
+                statement.executeUpdate(insertStatement);
+                statement.close();
+            } else {
+                this.reconnect();
+
+                this.insert(table, values);
+            }
         } catch (SQLTimeoutException e) {
             this.reconnect();
 
@@ -123,11 +149,17 @@ public class MySQL implements Closable {
 
     public void insert(String table, String keys, String values) {
         try {
-            String insertStatement = "INSERT INTO " + table + " " + keys + " VALUES " + values + ";";
-            Statement statement = this.connection.createStatement();
+            if (!this.connection.isClosed()) {
+                String insertStatement = "INSERT INTO " + table + " " + keys + " VALUES " + values + ";";
+                Statement statement = this.connection.createStatement();
 
-            statement.executeUpdate(insertStatement);
-            statement.close();
+                statement.executeUpdate(insertStatement);
+                statement.close();
+            } else {
+                this.reconnect();
+
+                this.insert(table, keys, values);
+            }
         } catch (SQLTimeoutException e) {
             this.reconnect();
 
@@ -139,11 +171,17 @@ public class MySQL implements Closable {
 
     public void update(String table, String set, String condition) {
         try {
-            String updateStatement = "UPDATE " + table + " SET " + set + " WHERE " + condition + ";";
-            Statement statement = this.connection.createStatement();
+            if (!this.connection.isClosed()) {
+                String updateStatement = "UPDATE " + table + " SET " + set + " WHERE " + condition + ";";
+                Statement statement = this.connection.createStatement();
 
-            statement.executeUpdate(updateStatement);
-            statement.close();
+                statement.executeUpdate(updateStatement);
+                statement.close();
+            } else {
+                this.reconnect();
+
+                this.update(table, set, condition);
+            }
         } catch (SQLTimeoutException e) {
             this.reconnect();
 
@@ -155,11 +193,17 @@ public class MySQL implements Closable {
 
     public void delete(String table, String condition) {
         try {
-            String deleteStatement = "DELETE FROM " + table + " WHERE " + condition + ";";
-            Statement statement = this.connection.createStatement();
+            if (!this.connection.isClosed()) {
+                String deleteStatement = "DELETE FROM " + table + " WHERE " + condition + ";";
+                Statement statement = this.connection.createStatement();
 
-            statement.executeUpdate(deleteStatement);
-            statement.close();
+                statement.executeUpdate(deleteStatement);
+                statement.close();
+            } else {
+                this.reconnect();
+
+                this.delete(table, condition);
+            }
         } catch (SQLTimeoutException e) {
             this.reconnect();
 
@@ -170,18 +214,28 @@ public class MySQL implements Closable {
     }
 
     public void reconnect() {
-        this.close();
+        if (!this.closed) {
+            try {
+                this.connection.close();
 
-        try {
-            this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
+                this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            throw new RuntimeException("MySQL is already closed, can't reconnect");
         }
+    }
+
+    public Boolean isClosed() {
+        return this.closed;
     }
 
     public void close() {
         try {
             this.connection.close();
+
+            this.closed = true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
