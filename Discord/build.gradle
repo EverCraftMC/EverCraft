@@ -17,19 +17,21 @@ dependencies {
 }
 
 tasks.register("buildFull", Jar) {
-    sourceCompatibility = JavaVersion.toVersion(project.java_version)
-    targetCompatibility = JavaVersion.toVersion(project.java_version)
-
     dependsOn tasks.build
 
-    duplicatesStrategy = "exclude"
-    destinationDirectory = file("../")
-    archiveFileName = "${project.rootProject.name}-${project.name}-${project.version}-${project.project_version}.jar"
+    doLast {
+        sourceCompatibility = JavaVersion.toVersion(project.java_version)
+        targetCompatibility = JavaVersion.toVersion(project.java_version)
 
-    from files(project.sourceSets.main.output)
-    from files(project.configurations.depencancy.collect { it.isDirectory() ? it : zipTree(it) })
+        duplicatesStrategy = "exclude"
+        destinationDirectory = file("../")
+        archiveFileName = "${project.rootProject.name}-${project.name}-${project.version}-${project.project_version}.jar"
 
-    manifest {
-        attributes "Main-Class": "io.github.evercraftmc.evercraft.discord.BotMain"
+        from files(project.sourceSets.main.output)
+        from files(project.configurations.depencancy.collect { it.isDirectory() ? it : zipTree(it) })
+
+        manifest {
+            attributes "Main-Class": "io.github.evercraftmc.evercraft.discord.BotMain"
+        }
     }
 }

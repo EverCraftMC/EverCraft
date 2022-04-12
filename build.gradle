@@ -47,21 +47,23 @@ subprojects {
 tasks.register("buildAll") {
     dependsOn subprojects.collect { it.tasks.buildFull }
 
-    fileTree(project.projectDir).visit(details -> {
-        if (details.file.path.startsWith("${project.projectDir}\\EverCraft-")) {
-            def isCurrent = false
+    doLast {
+        fileTree(project.projectDir).visit(details -> {
+            if (details.file.path.startsWith("${project.projectDir}\\EverCraft-")) {
+                def isCurrent = false
 
-            subprojects.each {
-                if (it.tasks.buildFull.outputs.files.size() > 0 && it.tasks.buildFull.outputs.files[0].getPath() == details.file.path) {
-                    isCurrent = true
+                subprojects.each {
+                    if (it.tasks.buildFull.outputs.files.size() > 0 && it.tasks.buildFull.outputs.files[0].getPath() == details.file.path) {
+                        isCurrent = true
+                    }
+                }
+
+                if (!isCurrent) {
+                    delete(details.file.path)
                 }
             }
-
-            if (!isCurrent) {
-                delete(details.file.path)
-            }
-        }
-    })
+        })
+    }
 }
 
 import net.schmizz.sshj.SSHClient
@@ -70,27 +72,29 @@ import net.schmizz.sshj.sftp.SFTPClient
 tasks.register("upload") {
     dependsOn tasks.buildAll
 
-    def servers = System.getenv("EVERCRAFT_SERVERS").split(";")
+    doLast {
+        def servers = System.getenv("EVERCRAFT_SERVERS").split(";")
 
-    servers.each() {
-        def server = it
+        servers.each() {
+            def server = it
 
-        SSHClient ssh = new SSHClient()
-        ssh.loadKnownHosts()
-        ssh.connect(System.getenv("EVERCRAFT_FTP_HOST").split(":")[0], Integer.parseInt(System.getenv("EVERCRAFT_FTP_HOST").split(":")[1]))
-        ssh.authPassword(System.getenv("EVERCRAFT_FTP_USERNAME") + "." + server.split(":")[0], System.getenv("EVERCRAFT_FTP_PASSWORD"))
+            SSHClient ssh = new SSHClient()
+            ssh.loadKnownHosts()
+            ssh.connect(System.getenv("EVERCRAFT_FTP_HOST").split(":")[0], Integer.parseInt(System.getenv("EVERCRAFT_FTP_HOST").split(":")[1]))
+            ssh.authPassword(System.getenv("EVERCRAFT_FTP_USERNAME") + "." + server.split(":")[0], System.getenv("EVERCRAFT_FTP_PASSWORD"))
 
-        SFTPClient ftp = ssh.newSFTPClient()
+            SFTPClient ftp = ssh.newSFTPClient()
 
-        ftp.ls(server.split(":")[2]).each() {
-            if (it.getName().startsWith("EverCraft-") && it.getName().endsWith(".jar") && it.isRegularFile()) {
-                ftp.rm(it.getPath())
+            ftp.ls(server.split(":")[2]).each() {
+                if (it.getName().startsWith("EverCraft-") && it.getName().endsWith(".jar") && it.isRegularFile()) {
+                    ftp.rm(it.getPath())
+                }
             }
+
+            ftp.put(project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getPath(), server.split(":")[2] + "/" + project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getName())
+
+            ftp.close()
+            ssh.disconnect()
         }
-
-        ftp.put(project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getPath(), server.split(":")[2] + "/" + project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getName())
-
-        ftp.close()
-        ssh.disconnect()
     }
 }
