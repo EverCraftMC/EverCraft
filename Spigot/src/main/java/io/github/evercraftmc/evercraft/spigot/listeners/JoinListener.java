@@ -26,6 +26,7 @@ public class JoinListener extends SpigotListener {
         event.joinMessage(Component.empty());
 
         event.getPlayer().displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(event.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix() + SpigotMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".nickname"))));
+        event.getPlayer().playerListName(event.getPlayer().displayName());
     }
 
     @EventHandler
