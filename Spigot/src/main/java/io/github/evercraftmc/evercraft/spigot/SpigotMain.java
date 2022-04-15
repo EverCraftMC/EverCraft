@@ -183,8 +183,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         for (Player player : this.getServer().getOnlinePlayers()) {
             player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + SpigotMain.getInstance().getData().getString("players." + player.getUniqueId() + ".nickname"))));
-            player.customName(player.displayName());
-            player.setCustomNameVisible(true);
             player.playerListName(player.displayName());
         }
 
@@ -242,8 +240,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         for (Player player : this.getServer().getOnlinePlayers()) {
             player.displayName(null);
-            player.customName(null);
-            player.setCustomNameVisible(false);
             player.playerListName(null);
         }
 

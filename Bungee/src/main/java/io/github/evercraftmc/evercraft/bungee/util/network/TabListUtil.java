@@ -16,12 +16,15 @@ public class TabListUtil {
         item.setDisplayName(ComponentFormatter.stringToJson(player.getDisplayName()));
         item.setPing(player.getPing());
         item.setGamemode(0);
+        item.setProperties(new String[][] {});
 
         packet.setItems(new PlayerListItem.Item[] { item });
 
         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
             player2.unsafe().sendPacket(packet);
         }
+
+        updatePlayer(player);
     }
 
     public static void removeFromList(ProxiedPlayer player) {
