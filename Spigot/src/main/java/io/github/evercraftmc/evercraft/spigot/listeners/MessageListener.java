@@ -4,6 +4,7 @@ import java.util.UUID;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
@@ -80,7 +81,7 @@ public class MessageListener extends SpigotListener implements PluginMessageList
 
             String subChannel = in.readUTF();
             if (subChannel.equals("GetServer")) {
-                SpigotMain.getInstance().setServerName(in.readUTF());
+                SpigotMain.getInstance().setServerName(StringUtils.toTtitleCase(in.readUTF()));
             } else if (subChannel.equals("crossCommand")) {
                 Player player = SpigotMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
 
