@@ -91,9 +91,6 @@ public class MessageListener extends SpigotListener implements PluginMessageList
                 Player player = SpigotMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
 
                 player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + SpigotMain.getInstance().getData().getString("players." + player.getUniqueId() + ".nickname"))));
-                player.customName(player.displayName());
-                player.setCustomNameVisible(true);
-                player.playerListName(player.displayName());
             }
         }
     }

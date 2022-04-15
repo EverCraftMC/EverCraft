@@ -31,6 +31,7 @@ import io.github.evercraftmc.evercraft.bungee.listeners.VoteListener;
 import io.github.evercraftmc.evercraft.bungee.listeners.JoinListener;
 import io.github.evercraftmc.evercraft.bungee.scoreboard.ScoreBoard;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
 import io.github.evercraftmc.evercraft.shared.PluginCommand;
 import io.github.evercraftmc.evercraft.shared.config.FileConfig;
 import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
@@ -252,6 +253,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         for (ProxiedPlayer player : this.getProxy().getPlayers()) {
             player.setDisplayName(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".nickname")));
+            TabListUtil.updatePlayerName(player);
         }
 
         this.getLogger().info("Finished loading other assets..");
@@ -327,6 +329,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         for (ProxiedPlayer player : this.getProxy().getPlayers()) {
             player.setDisplayName(null);
+            TabListUtil.updatePlayerName(player);
         }
 
         this.getLogger().info("Finished closing assets..");
