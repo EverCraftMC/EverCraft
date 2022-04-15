@@ -22,7 +22,7 @@ public class NickNameCommand extends BungeeCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof ProxiedPlayer player) {
             if (args.length > 0) {
-                if (args[0].length() < 16) {
+                if (TextFormatter.removeColors(args[0]).length() > 0 && args[0].length() < 16) {
                     BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".nickname", args[0]);
 
                     player.setDisplayName(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + args[0]));
