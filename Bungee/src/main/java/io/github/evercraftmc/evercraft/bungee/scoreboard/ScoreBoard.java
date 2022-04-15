@@ -17,12 +17,16 @@ import net.md_5.bungee.protocol.packet.ScoreboardObjective;
 import net.md_5.bungee.protocol.packet.ScoreboardScore;
 
 public class ScoreBoard implements Closable {
-    private ScheduledTask task;
+    private static ScoreBoard Instance;
 
     private Map<ProxiedPlayer, ScoreboardObjective> scoreboardMap = new HashMap<ProxiedPlayer, ScoreboardObjective>();
     private Map<ScoreboardObjective, Map<String, Integer>> linesMap = new HashMap<ScoreboardObjective, Map<String, Integer>>();
 
+    private ScheduledTask task;
+
     public ScoreBoard() {
+        ScoreBoard.Instance = this;
+
         task = BungeeMain.getInstance().getProxy().getScheduler().schedule(BungeeMain.getInstance(), new Runnable() {
             public void run() {
                 for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
@@ -84,6 +88,18 @@ public class ScoreBoard implements Closable {
                 }
             }
         }, 0, 1, TimeUnit.SECONDS);
+    }
+
+    public static ScoreBoard getInstance() {
+        return ScoreBoard.Instance;
+    }
+
+    public Map<ProxiedPlayer, ScoreboardObjective> getScoreboardMap() {
+        return this.scoreboardMap;
+    }
+
+    public Map<ScoreboardObjective, Map<String, Integer>> getLinesMap() {
+        return this.linesMap;
     }
 
     public String getScore(ScoreboardObjective objective, Integer value) {
