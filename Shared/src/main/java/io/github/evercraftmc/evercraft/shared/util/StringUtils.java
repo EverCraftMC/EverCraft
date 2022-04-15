@@ -15,4 +15,21 @@ public class StringUtils {
 
         return results;
     }
+
+    public static String toTtitleCase(String string) {
+        StringBuilder converted = new StringBuilder();
+
+        int i = 0;
+        for (char ch : string.toCharArray()) {
+            if (i == 0 || string.toCharArray()[i - 1] == ' ') {
+                ch = Character.toTitleCase(ch);
+            }
+
+            converted.append(ch);
+
+            i++;
+        }
+
+        return converted.toString();
+    }
 }

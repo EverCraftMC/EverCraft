@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
+import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -38,26 +39,26 @@ public class ScoreBoard implements Closable {
 
                         List<String> lines = BungeeMain.getInstance().getPluginConfig().getStringList("scoreboard.lines");
 
-                        for (int i = lines.size() - 1; i > 0; i--) {
+                        for (int i = lines.size() - 1; i >= 0; i--) {
                             String line = TextFormatter.translateColors(lines.get(i)
                                 .replace("{player}", player.getDisplayName())
                                 .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
                                 .replace("{ping}", player.getPing() + "")
-                                .replace("{server}", player.getServer().getInfo().getName())
+                                .replace("{server}", StringUtils.toTtitleCase(player.getServer().getInfo().getName()))
                                 .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
                                 .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
                                 .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""));
 
-                            if (getScore(scoreboardMap.get(player), i) == null) {
-                                ScoreboardScore score = new ScoreboardScore(line, (byte) 0, scoreboardMap.get(player).getName(), i);
+                            if (getScore(scoreboardMap.get(player), lines.size() - i) == null) {
+                                ScoreboardScore score = new ScoreboardScore(line, (byte) 0, scoreboardMap.get(player).getName(), lines.size() - i);
                                 linesMap.get(scoreboardMap.get(player)).put(score.getItemName(), score.getValue());
                                 player.unsafe().sendPacket(score);
-                            } else if (!getScore(scoreboardMap.get(player), i).equals(line)) {
-                                ScoreboardScore removescore = new ScoreboardScore(line, (byte) 1, scoreboardMap.get(player).getName(), i);
-                                linesMap.get(scoreboardMap.get(player)).remove(removescore.getItemName(), removescore.getValue());
+                            } else if (!getScore(scoreboardMap.get(player), lines.size() - i).equals(line)) {
+                                ScoreboardScore removescore = new ScoreboardScore(getScore(scoreboardMap.get(player), lines.size() - i), (byte) 1, scoreboardMap.get(player).getName(), lines.size() - i);
+                                linesMap.get(scoreboardMap.get(player)).remove(removescore.getItemName());
                                 player.unsafe().sendPacket(removescore);
 
-                                ScoreboardScore score = new ScoreboardScore(line, (byte) 0, scoreboardMap.get(player).getName(), i);
+                                ScoreboardScore score = new ScoreboardScore(line, (byte) 0, scoreboardMap.get(player).getName(), lines.size() - i);
                                 linesMap.get(scoreboardMap.get(player)).put(score.getItemName(), score.getValue());
                                 player.unsafe().sendPacket(score);
                             }
@@ -86,9 +87,9 @@ public class ScoreBoard implements Closable {
     }
 
     public String getScore(ScoreboardObjective objective, Integer value) {
-        for (String line : linesMap.get(objective).keySet()) {
-            if (linesMap.get(objective).get(line).equals(value)) {
-                return line;
+        for (Map.Entry<String, Integer> line : linesMap.get(objective).entrySet()) {
+            if (line.getValue().equals(value)) {
+                return line.getKey();
             }
         }
 
