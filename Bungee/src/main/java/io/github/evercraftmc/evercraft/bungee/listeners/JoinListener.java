@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.Date;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
@@ -18,6 +19,10 @@ public class JoinListener extends BungeeListener {
     @EventHandler
     public void onPlayerConnect(ServerConnectEvent event) {
         if (event.getReason() == Reason.JOIN_PROXY) {
+            if (event.getPlayer().getPendingConnection().getVirtualHost() != null && !event.getPlayer().getPendingConnection().getVirtualHost().getHostString().contains("evercraft")) {
+                event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors("&4&lWARNING - &r&cIt looks like you are using one of the old ip addresses, please make sure you are using the new one play.evercraft.ga")));
+            }
+
             if (event.getPlayer().getPendingConnection().getVirtualHost() != null && BungeeMain.getInstance().getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostName().split("\\.")[0]) != null) {
                 event.setTarget(BungeeMain.getInstance().getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostName().split("\\.")[0]));
             } else {
@@ -74,6 +79,9 @@ public class JoinListener extends BungeeListener {
 
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("welcome.join").replace("{player}", event.getPlayer().getDisplayName()))).queue();
 
+        TabListUtil.removeFromList(event.getPlayer());
+        TabListUtil.addToList(event.getPlayer());
+
         if (BungeeMain.getInstance().getData().getFloat("votes." + event.getPlayer().getName() + ".toProcess") != null) {
             for (int i = BungeeMain.getInstance().getData().getInteger("votes." + event.getPlayer().getName() + ".toProcess"); i > 0; i--) {
                 VoteListener.process(event.getPlayer());
@@ -84,10 +92,13 @@ public class JoinListener extends BungeeListener {
     }
 
     @EventHandler
-    public void onPlayerConnect(ServerConnectedEvent event) {
+    public void onPlayerConnected(ServerConnectedEvent event) {
         BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("welcome.move").replace("{player}", event.getPlayer().getDisplayName())).replace("{server}", event.getServer().getInfo().getName())));
 
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("welcome.move").replace("{player}", event.getPlayer().getDisplayName()).replace("{server}", event.getServer().getInfo().getName()))).queue();
+
+        TabListUtil.removeFromList(event.getPlayer());
+        TabListUtil.addToList(event.getPlayer());
     }
 
     @EventHandler
@@ -97,5 +108,7 @@ public class JoinListener extends BungeeListener {
         BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("welcome.quit").replace("{player}", event.getPlayer().getDisplayName()))));
 
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("welcome.quit").replace("{player}", event.getPlayer().getDisplayName()))).queue();
+
+        TabListUtil.removeFromList(event.getPlayer());
     }
 }
