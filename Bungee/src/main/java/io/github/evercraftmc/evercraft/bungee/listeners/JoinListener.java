@@ -4,10 +4,12 @@ import java.net.InetSocketAddress;
 import java.time.Instant;
 import java.util.Date;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
+import io.github.evercraftmc.evercraft.bungee.scoreboard.ScoreBoard;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import net.luckperms.api.LuckPermsProvider;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
@@ -82,6 +84,10 @@ public class JoinListener extends BungeeListener {
         TabListUtil.removeFromList(event.getPlayer());
         TabListUtil.addToList(event.getPlayer());
 
+        for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
+            TabListUtil.addToList(player, event.getPlayer());
+        }
+
         if (BungeeMain.getInstance().getData().getFloat("votes." + event.getPlayer().getName() + ".toProcess") != null) {
             for (int i = BungeeMain.getInstance().getData().getInteger("votes." + event.getPlayer().getName() + ".toProcess"); i > 0; i--) {
                 VoteListener.process(event.getPlayer());
@@ -96,6 +102,9 @@ public class JoinListener extends BungeeListener {
         BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("welcome.move").replace("{player}", event.getPlayer().getDisplayName())).replace("{server}", event.getServer().getInfo().getName())));
 
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("welcome.move").replace("{player}", event.getPlayer().getDisplayName()).replace("{server}", event.getServer().getInfo().getName()))).queue();
+
+        ScoreBoard.getInstance().getLinesMap().remove(ScoreBoard.getInstance().getScoreboardMap().get(event.getPlayer()));
+        ScoreBoard.getInstance().getScoreboardMap().remove(event.getPlayer());
 
         TabListUtil.removeFromList(event.getPlayer());
         TabListUtil.addToList(event.getPlayer());
