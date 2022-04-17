@@ -50,7 +50,7 @@ public class MessageListener extends SpigotListener implements PluginMessageList
 
     @EventHandler
     public void onAdvancementMessage(PlayerAdvancementDoneEvent event) {
-        if (event.getPlayer().getWorld().getGameRuleValue(GameRule.ANNOUNCE_ADVANCEMENTS)) {
+        if (event.getPlayer().getWorld().getGameRuleValue(GameRule.ANNOUNCE_ADVANCEMENTS) && event.message() != null) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("globalPlayerMessage");
             out.writeUTF(SpigotMain.getInstance().getServerName());
