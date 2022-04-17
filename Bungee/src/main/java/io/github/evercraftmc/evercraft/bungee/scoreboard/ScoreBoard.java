@@ -20,7 +20,7 @@ public class ScoreBoard implements Closable {
     private static ScoreBoard Instance;
 
     private Map<ProxiedPlayer, ScoreboardObjective> scoreboardMap = new HashMap<ProxiedPlayer, ScoreboardObjective>();
-    private Map<ScoreboardObjective, Map<String, Integer>> linesMap = new HashMap<ScoreboardObjective, Map<String, Integer>>();
+    private Map<ProxiedPlayer, Map<String, Integer>> linesMap = new HashMap<ProxiedPlayer, Map<String, Integer>>();
 
     private ScheduledTask task;
 
@@ -32,8 +32,8 @@ public class ScoreBoard implements Closable {
                 for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
                     if (player.getServer() != null) {
                         if (!scoreboardMap.containsKey(player)) {
-                            scoreboardMap.put(player, new ScoreboardObjective("main", ComponentFormatter.stringToJson(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("scoreboard.title"))), ScoreboardObjective.HealthDisplay.INTEGER, (byte) 0));
-                            linesMap.put(scoreboardMap.get(player), new HashMap<String, Integer>());
+                            scoreboardMap.put(player, new ScoreboardObjective(player.getName(), ComponentFormatter.stringToJson(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("scoreboard.title"))), ScoreboardObjective.HealthDisplay.INTEGER, (byte) 0));
+                            linesMap.put(player, new HashMap<String, Integer>());
 
                             player.unsafe().sendPacket(scoreboardMap.get(player));
 
@@ -53,17 +53,17 @@ public class ScoreBoard implements Closable {
                                 .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
                                 .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""));
 
-                            if (getScore(scoreboardMap.get(player), lines.size() - i) == null) {
+                            if (getScore(player, lines.size() - i) == null) {
                                 ScoreboardScore score = new ScoreboardScore(line, (byte) 0, scoreboardMap.get(player).getName(), lines.size() - i);
-                                linesMap.get(scoreboardMap.get(player)).put(score.getItemName(), score.getValue());
+                                linesMap.get(player).put(score.getItemName(), score.getValue());
                                 player.unsafe().sendPacket(score);
-                            } else if (!getScore(scoreboardMap.get(player), lines.size() - i).equals(line)) {
-                                ScoreboardScore removescore = new ScoreboardScore(getScore(scoreboardMap.get(player), lines.size() - i), (byte) 1, scoreboardMap.get(player).getName(), lines.size() - i);
-                                linesMap.get(scoreboardMap.get(player)).remove(removescore.getItemName());
+                            } else if (!getScore(player, lines.size() - i).equals(line)) {
+                                ScoreboardScore removescore = new ScoreboardScore(getScore(player, lines.size() - i), (byte) 1, scoreboardMap.get(player).getName(), lines.size() - i);
+                                linesMap.get(player).remove(removescore.getItemName());
                                 player.unsafe().sendPacket(removescore);
 
                                 ScoreboardScore score = new ScoreboardScore(line, (byte) 0, scoreboardMap.get(player).getName(), lines.size() - i);
-                                linesMap.get(scoreboardMap.get(player)).put(score.getItemName(), score.getValue());
+                                linesMap.get(player).put(score.getItemName(), score.getValue());
                                 player.unsafe().sendPacket(score);
                             }
                         }
@@ -98,12 +98,12 @@ public class ScoreBoard implements Closable {
         return this.scoreboardMap;
     }
 
-    public Map<ScoreboardObjective, Map<String, Integer>> getLinesMap() {
+    public Map<ProxiedPlayer, Map<String, Integer>> getLinesMap() {
         return this.linesMap;
     }
 
-    public String getScore(ScoreboardObjective objective, Integer value) {
-        for (Map.Entry<String, Integer> line : linesMap.get(objective).entrySet()) {
+    private String getScore(ProxiedPlayer player, Integer value) {
+        for (Map.Entry<String, Integer> line : linesMap.get(player).entrySet()) {
             if (line.getValue().equals(value)) {
                 return line.getKey();
             }
