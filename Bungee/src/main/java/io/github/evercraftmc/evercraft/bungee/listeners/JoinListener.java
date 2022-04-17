@@ -103,8 +103,8 @@ public class JoinListener extends BungeeListener {
 
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("welcome.move").replace("{player}", event.getPlayer().getDisplayName()).replace("{server}", event.getServer().getInfo().getName()))).queue();
 
-        ScoreBoard.getInstance().getLinesMap().remove(ScoreBoard.getInstance().getScoreboardMap().get(event.getPlayer()));
         ScoreBoard.getInstance().getScoreboardMap().remove(event.getPlayer());
+        ScoreBoard.getInstance().getLinesMap().remove(event.getPlayer());
 
         TabListUtil.removeFromList(event.getPlayer());
         TabListUtil.addToList(event.getPlayer());
