@@ -49,7 +49,7 @@ tasks.register("buildAll") {
 
     doLast {
         fileTree(project.projectDir).visit(details -> {
-            if (details.file.path.startsWith("${project.projectDir}\\EverCraft-")) {
+            if (details.file.path.replace("\\", "/").startsWith(project.projectDir.getPath().replace("\\", "/") + "/EverCraft-")) {
                 def isCurrent = false
 
                 subprojects.each {
