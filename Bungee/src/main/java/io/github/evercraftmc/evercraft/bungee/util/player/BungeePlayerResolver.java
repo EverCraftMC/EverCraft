@@ -13,7 +13,7 @@ public class BungeePlayerResolver extends PlayerResolver {
 
     public static SimplePlayer playerFromConnection(Connection connection) {
         for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
-            if (player.getPendingConnection() == connection) {
+            if (player.getPendingConnection().getSocketAddress() == connection.getSocketAddress()) {
                 return new SimplePlayer(player.getUniqueId(), player.getName(), player.getDisplayName());
             }
         }
