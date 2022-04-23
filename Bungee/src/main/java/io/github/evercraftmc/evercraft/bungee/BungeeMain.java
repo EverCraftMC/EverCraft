@@ -16,6 +16,7 @@ import io.github.evercraftmc.evercraft.bungee.commands.moderation.TempBanCommand
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.TempMuteCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.UnBanCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.UnMuteCommand;
+import io.github.evercraftmc.evercraft.bungee.commands.player.MessageCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.NickNameCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SpigotCommandCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.CommandSpyCommand;
@@ -117,6 +118,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.messages.addDefault("reload.reloaded", "&aSuccessfully reloaded");
         this.messages.addDefault("globalMessage", "&f[{server}] &r{message}");
         this.messages.addDefault("chat.default", "&f{player} &r&f> {message}");
+        this.messages.addDefault("chat.dm", "&f{player1} &r&f-> {player2} &r&f> {message}");
         this.messages.addDefault("chat.staff", "&d&l[Staffchat] &r&f{player} &r&f> {message}");
         this.messages.addDefault("chat.discord", "&b&l[Discord] &r&f{player} &r&f> {message}");
         this.messages.addDefault("chat.commandSpy", "&d&l[Commandspy] &r&f{player} &r&fran {message}");
@@ -202,6 +204,9 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.commands.add(new InfoCommand("staff", "Get the server staff", Arrays.asList(), "evercraft.commands.info.staff").register());
 
         this.commands.add(new NickNameCommand("nickname", "Change your nickname", Arrays.asList("nick"), "evercraft.commands.player.nickname").register());
+
+        this.commands.add(new MessageCommand("message", "Message someone", Arrays.asList("msg"), "evercraft.commands.player.message").register());
+        this.commands.add(new MessageCommand("reply", "Reply to someone", Arrays.asList("r"), "evercraft.commands.player.message").register());
 
         this.commands.add(new BalanceCommand("balance", "Check your balance", Arrays.asList("bal"), "evercraft.commands.economy.balance").register());
         this.commands.add(new EconomyCommand("economy", "Modify someones balance", Arrays.asList("eco"), "evercraft.commands.economy.economy").register());

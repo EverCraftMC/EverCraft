@@ -24,19 +24,19 @@ public class StaffChatCommand extends BungeeCommand {
                 senderName = "CONSOLE";
             }
 
-            StringBuilder command = new StringBuilder();
+            StringBuilder message = new StringBuilder();
 
             for (String arg : args) {
-                command.append(arg + " ");
+                message.append(arg + " ");
             }
 
             for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
                 if (player.hasPermission(this.getPermission())) {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", command.substring(0, command.length() - 1)))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", message.substring(0, message.length() - 1)))));
                 }
             }
 
-            BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.staffChannelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", command.substring(0, command.length() - 1)))).queue();
+            BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.staffChannelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", senderName).replace("{message}", message.substring(0, message.length() - 1)))).queue();
         } else {
             sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
         }

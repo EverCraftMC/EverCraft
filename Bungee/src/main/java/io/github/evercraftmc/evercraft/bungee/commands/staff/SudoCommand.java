@@ -87,7 +87,7 @@ public class SudoCommand extends BungeeCommand {
                         }
                     }
 
-                    if (args[0].equalsIgnoreCase("*")) {
+                    if (!args[0].equalsIgnoreCase("*")) {
                         sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("sudo.command").replace("{command}", message.toString().trim()).replace("{player}", player.getDisplayName()))));
                     } else {
                         sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("sudo.command").replace("{command}", message.toString().trim()).replace("{player}", "*"))));
@@ -101,7 +101,7 @@ public class SudoCommand extends BungeeCommand {
                         player.chat(message.toString().trim());
                     }
 
-                    if (args[0].equalsIgnoreCase("*")) {
+                    if (!args[0].equalsIgnoreCase("*")) {
                         sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("sudo.message").replace("{message}", message.toString().trim()).replace("{player}", player.getDisplayName()))));
                     } else {
                         sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("sudo.message").replace("{message}", message.toString().trim()).replace("{player}", "*"))));
