@@ -69,8 +69,6 @@ public class MySQL implements Closable {
                 ResultSet result = statement.executeQuery(query);
 
                 statement.close();
-                result.close();
-
                 this.currentStatements.remove(statement);
 
                 return result;
@@ -107,6 +105,8 @@ public class MySQL implements Closable {
 
                 ret = new StringBuilder(ret.substring(0, ret.length() - 1) + "\n");
             }
+
+            result.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -121,6 +121,8 @@ public class MySQL implements Closable {
             while (result.next()) {
                 return result.getString(field);
             }
+
+            result.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
