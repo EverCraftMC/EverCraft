@@ -82,7 +82,13 @@ public class FileConfig extends AbstractConfig {
     }
 
     public Object getRaw(String key) {
-        return this.objects.get(key);
+        if (this.objects.containsKey(key)) {
+            return this.objects.get(key);
+        } else if (this.getDefaults().containsKey(key)) {
+            return this.getDefaults().get(key);
+        } else {
+            return null;
+        }
     }
 
     @SuppressWarnings("unchecked")

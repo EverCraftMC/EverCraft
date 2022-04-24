@@ -2,6 +2,7 @@ package io.github.evercraftmc.evercraft.shared.config;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 
 public interface Config extends Closable {
@@ -53,7 +54,11 @@ public interface Config extends Closable {
 
     public void set(String key, Object value);
 
+    public Map<String, Object> getDefaults();
+
     public void addDefault(String key, Object value);
+
+    public void removeDefault(String key);
 
     public void copyDefaults();
 

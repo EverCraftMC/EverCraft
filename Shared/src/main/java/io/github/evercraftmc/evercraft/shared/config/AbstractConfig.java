@@ -1,11 +1,11 @@
 package io.github.evercraftmc.evercraft.shared.config;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import io.github.evercraftmc.evercraft.shared.util.KeyValuePair;
+import java.util.Map;
 
 public abstract class AbstractConfig implements Config {
-    private List<KeyValuePair<String, Object>> defaults = new ArrayList<KeyValuePair<String, Object>>();
+    private Map<String, Object> defaults = new HashMap<String, Object>();
 
     public String getString(String key) {
         return getSerializable(key, String.class);
@@ -125,14 +125,22 @@ public abstract class AbstractConfig implements Config {
         return getSerializableList(key, Boolean.class);
     }
 
+    public Map<String, Object> getDefaults() {
+        return this.defaults;
+    }
+
     public void addDefault(String key, Object value) {
-        this.defaults.add(new KeyValuePair<String, Object>(key, value));
+        this.defaults.put(key, value);
+    }
+
+    public void removeDefault(String key) {
+        this.defaults.remove(key);
     }
 
     public void copyDefaults() {
-        for (KeyValuePair<String, Object> entry : this.defaults) {
-            if (!this.exists(entry.key())) {
-                this.set(entry.key(), entry.value());
+        for (Map.Entry<String, Object> entry : this.defaults.entrySet()) {
+            if (!this.exists(entry.getKey())) {
+                this.set(entry.getKey(), entry.getValue());
             }
         }
 

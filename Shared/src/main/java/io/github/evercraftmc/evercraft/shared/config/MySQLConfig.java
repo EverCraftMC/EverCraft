@@ -27,7 +27,7 @@ public class MySQLConfig extends AbstractConfig {
 
     @Override
     public Boolean exists(String key) {
-        return mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'") == null;
+        return mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'") != null;
     }
 
     public List<String> getKeys(String path, Boolean deep) {
@@ -57,7 +57,15 @@ public class MySQLConfig extends AbstractConfig {
     }
 
     public String getRaw(String key) {
-        return mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'");
+        String res = mysql.selectFirst(this.tableName, "keyvalue", "keyid = '" + key + "'");
+
+        if (res != null) {
+            return res;
+        } else if (this.getDefaults().containsKey(key)) {
+            return gson.toJson(this.getDefaults().get(key));
+        } else {
+            return null;
+        }
     }
 
     public <T> T getSerializable(String key, Class<T> clazz) {
