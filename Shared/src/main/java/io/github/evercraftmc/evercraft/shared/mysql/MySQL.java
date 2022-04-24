@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 
 public class MySQL implements Closable {
@@ -16,6 +18,8 @@ public class MySQL implements Closable {
     private String password;
 
     private Connection connection;
+
+    private List<Statement> currentStatements = new ArrayList<Statement>();
 
     private Boolean closed = false;
 
@@ -34,23 +38,56 @@ public class MySQL implements Closable {
         }
     }
 
-    public void createTable(String name, String data) {
+    public void query(String query) {
         try {
             if (!this.connection.isClosed()) {
-                String createStatement = "CREATE TABLE IF NOT EXISTS " + name + " " + data + ";";
                 Statement statement = this.connection.createStatement();
+                this.currentStatements.add(statement);
 
-                statement.executeUpdate(createStatement);
+                statement.executeUpdate(query);
+
+                statement.close();
+                this.currentStatements.remove(statement);
             } else {
                 this.reconnect();
 
-                this.createTable(name, data);
+                this.query(query);
             }
         } catch (SQLException e) {
             this.reconnect();
 
-            this.createTable(name, data);
+            this.query(query);
         }
+    }
+
+    public ResultSet queryResponse(String query) {
+        try {
+            if (!this.connection.isClosed()) {
+                Statement statement = this.connection.createStatement();
+                this.currentStatements.add(statement);
+
+                ResultSet result = statement.executeQuery(query);
+
+                statement.close();
+                result.close();
+
+                this.currentStatements.remove(statement);
+
+                return result;
+            } else {
+                this.reconnect();
+
+                return this.queryResponse(query);
+            }
+        } catch (SQLException e) {
+            this.reconnect();
+
+            return this.queryResponse(query);
+        }
+    }
+
+    public void createTable(String name, String data) {
+        query("CREATE TABLE IF NOT EXISTS " + name + " " + data + ";");
     }
 
     public String selectAll(String table, String[] fields) {
@@ -58,148 +95,57 @@ public class MySQL implements Closable {
     }
 
     public String select(String table, String[] fields, String condition) {
-        String selectStatement = "SELECT * FROM " + table + " " + "WHERE " + condition + ";";
+        ResultSet result = queryResponse("SELECT * FROM " + table + " " + "WHERE " + condition + ";");
+
         StringBuilder ret = new StringBuilder();
 
         try {
-            if (!this.connection.isClosed()) {
-                Statement statement = this.connection.createStatement();
-                ResultSet result = statement.executeQuery(selectStatement);
-
-                while (result.next()) {
-                    for (String field : fields) {
-                        ret.append(result.getString(field) + "\t");
-                    }
-
-                    ret = new StringBuilder(ret.substring(0, ret.length() - 1) + "\n");
+            while (result.next()) {
+                for (String field : fields) {
+                    ret.append(result.getString(field) + "\t");
                 }
 
-                statement.close();
-                result.close();
-            } else {
-                this.reconnect();
-
-                return this.select(table, fields, condition);
+                ret = new StringBuilder(ret.substring(0, ret.length() - 1) + "\n");
             }
         } catch (SQLException e) {
-            this.reconnect();
-
-            return this.select(table, fields, condition);
+            e.printStackTrace();
         }
 
         return ret.toString();
     }
 
     public String selectFirst(String table, String field, String condition) {
-        String selectStatement = "SELECT * FROM " + table + " " + "WHERE " + condition + ";";
+        ResultSet result = queryResponse("SELECT * FROM " + table + " " + "WHERE " + condition + ";");
 
         try {
-            if (!this.connection.isClosed()) {
-                Statement statement = this.connection.createStatement();
-                ResultSet result = statement.executeQuery(selectStatement);
-
-                while (result.next()) {
-                    return result.getString(field);
-                }
-
-                statement.close();
-                result.close();
-            } else {
-                this.reconnect();
-
-                return this.selectFirst(table, field, condition);
+            while (result.next()) {
+                return result.getString(field);
             }
         } catch (SQLException e) {
-            this.reconnect();
-
-            return this.selectFirst(table, field, condition);
+            e.printStackTrace();
         }
 
         return null;
     }
 
     public void insert(String table, String values) {
-        try {
-            if (!this.connection.isClosed()) {
-                String insertStatement = "INSERT INTO " + table + " VALUES " + values + ";";
-                Statement statement = this.connection.createStatement();
-
-                statement.executeUpdate(insertStatement);
-                statement.close();
-            } else {
-                this.reconnect();
-
-                this.insert(table, values);
-            }
-        } catch (SQLException e) {
-            this.reconnect();
-
-            this.insert(table, values);
-        }
+        query("INSERT INTO " + table + " VALUES " + values + ";");
     }
 
     public void insert(String table, String keys, String values) {
-        try {
-            if (!this.connection.isClosed()) {
-                String insertStatement = "INSERT INTO " + table + " " + keys + " VALUES " + values + ";";
-                Statement statement = this.connection.createStatement();
-
-                statement.executeUpdate(insertStatement);
-                statement.close();
-            } else {
-                this.reconnect();
-
-                this.insert(table, keys, values);
-            }
-        } catch (SQLException e) {
-            this.reconnect();
-
-            this.insert(table, keys, values);
-        }
+        query("INSERT INTO " + table + " " + keys + " VALUES " + values + ";");
     }
 
     public void update(String table, String set, String condition) {
-        try {
-            if (!this.connection.isClosed()) {
-                String updateStatement = "UPDATE " + table + " SET " + set + " WHERE " + condition + ";";
-                Statement statement = this.connection.createStatement();
-
-                statement.executeUpdate(updateStatement);
-                statement.close();
-            } else {
-                this.reconnect();
-
-                this.update(table, set, condition);
-            }
-        } catch (SQLException e) {
-            this.reconnect();
-
-            this.update(table, set, condition);
-        }
+        query("UPDATE " + table + " SET " + set + " WHERE " + condition + ";");
     }
 
     public void delete(String table, String condition) {
-        try {
-            if (!this.connection.isClosed()) {
-                String deleteStatement = "DELETE FROM " + table + " WHERE " + condition + ";";
-                Statement statement = this.connection.createStatement();
-
-                statement.executeUpdate(deleteStatement);
-                statement.close();
-            } else {
-                this.reconnect();
-
-                this.delete(table, condition);
-            }
-        } catch (SQLException e) {
-            this.reconnect();
-
-            this.delete(table, condition);
-        }
+        query("DELETE FROM " + table + " WHERE " + condition + ";");
     }
 
     public void reconnect() {
-        if (!this.closed) {
+        if (!this.isClosed()) {
             try {
                 this.connection.close();
 
@@ -218,6 +164,10 @@ public class MySQL implements Closable {
 
     public void close() {
         try {
+            for (Statement statement : this.currentStatements) {
+                statement.close();
+            }
+
             this.connection.close();
 
             this.closed = true;
