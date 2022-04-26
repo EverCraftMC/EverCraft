@@ -47,7 +47,7 @@ public class TabListUtil {
             player2.unsafe().sendPacket(packet);
         }
 
-        updatePlayer(player);
+        updatePlayer(player, server);
     }
 
     public static void addToList(ProxiedPlayer player, ProxiedPlayer player2) {
@@ -101,6 +101,12 @@ public class TabListUtil {
         updatePlayerGamemode(player);
     }
 
+    public static void updatePlayer(ProxiedPlayer player, ServerInfo server) {
+        updatePlayerName(player, server);
+        updatePlayerPing(player);
+        updatePlayerGamemode(player);
+    }
+
     public static void updatePlayer(ProxiedPlayer player, ProxiedPlayer player2) {
         updatePlayerName(player, player2);
         updatePlayerPing(player, player2);
@@ -114,6 +120,21 @@ public class TabListUtil {
         PlayerListItem.Item item = new PlayerListItem.Item();
         item.setUuid(player.getUniqueId());
         item.setDisplayName(ComponentFormatter.stringToJson("[" + StringUtils.toTtitleCase(player.getServer().getInfo().getName()) + "] " + player.getDisplayName()));
+
+        packet.setItems(new PlayerListItem.Item[] { item });
+
+        for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
+            player2.unsafe().sendPacket(packet);
+        }
+    }
+
+    public static void updatePlayerName(ProxiedPlayer player, ServerInfo server) {
+        PlayerListItem packet = new PlayerListItem();
+        packet.setAction(PlayerListItem.Action.UPDATE_DISPLAY_NAME);
+
+        PlayerListItem.Item item = new PlayerListItem.Item();
+        item.setUuid(player.getUniqueId());
+        item.setDisplayName(ComponentFormatter.stringToJson("[" + StringUtils.toTtitleCase(server.getName()) + "] " + player.getDisplayName()));
 
         packet.setItems(new PlayerListItem.Item[] { item });
 
