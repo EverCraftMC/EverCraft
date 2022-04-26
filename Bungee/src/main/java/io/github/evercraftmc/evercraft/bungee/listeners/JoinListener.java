@@ -127,11 +127,16 @@ public class JoinListener extends BungeeListener {
 
     @EventHandler
     public void onPlayerKicked(ServerKickEvent event) {
-        if (event.getCause() == Cause.LOST_CONNECTION || event.getCause() == Cause.EXCEPTION) {
+        if (event.getCause() == Cause.LOST_CONNECTION) {
             event.setCancelled(true);
             event.setCancelServer(BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getPluginConfig().getString("server.fallback")));
 
-            event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("server.disconnected"))));
+            event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("server.disconnected-no-com"))));
+        } else if (event.getCause() == Cause.EXCEPTION) {
+            event.setCancelled(true);
+            event.setCancelServer(BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getPluginConfig().getString("server.fallback")));
+
+            event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("server.disconnected-error").replace("{error}", ComponentFormatter.componentToString(event.getKickReasonComponent())))));
         }
     }
 }
