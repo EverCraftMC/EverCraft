@@ -33,6 +33,7 @@ import io.github.evercraftmc.evercraft.spigot.listeners.SpigotListener;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SpigotMain extends JavaPlugin implements Plugin {
@@ -223,9 +224,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Unregistering listeners..");
 
-        for (SpigotListener listener : this.listeners) {
-            listener.unregister();
-        }
+        HandlerList.unregisterAll(this);
 
         this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
         this.getServer().getMessenger().unregisterIncomingPluginChannel(this);

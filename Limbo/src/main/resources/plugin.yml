@@ -1,0 +1,7 @@
+main: io.github.evercraftmc.evercraft.limbo.LimboMain
+
+name: EverCraft
+version: ${plugin_version}
+description: A custom plugin to run on EverCraft
+author: Kale Ko
+website: https://github.com/EverCraft-MC/EverCraft

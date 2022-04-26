@@ -4,5 +4,6 @@ include 'Shared'
 
 include 'Spigot'
 include 'Bungee'
+include 'Limbo'
 
 include 'Discord'
