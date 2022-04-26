@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+archivesBaseName = "limbo"
+version = project.limbo_plugin_version
+
+repositories {
+    maven { url "https://repo.loohpjames.com/repository/" }
+    maven { url "https://hub.spigotmc.org/nexus/content/repositories/public/" }
+    maven { url "https://jitpack.io/" }
+}
+
+dependencies {
+    depencancy project(':Shared')
+
+    compileOnly "com.loohp:Limbo:${project.limbo_version}"
+}
+
+tasks.register("buildFull", Jar) {
+    dependsOn tasks.build
+
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+    duplicatesStrategy = "exclude"
+    destinationDirectory = file("../")
+    archiveFileName = "${project.rootProject.name}-${project.name}-${project.version}-${project.project_version}.jar"
+
+    from files(project.sourceSets.main.output)
+    from files(project.configurations.depencancy.collect { it.isDirectory() ? it : zipTree(it) })
+}
+
+processResources {
+    filesMatching("plugin.yml") {
+        expand "plugin_version": project.spigot_plugin_version
+    }
+}

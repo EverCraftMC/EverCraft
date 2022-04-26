@@ -69,11 +69,11 @@ public class MySQLConfig extends AbstractConfig {
     }
 
     public <T> T getSerializable(String key, Class<T> clazz) {
-        return gson.fromJson(getRaw(key), new TypeToken<T>() { }.getType());
+        return gson.fromJson(getRaw(key), new TypeToken<T>() {}.getType());
     }
 
     public <T> List<T> getSerializableList(String key, Class<T> clazz) {
-        return gson.fromJson(getRaw(key), new TypeToken<List<T>>() { }.getType());
+        return gson.fromJson(getRaw(key), new TypeToken<List<T>>() {}.getType());
     }
 
     public void set(String key, Object value) {
@@ -97,7 +97,7 @@ public class MySQLConfig extends AbstractConfig {
         mysql.reconnect();
     }
 
-    public void save() { }
+    public void save() {}
 
     public void close() {
         mysql.close();
