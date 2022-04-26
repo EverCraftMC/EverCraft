@@ -57,7 +57,7 @@ public class TabListUtil {
         PlayerListItem.Item item = new PlayerListItem.Item();
         item.setUuid(player.getUniqueId());
         item.setUsername(player.getName());
-        item.setDisplayName(ComponentFormatter.stringToJson("[" + StringUtils.toTtitleCase(player.getServer().getInfo().getName()) + "] " + player.getDisplayName()));
+        item.setDisplayName(ComponentFormatter.stringToJson(player.getDisplayName()));
         item.setPing(player.getPing());
         item.setGamemode(0);
         item.setProperties(new String[][] {});
