@@ -14,7 +14,9 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
+import net.md_5.bungee.api.event.ServerKickEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent.Reason;
+import net.md_5.bungee.api.event.ServerKickEvent.Cause;
 import net.md_5.bungee.event.EventHandler;
 
 public class JoinListener extends BungeeListener {
@@ -28,8 +30,10 @@ public class JoinListener extends BungeeListener {
             if (event.getPlayer().getPendingConnection().getVirtualHost() != null && BungeeMain.getInstance().getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostName().split("\\.")[0]) != null) {
                 event.setTarget(BungeeMain.getInstance().getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostName().split("\\.")[0]));
             } else {
-                event.setTarget(BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getServerPriority().get(0)));
+                event.setTarget(BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getPluginConfig().getString("server.default")));
             }
+
+            event.getPlayer().setReconnectServer(BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getPluginConfig().getString("server.fallback")));
         }
     }
 
@@ -119,5 +123,15 @@ public class JoinListener extends BungeeListener {
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("welcome.quit").replace("{player}", event.getPlayer().getDisplayName()))).queue();
 
         TabListUtil.removeFromList(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerKicked(ServerKickEvent event) {
+        if (event.getCause() == Cause.LOST_CONNECTION || event.getCause() == Cause.EXCEPTION) {
+            event.setCancelled(true);
+            event.setCancelServer(BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getPluginConfig().getString("server.fallback")));
+
+            event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("server.disconnected"))));
+        }
     }
 }
