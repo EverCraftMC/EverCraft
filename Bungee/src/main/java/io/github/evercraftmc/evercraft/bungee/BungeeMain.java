@@ -83,6 +83,8 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
 
+        this.config.addDefault("server.default", "hub");
+        this.config.addDefault("server.fallback", "fallback");
         this.config.addDefault("database.host", "localhost");
         this.config.addDefault("database.port", 3306);
         this.config.addDefault("database.name", "evercraft");
@@ -122,6 +124,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.messages.addDefault("chat.staff", "&d&l[Staffchat] &r&f{player} &r&f> {message}");
         this.messages.addDefault("chat.discord", "&b&l[Discord] &r&f{player} &r&f> {message}");
         this.messages.addDefault("chat.commandSpy", "&d&l[Commandspy] &r&f{player} &r&fran {message}");
+        this.messages.addDefault("server.disconnected", "&cThe server you where on is temporarily down, you have been placed in the fallback server.");
         this.messages.addDefault("info.about", "&f");
         this.messages.addDefault("info.discord", "&f");
         this.messages.addDefault("info.vote", "&f");
