@@ -5,6 +5,7 @@ import java.util.List;
 import io.github.evercraftmc.evercraft.shared.PluginCommand;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.limbo.LimboMain;
+import io.github.evercraftmc.evercraft.limbo.util.formatting.ComponentFormatter;
 import com.loohp.limbo.commands.CommandExecutor;
 import com.loohp.limbo.commands.CommandSender;
 import com.loohp.limbo.commands.TabCompletor;
@@ -22,11 +23,27 @@ public abstract class LimboCommand implements CommandExecutor, TabCompletor, Plu
         this.permission = permission;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public List<String> getAliases() {
+        return this.aliases;
+    }
+
+    public String getPermission() {
+        return this.permission;
+    }
+
     @Override
     public void execute(CommandSender sender, String[] args) {
-        Boolean isCommand = args[0].equalsIgnoreCase(name);
+        Boolean isCommand = args[0].equalsIgnoreCase(this.getName());
 
-        for (String alias : aliases) {
+        for (String alias : this.getAliases()) {
             if (args[0].equalsIgnoreCase(alias)) {
                 isCommand = true;
             }
@@ -43,14 +60,14 @@ public abstract class LimboCommand implements CommandExecutor, TabCompletor, Plu
         if (this.testPermissionSilent(sender)) {
             return true;
         } else {
-            sender.sendMessage(TextFormatter.translateColors(LimboMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", this.permission)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LimboMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", this.getPermission()))));
 
             return false;
         }
     }
 
     public boolean testPermissionSilent(CommandSender sender) {
-        return this.permission == null || sender.hasPermission(this.permission);
+        return this.getPermission() == null || sender.hasPermission(this.getPermission());
     }
 
     public abstract void run(CommandSender sender, String[] args);

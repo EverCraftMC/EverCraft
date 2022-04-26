@@ -1,4 +1,4 @@
-package io.github.evercraftmc.evercraft.spigot.util.formatting;
+package io.github.evercraftmc.evercraft.limbo.util.formatting;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
