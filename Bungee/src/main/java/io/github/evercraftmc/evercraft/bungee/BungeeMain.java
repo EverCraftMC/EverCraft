@@ -124,7 +124,8 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.messages.addDefault("chat.staff", "&d&l[Staffchat] &r&f{player} &r&f> {message}");
         this.messages.addDefault("chat.discord", "&b&l[Discord] &r&f{player} &r&f> {message}");
         this.messages.addDefault("chat.commandSpy", "&d&l[Commandspy] &r&f{player} &r&fran {message}");
-        this.messages.addDefault("server.disconnected", "&cThe server you where on is temporarily down, you have been placed in the fallback server.");
+        this.messages.addDefault("server.disconnected-no-com", "&cThe server you where on is temporarily down, you have been placed in the fallback server.");
+        this.messages.addDefault("server.disconnected-error", "&cYour connection to the server encountered an error, you have been placed in the fallback server. {error}");
         this.messages.addDefault("info.about", "&f");
         this.messages.addDefault("info.discord", "&f");
         this.messages.addDefault("info.vote", "&f");
