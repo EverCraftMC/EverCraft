@@ -37,6 +37,6 @@ tasks.register("buildFull", Jar) {
 
 processResources {
     filesMatching("bungee.yml") {
-        expand "plugin_version": project.bungee_plugin_version
+        expand "plugin_version": project.version
     }
 }

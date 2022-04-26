@@ -107,7 +107,7 @@ public class JoinListener extends BungeeListener {
         ScoreBoard.getInstance().getLinesMap().remove(event.getPlayer());
 
         TabListUtil.removeFromList(event.getPlayer());
-        TabListUtil.addToList(event.getPlayer());
+        TabListUtil.addToList(event.getPlayer(), event.getServer().getInfo());
     }
 
     @EventHandler

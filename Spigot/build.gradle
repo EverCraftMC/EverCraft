@@ -33,6 +33,6 @@ tasks.register("buildFull", Jar) {
 
 processResources {
     filesMatching("plugin.yml") {
-        expand "plugin_version": project.spigot_plugin_version
+        expand "plugin_version": project.version
     }
 }
