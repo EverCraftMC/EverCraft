@@ -102,11 +102,6 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
         this.assets = new ArrayList<Closable>();
 
-        // for (Player player : this.getServer().getOnlinePlayers()) {
-        // player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + LimboMain.getInstance().getData().getString("players." + player.getUniqueId() + ".nickname"))));
-        // player.playerListName(player.displayName());
-        // }
-
         System.out.println("Finished loading other assets..");
 
         System.out.println("Finished loading plugin");
@@ -148,11 +143,6 @@ public class LimboMain extends LimboPlugin implements Plugin {
         for (Closable asset : this.assets) {
             asset.close();
         }
-
-        // for (Player player : this.getServer().getOnlinePlayers()) {
-        // player.displayName(null);
-        // player.playerListName(null);
-        // }
 
         System.out.println("Finished closing assets..");
 
