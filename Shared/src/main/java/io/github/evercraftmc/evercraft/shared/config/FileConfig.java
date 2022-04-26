@@ -204,7 +204,7 @@ public class FileConfig extends AbstractConfig {
             }
             reader.close();
 
-            this.objects = gson.fromJson(contents.toString(), new TypeToken<Map<String, Object>>() { }.getType());
+            this.objects = gson.fromJson(contents.toString(), new TypeToken<Map<String, Object>>() {}.getType());
 
             for (Map.Entry<String, Object> entry : this.objects.entrySet()) {
                 if (entry.getValue() == null) {
@@ -228,5 +228,5 @@ public class FileConfig extends AbstractConfig {
         }
     }
 
-    public void close() { }
+    public void close() {}
 }

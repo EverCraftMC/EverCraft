@@ -8,7 +8,6 @@ bin
 .gradle
 
 todo.md
-.env
 *.jar
 !*/lib/*.jar
 !gradle-wrapper.jar
