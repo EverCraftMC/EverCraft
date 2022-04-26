@@ -119,7 +119,7 @@ public class TabListUtil {
 
         PlayerListItem.Item item = new PlayerListItem.Item();
         item.setUuid(player.getUniqueId());
-        item.setDisplayName(ComponentFormatter.stringToJson("[" + StringUtils.toTtitleCase(player.getServer().getInfo().getName()) + "] " + player.getDisplayName()));
+        item.setDisplayName(ComponentFormatter.stringToJson(player.getDisplayName()));
 
         packet.setItems(new PlayerListItem.Item[] { item });
 
