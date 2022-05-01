@@ -1,14 +1,14 @@
 package io.github.evercraftmc.evercraft.spigot.util.formatting;
 
+import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class ComponentFormatter {
-    private static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.builder().character('&').extractUrls(Style.style(TextDecoration.UNDERLINED)).flattener(ComponentFlattener.basic()).hexColors().build();
+    private static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.builder().character('&').extractUrls(Style.style(TextDecoration.UNDERLINED)).flattener(PaperComponents.flattener()).build();
     private static final GsonComponentSerializer JSON_COMPONENT_SERIALIZER = GsonComponentSerializer.builder().build();
 
     public static Component stringToComponent(String string) {
