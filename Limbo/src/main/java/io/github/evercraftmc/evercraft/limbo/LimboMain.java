@@ -2,13 +2,16 @@ package io.github.evercraftmc.evercraft.limbo;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import com.loohp.limbo.plugins.LimboPlugin;
 import io.github.evercraftmc.evercraft.shared.Plugin;
 import io.github.evercraftmc.evercraft.shared.config.FileConfig;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 import io.github.evercraftmc.evercraft.limbo.commands.LimboCommand;
+import io.github.evercraftmc.evercraft.limbo.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.limbo.listeners.LimboListener;
+import io.github.evercraftmc.evercraft.limbo.listeners.MessageListener;
 
 public class LimboMain extends LimboPlugin implements Plugin {
     private static LimboMain Instance;
@@ -64,16 +67,6 @@ public class LimboMain extends LimboPlugin implements Plugin {
         this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
         this.messages.addDefault("reload.reloading", "&aReloading plugin..");
         this.messages.addDefault("reload.reloaded", "&aSuccessfully reloaded");
-        this.messages.addDefault("warp.warped", "&aSuccessfully warped to {warp}");
-        this.messages.addDefault("warp.setWarp", "&aSuccessfully set warp {warp} to your location");
-        this.messages.addDefault("warp.delWarp", "&aSuccessfully deleted warp {warp}");
-        this.messages.addDefault("warp.notFound", "&cWarp {warp} does not exist");
-        this.messages.addDefault("kit.kit", "&aSuccessfully got kit {kit}");
-        this.messages.addDefault("kit.setkit", "&aSuccessfully set kit {kit} to your inventory");
-        this.messages.addDefault("kit.delkit", "&cSuccessfully deleted kit {kit}");
-        this.messages.addDefault("kit.notFound", "&cKit {kit} does not exist");
-        this.messages.addDefault("passive", "&aSuccessfully toggled passive mode {value}");
-        this.messages.addDefault("staff.gamemode", "&aSuccessfully set your gamemode to {gamemode}");
 
         this.messages.copyDefaults();
 
@@ -83,7 +76,7 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
         this.commands = new ArrayList<LimboCommand>();
 
-        // this.commands.add(new ReloadCommand("evercraftreload", "Reload the plugin", Arrays.asList("ecreload"), "evercraft.commands.staff.reload").register());
+        this.commands.add(new ReloadCommand("evercraftreload", "Reload the plugin", Arrays.asList("ecreload"), "evercraft.commands.staff.reload").register());
 
         System.out.println("Finished loading commands");
 
@@ -91,10 +84,7 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
         this.listeners = new ArrayList<LimboListener>();
 
-        // this.listeners.add(new MessageListener().register());
-
-        // this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        // this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
+        this.listeners.add(new MessageListener().register());
 
         System.out.println("Finished loading listeners");
 
