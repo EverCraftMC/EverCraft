@@ -14,7 +14,7 @@ public class SpawnListener extends LimboListener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (event.getTo().getY() < 0) {
+        if (event.getTo().getY() < -64) {
             event.getPlayer().teleport(LimboMain.getInstance().getPluginConfig().getSerializable("spawnLocation", SerializableLocation.class).toLimboLocation());
         }
     }
