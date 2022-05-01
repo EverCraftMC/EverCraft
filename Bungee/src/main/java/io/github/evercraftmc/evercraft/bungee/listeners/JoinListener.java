@@ -112,6 +112,14 @@ public class JoinListener extends BungeeListener {
 
         TabListUtil.removeFromList(event.getPlayer());
         TabListUtil.addToList(event.getPlayer(), event.getServer().getInfo());
+
+        for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
+            if (event.getPlayer().getServer() != null) {
+                TabListUtil.addToList(player2, event.getPlayer(), event.getPlayer().getServer().getInfo());
+            } else {
+                TabListUtil.addToList(player2, event.getPlayer());
+            }
+        }
     }
 
     @EventHandler
