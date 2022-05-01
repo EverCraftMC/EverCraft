@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import com.loohp.limbo.location.Location;
 import com.loohp.limbo.plugins.LimboPlugin;
 import io.github.evercraftmc.evercraft.shared.Plugin;
 import io.github.evercraftmc.evercraft.shared.config.FileConfig;
@@ -12,6 +13,8 @@ import io.github.evercraftmc.evercraft.limbo.commands.LimboCommand;
 import io.github.evercraftmc.evercraft.limbo.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.limbo.listeners.LimboListener;
 import io.github.evercraftmc.evercraft.limbo.listeners.MessageListener;
+import io.github.evercraftmc.evercraft.limbo.listeners.SpawnListener;
+import io.github.evercraftmc.evercraft.limbo.util.types.SerializableLocation;
 
 public class LimboMain extends LimboPlugin implements Plugin {
     private static LimboMain Instance;
@@ -43,14 +46,7 @@ public class LimboMain extends LimboPlugin implements Plugin {
         this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
 
-        this.config.addDefault("warp.overidespawn", true);
-        this.config.addDefault("warp.clearonwarp", false);
-        this.config.addDefault("passiveEnabled", false);
-        this.config.addDefault("database.host", "localhost");
-        this.config.addDefault("database.port", 3306);
-        this.config.addDefault("database.name", "evercraft");
-        this.config.addDefault("database.username", "root");
-        this.config.addDefault("database.password", "");
+        this.config.addDefault("spawnLocation", SerializableLocation.fromLimboLocation(new Location(this.getServer().getWorlds().get(0), 0, 64, 0, 0, 0)));
 
         this.config.copyDefaults();
 
@@ -85,6 +81,7 @@ public class LimboMain extends LimboPlugin implements Plugin {
         this.listeners = new ArrayList<LimboListener>();
 
         this.listeners.add(new MessageListener().register());
+        this.listeners.add(new SpawnListener().register());
 
         System.out.println("Finished loading listeners");
 
