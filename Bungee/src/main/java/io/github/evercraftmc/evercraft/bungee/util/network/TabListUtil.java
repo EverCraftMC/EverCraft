@@ -69,6 +69,25 @@ public class TabListUtil {
         updatePlayer(player, player2);
     }
 
+    public static void addToList(ProxiedPlayer player, ProxiedPlayer player2, ServerInfo server) {
+        PlayerListItem packet = new PlayerListItem();
+        packet.setAction(PlayerListItem.Action.ADD_PLAYER);
+
+        PlayerListItem.Item item = new PlayerListItem.Item();
+        item.setUuid(player.getUniqueId());
+        item.setUsername(player.getName());
+        item.setDisplayName(ComponentFormatter.stringToJson("[" + StringUtils.toTtitleCase(server.getName()) + "] " + player.getDisplayName()));
+        item.setPing(player.getPing());
+        item.setGamemode(0);
+        item.setProperties(new String[][] {});
+
+        packet.setItems(new PlayerListItem.Item[] { item });
+
+        player2.unsafe().sendPacket(packet);
+
+        updatePlayer(player, player2);
+    }
+
     public static void removeFromList(ProxiedPlayer player) {
         PlayerListItem packet = new PlayerListItem();
         packet.setAction(PlayerListItem.Action.REMOVE_PLAYER);
@@ -113,6 +132,12 @@ public class TabListUtil {
         updatePlayerGamemode(player, player2);
     }
 
+    public static void updatePlayer(ProxiedPlayer player, ProxiedPlayer player2, ServerInfo server) {
+        updatePlayerName(player, player2, server);
+        updatePlayerPing(player, player2);
+        updatePlayerGamemode(player, player2);
+    }
+
     public static void updatePlayerName(ProxiedPlayer player) {
         PlayerListItem packet = new PlayerListItem();
         packet.setAction(PlayerListItem.Action.UPDATE_DISPLAY_NAME);
@@ -150,6 +175,19 @@ public class TabListUtil {
         PlayerListItem.Item item = new PlayerListItem.Item();
         item.setUuid(player.getUniqueId());
         item.setDisplayName(ComponentFormatter.stringToJson(player.getDisplayName()));
+
+        packet.setItems(new PlayerListItem.Item[] { item });
+
+        player2.unsafe().sendPacket(packet);
+    }
+
+    public static void updatePlayerName(ProxiedPlayer player, ProxiedPlayer player2, ServerInfo server) {
+        PlayerListItem packet = new PlayerListItem();
+        packet.setAction(PlayerListItem.Action.UPDATE_DISPLAY_NAME);
+
+        PlayerListItem.Item item = new PlayerListItem.Item();
+        item.setUuid(player.getUniqueId());
+        item.setDisplayName(ComponentFormatter.stringToJson("[" + StringUtils.toTtitleCase(server.getName()) + "] " + player.getDisplayName()));
 
         packet.setItems(new PlayerListItem.Item[] { item });
 
