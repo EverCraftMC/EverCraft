@@ -78,23 +78,25 @@ tasks.register("upload") {
         servers.each() {
             def server = it
 
-            SSHClient ssh = new SSHClient()
-            ssh.loadKnownHosts()
-            ssh.connect(System.getenv("EVERCRAFT_FTP_HOST").split(":")[0], Integer.parseInt(System.getenv("EVERCRAFT_FTP_HOST").split(":")[1]))
-            ssh.authPassword(System.getenv("EVERCRAFT_FTP_USERNAME") + "." + server.split(":")[0], System.getenv("EVERCRAFT_FTP_PASSWORD"))
+            if (findProject(":" + server.split(":")[1]) != null) {
+                SSHClient ssh = new SSHClient()
+                ssh.loadKnownHosts()
+                ssh.connect(System.getenv("EVERCRAFT_FTP_HOST").split(":")[0], Integer.parseInt(System.getenv("EVERCRAFT_FTP_HOST").split(":")[1]))
+                ssh.authPassword(System.getenv("EVERCRAFT_FTP_USERNAME") + "." + server.split(":")[0], System.getenv("EVERCRAFT_FTP_PASSWORD"))
 
-            SFTPClient ftp = ssh.newSFTPClient()
+                SFTPClient ftp = ssh.newSFTPClient()
 
-            ftp.ls(server.split(":")[2]).each() {
-                if (it.getName().startsWith("EverCraft-") && it.getName().endsWith(".jar") && it.isRegularFile()) {
-                    ftp.rm(it.getPath())
+                ftp.ls(server.split(":")[2]).each() {
+                    if (it.getName().startsWith("EverCraft-") && it.getName().endsWith(".jar") && it.isRegularFile()) {
+                        ftp.rm(it.getPath())
+                    }
                 }
+
+                ftp.put(project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getPath(), server.split(":")[2] + "/" + project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getName())
+
+                ftp.close()
+                ssh.disconnect()
             }
-
-            ftp.put(project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getPath(), server.split(":")[2] + "/" + project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getName())
-
-            ftp.close()
-            ssh.disconnect()
         }
     }
 }
