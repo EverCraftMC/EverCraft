@@ -50,9 +50,7 @@ public abstract class LimboCommand implements CommandExecutor, TabCompletor, Plu
         }
 
         if (isCommand && this.testPermission(sender)) {
-            List<String> args0 = Arrays.asList(args);
-            args0.remove(0);
-            this.run(sender, args0.toArray(new String[] {}));
+            this.run(sender, Arrays.copyOfRange(args, 1, args.length));
         }
     }
 
