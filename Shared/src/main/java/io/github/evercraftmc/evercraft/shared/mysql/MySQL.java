@@ -66,7 +66,11 @@ public class MySQL implements Closable {
                 Statement statement = this.connection.createStatement();
                 this.currentStatements.add(statement);
 
-                return statement.executeQuery(query);
+                ResultSet results = statement.executeQuery(query);
+
+                statement.close();
+
+                return results;
             } else {
                 this.reconnect();
 
