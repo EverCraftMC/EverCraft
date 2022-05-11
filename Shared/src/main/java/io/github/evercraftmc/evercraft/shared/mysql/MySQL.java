@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 
 public class MySQL implements Closable {
@@ -19,8 +17,6 @@ public class MySQL implements Closable {
 
     private Connection connection;
 
-    private List<Statement> currentStatements = new ArrayList<Statement>();
-
     private Boolean closed = false;
 
     public MySQL(String host, Integer port, String database, String username, String password) {
@@ -32,7 +28,7 @@ public class MySQL implements Closable {
         this.password = password;
 
         try {
-            this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true", username, password);
+            this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?tlsmode=verify-full", username, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -41,10 +37,6 @@ public class MySQL implements Closable {
     private class Query {
         private Statement statement;
         private ResultSet results;
-
-        protected Query(Statement statement) {
-            this(statement, null);
-        }
 
         protected Query(Statement statement, ResultSet results) {
             this.statement = statement;
@@ -61,38 +53,34 @@ public class MySQL implements Closable {
 
         public void close() {
             try {
-                this.statement.close();
-
                 if (this.results != null) {
                     this.results.close();
                 }
+
+                this.statement.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public Query query(String query) {
+    public void query(String query) {
         try {
             if (!this.connection.isClosed()) {
                 Statement statement = this.connection.createStatement();
-                this.currentStatements.add(statement);
 
                 statement.execute(query);
 
                 statement.close();
-                this.currentStatements.remove(statement);
-
-                return new Query(statement);
             } else {
                 this.reconnect();
 
-                return this.query(query);
+                this.query(query);
             }
         } catch (SQLException e) {
             this.reconnect();
 
-            return this.query(query);
+            this.query(query);
         }
     }
 
@@ -100,7 +88,6 @@ public class MySQL implements Closable {
         try {
             if (!this.connection.isClosed()) {
                 Statement statement = this.connection.createStatement();
-                this.currentStatements.add(statement);
 
                 ResultSet results = statement.executeQuery(query);
 
@@ -151,11 +138,15 @@ public class MySQL implements Closable {
         Query query = queryResponse("SELECT * FROM " + table + " " + "WHERE " + condition + ";");
 
         try {
+            String res = null;
+
             while (query.getResults().next()) {
-                return query.getResults().getString(field);
+                res = query.getResults().getString(field);
             }
 
             query.close();
+
+            return res;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -184,7 +175,7 @@ public class MySQL implements Closable {
             try {
                 this.connection.close();
 
-                this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true", username, password);
+                this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?tlsmode=verify-full", username, password);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -199,10 +190,6 @@ public class MySQL implements Closable {
 
     public void close() {
         try {
-            for (Statement statement : this.currentStatements) {
-                statement.close();
-            }
-
             this.connection.close();
 
             this.closed = true;
