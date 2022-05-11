@@ -140,7 +140,7 @@ public class MySQL implements Closable {
         try {
             String res = null;
 
-            while (query.getResults().next()) {
+            if (query.getResults().next()) {
                 res = query.getResults().getString(field);
             }
 
