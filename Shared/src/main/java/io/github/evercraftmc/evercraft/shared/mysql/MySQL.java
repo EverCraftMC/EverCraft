@@ -38,29 +38,65 @@ public class MySQL implements Closable {
         }
     }
 
-    public void query(String query) {
+    private class Query {
+        private Statement statement;
+        private ResultSet results;
+
+        protected Query(Statement statement) {
+            this(statement, null);
+        }
+
+        protected Query(Statement statement, ResultSet results) {
+            this.statement = statement;
+            this.results = results;
+        }
+
+        public Statement getStatement() {
+            return this.statement;
+        }
+
+        public ResultSet getResults() {
+            return this.results;
+        }
+
+        public void close() {
+            try {
+                this.statement.close();
+
+                if (this.results != null) {
+                    this.results.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Query query(String query) {
         try {
             if (!this.connection.isClosed()) {
                 Statement statement = this.connection.createStatement();
                 this.currentStatements.add(statement);
 
-                statement.executeUpdate(query);
+                statement.execute(query);
 
                 statement.close();
                 this.currentStatements.remove(statement);
+
+                return new Query(statement);
             } else {
                 this.reconnect();
 
-                this.query(query);
+                return this.query(query);
             }
         } catch (SQLException e) {
             this.reconnect();
 
-            this.query(query);
+            return this.query(query);
         }
     }
 
-    public ResultSet queryResponse(String query) {
+    public Query queryResponse(String query) {
         try {
             if (!this.connection.isClosed()) {
                 Statement statement = this.connection.createStatement();
@@ -68,9 +104,7 @@ public class MySQL implements Closable {
 
                 ResultSet results = statement.executeQuery(query);
 
-                statement.close();
-
-                return results;
+                return new Query(statement, results);
             } else {
                 this.reconnect();
 
@@ -92,20 +126,20 @@ public class MySQL implements Closable {
     }
 
     public String select(String table, String[] fields, String condition) {
-        ResultSet result = queryResponse("SELECT * FROM " + table + " " + "WHERE " + condition + ";");
+        Query query = queryResponse("SELECT * FROM " + table + " " + "WHERE " + condition + ";");
 
         StringBuilder ret = new StringBuilder();
 
         try {
-            while (result.next()) {
+            while (query.getResults().next()) {
                 for (String field : fields) {
-                    ret.append(result.getString(field) + "\t");
+                    ret.append(query.getResults().getString(field) + "\t");
                 }
 
                 ret = new StringBuilder(ret.substring(0, ret.length() - 1) + "\n");
             }
 
-            result.close();
+            query.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -114,14 +148,14 @@ public class MySQL implements Closable {
     }
 
     public String selectFirst(String table, String field, String condition) {
-        ResultSet result = queryResponse("SELECT * FROM " + table + " " + "WHERE " + condition + ";");
+        Query query = queryResponse("SELECT * FROM " + table + " " + "WHERE " + condition + ";");
 
         try {
-            while (result.next()) {
-                return result.getString(field);
+            while (query.getResults().next()) {
+                return query.getResults().getString(field);
             }
 
-            result.close();
+            query.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
