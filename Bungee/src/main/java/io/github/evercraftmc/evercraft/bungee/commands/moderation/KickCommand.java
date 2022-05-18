@@ -29,7 +29,7 @@ public class KickCommand extends BungeeCommand {
             ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
 
             if (player != null) {
-                if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId() == player.getUniqueId()) {
+                if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId())) {
                     player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.cantkickself"))));
                 } else {
                     BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
@@ -55,7 +55,7 @@ public class KickCommand extends BungeeCommand {
                     }
                 }
 
-                if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId() == player.getUniqueId() && !confirm) {
+                if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId()) && !confirm) {
                     player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.cantkickself"))));
                 } else {
                     BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.kick.brodcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
