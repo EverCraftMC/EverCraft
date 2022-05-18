@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.discord.commands.moderation;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import io.github.evercraftmc.evercraft.discord.BotMain;
@@ -29,7 +30,7 @@ public class ClearWarnsCommand extends Command {
 
         List<Warning> warnings = BotMain.Instance.getData().warnings.get(ArgsParser.getUserArg(message, 1).getId());
         for (Warning warning : warnings.toArray(new Warning[] {})) {
-            BotMain.Instance.getData().history.add(new ModCase(warning.getUser(), warning.getMod(), ModType.REMOVEWARN, ArgsParser.getStringArg(message, 2)));
+            BotMain.Instance.getData().history.add(new ModCase(warning.getUser(), warning.getMod(), ModType.REMOVEWARN, ArgsParser.getStringArg(message, 2), Instant.now()));
             warnings.remove(warning);
         }
         BotMain.Instance.getData().getParser().save();

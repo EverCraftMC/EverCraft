@@ -9,7 +9,7 @@ public class Config extends DataParseable {
     private String prefix = "!";
 
     private ActivityType statusType = ActivityType.WATCHING;
-    private String status = "for bad boys";
+    private String status = "the Discord";
 
     private ConfigColor color = new ConfigColor();
 

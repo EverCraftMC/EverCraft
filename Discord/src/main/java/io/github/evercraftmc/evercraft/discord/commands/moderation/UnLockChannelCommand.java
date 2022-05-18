@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.discord.commands.moderation;
 
+import java.time.Instant;
 import java.util.Arrays;
 import io.github.evercraftmc.evercraft.discord.BotMain;
 import io.github.evercraftmc.evercraft.discord.args.ArgsParser;
@@ -22,12 +23,12 @@ public class UnLockChannelCommand extends Command {
         if (ArgsParser.hasArg(message, 2)) {
             BotMain.Instance.sendEmbed(message.getTextChannel(), "Lock Channel", ArgsParser.getTextChannelArg(message, 1).getAsMention() + " has been unlocked for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
             BotMain.Instance.log(ArgsParser.getTextChannelArg(message, 1).getAsMention() + " was unlocked by " + message.getMember().getAsMention() + " for " + ArgsParser.getStringArg(message, 2));
-            BotMain.Instance.getData().history.add(new ModCase(null, message.getAuthor().getId(), ModType.UNLOCKCHANNEL, ArgsParser.getStringArg(message, 2)));
+            BotMain.Instance.getData().history.add(new ModCase(null, message.getAuthor().getId(), ModType.UNLOCKCHANNEL, ArgsParser.getStringArg(message, 2), Instant.now()));
             BotMain.Instance.getData().getParser().save();
         } else {
             BotMain.Instance.sendEmbed(message.getTextChannel(), "Lock Channel", ArgsParser.getTextChannelArg(message, 1).getAsMention() + " has been unlocked", message.getAuthor());
             BotMain.Instance.log(ArgsParser.getTextChannelArg(message, 1).getAsMention() + " was unlocked by " + message.getMember().getAsMention());
-            BotMain.Instance.getData().history.add(new ModCase(null, message.getAuthor().getId(), ModType.UNLOCKCHANNEL, null));
+            BotMain.Instance.getData().history.add(new ModCase(null, message.getAuthor().getId(), ModType.UNLOCKCHANNEL, null, Instant.now()));
             BotMain.Instance.getData().getParser().save();
         }
     }

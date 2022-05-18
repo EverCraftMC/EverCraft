@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.discord.commands.moderation;
 
+import java.time.Instant;
 import java.util.Arrays;
 import io.github.evercraftmc.evercraft.discord.BotMain;
 import io.github.evercraftmc.evercraft.discord.args.ArgsParser;
@@ -23,12 +24,12 @@ public class MuteCommand extends Command {
             if (ArgsParser.hasArg(message, 3)) {
                 BotMain.Instance.sendEmbed(message.getTextChannel(), "Mute", ArgsParser.getUserArg(message, 1).getAsMention() + " was muted for " + ArgsParser.getWordArg(message, 2) + " " + ArgsParser.getStringArg(message, 3), message.getAuthor());
                 BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + " was muted by " + message.getMember().getAsMention() + " for " + ArgsParser.getWordArg(message, 2) + " " + ArgsParser.getStringArg(message, 3));
-                BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.MUTE, ArgsParser.getStringArg(message, 2)));
+                BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.MUTE, ArgsParser.getStringArg(message, 2), Instant.now()));
                 BotMain.Instance.getData().getParser().save();
             } else {
                 BotMain.Instance.sendEmbed(message.getTextChannel(), "Mute", ArgsParser.getUserArg(message, 1).getAsMention() + " was muted for " + ArgsParser.getWordArg(message, 2), message.getAuthor());
                 BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + " was muted by " + message.getMember().getAsMention() + " for " + ArgsParser.getWordArg(message, 2));
-                BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.MUTE, null));
+                BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.MUTE, null, Instant.now()));
                 BotMain.Instance.getData().getParser().save();
             }
         } else {

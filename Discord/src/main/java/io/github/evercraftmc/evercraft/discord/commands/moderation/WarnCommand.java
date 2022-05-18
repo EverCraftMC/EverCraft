@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.discord.commands.moderation;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import io.github.evercraftmc.evercraft.discord.BotMain;
@@ -21,12 +22,12 @@ public class WarnCommand extends Command {
     public void run(Message message) {
         BotMain.Instance.sendEmbed(message.getTextChannel(), "Warn", ArgsParser.getUserArg(message, 1).getAsMention() + " was warned for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
         BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + " was warned by " + message.getMember().getAsMention() + " for " + ArgsParser.getStringArg(message, 2));
-        BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.WARN, ArgsParser.getStringArg(message, 2)));
+        BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.WARN, ArgsParser.getStringArg(message, 2), Instant.now()));
 
         if (!BotMain.Instance.getData().warnings.containsKey(ArgsParser.getUserArg(message, 1).getId())) {
             BotMain.Instance.getData().warnings.put(ArgsParser.getUserArg(message, 1).getId(), new ArrayList<Warning>());
         }
-        BotMain.Instance.getData().warnings.get(ArgsParser.getUserArg(message, 1).getId()).add(new Warning(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ArgsParser.getStringArg(message, 2)));
+        BotMain.Instance.getData().warnings.get(ArgsParser.getUserArg(message, 1).getId()).add(new Warning(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ArgsParser.getStringArg(message, 2), Instant.now()));
         BotMain.Instance.getData().getParser().save();
     }
 }

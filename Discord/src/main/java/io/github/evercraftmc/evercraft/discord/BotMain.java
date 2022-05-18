@@ -2,12 +2,12 @@ package io.github.evercraftmc.evercraft.discord;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import gnu.trove.set.hash.TLongHashSet;
 import io.github.evercraftmc.evercraft.discord.args.ArgsParser;
@@ -33,6 +33,7 @@ import io.github.evercraftmc.evercraft.discord.commands.util.SudoCommand;
 import io.github.evercraftmc.evercraft.discord.data.DataParser;
 import io.github.evercraftmc.evercraft.discord.data.types.config.Config;
 import io.github.evercraftmc.evercraft.discord.data.types.data.Data;
+import io.github.evercraftmc.evercraft.discord.data.types.data.Warning;
 import io.github.evercraftmc.evercraft.shared.discord.DiscordBot;
 import io.github.evercraftmc.evercraft.shared.util.ModerationUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -86,8 +87,6 @@ public class BotMain implements EventListener {
     private DiscordBot bot;
     private Map<String, Message> messageCache = new HashMap<String, Message>();
     private Map<Member, List<Message>> latestMessages = new HashMap<Member, List<Message>>();
-
-    public Map<Member, Integer> warnings = new HashMap<Member, Integer>();
 
     public BotMain(String configFileName, String dataFileName) {
         BotMain.Instance = this;
@@ -240,53 +239,53 @@ public class BotMain implements EventListener {
                     return;
                 }
 
-                if (event.getMessage().getContentRaw().contains("nigger")) {
-                    event.getMember().timeoutFor(Duration.ofMinutes(15)).queue();
+                StringBuilder message = new StringBuilder(event.getMessage().getContentRaw());
 
-                    BotMain.Instance.sendEmbed(event.getTextChannel(), "Mute", event.getMember().getAsMention() + " was muted for 15m Saying the freaking n word");
-                    BotMain.Instance.log(event.getMember().getAsMention() + " was muted by AutoMod for 15m Saying the freaking n word");
-                } else {
-                    StringBuilder message = new StringBuilder(event.getMessage().getContentRaw());
+                for (MessageEmbed embed : event.getMessage().getEmbeds()) {
+                    if (embed.getType() == EmbedType.LINK) {
+                        message.append(" " + embed.getTitle() + " " + embed.getDescription() + " " + embed.getUrl().replace("-", " ").replace("_", " "));
+                    } else if (embed.getType() == EmbedType.IMAGE || embed.getType() == EmbedType.VIDEO) {
+                        message.append(" " + embed.getUrl().replace("-", " ").replace("_", " "));
+                    }
+                }
 
-                    for (MessageEmbed embed : event.getMessage().getEmbeds()) {
-                        if (embed.getType() == EmbedType.LINK) {
-                            message.append(" " + embed.getTitle() + " " + embed.getDescription() + " " + embed.getUrl().replace("-", " ").replace("_", " "));
-                        } else if (embed.getType() == EmbedType.IMAGE || embed.getType() == EmbedType.VIDEO) {
-                            message.append(" " + embed.getUrl().replace("-", " ").replace("_", " "));
+                for (Attachment attachment : event.getMessage().getAttachments()) {
+                    message.append(" " + attachment.getUrl().replace("-", " ").replace("_", " ") + " " + attachment.getFileName() + " " + attachment.getDescription());
+                }
+
+                if (ModerationUtil.isSuperInappropriateString(message.toString().trim())) {
+                    if (event.getMember().getRoles().isEmpty() || event.getMember().getRoles().get(0).getPosition() <= event.getGuild().getSelfMember().getRoles().get(0).getPosition()) {
+                        String command = getConfig().getPrefix() + "mute " + event.getMember().getAsMention() + " 1h No, just no, get the fuck out";
+                        Long id = UUID.randomUUID().getMostSignificantBits();
+                        Message fakemessage = new ReceivedMessage(id, event.getChannel(), MessageType.DEFAULT, new MessageReference(id, event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(command.trim()).build(), this.getJDA()), false, false, new TLongHashSet(), new TLongHashSet(), false, false, command.trim(), id + "", getJDA().getSelfUser(), event.getMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, null);
+                        new MuteCommand().run(fakemessage);
+
+                        event.getMessage().delete().queue();
+                    }
+                } else if (ModerationUtil.isInappropriateString(message.toString().trim())) {
+                    String command = getConfig().getPrefix() + "warn " + event.getMember().getAsMention() + " Inappropriate language";
+                    Long id = UUID.randomUUID().getMostSignificantBits();
+                    Message fakemessage = new ReceivedMessage(id, event.getChannel(), MessageType.DEFAULT, new MessageReference(id, event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(command.trim()).build(), this.getJDA()), false, false, new TLongHashSet(), new TLongHashSet(), false, false, command.trim(), id + "", getJDA().getSelfUser(), event.getMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, null);
+                    new WarnCommand().run(fakemessage);
+
+                    Integer warningCount = 0;
+                    for (Warning warning : BotMain.Instance.getData().warnings.get(event.getAuthor().getId())) {
+                        if (Instant.now().getEpochSecond() - warning.getTimestamp().getEpochSecond() < 300 && warning.getReason().equals("Inappropriate language")) {
+                            warningCount++;
                         }
                     }
 
-                    for (Attachment attachment : event.getMessage().getAttachments()) {
-                        message.append(" " + attachment.getUrl().replace("-", " ").replace("_", " ") + " " + attachment.getFileName() + " " + attachment.getDescription());
-                    }
-
-                    if (ModerationUtil.isInappropriateString(message.toString().trim())) {
-                        if (warnings.containsKey(event.getMember())) {
-                            Integer value = warnings.get(event.getMember()) + 1;
-                            warnings.remove(event.getMember());
-                            warnings.put(event.getMember(), value);
-                        } else {
-                            warnings.put(event.getMember(), 1);
+                    if (event.getMember().getRoles().isEmpty() || event.getMember().getRoles().get(0).getPosition() <= event.getGuild().getSelfMember().getRoles().get(0).getPosition()) {
+                        if (warningCount > 5) {
+                            String command2 = getConfig().getPrefix() + "mute " + event.getMember().getAsMention() + " " + (5 * (warningCount - 5)) + "m Inappropriate language";
+                            Long id2 = UUID.randomUUID().getMostSignificantBits();
+                            Message fakemessage2 = new ReceivedMessage(id2, event.getChannel(), MessageType.DEFAULT, new MessageReference(id2, event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(command2.trim()).build(), this.getJDA()), false, false, new TLongHashSet(), new TLongHashSet(), false, false, command2.trim(), id2 + "", event.getAuthor(), event.getMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, null);
+                            new MuteCommand().run(fakemessage2);
                         }
 
-                        if (event.getMember().getRoles().isEmpty() || event.getMember().getRoles().get(0).getPosition() <= event.getGuild().getSelfMember().getRoles().get(0).getPosition()) {
-                            if (warnings.get(event.getMember()) == 1) {
-                                sendEmbed(event.getTextChannel(), ":(", "**Hey don't say that :(**");
-                            } else if (warnings.get(event.getMember()) == 2) {
-                                sendEmbed(event.getTextChannel(), ":(", "**Seriously don't say that**");
-                            } else if (warnings.get(event.getMember()) == 3) {
-                                sendEmbed(event.getTextChannel(), ":(", "**This is your last warning, do not say that**");
-                            } else if (warnings.get(event.getMember()) >= 4) {
-                                event.getMember().timeoutFor(Duration.ofMinutes(5 * (warnings.get(event.getMember()) - 3))).queue();
+                        event.getMessage().delete().queue();
 
-                                BotMain.Instance.sendEmbed(event.getTextChannel(), "Mute", event.getMember().getAsMention() + " was muted for " + (5 * (warnings.get(event.getMember()) - 3)) + "m Inappropriate language");
-                                BotMain.Instance.log(event.getMember().getAsMention() + " was muted by AutoMod for " + (5 * (warnings.get(event.getMember()) - 3)) + "m Inappropriate language");
-                            }
-
-                            event.getMessage().delete().queue();
-
-                            return;
-                        }
+                        return;
                     }
                 }
             }

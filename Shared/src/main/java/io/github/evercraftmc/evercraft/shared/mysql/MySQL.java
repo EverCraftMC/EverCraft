@@ -34,6 +34,7 @@ public class MySQL implements Closable {
         }
     }
 
+    @SuppressWarnings("unused")
     private class Query {
         private Statement statement;
         private ResultSet results;

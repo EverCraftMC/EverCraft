@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.discord.commands.moderation;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,14 +33,14 @@ public class ClearCommand extends Command {
 
             BotMain.Instance.sendEmbed(message.getTextChannel(), "Clear", "Cleared " + ArgsParser.getIntegerArg(message, 1) + " messages by " + ArgsParser.getUserArg(message, 2).getAsMention(), message.getAuthor());
             BotMain.Instance.log(ArgsParser.getIntegerArg(message, 1) + " messages from " + ArgsParser.getUserArg(message, 2).getAsMention() + " where cleared by " + message.getMember().getAsMention() + " in " + message.getTextChannel().getAsMention());
-            BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 2).getId(), message.getAuthor().getId(), ModType.CLEARMESSAGES, message.getTextChannel().getId()));
+            BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 2).getId(), message.getAuthor().getId(), ModType.CLEARMESSAGES, message.getTextChannel().getId(), Instant.now()));
             BotMain.Instance.getData().getParser().save();
         } else {
             message.getTextChannel().deleteMessages(message.getTextChannel().getHistoryBefore(message, ArgsParser.getIntegerArg(message, 1)).complete().getRetrievedHistory()).queue();
 
             BotMain.Instance.sendEmbed(message.getTextChannel(), "Clear", "Cleared " + ArgsParser.getIntegerArg(message, 1) + " messages", message.getAuthor());
             BotMain.Instance.log(ArgsParser.getIntegerArg(message, 1) + " messages where cleared by " + message.getMember().getAsMention() + " in " + message.getTextChannel().getAsMention());
-            BotMain.Instance.getData().history.add(new ModCase(null, message.getAuthor().getId(), ModType.CLEARMESSAGES, message.getTextChannel().getId()));
+            BotMain.Instance.getData().history.add(new ModCase(null, message.getAuthor().getId(), ModType.CLEARMESSAGES, message.getTextChannel().getId(), Instant.now()));
             BotMain.Instance.getData().getParser().save();
         }
     }

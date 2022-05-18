@@ -1,5 +1,7 @@
 package io.github.evercraftmc.evercraft.discord.data.types.data;
 
+import java.time.Instant;
+
 public class ModCase {
     private String user = "";
     private String mod = "";
@@ -7,12 +9,16 @@ public class ModCase {
     private ModType type = ModType.OTHER;
     private String reason = "";
 
-    public ModCase(String user, String mod, ModType type, String reason) {
+    private String timestamp;
+
+    public ModCase(String user, String mod, ModType type, String reason, Instant timestamp) {
         this.user = user;
         this.mod = mod;
 
         this.type = type;
         this.reason = reason;
+
+        this.timestamp = timestamp.toString();
     }
 
     public String getUser() {
@@ -29,5 +35,9 @@ public class ModCase {
 
     public String getReason() {
         return this.reason;
+    }
+
+    public Instant getTimestamp() {
+        return Instant.parse(this.timestamp);
     }
 }
