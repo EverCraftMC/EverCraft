@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.discord.commands.moderation;
 
+import java.time.Instant;
 import java.util.Arrays;
 import io.github.evercraftmc.evercraft.discord.BotMain;
 import io.github.evercraftmc.evercraft.discord.args.ArgsParser;
@@ -26,12 +27,12 @@ public class UnBanCommand extends Command {
             if (ArgsParser.hasArg(message, 2)) {
                 BotMain.Instance.sendEmbed(message.getTextChannel(), "Unbanned", ArgsParser.getUserArg(message, 1).getAsMention() + " was unbanned for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
                 BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + " was unbanned by " + message.getMember().getAsMention() + " for " + ArgsParser.getStringArg(message, 2));
-                BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.UNBAN, ArgsParser.getStringArg(message, 2)));
+                BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.UNBAN, ArgsParser.getStringArg(message, 2), Instant.now()));
                 BotMain.Instance.getData().getParser().save();
             } else {
                 BotMain.Instance.sendEmbed(message.getTextChannel(), "Unbanned", ArgsParser.getUserArg(message, 1).getAsMention() + " was unbanned", message.getAuthor());
                 BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + " was unbanned by " + message.getMember().getAsMention());
-                BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.UNBAN, null));
+                BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.UNBAN, null, Instant.now()));
                 BotMain.Instance.getData().getParser().save();
             }
         } catch (ErrorResponseException err) {

@@ -26,43 +26,43 @@ public class HistoryCommand extends Command {
             if (modcase.getUser() != null && modcase.getUser().equals(member.getId())) {
                 if (modcase.getReason() != null && !modcase.getReason().equals("")) {
                     if (modcase.getType() == ModType.WARN) {
-                        modsString.append("Warned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                        modsString.append("Warned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.REMOVEWARN) {
-                        modsString.append("Unwarned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                        modsString.append("Unwarned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.KICK) {
-                        modsString.append("Kicked by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                        modsString.append("Kicked by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.BAN) {
-                        modsString.append("Banned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                        modsString.append("Banned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.UNBAN) {
-                        modsString.append("Unbanned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                        modsString.append("Unbanned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.MUTE) {
-                        modsString.append("Muted by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                        modsString.append("Muted by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.UNMUTE) {
-                        modsString.append("Unmuted by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                        modsString.append("Unmuted by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.CLEARMESSAGES) {
-                        modsString.append("Messages cleared by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " in " + message.getGuild().getTextChannelById(modcase.getReason()).getAsMention() + "\n");
+                        modsString.append("Messages cleared by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " in " + message.getGuild().getTextChannelById(modcase.getReason()).getAsMention() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.CHANGENICK) {
-                        modsString.append("Nick was changed by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + "\n");
+                        modsString.append("Nick was changed by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " for " + modcase.getReason() + " at " + modcase.getTimestamp().toString() + "\n");
                     }
                 } else {
                     if (modcase.getType() == ModType.WARN) {
-                        modsString.append("Warned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                        modsString.append("Warned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.REMOVEWARN) {
-                        modsString.append("Unwarned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                        modsString.append("Unwarned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.KICK) {
-                        modsString.append("Kicked by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                        modsString.append("Kicked by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.BAN) {
-                        modsString.append("Banned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                        modsString.append("Banned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.UNBAN) {
-                        modsString.append("Unbanned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                        modsString.append("Unbanned by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.MUTE) {
-                        modsString.append("Muted by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                        modsString.append("Muted by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.UNMUTE) {
-                        modsString.append("Unmuted by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                        modsString.append("Unmuted by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.CLEARMESSAGES) {
-                        modsString.append("Messages cleared by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " in " + message.getGuild().getTextChannelById(modcase.getReason()).getAsMention() + "\n");
+                        modsString.append("Messages cleared by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " in " + message.getGuild().getTextChannelById(modcase.getReason()).getAsMention() + " at " + modcase.getTimestamp().toString() + "\n");
                     } else if (modcase.getType() == ModType.CHANGENICK) {
-                        modsString.append("Nick was changed by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + "\n");
+                        modsString.append("Nick was changed by " + message.getJDA().retrieveUserById(modcase.getMod()).complete().getAsMention() + " at " + modcase.getTimestamp().toString() + "\n");
                     }
                 }
             }

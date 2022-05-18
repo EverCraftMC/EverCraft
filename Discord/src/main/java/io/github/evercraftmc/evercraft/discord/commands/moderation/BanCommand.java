@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.discord.commands.moderation;
 
+import java.time.Instant;
 import java.util.Arrays;
 import io.github.evercraftmc.evercraft.discord.BotMain;
 import io.github.evercraftmc.evercraft.discord.args.ArgsParser;
@@ -28,12 +29,12 @@ public class BanCommand extends Command {
             if (ArgsParser.hasArg(message, 2)) {
                 BotMain.Instance.sendEmbed(message.getTextChannel(), "Banned", ArgsParser.getUserArg(message, 1).getAsMention() + " was banned for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
                 BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + " was banned by " + message.getMember().getAsMention() + " for " + ArgsParser.getStringArg(message, 2));
-                BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.BAN, ArgsParser.getStringArg(message, 2)));
+                BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.BAN, ArgsParser.getStringArg(message, 2), Instant.now()));
                 BotMain.Instance.getData().getParser().save();
             } else {
                 BotMain.Instance.sendEmbed(message.getTextChannel(), "Banned", ArgsParser.getUserArg(message, 1).getAsMention() + " was banned", message.getAuthor());
                 BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + " was banned by " + message.getMember().getAsMention());
-                BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.BAN, null));
+                BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.BAN, null, Instant.now()));
                 BotMain.Instance.getData().getParser().save();
             }
         }
