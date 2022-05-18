@@ -31,7 +31,7 @@ public class UnMuteCommand extends BungeeCommand {
             SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
 
             if (player != null) {
-                if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId() == player.getUniqueId()) {
+                if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId())) {
                     player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.cantunmuteself"))));
                 } else {
                     if (BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
@@ -52,7 +52,7 @@ public class UnMuteCommand extends BungeeCommand {
             SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
 
             if (player != null) {
-                if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId() == player.getUniqueId()) {
+                if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId())) {
                     player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.cantunmuteself"))));
                 } else {
                     if (BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
