@@ -22,7 +22,7 @@ public class WarnsCommand extends Command {
         StringBuilder warningString = new StringBuilder();
 
         for (Warning warning : BotMain.Instance.getData().warnings.get(member.getId())) {
-            warningString.append("Warned by " + message.getJDA().retrieveUserById(warning.getMod()).complete().getAsMention() + " for " + warning.getReason() + "\n");
+            warningString.append("Warned by " + message.getJDA().retrieveUserById(warning.getMod()).complete().getAsMention() + " for " + warning.getReason() + " at " + warning.getTimestamp().toString() + "\n");
         }
 
         BotMain.Instance.sendEmbed(message.getTextChannel(), "Warnings", warningString.toString().trim(), message.getAuthor());

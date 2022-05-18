@@ -17,7 +17,7 @@ import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.event.EventHandler;
 
 public class MessageListener extends BungeeListener {
-    public Map<UUID, Integer> warnings = new HashMap<UUID, Integer>();
+    private Map<UUID, Integer> warnings = new HashMap<UUID, Integer>();
 
     @EventHandler
     public void onMessage(PluginMessageEvent event) {
@@ -34,7 +34,25 @@ public class MessageListener extends BungeeListener {
                 String message = in.readUTF();
 
                 if (!BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
-                    if (!ModerationUtil.isInappropriateString(message)) {
+                    if (ModerationUtil.isSuperInappropriateString(message.trim())) {
+                        BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(BungeeMain.getInstance().getProxy().getConsole(), "tempmute " + player.getName() + " 1h No, just no, get the fuck out");
+                    } else if (ModerationUtil.isInappropriateString(message.trim())) {
+                        if (warnings.containsKey(player.getUniqueId())) {
+                            Integer value = warnings.get(player.getUniqueId()) + 1;
+                            warnings.remove(player.getUniqueId());
+                            warnings.put(player.getUniqueId(), value);
+                        } else {
+                            warnings.put(player.getUniqueId(), 1);
+                        }
+
+                        if (warnings.get(player.getUniqueId()) >= 1 && warnings.get(player.getUniqueId()) <= 5) {
+                            for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
+                                player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.chat.warning").replace("{player}", player.getDisplayName()))));
+                            }
+                        } else if (warnings.get(player.getUniqueId()) > 5) {
+                            BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(BungeeMain.getInstance().getProxy().getConsole(), "tempmute " + player.getName() + " " + (5 * (warnings.get(player.getUniqueId()) - 5)) + "m Inappropriate language");
+                        }
+                    } else {
                         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                             if (player2.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
                                 player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message))));
@@ -44,26 +62,6 @@ public class MessageListener extends BungeeListener {
                         }
 
                         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message)))).queue();
-                    } else if (message.matches("nigg(a)?(s)?") || message.contains("nig(g)?er(s)?")) {
-                        BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(BungeeMain.getInstance().getProxy().getConsole(), "tempmute " + player.getName() + " 15m Saying the freaking n word");
-                    } else {
-                        if (warnings.containsKey(player.getUniqueId())) {
-                            Integer value = warnings.get(player.getUniqueId()) + 1;
-                            warnings.remove(player.getUniqueId());
-                            warnings.put(player.getUniqueId(), value);
-                        } else {
-                            warnings.put(player.getUniqueId(), 1);
-                        }
-
-                        if (warnings.get(player.getUniqueId()) == 1) {
-                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.chat.warning1"))));
-                        } else if (warnings.get(player.getUniqueId()) == 2) {
-                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.chat.warning2"))));
-                        } else if (warnings.get(player.getUniqueId()) == 3) {
-                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.chat.warning3"))));
-                        } else if (warnings.get(player.getUniqueId()) >= 4) {
-                            BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(BungeeMain.getInstance().getProxy().getConsole(), "tempmute " + player.getName() + " " + (5 * (warnings.get(player.getUniqueId()) - 3)) + "m Inappropriate language");
-                        }
                     }
                 } else {
                     String time = BungeeMain.getInstance().getData().getString("players." + player.getUniqueId() + ".mute.until");
