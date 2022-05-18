@@ -88,7 +88,7 @@ public class MessageListener extends BungeeListener {
 
                 for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                     if (player2.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(message.replace("{player}", player.getDisplayName() + TextFormatter.translateColors("&r"))));
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(message.replace("{player}", player.getDisplayName() + "&r"))));
                     } else {
                         player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message.replace("{player}", player.getDisplayName() + "&r")))));
                     }
