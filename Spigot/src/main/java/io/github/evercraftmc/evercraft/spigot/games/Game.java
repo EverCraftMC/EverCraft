@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitTask;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
+import io.github.evercraftmc.evercraft.spigot.commands.warp.SpawnCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 
 public abstract class Game implements Listener {
@@ -72,6 +73,8 @@ public abstract class Game implements Listener {
 
     public void leave(Player player) {
         this.players.remove(player);
+
+        new SpawnCommand("spawn", null, Arrays.asList(), null).run(player, new String[] {});
     }
 
     public void tick() {}
