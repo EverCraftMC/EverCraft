@@ -11,6 +11,7 @@ import io.github.evercraftmc.evercraft.shared.economy.Economy;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.games.GameCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.DelKitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.SetKitCommand;
@@ -151,6 +152,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new KitCommand("kit", "Get a kit", Arrays.asList(), "evercraft.commands.kit.kit").register());
         this.commands.add(new SetKitCommand("setkit", "Set a kit", Arrays.asList(), "evercraft.commands.kit.setkit").register());
         this.commands.add(new DelKitCommand("delkit", "Delete a kit", Arrays.asList(), "evercraft.commands.kit.delkit").register());
+
+        this.commands.add(new GameCommand("game", "Join/leave a game", Arrays.asList("games"), "evercraft.commands.games.game").register());
 
         if (this.getPluginConfig().getBoolean("passiveEnabled")) {
             this.commands.add(new PassiveCommand("passive", "Toggle passive mode on/off", Arrays.asList("togglepassive", "pvp"), "evercraft.commands.player.passive").register());
