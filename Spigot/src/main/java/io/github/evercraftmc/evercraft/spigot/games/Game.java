@@ -1,9 +1,9 @@
 package io.github.evercraftmc.evercraft.spigot.games;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,11 +13,12 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitTask;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
+import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 
 public abstract class Game implements Listener {
     protected String name;
 
-    protected Location location;
+    protected String warpName;
 
     protected Float minPlayers;
     protected Float maxPlayers;
@@ -26,10 +27,10 @@ public abstract class Game implements Listener {
 
     protected BukkitTask tickTask;
 
-    protected Game(String name, Location location, Float minPlayers, Float maxPlayers) {
+    protected Game(String name, String warpName, Float minPlayers, Float maxPlayers) {
         this.name = name;
 
-        this.location = location;
+        this.warpName = warpName;
 
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
@@ -47,8 +48,8 @@ public abstract class Game implements Listener {
         return this.name;
     }
 
-    public Location getLocation() {
-        return this.location;
+    public String getWarpName() {
+        return this.warpName;
     }
 
     public Float getMinPlayers() {
@@ -63,7 +64,7 @@ public abstract class Game implements Listener {
         if (this.players.size() < this.maxPlayers) {
             this.players.add(player);
 
-            player.teleport(this.location);
+            new WarpCommand("warp", null, Arrays.asList(), null).run(player, new String[] { warpName });
         } else {
             throw new RuntimeException("Game is full");
         }
