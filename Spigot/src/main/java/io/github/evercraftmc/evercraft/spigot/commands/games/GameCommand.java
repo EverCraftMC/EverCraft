@@ -2,6 +2,7 @@ package io.github.evercraftmc.evercraft.spigot.commands.games;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
@@ -14,7 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class GameCommand extends SpigotCommand {
-    public static Map<Player, Game> currentGames;
+    public static Map<Player, Game> currentGames = new HashMap<Player, Game>();
 
     public GameCommand(String name, String description, List<String> aliases, String permission) {
         super(name, description, aliases, permission);
