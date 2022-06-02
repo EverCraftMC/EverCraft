@@ -153,8 +153,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new SetKitCommand("setkit", "Set a kit", Arrays.asList(), "evercraft.commands.kit.setkit").register());
         this.commands.add(new DelKitCommand("delkit", "Delete a kit", Arrays.asList(), "evercraft.commands.kit.delkit").register());
 
-        this.commands.add(new GameCommand("game", "Join/leave a game", Arrays.asList("games"), "evercraft.commands.games.game").register());
-
         if (this.getPluginConfig().getBoolean("passiveEnabled")) {
             this.commands.add(new PassiveCommand("passive", "Toggle passive mode on/off", Arrays.asList("togglepassive", "pvp"), "evercraft.commands.player.passive").register());
         }
@@ -194,10 +192,14 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.games.addDefault("enabled", false);
 
-        this.config.copyDefaults();
+        this.games.copyDefaults();
+
+        this.registeredGames = new ArrayList<Game>();
 
         if (this.games.getBoolean("enabled")) {
-            registeredGames.add(new PvpGame("plainspvp", new Location(this.getServer().getWorld("kalesmc-minigames"), 84.5, 66.5, 0.5), "pvp"));
+            this.commands.add(new GameCommand("game", "Join/leave a game", Arrays.asList("games"), "evercraft.commands.games.game").register());
+
+            this.registeredGames.add(new PvpGame("plainspvp", new Location(this.getServer().getWorld("kalesmc-minigames"), 84.5, 66.5, 0.5), "pvp"));
         }
 
         this.getLogger().info("Finished loading games");

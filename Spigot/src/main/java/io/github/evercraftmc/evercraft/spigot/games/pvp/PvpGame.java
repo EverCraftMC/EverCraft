@@ -17,6 +17,8 @@ public class PvpGame extends Game {
 
     @Override
     public void join(Player player) {
+        super.join(player);
+
         new KitCommand("kit", null, Arrays.asList(), null).run(player, new String[] { kitName });
     }
 }
