@@ -1,7 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.games.pvp;
 
 import java.util.Arrays;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
 import io.github.evercraftmc.evercraft.spigot.games.Game;
@@ -9,8 +8,8 @@ import io.github.evercraftmc.evercraft.spigot.games.Game;
 public class PvpGame extends Game {
     protected String kitName;
 
-    public PvpGame(String name, Location location, String kitName) {
-        super(name, location, 1f, Float.MAX_VALUE);
+    public PvpGame(String name, String warpName, String kitName) {
+        super(name, warpName, 1f, Float.MAX_VALUE);
 
         this.kitName = kitName;
     }

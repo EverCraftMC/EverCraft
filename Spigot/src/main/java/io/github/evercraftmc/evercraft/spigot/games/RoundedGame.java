@@ -1,12 +1,11 @@
 package io.github.evercraftmc.evercraft.spigot.games;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 
 public abstract class RoundedGame extends Game {
-    protected RoundedGame(String name, Location location, Float minPlayers, Float maxPlayers) {
-        super(name, location, minPlayers, maxPlayers);
+    protected RoundedGame(String name, String warpName, Float minPlayers, Float maxPlayers) {
+        super(name, warpName, minPlayers, maxPlayers);
 
         this.tickTask.cancel();
     }
