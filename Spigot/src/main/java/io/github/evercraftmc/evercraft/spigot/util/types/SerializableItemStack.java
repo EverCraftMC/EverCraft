@@ -63,13 +63,15 @@ public class SerializableItemStack {
             stack.setDamage(this.getDamage());
         }
 
-        List<Component> loreComponents = new ArrayList<Component>();
+        if (this.getLore().size() > 0) {
+            List<Component> loreComponents = new ArrayList<Component>();
 
-        for (String line : this.getLore()) {
-            loreComponents.add(ComponentFormatter.stringToComponent(line));
+            for (String line : this.getLore()) {
+                loreComponents.add(ComponentFormatter.stringToComponent(line));
+            }
+
+            stack.lore(loreComponents);
         }
-
-        stack.lore(loreComponents);
 
         for (SerializableEnchantment enchantment : this.getEnchantments()) {
             stack.addUnsafeEnchantment(enchantment.getEnchantment(), enchantment.getLevel());
