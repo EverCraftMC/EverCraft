@@ -26,12 +26,15 @@ import io.github.evercraftmc.evercraft.spigot.commands.warp.DelWarpCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.SetWarpCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.SpawnCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
+import io.github.evercraftmc.evercraft.spigot.games.Game;
+import io.github.evercraftmc.evercraft.spigot.games.pvp.PvpGame;
 import io.github.evercraftmc.evercraft.spigot.listeners.JoinListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.PvPListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.SpigotListener;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import net.luckperms.api.LuckPermsProvider;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,6 +54,9 @@ public class SpigotMain extends JavaPlugin implements Plugin {
     private List<SpigotCommand> commands;
     private List<SpigotListener> listeners;
     private List<Closable> assets;
+
+    private FileConfig games;
+    private List<Game> registeredGames;
 
     private String serverName = "unknown";
 
@@ -178,6 +184,21 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Finished loading listeners");
 
+        this.getLogger().info("Loading games..");
+
+        this.games = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "games.json");
+        this.games.reload();
+
+        this.games.addDefault("enabled", false);
+
+        this.config.copyDefaults();
+
+        if (this.games.getBoolean("enabled")) {
+            registeredGames.add(new PvpGame("plainspvp", new Location(this.getServer().getWorld("kalesmc-minigames"), 84.5, 66.5, 0.5), "pvp"));
+        }
+
+        this.getLogger().info("Finished loading games");
+
         this.getLogger().info("Loading other assets..");
 
         this.assets = new ArrayList<Closable>();
@@ -284,6 +305,26 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     public Economy getEconomy() {
         return this.economy;
+    }
+
+    public List<SpigotCommand> getCommands() {
+        return this.commands;
+    }
+
+    public List<SpigotListener> getListeneres() {
+        return this.listeners;
+    }
+
+    public List<Closable> getAssets() {
+        return this.assets;
+    }
+
+    public FileConfig getGames() {
+        return this.games;
+    }
+
+    public List<Game> getRegisteredGames() {
+        return this.registeredGames;
     }
 
     public String getServerName() {

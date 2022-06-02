@@ -159,6 +159,18 @@ public class LimboMain extends LimboPlugin implements Plugin {
         return this.messages;
     }
 
+    public List<LimboCommand> getCommands() {
+        return this.commands;
+    }
+
+    public List<LimboListener> getListeners() {
+        return this.listeners;
+    }
+
+    public List<Closable> getAssets() {
+        return this.assets;
+    }
+
     public String getServerName() {
         return this.serverName;
     }

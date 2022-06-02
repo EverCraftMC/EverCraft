@@ -17,6 +17,10 @@ dependencies {
     compileOnly "com.loohp:Limbo:${project.limbo_version}"
 }
 
+jar {
+    archiveVersion = project.version + "-" + rootProject.version
+}
+
 tasks.register("buildFat", Jar) {
     dependsOn tasks.build
 
@@ -24,6 +28,7 @@ tasks.register("buildFat", Jar) {
     targetCompatibility = JavaVersion.toVersion(project.java_version)
 
     duplicatesStrategy = "exclude"
+    archiveVersion = project.version + "-" + rootProject.version
     classifier = "fat"
 
     from files(project.sourceSets.main.output)

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import io.github.evercraftmc.evercraft.bungee.broadcast.Broadcaster;
+import io.github.evercraftmc.evercraft.bungee.commands.BungeeCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.economy.BalanceCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.economy.EconomyCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.info.InfoCommand;
@@ -33,7 +34,6 @@ import io.github.evercraftmc.evercraft.bungee.listeners.JoinListener;
 import io.github.evercraftmc.evercraft.bungee.scoreboard.ScoreBoard;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
-import io.github.evercraftmc.evercraft.shared.PluginCommand;
 import io.github.evercraftmc.evercraft.shared.config.FileConfig;
 import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
 import io.github.evercraftmc.evercraft.shared.discord.DiscordBot;
@@ -61,7 +61,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
     private DiscordBot bot;
 
-    private List<PluginCommand> commands;
+    private List<BungeeCommand> commands;
     private List<BungeeListener> listeners;
     private List<Closable> assets;
 
@@ -197,7 +197,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.getLogger().info("Loading commands..");
 
-        this.commands = new ArrayList<PluginCommand>();
+        this.commands = new ArrayList<BungeeCommand>();
 
         this.commands.add(new InfoCommand("about", "Get the server about", Arrays.asList("info"), "evercraft.commands.info.about").register());
         this.commands.add(new InfoCommand("rules", "Get the server rules", Arrays.asList(), "evercraft.commands.info.rules").register());
@@ -314,7 +314,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.getLogger().info("Unregistering commands..");
 
-        for (PluginCommand command : this.commands) {
+        for (BungeeCommand command : this.commands) {
             command.unregister();
         }
 
@@ -373,6 +373,18 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
     public Economy getEconomy() {
         return this.economy;
+    }
+
+    public List<BungeeCommand> getCommands() {
+        return this.commands;
+    }
+
+    public List<BungeeListener> getListeners() {
+        return this.listeners;
+    }
+
+    public List<Closable> getAssets() {
+        return this.assets;
     }
 
     public DiscordBot getDiscordBot() {
