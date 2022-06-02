@@ -45,25 +45,8 @@ subprojects {
 }
 
 tasks.register("buildAll") {
-    dependsOn subprojects.collect { it.tasks.buildFull }
-
-    doLast {
-        fileTree(project.projectDir).visit(details -> {
-            if (details.file.path.replace("\\", "/").startsWith(project.projectDir.getPath().replace("\\", "/") + "/EverCraft-")) {
-                def isCurrent = false
-
-                subprojects.each {
-                    if (it.tasks.buildFull.outputs.files.size() > 0 && it.tasks.buildFull.outputs.files[0].getPath() == details.file.path) {
-                        isCurrent = true
-                    }
-                }
-
-                if (!isCurrent) {
-                    delete(details.file.path)
-                }
-            }
-        })
-    }
+    dependsOn subprojects.collect { it.tasks.jar }
+    dependsOn subprojects.collect { it.tasks.buildFat }
 }
 
 import net.schmizz.sshj.SSHClient
@@ -92,7 +75,7 @@ tasks.register("upload") {
                     }
                 }
 
-                ftp.put(project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getPath(), server.split(":")[2] + "/" + project(":" + server.split(":")[1]).tasks.buildFull.outputs.files[0].getName())
+                ftp.put(project(":" + server.split(":")[1]).tasks.buildFat.outputs.files[0].getPath(), server.split(":")[2] + "/" + project(":" + server.split(":")[1]).tasks.buildFat.outputs.files[0].getName())
 
                 ftp.close()
                 ssh.disconnect()
