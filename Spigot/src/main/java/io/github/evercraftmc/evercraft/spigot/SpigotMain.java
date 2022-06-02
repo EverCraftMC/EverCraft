@@ -35,7 +35,6 @@ import io.github.evercraftmc.evercraft.spigot.listeners.PvPListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.SpigotListener;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import net.luckperms.api.LuckPermsProvider;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -199,7 +198,11 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         if (this.games.getBoolean("enabled")) {
             this.commands.add(new GameCommand("game", "Join/leave a game", Arrays.asList("games"), "evercraft.commands.games.game").register());
 
-            this.registeredGames.add(new PvpGame("plainspvp", new Location(this.getServer().getWorld("kalesmc-minigames"), 84.5, 66.0, 0.5, -90, 0), "pvp"));
+            this.registeredGames.add(new PvpGame("plainspvp", "plainspvp", "pvp"));
+            this.registeredGames.add(new PvpGame("endpvp", "endpvp", "end"));
+            this.registeredGames.add(new PvpGame("crystalpvp", "crystalpvp", "crystal"));
+            this.registeredGames.add(new PvpGame("ventpvp", "ventpvp", "vents"));
+            this.registeredGames.add(new PvpGame("sumo", "sumo", "sumo"));
         }
 
         this.getLogger().info("Finished loading games");
