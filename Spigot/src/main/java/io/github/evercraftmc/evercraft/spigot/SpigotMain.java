@@ -199,7 +199,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         if (this.games.getBoolean("enabled")) {
             this.commands.add(new GameCommand("game", "Join/leave a game", Arrays.asList("games"), "evercraft.commands.games.game").register());
 
-            this.registeredGames.add(new PvpGame("plainspvp", new Location(this.getServer().getWorld("kalesmc-minigames"), 84.5, 66.5, 0.5), "pvp"));
+            this.registeredGames.add(new PvpGame("plainspvp", new Location(this.getServer().getWorld("kalesmc-minigames"), 84.5, 66.0, 0.5, -90, 0), "pvp"));
         }
 
         this.getLogger().info("Finished loading games");

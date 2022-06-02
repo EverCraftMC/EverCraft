@@ -2,9 +2,7 @@ package io.github.evercraftmc.evercraft.spigot.commands.games;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
@@ -15,8 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class GameCommand extends SpigotCommand {
-    public static Map<Player, Game> currentGames = new HashMap<Player, Game>();
-
     public GameCommand(String name, String description, List<String> aliases, String permission) {
         super(name, description, aliases, permission);
     }
@@ -24,15 +20,23 @@ public class GameCommand extends SpigotCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
-            if (args.length >= 2) {
+            if (args.length >= 1) {
                 if (args[0].equalsIgnoreCase("join")) {
-                    for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
-                        if (game.getName().equalsIgnoreCase(args[1])) {
-                            game.join(player);
+                    if (args.length >= 2) {
+                        for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
+                            if (game.getName().equalsIgnoreCase(args[1])) {
+                                game.join(player);
+                            }
                         }
+                    } else {
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
                     }
                 } else if (args[0].equalsIgnoreCase("leave")) {
-                    currentGames.get(player).leave(player);
+                    for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
+                        if (game.isPlaying(player)) {
+                            game.leave(player);
+                        }
+                    }
                 }
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
