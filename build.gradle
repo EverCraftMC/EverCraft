@@ -75,7 +75,7 @@ tasks.register("upload") {
                     }
                 }
 
-                ftp.put(project(":" + server.split(":")[1]).tasks.buildFat.outputs.files[0].getPath(), server.split(":")[2] + "/" + project(":" + server.split(":")[1]).tasks.buildFat.outputs.files[0].getName())
+                ftp.put(project(":" + server.split(":")[1]).tasks.buildFat.outputs.files[0].getPath(), server.split(":")[2] + "/EverCraft-" + project(":" + server.split(":")[1]).tasks.buildFat.outputs.files[0].getName().replace("-fat", ""))
 
                 ftp.close()
                 ssh.disconnect()
