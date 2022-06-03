@@ -8,6 +8,7 @@ import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.games.Game;
+import io.github.evercraftmc.evercraft.spigot.games.TeamedGame;
 import io.github.evercraftmc.evercraft.spigot.games.Game.LeaveReason;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import org.bukkit.command.CommandSender;
@@ -32,10 +33,17 @@ public class GameCommand extends SpigotCommand {
                         }
 
                         if (!inGame) {
+                            Boolean joinedGame = false;
                             for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
                                 if (game.getName().equalsIgnoreCase(args[1])) {
                                     game.join(player);
+
+                                    joinedGame = true;
                                 }
+                            }
+
+                            if (!joinedGame) {
+                                // TODO Unknown game message
                             }
                         } else {
                             // TODO Already in game message
@@ -60,6 +68,78 @@ public class GameCommand extends SpigotCommand {
                     } else {
                         // TODO Not in game message
                     }
+                } else if (args[0].equalsIgnoreCase("team")) {
+                    if (args.length >= 2) {
+                        if (args[1].equalsIgnoreCase("join")) {
+                            if (args.length >= 2) {
+                                Boolean inGame = false;
+                                Boolean inTeam = false;
+                                for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
+                                    if (game.isPlaying(player)) {
+                                        inGame = true;
+
+                                        if (game instanceof TeamedGame teamGame) {
+                                            if (teamGame.getTeam(player) != null) {
+                                                inTeam = true;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (inGame) {
+                                    if (!inTeam) {
+                                        for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
+                                            if (game instanceof TeamedGame teamedGame) {
+                                                if (teamedGame.isPlaying(player)) {
+                                                    teamedGame.joinTeam(player, args[1]);
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        // TODO Already in team message
+                                    }
+                                } else {
+                                    // TODO Not in game message
+                                }
+                            }
+                        } else if (args[1].equalsIgnoreCase("leave")) {
+                            Boolean inGame = false;
+                            Boolean inTeam = false;
+                            for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
+                                if (game.isPlaying(player)) {
+                                    inGame = true;
+
+                                    if (game instanceof TeamedGame teamGame) {
+                                        if (teamGame.getTeam(player) != null) {
+                                            inTeam = true;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (inGame) {
+                                if (inTeam) {
+                                    for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
+                                        if (game instanceof TeamedGame teamedGame) {
+                                            if (teamedGame.isPlaying(player)) {
+                                                teamedGame.leaveTeam(player);
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    // TODO Not in team message
+                                }
+                            } else {
+                                // TODO Not in game message
+                            }
+                        } else {
+                            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+                        }
+                    } else {
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+                    }
+                } else {
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
                 }
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
@@ -76,11 +156,15 @@ public class GameCommand extends SpigotCommand {
         if (args.length == 1) {
             list.add("join");
             list.add("leave");
+            list.add("team");
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("join")) {
                 for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
                     list.add(game.getName());
                 }
+            } else if (args[0].equalsIgnoreCase("team")) {
+                list.add("join");
+                list.add("leave");
             } else {
                 return Arrays.asList();
             }

@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 
 public abstract class RoundedGame extends Game {
+    protected Boolean started = false;
+
     protected RoundedGame(String name, String warpName, Float minPlayers, Float maxPlayers) {
         super(name, warpName, minPlayers, maxPlayers);
 
@@ -21,22 +23,34 @@ public abstract class RoundedGame extends Game {
     }
 
     public void start() {
-        if (this.players.size() < this.minPlayers) {
-            throw new RuntimeException("Not enough players");
-        }
-
-        this.tickTask = Bukkit.getScheduler().runTaskTimer(SpigotMain.getInstance(), new Runnable() {
-            public void run() {
-                tick();
+        if (!this.started) {
+            if (this.players.size() < this.minPlayers) {
+                throw new RuntimeException("Not enough players");
             }
-        }, 1, 1);
+
+            this.started = true;
+
+            this.tickTask = Bukkit.getScheduler().runTaskTimer(SpigotMain.getInstance(), new Runnable() {
+                public void run() {
+                    tick();
+                }
+            }, 1, 1);
+        } else {
+            throw new RuntimeException("Game is already started");
+        }
     }
 
     public void stop() {
-        for (Player player : this.players) {
-            this.leave(player, LeaveReason.COMMAND);
-        }
+        if (this.started) {
+            for (Player player : this.players) {
+                this.leave(player, LeaveReason.COMMAND);
+            }
 
-        this.tickTask.cancel();
+            this.started = true;
+
+            this.tickTask.cancel();
+        } else {
+            throw new RuntimeException("Game is not started");
+        }
     }
 }
