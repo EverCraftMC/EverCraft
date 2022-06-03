@@ -43,7 +43,9 @@ public class KitCommand extends SpigotCommand {
                         }
                     }
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.kit").replace("{kit}", args[0]))));
+                    if (args.length >= 2 && !args[1].equalsIgnoreCase("true")) {
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.kit").replace("{kit}", args[0]))));
+                    }
                 } else {
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.notFound").replace("{kit}", args[0]))));
                 }
