@@ -17,6 +17,10 @@ import io.github.evercraftmc.evercraft.spigot.commands.warp.SpawnCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 
 public abstract class Game implements Listener {
+    public enum LeaveReason {
+        COMMAND, DEATH, TELEPORT, DISCONNECTED
+    }
+
     protected String name;
 
     protected String warpName;
@@ -63,18 +67,20 @@ public abstract class Game implements Listener {
 
     public void join(Player player) {
         if (this.players.size() < this.maxPlayers) {
-            this.players.add(player);
+            new WarpCommand("warp", null, Arrays.asList(), null).run(player, new String[] { warpName, "true" });
 
-            new WarpCommand("warp", null, Arrays.asList(), null).run(player, new String[] { warpName });
+            this.players.add(player);
         } else {
             throw new RuntimeException("Game is full");
         }
     }
 
-    public void leave(Player player) {
+    public void leave(Player player, LeaveReason leaveReason) {
         this.players.remove(player);
 
-        new SpawnCommand("spawn", null, Arrays.asList(), null).run(player, new String[] {});
+        if (leaveReason == LeaveReason.COMMAND) {
+            new SpawnCommand("spawn", null, Arrays.asList(), null).run(player, new String[] { "true" });
+        }
     }
 
     public void tick() {}
@@ -86,14 +92,14 @@ public abstract class Game implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         if (this.players.contains(event.getPlayer())) {
-            this.leave(event.getPlayer());
+            this.leave(event.getPlayer(), LeaveReason.DISCONNECTED);
         }
     }
 
     @EventHandler
     public void onPlayerDied(PlayerDeathEvent event) {
         if (this.players.contains(event.getPlayer())) {
-            this.leave(event.getPlayer());
+            this.leave(event.getPlayer(), LeaveReason.DEATH);
         }
     }
 
@@ -101,7 +107,7 @@ public abstract class Game implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         if (event.getCause() == TeleportCause.COMMAND || event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.SPECTATE) {
             if (this.players.contains(event.getPlayer())) {
-                this.leave(event.getPlayer());
+                this.leave(event.getPlayer(), LeaveReason.TELEPORT);
             }
         }
     }
