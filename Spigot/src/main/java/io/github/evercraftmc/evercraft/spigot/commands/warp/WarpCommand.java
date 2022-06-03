@@ -29,7 +29,7 @@ public class WarpCommand extends SpigotCommand {
                         player.getActivePotionEffects().clear();
                     }
 
-                    if (args.length >= 2 && !args[1].equalsIgnoreCase("true")) {
+                    if (!(args.length >= 2 && args[1].equalsIgnoreCase("true"))) {
                         player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("warp.warped").replace("{warp}", args[0]))));
                     }
                 } else {

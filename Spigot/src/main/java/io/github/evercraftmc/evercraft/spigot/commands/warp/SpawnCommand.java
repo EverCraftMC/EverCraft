@@ -26,7 +26,7 @@ public class SpawnCommand extends SpigotCommand {
                     player.getActivePotionEffects().clear();
                 }
 
-                if (args.length >= 1 && !args[0].equalsIgnoreCase("true")) {
+                if (!(args.length >= 1 && args[0].equalsIgnoreCase("true"))) {
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("warp.warped").replace("{warp}", "spawn"))));
                 }
             } else {
