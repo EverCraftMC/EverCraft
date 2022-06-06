@@ -29,10 +29,13 @@ import io.github.evercraftmc.evercraft.discord.commands.moderation.UnBanCommand;
 import io.github.evercraftmc.evercraft.discord.commands.moderation.UnLockChannelCommand;
 import io.github.evercraftmc.evercraft.discord.commands.moderation.UnMuteCommand;
 import io.github.evercraftmc.evercraft.discord.commands.moderation.WarnCommand;
+import io.github.evercraftmc.evercraft.discord.commands.rr.CreateReactionRoleCommand;
+import io.github.evercraftmc.evercraft.discord.commands.rr.RemoveReactionRoleCommand;
 import io.github.evercraftmc.evercraft.discord.commands.util.SudoCommand;
 import io.github.evercraftmc.evercraft.discord.data.DataParser;
 import io.github.evercraftmc.evercraft.discord.data.types.config.Config;
 import io.github.evercraftmc.evercraft.discord.data.types.data.Data;
+import io.github.evercraftmc.evercraft.discord.data.types.data.ReactionRole;
 import io.github.evercraftmc.evercraft.discord.data.types.data.Warning;
 import io.github.evercraftmc.evercraft.shared.discord.DiscordBot;
 import io.github.evercraftmc.evercraft.shared.util.ModerationUtil;
@@ -67,6 +70,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.events.message.MessageBulkDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
@@ -119,8 +124,10 @@ public class BotMain implements EventListener {
         commands.add(new ClearCommand());
         commands.add(new NickCommand());
         commands.add(new SudoCommand());
+        commands.add(new CreateReactionRoleCommand());
+        commands.add(new RemoveReactionRoleCommand());
 
-        this.bot = new DiscordBot(this.getConfig().getToken(), config.getGuildId(), new GatewayIntent[] { GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_BANS }, new CacheFlag[] { CacheFlag.MEMBER_OVERRIDES }, MemberCachePolicy.ONLINE, config.getStatusType(), config.getStatus());
+        this.bot = new DiscordBot(this.getConfig().getToken(), config.getGuildId(), new GatewayIntent[] { GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_BANS, GatewayIntent.GUILD_EMOJIS }, new CacheFlag[] { CacheFlag.MEMBER_OVERRIDES, CacheFlag.EMOTE }, MemberCachePolicy.ONLINE, config.getStatusType(), config.getStatus());
 
         this.bot.addListener((GenericEvent rawevent) -> {
             if (rawevent instanceof ReadyEvent event) {
@@ -401,6 +408,18 @@ public class BotMain implements EventListener {
                     }
                 } else {
                     log("An uncached message (" + messageId + ") was deleted in " + event.getChannel().getAsMention());
+                }
+            }
+        } else if (rawevent instanceof MessageReactionAddEvent event) {
+            for (ReactionRole reactionRole : BotMain.Instance.getData().reactions) {
+                if (reactionRole.getChannel().equals(event.getChannel().getId()) && reactionRole.getMessage().equals(event.getMessageId()) && reactionRole.getEmoji().equals(event.getReactionEmote().getEmoji())) {
+                    event.getGuild().addRoleToMember(event.getMember(), event.getGuild().getRoleById(reactionRole.getRole())).queue();
+                }
+            }
+        } else if (rawevent instanceof MessageReactionRemoveEvent event) {
+            for (ReactionRole reactionRole : BotMain.Instance.getData().reactions) {
+                if (reactionRole.getChannel().equals(event.getChannel().getId()) && reactionRole.getMessage().equals(event.getMessageId()) && reactionRole.getEmoji().equals(event.getReactionEmote().getEmoji())) {
+                    event.getGuild().removeRoleFromMember(event.getMember(), event.getGuild().getRoleById(reactionRole.getRole())).queue();
                 }
             }
         }

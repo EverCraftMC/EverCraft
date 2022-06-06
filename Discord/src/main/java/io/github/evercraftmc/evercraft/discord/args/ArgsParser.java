@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.requests.ErrorResponse;
 
 public class ArgsParser {
     public static String[] getRawArgs(Message message) {
@@ -33,7 +35,7 @@ public class ArgsParser {
     }
 
     public static String getWordArg(Message message, Integer index) {
-        return getRawArg(message, index);
+        return getRawArg(message, index).trim();
     }
 
     public static Float getFloatArg(Message message, Integer index) throws NumberFormatException {
@@ -79,7 +81,7 @@ public class ArgsParser {
     }
 
     public static Role getRoleArg(Message message, Integer index) {
-        return message.getGuild().getRoleById(getWordArg(message, index).replaceAll("<@(!)?", "").replace(">", ""));
+        return message.getGuild().getRoleById(getWordArg(message, index).replaceAll("<@(&)?", "").replace(">", ""));
     }
 
     public static GuildChannel getChannelArg(Message message, Integer index) {
@@ -90,7 +92,39 @@ public class ArgsParser {
         return message.getGuild().getTextChannelById(getWordArg(message, index).replaceAll("<#(!)?", "").replace(">", ""));
     }
 
+    public static Message getMessageArg(Message message, Integer index) {
+        String messageUrl = ArgsParser.getWordArg(message, index);
+
+        if (messageUrl.startsWith("https://discord.com/channels/" + message.getGuild().getId() + "/")) {
+            messageUrl = messageUrl.replace("https://discord.com/channels/" + message.getGuild().getId() + "/", "");
+        } else {
+            return null;
+        }
+
+        TextChannel textChannel = message.getGuild().getTextChannelById(messageUrl.split("/")[0]);
+
+        try {
+            Message foundMessage = textChannel.retrieveMessageById(messageUrl.split("/")[1]).complete();
+
+            if (foundMessage != null) {
+                return foundMessage;
+            }
+        } catch (ErrorResponseException e) {
+            if (e.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE) {
+                return null;
+            } else {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
     public static VoiceChannel getVoiceChannelArg(Message message, Integer index) {
         return message.getGuild().getVoiceChannelById(getWordArg(message, index).replaceAll("<#(!)?", "").replace(">", ""));
+    }
+
+    public static String getEmojiArg(Message message, Integer index) {
+        return getWordArg(message, index);
     }
 }
