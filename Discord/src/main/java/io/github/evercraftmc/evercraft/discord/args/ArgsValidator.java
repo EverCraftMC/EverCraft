@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 public class ArgsValidator {
     public enum ArgType {
-        Word, String, Float, Integer, Boolean, Duration, User, Member, Role, Channel, TextChannel, VoiceChannel
+        Word, String, Float, Integer, Boolean, Duration, User, Member, Role, Channel, TextChannel, Message, VoiceChannel, Emoji
     }
 
     public record Arg(ArgType type, Boolean optional) {
@@ -37,8 +37,12 @@ public class ArgsValidator {
                 return OptionType.CHANNEL;
             case TextChannel:
                 return OptionType.CHANNEL;
+            case Message:
+                return OptionType.STRING;
             case VoiceChannel:
                 return OptionType.CHANNEL;
+            case Emoji:
+                return OptionType.STRING;
             default:
                 return OptionType.STRING;
             }
@@ -124,9 +128,21 @@ public class ArgsValidator {
 
                         return false;
                     }
+                } else if (expectedArgs.get(index).type() == ArgType.Message) {
+                    if (ArgsParser.getMessageArg(message, index + 1) == null) {
+                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be a message", message.getAuthor());
+
+                        return false;
+                    }
                 } else if (expectedArgs.get(index).type() == ArgType.VoiceChannel) {
                     if (ArgsParser.getVoiceChannelArg(message, index + 1) == null) {
                         BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be a voice channel", message.getAuthor());
+
+                        return false;
+                    }
+                } else if (expectedArgs.get(index).type() == ArgType.Emoji) {
+                    if (ArgsParser.getEmojiArg(message, index + 1) == null) {
+                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be an emoji", message.getAuthor());
 
                         return false;
                     }
