@@ -38,7 +38,7 @@ public class DodgeBowGame extends TeamedGame {
         super.start();
 
         for (Player player : this.players) {
-            if (this.teams.get(player) == null) {
+            if (!this.teams.containsKey(player)) {
                 this.teams.put(player, "runner");
             }
 
@@ -79,11 +79,14 @@ public class DodgeBowGame extends TeamedGame {
         if (!this.started) {
             Integer runners = 0;
             Integer bowers = 0;
+
             for (Player player2 : this.players) {
-                if (this.teams.get(player2).equalsIgnoreCase("runner")) {
-                    runners++;
-                } else if (this.teams.get(player2).equalsIgnoreCase("bower")) {
-                    bowers++;
+                if (this.teams.containsKey(player2)) {
+                    if (this.teams.get(player2).equalsIgnoreCase("runner")) {
+                        runners++;
+                    } else if (this.teams.get(player2).equalsIgnoreCase("bower")) {
+                        bowers++;
+                    }
                 }
             }
 

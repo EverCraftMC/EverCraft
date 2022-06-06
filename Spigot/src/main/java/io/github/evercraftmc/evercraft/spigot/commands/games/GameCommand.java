@@ -73,30 +73,24 @@ public class GameCommand extends SpigotCommand {
                         if (args[1].equalsIgnoreCase("join")) {
                             if (args.length >= 3) {
                                 Boolean inGame = false;
-                                Boolean inTeam = false;
                                 for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
                                     if (game.isPlaying(player)) {
                                         inGame = true;
-
-                                        if (game instanceof TeamedGame teamGame) {
-                                            if (teamGame.getTeam(player) != null) {
-                                                inTeam = true;
-                                            }
-                                        }
                                     }
                                 }
 
                                 if (inGame) {
-                                    if (!inTeam) {
-                                        for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
-                                            if (game instanceof TeamedGame teamedGame) {
-                                                if (teamedGame.isPlaying(player)) {
-                                                    teamedGame.joinTeam(player, args[1]);
+                                    for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
+                                        if (game instanceof TeamedGame teamedGame) {
+                                            if (teamedGame.isPlaying(player)) {
+                                                if (teamedGame.getTeam(player) == null) {
+                                                    teamedGame.joinTeam(player, args[2]);
+                                                } else {
+                                                    teamedGame.leaveTeam(player);
+                                                    teamedGame.joinTeam(player, args[2]);
                                                 }
                                             }
                                         }
-                                    } else {
-                                        // TODO Already in team message
                                     }
                                 } else {
                                     // TODO Not in game message
