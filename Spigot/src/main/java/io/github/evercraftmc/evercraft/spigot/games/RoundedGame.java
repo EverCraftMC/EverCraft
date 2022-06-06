@@ -26,7 +26,7 @@ public abstract class RoundedGame extends Game {
     public void leave(Player player, LeaveReason leaveReason) {
         super.leave(player, leaveReason);
 
-        if (this.players.size() < this.minPlayers) {
+        if (this.started && this.players.size() < this.minPlayers) {
             this.stop();
         }
     }
