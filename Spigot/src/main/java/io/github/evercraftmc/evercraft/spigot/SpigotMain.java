@@ -205,7 +205,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
             this.registeredGames.add(new PvpGame("ventpvp", "ventpvp", "vents"));
             this.registeredGames.add(new PvpGame("sumo", "sumo", "sumo"));
 
-            this.registeredGames.add(new DodgeBowGame("dodgebow", "dodgebow", "dodgebow"));
+            this.registeredGames.add(new DodgeBowGame("dodgebow", "dodgebow", "dodgebow-runners", "dodgebow-bowers", "dodgebow"));
         }
 
         this.getLogger().info("Finished loading games");
