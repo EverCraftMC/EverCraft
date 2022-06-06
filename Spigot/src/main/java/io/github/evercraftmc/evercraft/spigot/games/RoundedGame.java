@@ -14,6 +14,15 @@ public abstract class RoundedGame extends Game {
     }
 
     @Override
+    public void join(Player player) {
+        super.join(player);
+
+        if (this.started) {
+            throw new RuntimeException("The game has already started");
+        }
+    }
+
+    @Override
     public void leave(Player player, LeaveReason leaveReason) {
         super.leave(player, leaveReason);
 
@@ -46,7 +55,7 @@ public abstract class RoundedGame extends Game {
                 this.leave(player, LeaveReason.COMMAND);
             }
 
-            this.started = true;
+            this.started = false;
 
             this.tickTask.cancel();
         } else {

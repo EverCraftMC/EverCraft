@@ -71,7 +71,7 @@ public class GameCommand extends SpigotCommand {
                 } else if (args[0].equalsIgnoreCase("team")) {
                     if (args.length >= 2) {
                         if (args[1].equalsIgnoreCase("join")) {
-                            if (args.length >= 2) {
+                            if (args.length >= 3) {
                                 Boolean inGame = false;
                                 Boolean inTeam = false;
                                 for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
