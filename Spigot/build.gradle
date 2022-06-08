@@ -12,7 +12,7 @@ repositories {
 dependencies {
     depencancy project(':Shared')
 
-    compileOnly "org.purpurmc.purpur:purpur-api:${project.minecraft_version}-${project.purpur_version}"
+    compileOnly "org.purpurmc.purpur:purpur-api:${project.purpur_version}"
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
 }

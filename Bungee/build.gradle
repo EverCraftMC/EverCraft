@@ -13,7 +13,7 @@ repositories {
 dependencies {
     depencancy project(':Shared')
 
-    compileOnly "io.github.waterfallmc:waterfall-api:${project.minecraft_release}-${project.waterfall_version}"
+    compileOnly "io.github.waterfallmc:waterfall-api:${project.waterfall_version}"
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
     compileOnly "com.github.NuVotifier:NuVotifier:${project.votifier_version}"
