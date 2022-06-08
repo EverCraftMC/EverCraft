@@ -5,6 +5,7 @@ import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.protocol.Property;
 import net.md_5.bungee.protocol.packet.PlayerListItem;
 
 public class TabListUtil {
@@ -18,7 +19,7 @@ public class TabListUtil {
         item.setDisplayName(ComponentFormatter.stringToJson(player.getDisplayName()));
         item.setPing(player.getPing());
         item.setGamemode(0);
-        item.setProperties(new String[][] {});
+        item.setProperties(new Property[] {});
 
         packet.setItems(new PlayerListItem.Item[] { item });
 
@@ -39,7 +40,7 @@ public class TabListUtil {
         item.setDisplayName(ComponentFormatter.stringToJson("[" + StringUtils.toTtitleCase(server.getName()) + "] " + player.getDisplayName()));
         item.setPing(player.getPing());
         item.setGamemode(0);
-        item.setProperties(new String[][] {});
+        item.setProperties(new Property[] {});
 
         packet.setItems(new PlayerListItem.Item[] { item });
 
@@ -60,7 +61,7 @@ public class TabListUtil {
         item.setDisplayName(ComponentFormatter.stringToJson(player.getDisplayName()));
         item.setPing(player.getPing());
         item.setGamemode(0);
-        item.setProperties(new String[][] {});
+        item.setProperties(new Property[] {});
 
         packet.setItems(new PlayerListItem.Item[] { item });
 
@@ -79,7 +80,7 @@ public class TabListUtil {
         item.setDisplayName(ComponentFormatter.stringToJson("[" + StringUtils.toTtitleCase(server.getName()) + "] " + player.getDisplayName()));
         item.setPing(player.getPing());
         item.setGamemode(0);
-        item.setProperties(new String[][] {});
+        item.setProperties(new Property[] {});
 
         packet.setItems(new PlayerListItem.Item[] { item });
 

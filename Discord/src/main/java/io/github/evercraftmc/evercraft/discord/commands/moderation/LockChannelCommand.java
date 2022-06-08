@@ -21,7 +21,7 @@ public class LockChannelCommand extends Command {
         if (ArgsParser.getTextChannelArg(message, 1).getPermissionOverride(message.getGuild().getPublicRole()) != null) {
             ArgsParser.getTextChannelArg(message, 1).getPermissionOverride(message.getGuild().getPublicRole()).getManager().deny(Permission.MESSAGE_SEND, Permission.MESSAGE_SEND_IN_THREADS, Permission.MESSAGE_TTS, Permission.CREATE_PUBLIC_THREADS, Permission.CREATE_PRIVATE_THREADS, Permission.USE_APPLICATION_COMMANDS, Permission.MESSAGE_ADD_REACTION).queue();
         } else {
-            ArgsParser.getTextChannelArg(message, 1).putPermissionOverride(message.getGuild().getPublicRole()).complete().getManager().deny(Permission.MESSAGE_SEND, Permission.MESSAGE_SEND_IN_THREADS, Permission.MESSAGE_TTS, Permission.CREATE_PUBLIC_THREADS, Permission.CREATE_PRIVATE_THREADS, Permission.USE_APPLICATION_COMMANDS, Permission.MESSAGE_ADD_REACTION).queue();
+            ArgsParser.getTextChannelArg(message, 1).upsertPermissionOverride(message.getGuild().getPublicRole()).complete().getManager().deny(Permission.MESSAGE_SEND, Permission.MESSAGE_SEND_IN_THREADS, Permission.MESSAGE_TTS, Permission.CREATE_PUBLIC_THREADS, Permission.CREATE_PRIVATE_THREADS, Permission.USE_APPLICATION_COMMANDS, Permission.MESSAGE_ADD_REACTION).queue();
         }
 
         if (ArgsParser.hasArg(message, 2)) {
