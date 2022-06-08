@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import gnu.trove.set.hash.TLongHashSet;
 import io.github.evercraftmc.evercraft.discord.args.ArgsParser;
 import io.github.evercraftmc.evercraft.discord.args.ArgsValidator;
 import io.github.evercraftmc.evercraft.discord.commands.Command;
@@ -79,6 +78,10 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandEditAction;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import net.dv8tion.jda.api.utils.data.DataArray;
+import net.dv8tion.jda.internal.JDAImpl;
+import net.dv8tion.jda.internal.entities.GuildImpl;
+import net.dv8tion.jda.internal.entities.MessageMentionsImpl;
 import net.dv8tion.jda.internal.entities.ReceivedMessage;
 
 public class BotMain implements EventListener {
@@ -264,7 +267,7 @@ public class BotMain implements EventListener {
                     if (event.getMember().getRoles().isEmpty() || event.getMember().getRoles().get(0).getPosition() <= event.getGuild().getSelfMember().getRoles().get(0).getPosition()) {
                         String command = getConfig().getPrefix() + "mute " + event.getMember().getAsMention() + " 1h No, just no, get the fuck out";
                         Long id = UUID.randomUUID().getMostSignificantBits();
-                        Message fakemessage = new ReceivedMessage(id, event.getChannel(), MessageType.DEFAULT, new MessageReference(id, event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(command.trim()).build(), this.getJDA()), false, false, new TLongHashSet(), new TLongHashSet(), false, false, command.trim(), id + "", getJDA().getSelfUser(), event.getMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, null);
+                        Message fakemessage = new ReceivedMessage(id, event.getChannel(), MessageType.DEFAULT, new MessageReference(id, event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(command.trim()).build(), this.getJDA()), false, false, false, command.trim(), id + "", getJDA().getSelfUser(), event.getGuild().getSelfMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new MessageMentionsImpl((JDAImpl) event.getJDA(), (GuildImpl) event.getGuild(), command.trim(), false, DataArray.empty(), DataArray.empty()), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, null, null);
                         new MuteCommand().run(fakemessage);
 
                         event.getMessage().delete().queue();
@@ -272,7 +275,7 @@ public class BotMain implements EventListener {
                 } else if (ModerationUtil.isInappropriateString(message.toString().trim())) {
                     String command = getConfig().getPrefix() + "warn " + event.getMember().getAsMention() + " Inappropriate language";
                     Long id = UUID.randomUUID().getMostSignificantBits();
-                    Message fakemessage = new ReceivedMessage(id, event.getChannel(), MessageType.DEFAULT, new MessageReference(id, event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(command.trim()).build(), this.getJDA()), false, false, new TLongHashSet(), new TLongHashSet(), false, false, command.trim(), id + "", getJDA().getSelfUser(), event.getMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, null);
+                    Message fakemessage = new ReceivedMessage(id, event.getChannel(), MessageType.DEFAULT, new MessageReference(id, event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(command.trim()).build(), this.getJDA()), false, false, false, command.trim(), id + "", getJDA().getSelfUser(), event.getGuild().getSelfMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new MessageMentionsImpl((JDAImpl) event.getJDA(), (GuildImpl) event.getGuild(), command.trim(), false, DataArray.empty(), DataArray.empty()), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, null, null);
                     new WarnCommand().run(fakemessage);
 
                     Integer warningCount = 0;
@@ -286,7 +289,7 @@ public class BotMain implements EventListener {
                         if (warningCount > 5) {
                             String command2 = getConfig().getPrefix() + "mute " + event.getMember().getAsMention() + " " + (5 * (warningCount - 5)) + "m Inappropriate language";
                             Long id2 = UUID.randomUUID().getMostSignificantBits();
-                            Message fakemessage2 = new ReceivedMessage(id2, event.getChannel(), MessageType.DEFAULT, new MessageReference(id2, event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(command2.trim()).build(), this.getJDA()), false, false, new TLongHashSet(), new TLongHashSet(), false, false, command2.trim(), id2 + "", event.getAuthor(), event.getMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, null);
+                            Message fakemessage2 = new ReceivedMessage(id2, event.getChannel(), MessageType.DEFAULT, new MessageReference(id2, event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(command2.trim()).build(), this.getJDA()), false, false, false, command2.trim(), id2 + "", getJDA().getSelfUser(), event.getGuild().getSelfMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new MessageMentionsImpl((JDAImpl) event.getJDA(), (GuildImpl) event.getGuild(), command2.trim(), false, DataArray.empty(), DataArray.empty()), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, null, null);
                             new MuteCommand().run(fakemessage2);
                         }
 
@@ -350,7 +353,7 @@ public class BotMain implements EventListener {
                         for (OptionMapping option : event.getOptions()) {
                             content.append(" " + option.getAsString());
                         }
-                        Message message = new ReceivedMessage(event.getIdLong(), event.getChannel(), MessageType.SLASH_COMMAND, new MessageReference(event.getIdLong(), event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(content.toString().trim()).build(), this.getJDA()), false, false, new TLongHashSet(), new TLongHashSet(), false, false, content.toString().trim(), event.getId(), event.getUser(), event.getMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, new Interaction(event.getIdLong(), event.getTypeRaw(), event.getName(), event.getUser(), event.getMember()));
+                        Message message = new ReceivedMessage(event.getIdLong(), event.getChannel(), MessageType.DEFAULT, new MessageReference(event.getIdLong(), event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(content.toString().trim()).build(), this.getJDA()), false, false, false, content.toString().trim(), event.getId(), event.getUser(), event.getMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new MessageMentionsImpl((JDAImpl) event.getJDA(), (GuildImpl) event.getGuild(), content.toString().trim(), false, DataArray.empty(), DataArray.empty()), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<MessageSticker>(), new ArrayList<ActionRow>(), 0, new Interaction(event.getIdLong(), event.getTypeRaw(), event.getName(), event.getUser(), event.getMember()), null);
 
                         if (ArgsValidator.validateArgs(message, command.getArgs())) {
                             command.run(message);
