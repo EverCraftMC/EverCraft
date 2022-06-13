@@ -20,8 +20,8 @@ public class TimeUtil {
         Integer minutes = 0;
         Integer seconds = 0;
 
-        while (difference > 1 * 60 * 60 * 24 * 7 * 30 * 365) {
-            difference -= 1 * 60 * 60 * 24 * 7 * 30 * 365;
+        while (difference > 1l * 60l * 60l * 24l * 7l * 30l * 365l) {
+            difference -= 1l * 60l * 60l * 24l * 7l * 30l * 365l;
 
             years++;
         }
@@ -30,8 +30,8 @@ public class TimeUtil {
             differentString.append(years + " years ");
         }
 
-        while (difference > 1 * 60 * 60 * 24 * 7 * 30) {
-            difference -= 1 * 60 * 60 * 24 * 7 * 30;
+        while (difference > 1l * 60l * 60l * 24l * 7l * 30l) {
+            difference -= 1l * 60l * 60l * 24l * 7l * 30l;
 
             months++;
         }
@@ -40,8 +40,8 @@ public class TimeUtil {
             differentString.append(months + " months ");
         }
 
-        while (difference > 1 * 60 * 60 * 24 * 7) {
-            difference -= 1 * 60 * 60 * 24 * 7;
+        while (difference > 1l * 60l * 60l * 24l * 7l) {
+            difference -= 1l * 60l * 60l * 24l * 7l;
 
             weeks++;
         }
@@ -50,8 +50,8 @@ public class TimeUtil {
             differentString.append(weeks + " weeks ");
         }
 
-        while (difference > 1 * 60 * 60 * 24) {
-            difference -= 1 * 60 * 60 * 24;
+        while (difference > 1l * 60l * 60l * 24l) {
+            difference -= 1l * 60l * 60l * 24l;
 
             days++;
         }
@@ -60,8 +60,8 @@ public class TimeUtil {
             differentString.append(days + " days ");
         }
 
-        while (difference > 1 * 60 * 60) {
-            difference -= 1 * 60 * 60;
+        while (difference > 1l * 60l * 60l) {
+            difference -= 1l * 60l * 60l;
 
             hours++;
         }
@@ -70,8 +70,8 @@ public class TimeUtil {
             differentString.append(hours + " hours ");
         }
 
-        while (difference > 1 * 60) {
-            difference -= 1 * 60;
+        while (difference > 1l * 60l) {
+            difference -= 1l * 60l;
 
             minutes++;
         }
@@ -105,21 +105,21 @@ public class TimeUtil {
         }
     }
 
-    public static Integer unitMultiplier(String unit) {
+    public static Long unitMultiplier(String unit) {
         if (unit.equalsIgnoreCase("s") || unit.equalsIgnoreCase("sec") || unit.equalsIgnoreCase("second")) {
-            return 1;
+            return 1l;
         } else if (unit.equalsIgnoreCase("m") || unit.equalsIgnoreCase("min") || unit.equalsIgnoreCase("minute")) {
-            return 1 * 60;
+            return 1l * 60l;
         } else if (unit.equalsIgnoreCase("h") || unit.equalsIgnoreCase("hour")) {
-            return 1 * 60 * 60;
+            return 1l * 60l * 60l;
         } else if (unit.equalsIgnoreCase("d") || unit.equalsIgnoreCase("day")) {
-            return 1 * 60 * 60 * 24;
+            return 1l * 60l * 60l * 24l;
         } else if (unit.equalsIgnoreCase("w") || unit.equalsIgnoreCase("week")) {
-            return 1 * 60 * 60 * 24 * 7;
+            return 1l * 60l * 60l * 24l * 7l;
         } else if (unit.equalsIgnoreCase("mon") || unit.equalsIgnoreCase("month")) {
-            return 1 * 60 * 60 * 24 * 7 * 30;
+            return 1l * 60l * 60l * 24l * 7l * 30l;
         } else if (unit.equalsIgnoreCase("y") || unit.equalsIgnoreCase("year")) {
-            return 1 * 60 * 60 * 24 * 7 * 30 * 365;
+            return 1l * 60l * 60l * 24l * 7l * 30l * 365l;
         } else {
             return null;
         }
