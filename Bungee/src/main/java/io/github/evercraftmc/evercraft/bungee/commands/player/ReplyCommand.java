@@ -27,7 +27,7 @@ public class ReplyCommand extends BungeeCommand {
                 if (player2 != null) {
                     StringBuilder message = new StringBuilder();
 
-                    for (Integer i = 1; i < args.length; i++) {
+                    for (Integer i = 0; i < args.length; i++) {
                         message.append(args[i] + " ");
                     }
 
@@ -44,7 +44,7 @@ public class ReplyCommand extends BungeeCommand {
                     }
                     lastMessages.put(player2, player);
                 } else {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noReplyTo"))));
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.noReplyTo"))));
                 }
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
