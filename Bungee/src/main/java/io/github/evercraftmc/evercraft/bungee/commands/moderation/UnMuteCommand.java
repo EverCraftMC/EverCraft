@@ -35,7 +35,7 @@ public class UnMuteCommand extends BungeeCommand {
                     player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.cantunmuteself"))));
                 } else {
                     if (BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
-                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
+                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.broadcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
 
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.muted", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.reason", null);
@@ -62,7 +62,7 @@ public class UnMuteCommand extends BungeeCommand {
                             reason.append(args[i] + " ");
                         }
 
-                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.brodcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
+                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.broadcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
 
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.muted", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.reason", null);
