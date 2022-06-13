@@ -36,7 +36,11 @@ public class SeenCommand extends BungeeCommand {
                 } else {
                     Instant lastonline = Instant.ofEpochSecond(BungeeMain.getInstance().getData().getLong("players." + player.getUniqueId() + ".lastonline"));
 
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("lastseen.lastseen").replace("{player}", args[0]).replace("{lastseen}", TimeUtil.getDifferenceString(Instant.now(), lastonline)))));
+                    if (lastonline != null) {
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("lastseen.lastseen").replace("{player}", args[0]).replace("{lastseen}", TimeUtil.getDifferenceString(Instant.now(), lastonline)))));
+                    } else {
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
+                    }
                 }
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
