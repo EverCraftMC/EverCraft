@@ -35,7 +35,7 @@ public class UnBanCommand extends BungeeCommand {
                     player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.cantunbanself"))));
                 } else {
                     if (BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".ban.banned")) {
-                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.brodcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
+                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.broadcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
 
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", null);
@@ -62,7 +62,7 @@ public class UnBanCommand extends BungeeCommand {
                             reason.append(args[i] + " ");
                         }
 
-                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.brodcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
+                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.broadcast.reason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
 
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", null);

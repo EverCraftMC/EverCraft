@@ -1,6 +1,5 @@
 package io.github.evercraftmc.evercraft.bungee.commands.player;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -8,23 +7,22 @@ import java.util.Map;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.commands.BungeeCommand;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
-import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class MessageCommand extends BungeeCommand {
-    public static Map<ProxiedPlayer, ProxiedPlayer> lastMessages = new HashMap<ProxiedPlayer, ProxiedPlayer>();
+public class ReplyCommand extends BungeeCommand {
+    public Map<ProxiedPlayer, ProxiedPlayer> lastMessages = new HashMap<ProxiedPlayer, ProxiedPlayer>();
 
-    public MessageCommand(String name, String description, List<String> aliases, String permission) {
+    public ReplyCommand(String name, String description, List<String> aliases, String permission) {
         super(name, description, aliases, permission);
     }
 
     @Override
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof ProxiedPlayer player) {
-            if (args.length > 1) {
-                ProxiedPlayer player2 = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
+            if (args.length > 0) {
+                ProxiedPlayer player2 = MessageCommand.lastMessages.get(player);
 
                 if (player2 != null) {
                     StringBuilder message = new StringBuilder();
@@ -46,7 +44,7 @@ public class MessageCommand extends BungeeCommand {
                     }
                     lastMessages.put(player2, player);
                 } else {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noReplyTo"))));
                 }
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
@@ -58,20 +56,6 @@ public class MessageCommand extends BungeeCommand {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        List<String> list = new ArrayList<String>();
-
-        if (args.length == 1) {
-            for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
-                list.add(player.getName());
-            }
-        } else {
-            return Arrays.asList();
-        }
-
-        if (args.length > 0) {
-            return StringUtils.matchPartial(args[args.length - 1], list);
-        } else {
-            return list;
-        }
+        return Arrays.asList();
     }
 }

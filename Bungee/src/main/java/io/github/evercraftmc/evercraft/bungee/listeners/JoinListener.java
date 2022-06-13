@@ -2,7 +2,6 @@ package io.github.evercraftmc.evercraft.bungee.listeners;
 
 import java.net.InetSocketAddress;
 import java.time.Instant;
-import java.util.Date;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.scoreboard.ScoreBoard;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
@@ -23,10 +22,6 @@ public class JoinListener extends BungeeListener {
     @EventHandler
     public void onPlayerConnect(ServerConnectEvent event) {
         if (event.getReason() == Reason.JOIN_PROXY) {
-            if (event.getPlayer().getPendingConnection().getVirtualHost() != null && !event.getPlayer().getPendingConnection().getVirtualHost().getHostString().contains("evercraft")) {
-                event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors("&4&lWARNING - &r&cIt looks like you are using one of the old ip addresses, please make sure you are using the new one play.evercraft.ga")));
-            }
-
             if (event.getPlayer().getPendingConnection().getVirtualHost() != null && BungeeMain.getInstance().getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostName().split("\\.")[0]) != null) {
                 event.setTarget(BungeeMain.getInstance().getProxy().getServerInfo(event.getPlayer().getPendingConnection().getVirtualHost().getHostName().split("\\.")[0]));
             } else {
@@ -124,7 +119,7 @@ public class JoinListener extends BungeeListener {
 
     @EventHandler
     public void onPlayerQuit(PlayerDisconnectEvent event) {
-        BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".lastseen", new Date().getTime());
+        BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".lastonline", Instant.now().getEpochSecond());
 
         BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("welcome.quit").replace("{player}", event.getPlayer().getDisplayName()))));
 
