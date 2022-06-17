@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
@@ -53,6 +54,22 @@ public class MessageListener extends BungeeListener {
                             BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(BungeeMain.getInstance().getProxy().getConsole(), "tempmute " + player.getName() + " " + (5 * (warnings.get(player.getUniqueId()) - 5)) + "m Inappropriate language");
                         }
                     } else {
+                        for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
+                            if (message.contains("@" + player2.getName())) {
+                                message = message.replace("@" + player2.getName(), TextFormatter.translateColors("&a@") + player2.getName() + TextFormatter.translateColors("&r"));
+
+                                ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                                out.writeUTF("playSound");
+                                out.writeUTF(player2.getUniqueId().toString());
+                                out.writeUTF("ENTITY_EXPERIENCE_ORB_PICKUP");
+                                out.writeUTF("PLAYERS");
+                                out.writeFloat(1);
+                                out.writeFloat(1);
+
+                                player2.getServer().sendData("BungeeCord", out.toByteArray());
+                            }
+                        }
+
                         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                             if (player2.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
                                 player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.default").replace("{player}", player.getDisplayName()).replace("{message}", message))));
