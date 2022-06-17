@@ -9,6 +9,8 @@ import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import org.bukkit.GameRule;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -92,6 +94,10 @@ public class MessageListener extends SpigotListener implements PluginMessageList
                 Player player = SpigotMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
 
                 player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + SpigotMain.getInstance().getData().getString("players." + player.getUniqueId() + ".nickname"))));
+            } else if (subChannel.equals("playSound")) {
+                Player player = SpigotMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
+
+                player.playSound(player, Sound.valueOf(in.readUTF()), SoundCategory.valueOf(in.readUTF()), in.readFloat(), in.readFloat());
             }
         }
     }
