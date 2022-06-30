@@ -17,7 +17,7 @@ public class CreateReactionRoleCommand extends Command {
     public void run(Message message) {
         Message reactionMessage = ArgsParser.getMessageArg(message, 1);
 
-        BotMain.Instance.getData().reactions.add(new ReactionRole(reactionMessage.getTextChannel().getId(), reactionMessage.getId(), ArgsParser.getEmojiArg(message, 2), ArgsParser.getRoleArg(message, 3).getId()));
+        BotMain.Instance.getData().reactions.add(new ReactionRole(reactionMessage.getTextChannel().getId(), reactionMessage.getId(), ArgsParser.getEmojiArg(message, 2).getAsReactionCode(), ArgsParser.getRoleArg(message, 3).getId()));
         BotMain.Instance.getData().getParser().save();
 
         reactionMessage.addReaction(ArgsParser.getEmojiArg(message, 2)).queue();

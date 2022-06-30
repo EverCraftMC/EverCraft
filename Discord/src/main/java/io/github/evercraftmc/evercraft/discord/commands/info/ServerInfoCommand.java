@@ -12,6 +12,6 @@ public class ServerInfoCommand extends Command {
 
     @Override
     public void run(Message message) {
-        BotMain.Instance.sendEmbed(message.getTextChannel(), "Server Info", "Name: " + message.getGuild().getName() + "\nID: " + message.getGuild().getId() + "\nCreated: " + message.getGuild().getTimeCreated().getMonthValue() + "/" + message.getGuild().getTimeCreated().getDayOfMonth() + "/" + message.getGuild().getTimeCreated().getYear() + "\nOwner: " + message.getGuild().getOwner().getAsMention() + " (" + message.getGuild().getOwner().getId() + ")\nMembers: " + message.getGuild().getMemberCount() + "\nChannels: " + message.getGuild().getChannels().size() + "\nRoles: " + message.getGuild().getRoles().size() + "\nEmotes: " + message.getGuild().getEmotes().size());
+        BotMain.Instance.sendEmbed(message.getTextChannel(), "Server Info", "Name: " + message.getGuild().getName() + "\nID: " + message.getGuild().getId() + "\nCreated: " + message.getGuild().getTimeCreated().getMonthValue() + "/" + message.getGuild().getTimeCreated().getDayOfMonth() + "/" + message.getGuild().getTimeCreated().getYear() + "\nOwner: " + message.getGuild().getOwner().getAsMention() + " (" + message.getGuild().getOwner().getId() + ")\nMembers: " + message.getGuild().getMemberCount() + "\nChannels: " + message.getGuild().getChannels().size() + "\nRoles: " + message.getGuild().getRoles().size() + "\nEmotes: " + message.getGuild().getEmojis().size());
     }
 }
