@@ -214,12 +214,6 @@ public class BotMain implements EventListener {
             System.out.println("Loading message chache..");
 
             for (TextChannel channel : this.getBot().getGuild().getTextChannels()) {
-                channel.getHistory().retrieveFuture(100).queue((List<Message> messages) -> {
-                    for (Message message : messages) {
-                        messageCache.put(message.getId(), message);
-                    }
-                });
-
                 channel.getHistory().retrievePast(100).queue((List<Message> messages) -> {
                     for (Message message : messages) {
                         messageCache.put(message.getId(), message);
