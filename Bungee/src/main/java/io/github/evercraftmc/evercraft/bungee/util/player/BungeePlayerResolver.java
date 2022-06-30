@@ -1,6 +1,7 @@
 package io.github.evercraftmc.evercraft.bungee.util.player;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.shared.config.Config;
 import io.github.evercraftmc.evercraft.shared.util.player.SimplePlayer;
@@ -52,7 +53,13 @@ public class BungeePlayerResolver {
     }
 
     public static String getPrefix(UUID uuid) {
-        return LuckPermsProvider.get().getUserManager().getUser(uuid).getCachedData().getMetaData().getPrefix();
+        try {
+            return LuckPermsProvider.get().getUserManager().loadUser(uuid).get().getCachedData().getMetaData().getPrefix();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public static ProxiedPlayer bungeePlayerFromPlayer(SimplePlayer player) {
