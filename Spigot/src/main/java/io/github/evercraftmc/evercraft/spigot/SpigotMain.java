@@ -79,6 +79,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
 
+        this.config.addDefault("serverName", "unknown");
         this.config.addDefault("warp.overidespawn", true);
         this.config.addDefault("warp.clearonwarp", false);
         this.config.addDefault("passiveEnabled", false);
@@ -89,6 +90,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.config.addDefault("database.password", "");
 
         this.config.copyDefaults();
+
+        this.serverName = this.config.getString("serverName");
 
         this.getLogger().info("Finished loading config");
 
@@ -344,5 +347,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     public void setServerName(String value) {
         this.serverName = value;
+
+        this.config.set("serverName", value);
     }
 }

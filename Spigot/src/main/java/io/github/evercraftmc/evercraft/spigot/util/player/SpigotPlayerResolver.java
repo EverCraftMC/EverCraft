@@ -1,6 +1,7 @@
 package io.github.evercraftmc.evercraft.spigot.util.player;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import io.github.evercraftmc.evercraft.shared.config.Config;
@@ -52,7 +53,13 @@ public class SpigotPlayerResolver {
     }
 
     public static String getPrefix(UUID uuid) {
-        return LuckPermsProvider.get().getUserManager().getUser(uuid).getCachedData().getMetaData().getPrefix();
+        try {
+            return LuckPermsProvider.get().getUserManager().loadUser(uuid).get().getCachedData().getMetaData().getPrefix();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public static Player spigotPlayerFromPlayer(SimplePlayer player) {
