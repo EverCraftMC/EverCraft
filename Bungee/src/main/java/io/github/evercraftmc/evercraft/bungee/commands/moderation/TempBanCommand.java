@@ -28,12 +28,14 @@ public class TempBanCommand extends BungeeCommand {
             senderName = "CONSOLE";
         }
 
-        if (args.length == 2) {
+        if (args.length == 2 || (args.length == 3 && args[2].equalsIgnoreCase("--confirm"))) {
             SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
 
             if (player != null) {
                 if (!BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".ban.banned")) {
-                    if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId())) {
+                    Boolean confirm = (args.length == 3 && args[2].equalsIgnoreCase("--confirm"));
+
+                    if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId()) && !confirm) {
                         player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.cantbanself"))));
                     } else {
                         BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.broadcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{time}", args[1]))));
