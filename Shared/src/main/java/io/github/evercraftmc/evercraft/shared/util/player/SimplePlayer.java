@@ -6,17 +6,22 @@ public class SimplePlayer {
     private UUID uuid;
     private String name;
 
-    private String displayName;
+    private String prefix;
+    private String nickname;
 
     public SimplePlayer(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
-        this.displayName = name;
+
+        this.prefix = "";
+        this.nickname = name;
     }
 
-    public SimplePlayer(UUID uuid, String name, String displayName) {
+    public SimplePlayer(UUID uuid, String name, String prefix, String nickname) {
         this(uuid, name);
-        this.displayName = displayName;
+
+        this.prefix = prefix;
+        this.nickname = nickname;
     }
 
     public UUID getUniqueId() {
@@ -28,6 +33,14 @@ public class SimplePlayer {
     }
 
     public String getDisplayName() {
-        return this.displayName;
+        return this.prefix + this.nickname;
+    }
+
+    public String getPrefix() {
+        return this.prefix;
+    }
+
+    public String getNickname() {
+        return this.nickname;
     }
 }
