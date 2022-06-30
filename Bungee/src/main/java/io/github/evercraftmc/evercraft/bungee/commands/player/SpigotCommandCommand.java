@@ -26,10 +26,16 @@ public class SpigotCommandCommand extends BungeeCommand {
                     command.append(arg + " ");
                 }
 
+                String commandString = command.toString();
+
+                if (commandString.startsWith("")) {
+                    commandString = commandString.substring(1);
+                }
+
                 ByteArrayDataOutput out = ByteStreams.newDataOutput();
                 out.writeUTF("crossCommand");
                 out.writeUTF(player.getUniqueId().toString());
-                out.writeUTF(command.toString().trim());
+                out.writeUTF(commandString.trim());
 
                 player.getServer().sendData("BungeeCord", out.toByteArray());
             } else {

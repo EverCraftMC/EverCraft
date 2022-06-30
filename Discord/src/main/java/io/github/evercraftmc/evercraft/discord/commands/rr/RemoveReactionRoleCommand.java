@@ -7,6 +7,7 @@ import io.github.evercraftmc.evercraft.discord.args.ArgsValidator;
 import io.github.evercraftmc.evercraft.discord.commands.Command;
 import io.github.evercraftmc.evercraft.discord.data.types.data.ReactionRole;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 
 public class RemoveReactionRoleCommand extends Command {
     public RemoveReactionRoleCommand() {
@@ -19,7 +20,7 @@ public class RemoveReactionRoleCommand extends Command {
 
         for (ReactionRole reactionRole : BotMain.Instance.getData().reactions) {
             if (reactionRole.getMessage().equals(reactionMessage.getId())) {
-                reactionMessage.removeReaction(reactionRole.getEmoji()).queue();
+                reactionMessage.removeReaction(Emoji.fromFormatted(reactionRole.getEmoji())).queue();
 
                 BotMain.Instance.getData().reactions.remove(reactionRole);
                 BotMain.Instance.getData().getParser().save();

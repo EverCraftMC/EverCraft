@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 
@@ -124,7 +125,7 @@ public class ArgsParser {
         return message.getGuild().getVoiceChannelById(getWordArg(message, index).replaceAll("<#(!)?", "").replace(">", ""));
     }
 
-    public static String getEmojiArg(Message message, Integer index) {
-        return getWordArg(message, index);
+    public static Emoji getEmojiArg(Message message, Integer index) {
+        return Emoji.fromFormatted(getWordArg(message, index));
     }
 }
