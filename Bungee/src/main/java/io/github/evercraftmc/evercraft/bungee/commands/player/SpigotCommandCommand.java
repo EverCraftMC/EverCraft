@@ -28,7 +28,7 @@ public class SpigotCommandCommand extends BungeeCommand {
 
                 String commandString = command.toString();
 
-                if (commandString.startsWith("")) {
+                if (commandString.startsWith("/")) {
                     commandString = commandString.substring(1);
                 }
 
