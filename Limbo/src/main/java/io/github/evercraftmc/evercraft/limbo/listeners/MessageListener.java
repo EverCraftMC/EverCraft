@@ -1,12 +1,17 @@
 package io.github.evercraftmc.evercraft.limbo.listeners;
 
 import java.io.IOException;
+import java.util.UUID;
+import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.loohp.limbo.events.EventHandler;
 import com.loohp.limbo.events.player.PlayerChatEvent;
+import com.loohp.limbo.events.player.PluginMessageEvent;
+import com.loohp.limbo.player.Player;
 import com.loohp.limbo.utils.NamespacedKey;
 import io.github.evercraftmc.evercraft.limbo.LimboMain;
+import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 
 public class MessageListener extends LimboListener {
     @EventHandler
@@ -23,6 +28,24 @@ public class MessageListener extends LimboListener {
             event.getPlayer().sendPluginMessage(new NamespacedKey("bungeecord:main"), out.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @EventHandler
+    public void onPluginMessageReceived(PluginMessageEvent event) {
+        if (event.getChannel().equals("BungeeCord") || event.getChannel().equals("bungee:main")) {
+            ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
+
+            String subChannel = in.readUTF();
+            if (subChannel.equals("GetServer")) {
+                LimboMain.getInstance().setServerName(StringUtils.toTtitleCase(in.readUTF()));
+            } else if (subChannel.equals("crossCommand")) {
+                Player player = LimboMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
+
+                String command = in.readUTF();
+
+                LimboMain.getInstance().getServer().dispatchCommand(player, command);
+            }
         }
     }
 }

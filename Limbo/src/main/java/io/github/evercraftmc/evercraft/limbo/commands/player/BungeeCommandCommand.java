@@ -1,17 +1,19 @@
-package io.github.evercraftmc.evercraft.spigot.commands.player;
+package io.github.evercraftmc.evercraft.limbo.commands.player;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.loohp.limbo.commands.CommandSender;
+import com.loohp.limbo.player.Player;
+import com.loohp.limbo.utils.NamespacedKey;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
-import io.github.evercraftmc.evercraft.spigot.SpigotMain;
-import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
-import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import io.github.evercraftmc.evercraft.limbo.LimboMain;
+import io.github.evercraftmc.evercraft.limbo.commands.LimboCommand;
+import io.github.evercraftmc.evercraft.limbo.util.formatting.ComponentFormatter;
 
-public class BungeeCommandCommand extends SpigotCommand {
+public class BungeeCommandCommand extends LimboCommand {
     public BungeeCommandCommand(String name, String description, List<String> aliases, String permission) {
         super(name, description, aliases, permission);
     }
@@ -37,10 +39,14 @@ public class BungeeCommandCommand extends SpigotCommand {
                 out.writeUTF(player.getUniqueId().toString());
                 out.writeUTF(commandString.trim());
 
-                player.sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
+                try {
+                    player.sendPluginMessage(new NamespacedKey("bungeecord:main"), out.toByteArray());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LimboMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
         }
     }
 
