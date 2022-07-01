@@ -50,6 +50,8 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
         this.config.copyDefaults();
 
+        this.serverName = this.config.getString("serverName");
+
         System.out.println("Finished loading config");
 
         System.out.println("Loading messages..");
@@ -177,5 +179,7 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
     public void setServerName(String value) {
         this.serverName = value;
+
+        this.config.set("serverName", value);
     }
 }

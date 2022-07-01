@@ -17,11 +17,9 @@ import net.luckperms.api.LuckPermsProvider;
 public class JoinListener extends SpigotListener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (SpigotMain.getInstance().getServerName().equals("unknown")) {
-            ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("GetServer");
-            SpigotMain.getInstance().getServer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
-        }
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("GetServer");
+        event.getPlayer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
 
         event.joinMessage(Component.empty());
 
