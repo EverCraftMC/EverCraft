@@ -84,7 +84,11 @@ public class JoinListener extends BungeeListener {
         TabListUtil.addToList(event.getPlayer());
 
         for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
-            TabListUtil.addToList(player, event.getPlayer());
+            if (player.getServer() != null) {
+                TabListUtil.addToList(player, event.getPlayer(), player.getServer().getInfo());
+            } else {
+                TabListUtil.addToList(player, event.getPlayer());
+            }
         }
 
         if (BungeeMain.getInstance().getData().getFloat("votes." + event.getPlayer().getName() + ".toProcess") != null) {
@@ -108,11 +112,13 @@ public class JoinListener extends BungeeListener {
         TabListUtil.removeFromList(event.getPlayer());
         TabListUtil.addToList(event.getPlayer(), event.getServer().getInfo());
 
-        for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
-            if (event.getPlayer().getServer() != null) {
-                TabListUtil.addToList(player2, event.getPlayer(), event.getPlayer().getServer().getInfo());
+        for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
+            TabListUtil.removeFromList(player, event.getPlayer());
+
+            if (player.getServer() != null) {
+                TabListUtil.addToList(player, event.getPlayer(), player.getServer().getInfo());
             } else {
-                TabListUtil.addToList(player2, event.getPlayer());
+                TabListUtil.addToList(player, event.getPlayer());
             }
         }
     }
