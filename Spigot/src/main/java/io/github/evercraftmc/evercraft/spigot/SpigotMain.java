@@ -30,6 +30,7 @@ import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 import io.github.evercraftmc.evercraft.spigot.games.Game;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.DodgeBowGame;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.PvpGame;
+import io.github.evercraftmc.evercraft.spigot.listeners.ChestProtectionListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.JoinListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.PvPListener;
@@ -49,6 +50,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     private FileConfig warps;
     private FileConfig kits;
+    private FileConfig chests;
 
     private Economy economy;
 
@@ -82,6 +84,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.config.addDefault("serverName", "unknown");
         this.config.addDefault("warp.overidespawn", true);
         this.config.addDefault("warp.clearonwarp", false);
+        this.config.addDefault("chestProtectionEnabled", false);
+        this.config.addDefault("protectable", Arrays.asList("CHEST", "TRAPPED_CHEST", "ENDER_CHEST", "BARREL", "SHULKER_BOX", "WHITE_SHULKER_BOX", "ORANGE_SHULKER_BOX", "MAGENTA_SHULKER_BOX", "LIGHT_BLUE_SHULKER_BOX", "YELLOW_SHULKER_BOX", "LIME_SHULKER_BOX", "PINK_SHULKER_BOX", "GRAY_SHULKER_BOX", "LIGHT_GRAY_SHULKER_BOX", "CYAN_SHULKER_BOX", "PURPLE_SHULKER_BOX", "BLUE_SHULKER_BOX", "BROWN_SHULKER_BOX", "GREEN_SHULKER_BOX", "RED_SHULKER_BOX", "BLACK_SHULKER_BOX", "FURNACE", "BLAST_FURNACE", "SMOKER", "HOPPER", "DROPPER", "DISPENSER", "JUKEBOX", "WHITE_BED", "ORANGE_BED", "MAGENTA_BED", "LIGHT_BLUE_BED", "YELLOW_BED", "LIME_BED", "PINK_BED", "GRAY_BED", "LIGHT_GRAY_BED", "CYAN_BED", "PURPLE_BED", "BLUE_BED", "BROWN_BED", "GREEN_BED", "BLACK_BED"));
         this.config.addDefault("passiveEnabled", false);
         this.config.addDefault("database.host", "localhost");
         this.config.addDefault("database.port", 3306);
@@ -115,6 +119,9 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.messages.addDefault("kit.delkit", "&cSuccessfully deleted kit {kit}");
         this.messages.addDefault("kit.notFound", "&cKit {kit} does not exist");
         this.messages.addDefault("passive", "&aSuccessfully toggled passive mode {value}");
+        this.messages.addDefault("chestProtection.claimed", "&aThis block is now protected");
+        this.messages.addDefault("chestProtection.unclaimed", "&cThis block is no longer protected");
+        this.messages.addDefault("chestProtection.notyours", "&cIm sorry but that isn't yours >:(");
         this.messages.addDefault("staff.gamemode", "&aSuccessfully set your gamemode to {gamemode}");
 
         this.messages.copyDefaults();
@@ -134,6 +141,11 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.kits = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "kits.json");
         this.kits.reload();
+
+        if (this.config.getBoolean("chestProtectionEnabled")) {
+            this.chests = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "chests.json");
+            this.chests.reload();
+        }
 
         this.getLogger().info("Finished loading other data..");
 
@@ -178,6 +190,10 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.listeners.add(new MessageListener().register());
         this.listeners.add(new JoinListener().register());
+
+        if (this.config.getBoolean("chestProtectionEnabled")) {
+            this.listeners.add(new ChestProtectionListener().register());
+        }
 
         if (this.getPluginConfig().getBoolean("passiveEnabled")) {
             this.listeners.add(new PvPListener().register());
@@ -315,6 +331,10 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     public FileConfig getKits() {
         return this.kits;
+    }
+
+    public FileConfig getChests() {
+        return this.chests;
     }
 
     public Economy getEconomy() {
