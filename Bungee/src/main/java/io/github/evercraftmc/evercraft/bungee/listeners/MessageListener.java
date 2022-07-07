@@ -9,6 +9,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
 import io.github.evercraftmc.evercraft.bungee.util.player.BungeePlayerResolver;
 import io.github.evercraftmc.evercraft.shared.util.ModerationUtil;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
@@ -156,6 +157,10 @@ public class MessageListener extends BungeeListener {
                 String command = in.readUTF();
 
                 BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player, command);
+            } else if (subChannel.equals("updateGamemode")) {
+                ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(UUID.fromString(in.readUTF()));
+
+                TabListUtil.updatePlayerGamemode(player);
             }
         }
     }
