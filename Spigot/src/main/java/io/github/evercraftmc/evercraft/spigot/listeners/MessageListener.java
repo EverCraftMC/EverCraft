@@ -43,7 +43,8 @@ public class MessageListener extends SpigotListener implements PluginMessageList
             out.writeUTF("globalPlayerMessage");
             out.writeUTF(SpigotMain.getInstance().getServerName());
             out.writeUTF(event.getEntity().getUniqueId().toString());
-            out.writeUTF(ComponentFormatter.componentToString(event.deathMessage()).replace(event.getEntity().getName(), "{player}"));
+            out.writeBoolean(true);
+            out.writeUTF(ComponentFormatter.componentToJson(event.deathMessage()).replace(event.getEntity().getName(), "{player}"));
 
             event.getEntity().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
 
@@ -58,7 +59,8 @@ public class MessageListener extends SpigotListener implements PluginMessageList
             out.writeUTF("globalPlayerMessage");
             out.writeUTF(SpigotMain.getInstance().getServerName());
             out.writeUTF(event.getPlayer().getUniqueId().toString());
-            out.writeUTF(ComponentFormatter.componentToString(event.message()).replace(event.getPlayer().getName(), "{player}"));
+            out.writeBoolean(true);
+            out.writeUTF(ComponentFormatter.componentToJson(event.message()).replace(event.getPlayer().getName(), "{player}"));
 
             event.getPlayer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
 

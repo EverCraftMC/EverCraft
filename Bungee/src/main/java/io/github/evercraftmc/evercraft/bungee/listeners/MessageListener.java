@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -56,8 +57,8 @@ public class MessageListener extends BungeeListener {
                         }
                     } else {
                         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
-                            if (message.contains("@" + player2.getName())) {
-                                message = message.replace("@" + player2.getName(), TextFormatter.translateColors("&a@") + player2.getName() + TextFormatter.translateColors("&r"));
+                            if (message.toLowerCase().contains("@" + player2.getName().toLowerCase())) {
+                                message = TextFormatter.translateColors(Pattern.compile("@" + player2.getName(), Pattern.LITERAL | Pattern.CASE_INSENSITIVE).matcher(message).replaceAll(TextFormatter.translateColors("&a@") + player2.getName() + TextFormatter.translateColors("&r")));
 
                                 ByteArrayDataOutput out = ByteStreams.newDataOutput();
                                 out.writeUTF("playSound");
@@ -104,13 +105,23 @@ public class MessageListener extends BungeeListener {
 
                 ProxiedPlayer player = BungeeMain.getInstance().getProxy().getPlayer(UUID.fromString(in.readUTF()));
 
+                Boolean isJson = in.readBoolean();
+
                 String message = in.readUTF();
 
                 for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
-                    if (player2.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(message.replace("{player}", player.getDisplayName() + "&r"))));
+                    if (isJson) {
+                        if (player2.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
+                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(message.replace("{player}", player.getDisplayName() + "&r"))));
+                        } else {
+                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message.replace("{player}", player.getDisplayName() + "&r")))));
+                        }
                     } else {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message.replace("{player}", player.getDisplayName() + "&r")))));
+                        if (player2.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
+                            player2.sendMessage(ComponentFormatter.jsonToComponent(message.replace("{player}", TextFormatter.translateColors(player.getDisplayName() + "&r"))));
+                        } else {
+                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", ComponentFormatter.componentToString(ComponentFormatter.jsonToComponent(message)).replace("{player}", player.getDisplayName() + "&r")))));
+                        }
                     }
                 }
 
@@ -118,13 +129,23 @@ public class MessageListener extends BungeeListener {
             } else if (subChannel.equals("globalMessage")) {
                 String sender = in.readUTF();
 
+                Boolean isJson = in.readBoolean();
+
                 String message = in.readUTF();
 
                 for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
-                    if (player.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(message)));
+                    if (isJson) {
+                        if (player.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(message)));
+                        } else {
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message))));
+                        }
                     } else {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message))));
+                        if (player.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
+                            player.sendMessage(ComponentFormatter.jsonToComponent(message));
+                        } else {
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", ComponentFormatter.componentToString(ComponentFormatter.jsonToComponent(message))))));
+                        }
                     }
                 }
 
