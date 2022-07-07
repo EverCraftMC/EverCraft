@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.listeners;
 
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -8,6 +9,7 @@ import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockMultiPlaceEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
@@ -16,12 +18,12 @@ import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter
 public class ChestProtectionListener extends SpigotListener {
     @EventHandler
     public void onChestOpen(PlayerInteractEvent event) {
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && !event.getPlayer().isSneaking() && SpigotMain.getInstance().getPluginConfig().getStringList("protectable").contains(event.getClickedBlock().getType().toString())) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && SpigotMain.getInstance().getPluginConfig().getStringList("protectable").contains(event.getClickedBlock().getType().toString())) {
             if (SpigotMain.getInstance().getChests().getBoolean(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".protected") && !SpigotMain.getInstance().getChests().getString(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".owner").equals(event.getPlayer().getUniqueId().toString())) {
                 event.setCancelled(true);
 
                 event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.notyours"))));
-            } else if (SpigotMain.getInstance().getChests().getBoolean(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".protected") == null && SpigotMain.getInstance().getChests().getString(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".owner") == null) {
+            } else if (SpigotMain.getInstance().getChests().getRaw(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".protected") == null && SpigotMain.getInstance().getChests().getRaw(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".owner") == null) {
                 SpigotMain.getInstance().getChests().set(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".protected", null);
                 SpigotMain.getInstance().getChests().set(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".owner", null);
                 SpigotMain.getInstance().getChests().save();
@@ -33,6 +35,10 @@ public class ChestProtectionListener extends SpigotListener {
 
     @EventHandler
     public void onChestPlace(BlockPlaceEvent event) {
+        if (event instanceof BlockMultiPlaceEvent) {
+            return;
+        }
+
         if (SpigotMain.getInstance().getPluginConfig().getStringList("protectable").contains(event.getBlock().getType().toString())) {
             SpigotMain.getInstance().getChests().set(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".protected", true);
             SpigotMain.getInstance().getChests().set(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".owner", event.getPlayer().getUniqueId().toString());
@@ -77,10 +83,20 @@ public class ChestProtectionListener extends SpigotListener {
     }
 
     @EventHandler
+    public void onChestBreak(EntityExplodeEvent event) {
+        for (Block block : event.blockList()) {
+            if (SpigotMain.getInstance().getPluginConfig().getStringList("protectable").contains(block.getType().toString()) && SpigotMain.getInstance().getChests().getBoolean(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".protected")) {
+                event.blockList().remove(block);
+            }
+        }
+    }
+
+    @EventHandler
     public void onChestBreak(BlockExplodeEvent event) {
-        System.out.println(event.getBlock().getType().toString());
-        if (SpigotMain.getInstance().getPluginConfig().getStringList("protectable").contains(event.getBlock().getType().toString()) && SpigotMain.getInstance().getChests().getBoolean(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".protected")) {
-            event.setCancelled(true);
+        for (Block block : event.blockList()) {
+            if (SpigotMain.getInstance().getPluginConfig().getStringList("protectable").contains(block.getType().toString()) && SpigotMain.getInstance().getChests().getBoolean(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".protected")) {
+                event.blockList().remove(block);
+            }
         }
     }
 
