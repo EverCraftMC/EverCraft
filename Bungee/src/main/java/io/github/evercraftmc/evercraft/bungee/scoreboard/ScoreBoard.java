@@ -44,46 +44,27 @@ public class ScoreBoard implements Closable {
                         List<String> lines = BungeeMain.getInstance().getPluginConfig().getStringList("scoreboard.lines");
 
                         for (int i = lines.size() - 1; i >= 0; i--) {
-                            String line = TextFormatter.translateColors(lines.get(i)
-                                .replace("{player}", player.getDisplayName())
-                                .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
-                                .replace("{ping}", player.getPing() + "")
-                                .replace("{server}", StringUtils.toTtitleCase(player.getServer().getInfo().getName()))
-                                .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
-                                .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
-                                .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""));
+                            try {
+                                String line = TextFormatter.translateColors(lines.get(i).replace("{player}", player.getDisplayName()).replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "").replace("{ping}", player.getPing() + "").replace("{server}", StringUtils.toTtitleCase(player.getServer().getInfo().getName())).replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "").replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "").replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""));
 
-                            if (getScore(player, lines.size() - i) == null) {
-                                ScoreboardScore score = new ScoreboardScore(line, (byte) 0, scoreboardMap.get(player).getName(), lines.size() - i);
-                                linesMap.get(player).put(score.getItemName(), score.getValue());
-                                player.unsafe().sendPacket(score);
-                            } else if (!getScore(player, lines.size() - i).equals(line)) {
-                                ScoreboardScore removescore = new ScoreboardScore(getScore(player, lines.size() - i), (byte) 1, scoreboardMap.get(player).getName(), lines.size() - i);
-                                linesMap.get(player).remove(removescore.getItemName());
-                                player.unsafe().sendPacket(removescore);
+                                if (getScore(player, lines.size() - i) == null) {
+                                    ScoreboardScore score = new ScoreboardScore(line, (byte) 0, scoreboardMap.get(player).getName(), lines.size() - i);
+                                    linesMap.get(player).put(score.getItemName(), score.getValue());
+                                    player.unsafe().sendPacket(score);
+                                } else if (!getScore(player, lines.size() - i).equals(line)) {
+                                    ScoreboardScore removescore = new ScoreboardScore(getScore(player, lines.size() - i), (byte) 1, scoreboardMap.get(player).getName(), lines.size() - i);
+                                    linesMap.get(player).remove(removescore.getItemName());
+                                    player.unsafe().sendPacket(removescore);
 
-                                ScoreboardScore score = new ScoreboardScore(line, (byte) 0, scoreboardMap.get(player).getName(), lines.size() - i);
-                                linesMap.get(player).put(score.getItemName(), score.getValue());
-                                player.unsafe().sendPacket(score);
+                                    ScoreboardScore score = new ScoreboardScore(line, (byte) 0, scoreboardMap.get(player).getName(), lines.size() - i);
+                                    linesMap.get(player).put(score.getItemName(), score.getValue());
+                                    player.unsafe().sendPacket(score);
+                                }
+                            } catch (NullPointerException e) {
                             }
                         }
 
-                        player.setTabHeader(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.header")
-                            .replace("{player}", player.getDisplayName())
-                            .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
-                            .replace("{ping}", player.getPing() + "")
-                            .replace("{server}", player.getServer().getInfo().getName())
-                            .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
-                            .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
-                            .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))),
-                        ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.footer")
-                            .replace("{player}", player.getDisplayName())
-                            .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
-                            .replace("{ping}", player.getPing() + "")
-                            .replace("{server}", player.getServer().getInfo().getName())
-                            .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
-                            .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
-                            .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))));
+                        player.setTabHeader(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.header").replace("{player}", player.getDisplayName()).replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "").replace("{ping}", player.getPing() + "").replace("{server}", player.getServer().getInfo().getName()).replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "").replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "").replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))), ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.footer").replace("{player}", player.getDisplayName()).replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "").replace("{ping}", player.getPing() + "").replace("{server}", player.getServer().getInfo().getName()).replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "").replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "").replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))));
                     }
                 }
             }
