@@ -110,22 +110,24 @@ public class MessageListener extends BungeeListener {
                 String message = in.readUTF();
 
                 for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
-                    if (isJson) {
+                    if (!isJson) {
                         if (player2.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
                             player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(message.replace("{player}", player.getDisplayName() + "&r"))));
                         } else {
                             player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message.replace("{player}", player.getDisplayName() + "&r")))));
                         }
+
+                        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message.replace("{player}", player.getDisplayName())))).queue();
                     } else {
                         if (player2.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
                             player2.sendMessage(ComponentFormatter.jsonToComponent(message.replace("{player}", TextFormatter.translateColors(player.getDisplayName() + "&r"))));
                         } else {
                             player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", ComponentFormatter.componentToString(ComponentFormatter.jsonToComponent(message)).replace("{player}", player.getDisplayName() + "&r")))));
                         }
+
+                        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", ComponentFormatter.componentToString(ComponentFormatter.jsonToComponent(message)).replace("{player}", player.getDisplayName() + "&r")))).queue();
                     }
                 }
-
-                BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message.replace("{player}", player.getDisplayName())))).queue();
             } else if (subChannel.equals("globalMessage")) {
                 String sender = in.readUTF();
 
@@ -134,22 +136,24 @@ public class MessageListener extends BungeeListener {
                 String message = in.readUTF();
 
                 for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
-                    if (isJson) {
+                    if (!isJson) {
                         if (player.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
                             player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(message)));
                         } else {
                             player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", message))));
                         }
+
+                        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", in.readUTF()))).queue();
                     } else {
                         if (player.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
                             player.sendMessage(ComponentFormatter.jsonToComponent(message));
                         } else {
                             player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", ComponentFormatter.componentToString(ComponentFormatter.jsonToComponent(message))))));
                         }
+
+                        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", ComponentFormatter.componentToString(ComponentFormatter.jsonToComponent(message))))).queue();
                     }
                 }
-
-                BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", in.readUTF()))).queue();
             } else if (subChannel.equals("globalCommandSpy")) {
                 String sender = in.readUTF();
 
