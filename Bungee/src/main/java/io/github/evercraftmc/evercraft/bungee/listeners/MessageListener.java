@@ -125,7 +125,7 @@ public class MessageListener extends BungeeListener {
                             player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", ComponentFormatter.componentToString(ComponentFormatter.jsonToComponent(message)).replace("{player}", player.getDisplayName() + "&r")))));
                         }
 
-                        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", ComponentFormatter.componentToString(ComponentFormatter.jsonToComponent(message)).replace("{player}", player.getDisplayName() + "&r")))).queue();
+                        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getString("discord.channelId")).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getString("globalMessage").replace("{server}", sender).replace("{message}", ComponentFormatter.componentToString(ComponentFormatter.jsonToComponent(message)).replace("{player}", player.getDisplayName() + "&r")))).queue();
                     }
                 }
             } else if (subChannel.equals("globalMessage")) {
