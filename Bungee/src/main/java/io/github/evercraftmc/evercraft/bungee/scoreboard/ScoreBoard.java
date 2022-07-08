@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee.scoreboard;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,7 @@ public class ScoreBoard implements Closable {
                                     linesMap.get(player).put(score.getItemName(), score.getValue());
                                     player.unsafe().sendPacket(score);
                                 }
-                            } catch (NullPointerException e) {
+                            } catch (NullPointerException | ConcurrentModificationException e) {
                             }
                         }
 
