@@ -1,6 +1,7 @@
 package io.github.evercraftmc.evercraft.bungee.listeners;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
@@ -37,7 +38,7 @@ public class PingListener extends BungeeListener {
                 Players players = new Players(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers(), 0, new PlayerInfo[] {});
                 ping.setPlayers(players);
             }
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | ConcurrentModificationException e) {
         }
 
         event.setResponse(ping);
