@@ -18,14 +18,32 @@ import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter
 public class ChestProtectionListener extends SpigotListener {
     @EventHandler
     public void onChestOpen(PlayerInteractEvent event) {
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && SpigotMain.getInstance().getPluginConfig().getStringList("protectable").contains(event.getClickedBlock().getType().toString())) {
-            if (SpigotMain.getInstance().getChests().getBoolean(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".protected") && !SpigotMain.getInstance().getChests().getString(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".owner").equals(event.getPlayer().getUniqueId().toString())) {
+        Boolean protectable = false;
+        Boolean allowUse = false;
+
+        for (String protectableSetting : SpigotMain.getInstance().getPluginConfig().getStringList("protectable")) {
+            if (protectableSetting.split(":")[0].equalsIgnoreCase(event.getClickedBlock().getType().toString().toLowerCase().replace("red__", "{color}__").replace("orange_", "{color}_").replace("yellow_", "{color}_").replace("lime_", "{color}_").replace("green_", "{color}_").replace("cyan_", "{color}_").replace("light_blue_", "{color}_").replace("blue_", "{color}_").replace("purple_", "{color}_").replace("magenta_", "{color}_").replace("pink_", "{color}_").replace("brown_", "{color}_").replace("white_", "{color}_").replace("light_gray_", "{color}_").replace("gray_", "{color}_").replace("black_", "{color}_"))) {
+                protectable = true;
+
+                if (protectableSetting.split(":")[1].equals("0")) {
+                    allowUse = false;
+                } else if (protectableSetting.split(":")[1].equals("1")) {
+                    allowUse = true;
+                }
+
+                break;
+            }
+        }
+
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && protectable) {
+            if (SpigotMain.getInstance().getChests().getBoolean("blocks." + event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".protected") && !SpigotMain.getInstance().getChests().getBoolean("blocks." + event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".allowUse") && !SpigotMain.getInstance().getChests().getString("blocks." + event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".owner").equals(event.getPlayer().getUniqueId().toString())) {
                 event.setCancelled(true);
 
                 event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.notyours"))));
             } else if (SpigotMain.getInstance().getChests().getRaw(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".protected") == null && SpigotMain.getInstance().getChests().getRaw(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".owner") == null) {
-                SpigotMain.getInstance().getChests().set(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".protected", true);
-                SpigotMain.getInstance().getChests().set(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".owner", event.getPlayer().getUniqueId().toString());
+                SpigotMain.getInstance().getChests().set("blocks." + event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".protected", true);
+                SpigotMain.getInstance().getChests().set("blocks." + event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".owner", event.getPlayer().getUniqueId().toString());
+                SpigotMain.getInstance().getChests().set("blocks." + event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".allowUse", allowUse);
                 SpigotMain.getInstance().getChests().save();
 
                 event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.claimed"))));
@@ -39,9 +57,27 @@ public class ChestProtectionListener extends SpigotListener {
             return;
         }
 
-        if (SpigotMain.getInstance().getPluginConfig().getStringList("protectable").contains(event.getBlock().getType().toString())) {
-            SpigotMain.getInstance().getChests().set(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".protected", true);
-            SpigotMain.getInstance().getChests().set(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".owner", event.getPlayer().getUniqueId().toString());
+        Boolean protectable = false;
+        Boolean allowUse = false;
+
+        for (String protectableSetting : SpigotMain.getInstance().getPluginConfig().getStringList("protectable")) {
+            if (protectableSetting.split(":")[0].equalsIgnoreCase(event.getBlock().getType().toString().toLowerCase().replace("red__", "{color}__").replace("orange_", "{color}_").replace("yellow_", "{color}_").replace("lime_", "{color}_").replace("green_", "{color}_").replace("cyan_", "{color}_").replace("light_blue_", "{color}_").replace("blue_", "{color}_").replace("purple_", "{color}_").replace("magenta_", "{color}_").replace("pink_", "{color}_").replace("brown_", "{color}_").replace("white_", "{color}_").replace("light_gray_", "{color}_").replace("gray_", "{color}_").replace("black_", "{color}_"))) {
+                protectable = true;
+
+                if (protectableSetting.split(":")[1].equals("0")) {
+                    allowUse = false;
+                } else if (protectableSetting.split(":")[1].equals("1")) {
+                    allowUse = true;
+                }
+
+                break;
+            }
+        }
+
+        if (protectable) {
+            SpigotMain.getInstance().getChests().set("blocks." + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".protected", true);
+            SpigotMain.getInstance().getChests().set("blocks." + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".owner", event.getPlayer().getUniqueId().toString());
+            SpigotMain.getInstance().getChests().set("blocks." + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".allowUse", allowUse);
             SpigotMain.getInstance().getChests().save();
 
             event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.claimed"))));
@@ -50,31 +86,59 @@ public class ChestProtectionListener extends SpigotListener {
 
     @EventHandler
     public void onChestPlace(BlockMultiPlaceEvent event) {
-        if (SpigotMain.getInstance().getPluginConfig().getStringList("protectable").contains(event.getBlock().getType().toString())) {
-            SpigotMain.getInstance().getChests().set(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".protected", true);
-            SpigotMain.getInstance().getChests().set(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".owner", event.getPlayer().getUniqueId().toString());
+        Boolean protectable = false;
+        Boolean allowUse = false;
+
+        for (String protectableSetting : SpigotMain.getInstance().getPluginConfig().getStringList("protectable")) {
+            if (protectableSetting.split(":")[0].equalsIgnoreCase(event.getBlock().getType().toString().toLowerCase().replace("red__", "{color}__").replace("orange_", "{color}_").replace("yellow_", "{color}_").replace("lime_", "{color}_").replace("green_", "{color}_").replace("cyan_", "{color}_").replace("light_blue_", "{color}_").replace("blue_", "{color}_").replace("purple_", "{color}_").replace("magenta_", "{color}_").replace("pink_", "{color}_").replace("brown_", "{color}_").replace("white_", "{color}_").replace("light_gray_", "{color}_").replace("gray_", "{color}_").replace("black_", "{color}_"))) {
+                protectable = true;
+
+                if (protectableSetting.split(":")[1].equals("0")) {
+                    allowUse = false;
+                } else if (protectableSetting.split(":")[1].equals("1")) {
+                    allowUse = true;
+                }
+
+                break;
+            }
+        }
+
+        if (protectable) {
+            SpigotMain.getInstance().getChests().set("blocks." + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".protected", true);
+            SpigotMain.getInstance().getChests().set("blocks." + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".owner", event.getPlayer().getUniqueId().toString());
+            SpigotMain.getInstance().getChests().set("blocks." + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".allowUse", allowUse);
 
             for (BlockState block : event.getReplacedBlockStates()) {
-                SpigotMain.getInstance().getChests().set(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".protected", true);
-                SpigotMain.getInstance().getChests().set(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner", event.getPlayer().getUniqueId().toString());
+                SpigotMain.getInstance().getChests().set("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".protected", true);
+                SpigotMain.getInstance().getChests().set("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner", event.getPlayer().getUniqueId().toString());
+                SpigotMain.getInstance().getChests().set("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".allowUse", allowUse);
             }
 
-            event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.claimed"))));
-
             SpigotMain.getInstance().getChests().save();
+
+            event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.claimed"))));
         }
     }
 
     @EventHandler
     public void onChestBreak(BlockBreakEvent event) {
-        if (SpigotMain.getInstance().getPluginConfig().getStringList("protectable").contains(event.getBlock().getType().toString()) && SpigotMain.getInstance().getChests().getBoolean(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".protected")) {
-            if (!SpigotMain.getInstance().getChests().getString(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".owner").equals(event.getPlayer().getUniqueId().toString())) {
+        Boolean protectable = false;
+
+        for (String protectableSetting : SpigotMain.getInstance().getPluginConfig().getStringList("protectable")) {
+            if (protectableSetting.split(":")[0].equalsIgnoreCase(event.getBlock().getType().toString().toLowerCase().replace("red__", "{color}__").replace("orange_", "{color}_").replace("yellow_", "{color}_").replace("lime_", "{color}_").replace("green_", "{color}_").replace("cyan_", "{color}_").replace("light_blue_", "{color}_").replace("blue_", "{color}_").replace("purple_", "{color}_").replace("magenta_", "{color}_").replace("pink_", "{color}_").replace("brown_", "{color}_").replace("white_", "{color}_").replace("light_gray_", "{color}_").replace("gray_", "{color}_").replace("black_", "{color}_"))) {
+                protectable = true;
+            }
+        }
+
+        if (protectable) {
+            if (!SpigotMain.getInstance().getChests().getString("blocks." + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".owner").equals(event.getPlayer().getUniqueId().toString())) {
                 event.setCancelled(true);
 
                 event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.notyours"))));
             } else {
-                SpigotMain.getInstance().getChests().set(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".protected", null);
-                SpigotMain.getInstance().getChests().set(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".owner", null);
+                SpigotMain.getInstance().getChests().set("blocks." + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".protected", null);
+                SpigotMain.getInstance().getChests().set("blocks." + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".owner", null);
+                SpigotMain.getInstance().getChests().set("blocks." + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".allowUse", null);
                 SpigotMain.getInstance().getChests().save();
 
                 event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.unclaimed"))));
@@ -85,7 +149,15 @@ public class ChestProtectionListener extends SpigotListener {
     @EventHandler
     public void onChestBreak(EntityExplodeEvent event) {
         for (Block block : event.blockList()) {
-            if (SpigotMain.getInstance().getPluginConfig().getStringList("protectable").contains(block.getType().toString()) && SpigotMain.getInstance().getChests().getBoolean(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".protected")) {
+            Boolean protectable = false;
+
+            for (String protectableSetting : SpigotMain.getInstance().getPluginConfig().getStringList("protectable")) {
+                if (protectableSetting.split(":")[0].equalsIgnoreCase(block.getType().toString().toLowerCase().replace("red__", "{color}__").replace("orange_", "{color}_").replace("yellow_", "{color}_").replace("lime_", "{color}_").replace("green_", "{color}_").replace("cyan_", "{color}_").replace("light_blue_", "{color}_").replace("blue_", "{color}_").replace("purple_", "{color}_").replace("magenta_", "{color}_").replace("pink_", "{color}_").replace("brown_", "{color}_").replace("white_", "{color}_").replace("light_gray_", "{color}_").replace("gray_", "{color}_").replace("black_", "{color}_"))) {
+                    protectable = true;
+                }
+            }
+
+            if (protectable && SpigotMain.getInstance().getChests().getBoolean("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".protected")) {
                 event.blockList().remove(block);
             }
         }
@@ -94,7 +166,15 @@ public class ChestProtectionListener extends SpigotListener {
     @EventHandler
     public void onChestBreak(BlockExplodeEvent event) {
         for (Block block : event.blockList()) {
-            if (SpigotMain.getInstance().getPluginConfig().getStringList("protectable").contains(block.getType().toString()) && SpigotMain.getInstance().getChests().getBoolean(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".protected")) {
+            Boolean protectable = false;
+
+            for (String protectableSetting : SpigotMain.getInstance().getPluginConfig().getStringList("protectable")) {
+                if (protectableSetting.split(":")[0].equalsIgnoreCase(block.getType().toString().toLowerCase().replace("red__", "{color}__").replace("orange_", "{color}_").replace("yellow_", "{color}_").replace("lime_", "{color}_").replace("green_", "{color}_").replace("cyan_", "{color}_").replace("light_blue_", "{color}_").replace("blue_", "{color}_").replace("purple_", "{color}_").replace("magenta_", "{color}_").replace("pink_", "{color}_").replace("brown_", "{color}_").replace("white_", "{color}_").replace("light_gray_", "{color}_").replace("gray_", "{color}_").replace("black_", "{color}_"))) {
+                    protectable = true;
+                }
+            }
+
+            if (protectable && SpigotMain.getInstance().getChests().getBoolean("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".protected")) {
                 event.blockList().remove(block);
             }
         }
@@ -102,7 +182,15 @@ public class ChestProtectionListener extends SpigotListener {
 
     @EventHandler
     public void onChestBreak(BlockBurnEvent event) {
-        if (SpigotMain.getInstance().getPluginConfig().getStringList("protectable").contains(event.getBlock().getType().toString()) && SpigotMain.getInstance().getChests().getBoolean(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".protected")) {
+        Boolean protectable = false;
+
+        for (String protectableSetting : SpigotMain.getInstance().getPluginConfig().getStringList("protectable")) {
+            if (protectableSetting.split(":")[0].equalsIgnoreCase(event.getBlock().getType().toString().toLowerCase().replace("red__", "{color}__").replace("orange_", "{color}_").replace("yellow_", "{color}_").replace("lime_", "{color}_").replace("green_", "{color}_").replace("cyan_", "{color}_").replace("light_blue_", "{color}_").replace("blue_", "{color}_").replace("purple_", "{color}_").replace("magenta_", "{color}_").replace("pink_", "{color}_").replace("brown_", "{color}_").replace("white_", "{color}_").replace("light_gray_", "{color}_").replace("gray_", "{color}_").replace("black_", "{color}_"))) {
+                protectable = true;
+            }
+        }
+
+        if (protectable && SpigotMain.getInstance().getChests().getBoolean("blocks." + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName() + ".protected")) {
             event.setCancelled(true);
         }
     }
