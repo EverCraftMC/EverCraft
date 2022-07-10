@@ -32,17 +32,17 @@ public class UnBanCommand extends BungeeCommand {
 
             if (player != null) {
                 if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId())) {
-                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.cantunbanself"))));
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.cantUnbanSelf"))));
                 } else {
                     if (BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".ban.banned")) {
-                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.broadcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
+                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.broadcast.noReason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
 
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.banned", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.reason", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", null);
                     } else {
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.notbanned").replace("{player}", player.getDisplayName()))));
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.notBanned").replace("{player}", player.getDisplayName()))));
                     }
                 }
             } else {
@@ -53,7 +53,7 @@ public class UnBanCommand extends BungeeCommand {
 
             if (player != null) {
                 if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId())) {
-                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.cantunbanself"))));
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.cantUnbanSelf"))));
                 } else {
                     if (BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".ban.banned")) {
                         StringBuilder reason = new StringBuilder();
@@ -69,7 +69,7 @@ public class UnBanCommand extends BungeeCommand {
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.by", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".ban.until", null);
                     } else {
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.notbanned").replace("{player}", player.getDisplayName()))));
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unban.notBanned").replace("{player}", player.getDisplayName()))));
                     }
                 }
             } else {

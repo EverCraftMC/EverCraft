@@ -25,7 +25,7 @@ public class Broadcaster implements Closable {
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getStringList("broadcaster.messages").get(random.nextInt(BungeeMain.getInstance().getPluginConfig().getStringList("broadcaster.messages").size())))));
                 }
             }
-        }, 0, BungeeMain.getInstance().getPluginConfig().getInteger("broadcaster.intervail"), TimeUnit.SECONDS);
+        }, 0, BungeeMain.getInstance().getPluginConfig().getInteger("broadcaster.interval"), TimeUnit.SECONDS);
     }
 
     public static Broadcaster getInstance() {
