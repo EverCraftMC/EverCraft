@@ -16,6 +16,7 @@ import io.github.evercraftmc.evercraft.spigot.commands.kit.DelKitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.SetKitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.BungeeCommandCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.player.ChestProtectionCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.PassiveCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.AdventureCommand;
@@ -85,7 +86,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.config.addDefault("warp.overidespawn", true);
         this.config.addDefault("warp.clearonwarp", false);
         this.config.addDefault("chestProtectionEnabled", false);
-        this.config.addDefault("protectable", Arrays.asList("CHEST", "TRAPPED_CHEST", "ENDER_CHEST", "BARREL", "SHULKER_BOX", "WHITE_SHULKER_BOX", "ORANGE_SHULKER_BOX", "MAGENTA_SHULKER_BOX", "LIGHT_BLUE_SHULKER_BOX", "YELLOW_SHULKER_BOX", "LIME_SHULKER_BOX", "PINK_SHULKER_BOX", "GRAY_SHULKER_BOX", "LIGHT_GRAY_SHULKER_BOX", "CYAN_SHULKER_BOX", "PURPLE_SHULKER_BOX", "BLUE_SHULKER_BOX", "BROWN_SHULKER_BOX", "GREEN_SHULKER_BOX", "RED_SHULKER_BOX", "BLACK_SHULKER_BOX", "FURNACE", "BLAST_FURNACE", "SMOKER", "HOPPER", "DROPPER", "DISPENSER", "JUKEBOX", "WHITE_BED", "ORANGE_BED", "MAGENTA_BED", "LIGHT_BLUE_BED", "YELLOW_BED", "LIME_BED", "PINK_BED", "GRAY_BED", "LIGHT_GRAY_BED", "CYAN_BED", "PURPLE_BED", "BLUE_BED", "BROWN_BED", "GREEN_BED", "BLACK_BED"));
+        this.config.addDefault("protectable", Arrays.asList("chest:0", "trapped_chest:0", "ender_chest:1", "barrel:0", "shulker_box:0", "{color}_shulker_box:0", "furnace:0", "blast_furnace:0", "smoker:0", "hopper:0", "dropper:0", "dispenser:0", "jukebox:0", "{color}_bed:1"));
         this.config.addDefault("passiveEnabled", false);
         this.config.addDefault("database.host", "localhost");
         this.config.addDefault("database.port", 3306);
@@ -119,9 +120,14 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.messages.addDefault("kit.delkit", "&cSuccessfully deleted kit {kit}");
         this.messages.addDefault("kit.notFound", "&cKit {kit} does not exist");
         this.messages.addDefault("passive", "&aSuccessfully toggled passive mode {value}");
-        this.messages.addDefault("chestProtection.claimed", "&aThis block is now protected");
-        this.messages.addDefault("chestProtection.unclaimed", "&cThis block is no longer protected");
+        this.messages.addDefault("chestProtection.claimed", "&aThis block is now claimed");
+        this.messages.addDefault("chestProtection.unclaimed", "&cThis block is no longer claimed");
+        this.messages.addDefault("chestProtection.protected", "&aThis block is now protected");
+        this.messages.addDefault("chestProtection.unprotected", "&cThis block is no longer protected");
+        this.messages.addDefault("chestProtection.allowedUse", "&aThis block is now usable by others");
+        this.messages.addDefault("chestProtection.disallowedUse", "&cThis block is no longer usable by others");
         this.messages.addDefault("chestProtection.notyours", "&cIm sorry but that isn't yours >:(");
+        this.messages.addDefault("chestProtection.noblock", "&cYou must be looking at a block to do that");
         this.messages.addDefault("staff.gamemode", "&aSuccessfully set your gamemode to {gamemode}");
 
         this.messages.copyDefaults();
@@ -167,6 +173,10 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new KitCommand("kit", "Get a kit", Arrays.asList(), "evercraft.commands.kit.kit").register());
         this.commands.add(new SetKitCommand("setkit", "Set a kit", Arrays.asList(), "evercraft.commands.kit.setkit").register());
         this.commands.add(new DelKitCommand("delkit", "Delete a kit", Arrays.asList(), "evercraft.commands.kit.delkit").register());
+
+        if (this.config.getBoolean("chestProtectionEnabled")) {
+            this.commands.add(new ChestProtectionCommand("chestprotection", "Manage you chest protections", Arrays.asList("cp", "chests"), null).register());
+        }
 
         if (this.getPluginConfig().getBoolean("passiveEnabled")) {
             this.commands.add(new PassiveCommand("passive", "Toggle passive mode on/off", Arrays.asList("togglepassive", "pvp"), "evercraft.commands.player.passive").register());
