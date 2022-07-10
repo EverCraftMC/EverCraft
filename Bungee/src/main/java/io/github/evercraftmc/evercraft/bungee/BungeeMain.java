@@ -103,7 +103,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.config.addDefault("scoreboard.lines", Arrays.asList());
         this.config.addDefault("tablist.header", "");
         this.config.addDefault("tablist.footer", "");
-        this.config.addDefault("broadcaster.intervail", 600);
+        this.config.addDefault("broadcaster.interval", 600);
         this.config.addDefault("broadcaster.messages", Arrays.asList());
 
         this.config.copyDefaults();
@@ -139,8 +139,8 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.messages.addDefault("welcome.move", "&c{player} &r&ehas moved to {server}");
         this.messages.addDefault("welcome.quit", "&e{player} &r&eleft the server");
         this.messages.addDefault("nickname", "&aSuccessfully changed your nickname to {nickname}");
-        this.messages.addDefault("lastseen.lastseen", "&a{player} was last seen {lastseen} ago");
-        this.messages.addDefault("lastseen.online", "&a{player} is online right now!");
+        this.messages.addDefault("lastSeen.lastSeen", "&a{player} was last seen {lastSeen} ago");
+        this.messages.addDefault("lastSeen.online", "&a{player} is online right now!");
         this.messages.addDefault("economy.yourBalance", "&aYou balance is currently {balance}");
         this.messages.addDefault("economy.otherBalance", "&a{player}&r&a's balance is currently {balance}");
         this.messages.addDefault("economy.economy", "&aSuccessfully set {player}&r&a's balance to {balance}");
@@ -148,37 +148,37 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.messages.addDefault("warp.hub", "&aSuccessfully went to the hub");
         this.messages.addDefault("warp.server", "&aSuccessfully went to {server}");
         this.messages.addDefault("warp.alreadyConnected", "&cYou are already in the hub");
-        this.messages.addDefault("moderation.kick.noreason", "&cYou where kicked by {moderator}");
+        this.messages.addDefault("moderation.kick.noReason", "&cYou where kicked by {moderator}");
         this.messages.addDefault("moderation.kick.reason", "&cYou where kicked by {moderator} &r&cfor {reason}");
-        this.messages.addDefault("moderation.kick.broadcast.noreason", "&a{player}&r&a was kicked by {moderator}");
+        this.messages.addDefault("moderation.kick.broadcast.noReason", "&a{player}&r&a was kicked by {moderator}");
         this.messages.addDefault("moderation.kick.broadcast.reason", "&a{player}&r&a was kicked by {moderator} &r&afor {reason}");
-        this.messages.addDefault("moderation.kick.cantkickself", "&cYou can't kick yourself (If you are absolutely sure you want to kick yourself add --confirm to the end of the command");
-        this.messages.addDefault("moderation.ban.noreason", "&cYou where banned by {moderator}");
+        this.messages.addDefault("moderation.kick.cantKickSelf", "&cYou can't kick yourself (If you are absolutely sure you want to kick yourself add --confirm to the end of the command");
+        this.messages.addDefault("moderation.ban.noReason", "&cYou where banned by {moderator}");
         this.messages.addDefault("moderation.ban.reason", "&cYou where banned by {moderator} &r&cfor {time} {reason}");
-        this.messages.addDefault("moderation.ban.broadcast.noreason", "&a{player}&r&a was banned by {moderator}");
+        this.messages.addDefault("moderation.ban.broadcast.noReason", "&a{player}&r&a was banned by {moderator}");
         this.messages.addDefault("moderation.ban.broadcast.reason", "&a{player}&r&a was banned by {moderator} &r&afor {reason}");
-        this.messages.addDefault("moderation.ban.alreadybanned", "&c{player}&r&c is already banned");
-        this.messages.addDefault("moderation.ban.cantbanself", "&cYou can't ban yourself (If you are absolutely sure you want to ban yourself (You can't unban yourself) add --confirm to the end of the command");
-        this.messages.addDefault("moderation.unban.noreason", "&cYou where unbanned by {moderator}");
+        this.messages.addDefault("moderation.ban.alreadyBanned", "&c{player}&r&c is already banned");
+        this.messages.addDefault("moderation.ban.cantBanSelf", "&cYou can't ban yourself (If you are absolutely sure you want to ban yourself (You can't unban yourself) add --confirm to the end of the command");
+        this.messages.addDefault("moderation.unban.noReason", "&cYou where unbanned by {moderator}");
         this.messages.addDefault("moderation.unban.reason", "&cYou where unbanned by {moderator} &r&cfor {reason}");
-        this.messages.addDefault("moderation.unban.broadcast.noreason", "&a{player}&r&a was unbanned by {moderator}");
+        this.messages.addDefault("moderation.unban.broadcast.noReason", "&a{player}&r&a was unbanned by {moderator}");
         this.messages.addDefault("moderation.unban.broadcast.reason", "&a{player}&r&a was unbanned by {moderator} &r&afor {reason}");
-        this.messages.addDefault("moderation.unban.notbanned", "&c{player}&r&c is not banned");
-        this.messages.addDefault("moderation.unban.cantunbanself", "&cYou can't unban yourself");
-        this.messages.addDefault("moderation.mute.noreason", "&cYou where muted by {moderator}");
+        this.messages.addDefault("moderation.unban.notBanned", "&c{player}&r&c is not banned");
+        this.messages.addDefault("moderation.unban.cantUnbanSelf", "&cYou can't unban yourself");
+        this.messages.addDefault("moderation.mute.noReason", "&cYou where muted by {moderator}");
         this.messages.addDefault("moderation.mute.reason", "&cYou where muted by {moderator} &r&cfor {time} {reason}");
-        this.messages.addDefault("moderation.mute.broadcast.noreason", "&a{player}&r&a was muted by {moderator} for {time}");
+        this.messages.addDefault("moderation.mute.broadcast.noReason", "&a{player}&r&a was muted by {moderator} for {time}");
         this.messages.addDefault("moderation.mute.broadcast.reason", "&a{player}&r&a was muted by {moderator} &r&afor {time} {reason}");
-        this.messages.addDefault("moderation.mute.alreadymuted", "&c{player}&r&c is already muted");
-        this.messages.addDefault("moderation.mute.cantmuteself", "&cYou can't mute yourself (If you are absolutely sure you want to mute yourself (You can't unmute yourself) add --confirm to the end of the command");
-        this.messages.addDefault("moderation.unmute.noreason", "&cYou where unmuted by {moderator}");
+        this.messages.addDefault("moderation.mute.alreadyMuted", "&c{player}&r&c is already muted");
+        this.messages.addDefault("moderation.mute.cantMuteSelf", "&cYou can't mute yourself (If you are absolutely sure you want to mute yourself (You can't unmute yourself) add --confirm to the end of the command");
+        this.messages.addDefault("moderation.unmute.noReason", "&cYou where unmuted by {moderator}");
         this.messages.addDefault("moderation.unmute.reason", "&cYou where unmuted by {moderator} &r&cfor {reason}");
-        this.messages.addDefault("moderation.unmute.broadcast.noreason", "&a{player}&r&a was unmuted by {moderator}");
+        this.messages.addDefault("moderation.unmute.broadcast.noReason", "&a{player}&r&a was unmuted by {moderator}");
         this.messages.addDefault("moderation.unmute.broadcast.reason", "&a{player}&r&a was unmuted by {moderator} &r&afor {reason}");
-        this.messages.addDefault("moderation.unmute.notmuted", "&c{player}&r&c is not muted");
-        this.messages.addDefault("moderation.unmute.cantunmuteself", "&cYou can't unmute yourself");
-        this.messages.addDefault("moderation.chatlock.toggle", "&aSuccessfully toggled chat lock mode {value}");
-        this.messages.addDefault("moderation.chatlock.chat", "&cChat lock is currently enabled");
+        this.messages.addDefault("moderation.unmute.notMuted", "&c{player}&r&c is not muted");
+        this.messages.addDefault("moderation.unmute.cantUnmuteSelf", "&cYou can't unmute yourself");
+        this.messages.addDefault("moderation.chatLock.toggle", "&aSuccessfully toggled chat lock mode {value}");
+        this.messages.addDefault("moderation.chatLock.chat", "&cChat lock is currently enabled");
         this.messages.addDefault("moderation.maintenance.toggle", "&aSuccessfully toggled maintenance mode {value}");
         this.messages.addDefault("moderation.maintenance.kick", "&cSorry but the server is currently in maintenance mode, please come back later");
         this.messages.addDefault("moderation.maintenance.motd", "              &cCurrently under maintenance");
@@ -215,7 +215,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.commands.add(new NickNameCommand("nickname", "Change your nickname", Arrays.asList("nick"), "evercraft.commands.player.nickname").register());
 
-        this.commands.add(new SeenCommand("lastseen", "Check when someone was last online", Arrays.asList("seen"), "evercraft.commands.player.seen").register());
+        this.commands.add(new SeenCommand("lastSeen", "Check when someone was last online", Arrays.asList("seen"), "evercraft.commands.player.seen").register());
 
         this.commands.add(new MessageCommand("message", "Message someone", Arrays.asList("msg"), "evercraft.commands.player.message").register());
         this.commands.add(new ReplyCommand("reply", "Reply to someone", Arrays.asList("r"), "evercraft.commands.player.message").register());
@@ -237,7 +237,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.commands.add(new PermMuteCommand("permmute", "Mute a player on the server", Arrays.asList(), "evercraft.commands.moderation.permmute").register());
         this.commands.add(new UnMuteCommand("unmute", "Unmute a player on the server", Arrays.asList(), "evercraft.commands.moderation.unmute").register());
         this.commands.add(new LockChatCommand("lockchat", "Toggle chat lock", Arrays.asList("lockchat"), "evercraft.commands.moderation.chatlock").register());
-        this.commands.add(new MaintenanceCommand("maintenance", "Toggle maintainance mode", Arrays.asList(), "evercraft.commands.moderation.maintenance").register());
+        this.commands.add(new MaintenanceCommand("maintenance", "Toggle maintenance mode", Arrays.asList(), "evercraft.commands.moderation.maintenance").register());
 
         this.commands.add(new StaffChatCommand("staffchat", "Send a message to the staffchat", Arrays.asList("sc"), "evercraft.commands.staff.staffchat").register());
         this.commands.add(new CommandSpyCommand("commandspy", "Toggle your commandspy", Arrays.asList("cs"), "evercraft.commands.staff.commandspy").register());

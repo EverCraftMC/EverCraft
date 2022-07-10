@@ -32,17 +32,17 @@ public class UnMuteCommand extends BungeeCommand {
 
             if (player != null) {
                 if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId())) {
-                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.cantunmuteself"))));
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.cantUnmuteSelf"))));
                 } else {
                     if (BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
-                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.broadcast.noreason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
+                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.broadcast.noReason").replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
 
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.muted", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.reason", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.by", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.until", null);
                     } else {
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.notmuted").replace("{player}", player.getDisplayName()))));
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.notMuted").replace("{player}", player.getDisplayName()))));
                     }
                 }
             } else {
@@ -53,7 +53,7 @@ public class UnMuteCommand extends BungeeCommand {
 
             if (player != null) {
                 if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId())) {
-                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.cantunmuteself"))));
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.cantUnmuteSelf"))));
                 } else {
                     if (BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
                         StringBuilder reason = new StringBuilder();
@@ -69,7 +69,7 @@ public class UnMuteCommand extends BungeeCommand {
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.by", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.until", null);
                     } else {
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.notmuted").replace("{player}", player.getDisplayName()))));
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.unmute.notMuted").replace("{player}", player.getDisplayName()))));
                     }
                 }
             } else {
