@@ -25,6 +25,7 @@ import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.GameModeCo
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.SpectatorCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.SurvivalCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.DelWarpCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.warp.HomeCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.SetWarpCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.SpawnCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
@@ -167,6 +168,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.commands.add(new WarpCommand("warp", "Teleport to a warp", Arrays.asList(), "evercraft.commands.warp.warp").register());
         this.commands.add(new SpawnCommand("spawn", "Teleport to the spawn", Arrays.asList(), "evercraft.commands.warp.spawn").register());
+        this.commands.add(new HomeCommand("home", "Teleport to your home (bed)", Arrays.asList("bed"), "evercraft.commands.warp.home").register());
         this.commands.add(new SetWarpCommand("setwarp", "Set a warp to your location", Arrays.asList(), "evercraft.commands.warp.setwarp").register());
         this.commands.add(new DelWarpCommand("delwarp", "Delete a warp", Arrays.asList(), "evercraft.commands.warp.delwarp").register());
 
@@ -175,7 +177,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new DelKitCommand("delkit", "Delete a kit", Arrays.asList(), "evercraft.commands.kit.delkit").register());
 
         if (this.config.getBoolean("chestProtectionEnabled")) {
-            this.commands.add(new ChestProtectionCommand("chestprotection", "Manage you chest protections", Arrays.asList("cp", "chests"), null).register());
+            this.commands.add(new ChestProtectionCommand("chestprotection", "Manage you chest protections", Arrays.asList("cp", "chests"), "evercraft.commands.player.chestprotection").register());
         }
 
         if (this.getPluginConfig().getBoolean("passiveEnabled")) {
