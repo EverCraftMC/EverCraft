@@ -41,34 +41,34 @@ public class ChestProtectionCommand extends SpigotCommand {
                         }
                     }
 
-                    if (protectable && (SpigotMain.getInstance().getChests().getBoolean(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner") == null || SpigotMain.getInstance().getChests().getString(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner").equals(player.getUniqueId().toString()))) {
-                        if (args[0].equalsIgnoreCase("protect") && SpigotMain.getInstance().getChests().getString(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner").equals(player.getUniqueId().toString())) {
+                    if (protectable && (SpigotMain.getInstance().getChests().getRaw("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner") == null || SpigotMain.getInstance().getChests().getString("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner").equals(player.getUniqueId().toString()))) {
+                        if (args[0].equalsIgnoreCase("protect") && SpigotMain.getInstance().getChests().getString("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner").equals(player.getUniqueId().toString())) {
                             SpigotMain.getInstance().getChests().set("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".protected", true);
 
                             player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.protected"))));
-                        } else if (args[0].equalsIgnoreCase("unprotect") && SpigotMain.getInstance().getChests().getString(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner").equals(player.getUniqueId().toString())) {
+                        } else if (args[0].equalsIgnoreCase("unprotect") && SpigotMain.getInstance().getChests().getString("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner").equals(player.getUniqueId().toString())) {
                             SpigotMain.getInstance().getChests().set("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".protected", false);
 
                             player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.unprotected"))));
-                        } else if (args[0].equalsIgnoreCase("claim") && SpigotMain.getInstance().getChests().getRaw(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner") == null) {
+                        } else if (args[0].equalsIgnoreCase("claim") && SpigotMain.getInstance().getChests().getRaw("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner") == null) {
                             SpigotMain.getInstance().getChests().set("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".protected", true);
                             SpigotMain.getInstance().getChests().set("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner", player.getUniqueId().toString());
                             SpigotMain.getInstance().getChests().set("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".allowUse", allowUse);
                             SpigotMain.getInstance().getChests().save();
 
                             player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.claimed"))));
-                        } else if (args[0].equalsIgnoreCase("unclaim") && SpigotMain.getInstance().getChests().getString(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner").equals(player.getUniqueId().toString())) {
+                        } else if (args[0].equalsIgnoreCase("unclaim") && SpigotMain.getInstance().getChests().getString("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner").equals(player.getUniqueId().toString())) {
                             SpigotMain.getInstance().getChests().set("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".protected", null);
                             SpigotMain.getInstance().getChests().set("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner", null);
                             SpigotMain.getInstance().getChests().set("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".allowUse", null);
                             SpigotMain.getInstance().getChests().save();
 
                             player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.unclaimed"))));
-                        } else if (args[0].equalsIgnoreCase("allowUse") && SpigotMain.getInstance().getChests().getString(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner").equals(player.getUniqueId().toString())) {
+                        } else if (args[0].equalsIgnoreCase("allowUse") && SpigotMain.getInstance().getChests().getString("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner").equals(player.getUniqueId().toString())) {
                             SpigotMain.getInstance().getChests().set("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".allowUse", true);
 
                             player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.allowedUse"))));
-                        } else if (args[0].equalsIgnoreCase("disallowUse") && SpigotMain.getInstance().getChests().getString(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner").equals(player.getUniqueId().toString())) {
+                        } else if (args[0].equalsIgnoreCase("disallowUse") && SpigotMain.getInstance().getChests().getString("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".owner").equals(player.getUniqueId().toString())) {
                             SpigotMain.getInstance().getChests().set("blocks." + block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName() + ".allowUse", false);
 
                             player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.disallowedUse"))));
