@@ -18,18 +18,20 @@ import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter
 public class ChestProtectionListener extends SpigotListener {
     @EventHandler
     public void onChestOpen(PlayerInteractEvent event) {
-        Boolean protectable = false;
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            Boolean protectable = false;
 
-        for (String protectableSetting : SpigotMain.getInstance().getPluginConfig().getStringList("protectable")) {
-            if (protectableSetting.split(":")[0].equalsIgnoreCase(event.getClickedBlock().getType().toString().toLowerCase().replace("red__", "{color}__").replace("orange_", "{color}_").replace("yellow_", "{color}_").replace("lime_", "{color}_").replace("green_", "{color}_").replace("cyan_", "{color}_").replace("light_blue_", "{color}_").replace("blue_", "{color}_").replace("purple_", "{color}_").replace("magenta_", "{color}_").replace("pink_", "{color}_").replace("brown_", "{color}_").replace("white_", "{color}_").replace("light_gray_", "{color}_").replace("gray_", "{color}_").replace("black_", "{color}_"))) {
-                protectable = true;
+            for (String protectableSetting : SpigotMain.getInstance().getPluginConfig().getStringList("protectable")) {
+                if (protectableSetting.split(":")[0].equalsIgnoreCase(event.getClickedBlock().getType().toString().toLowerCase().replace("red__", "{color}__").replace("orange_", "{color}_").replace("yellow_", "{color}_").replace("lime_", "{color}_").replace("green_", "{color}_").replace("cyan_", "{color}_").replace("light_blue_", "{color}_").replace("blue_", "{color}_").replace("purple_", "{color}_").replace("magenta_", "{color}_").replace("pink_", "{color}_").replace("brown_", "{color}_").replace("white_", "{color}_").replace("light_gray_", "{color}_").replace("gray_", "{color}_").replace("black_", "{color}_"))) {
+                    protectable = true;
+                }
             }
-        }
 
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && protectable && SpigotMain.getInstance().getChests().getBoolean("blocks." + event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".protected") && !SpigotMain.getInstance().getChests().getBoolean("blocks." + event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".allowUse") && !SpigotMain.getInstance().getChests().getString("blocks." + event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".owner").equals(event.getPlayer().getUniqueId().toString())) {
-            event.setCancelled(true);
+            if (protectable && SpigotMain.getInstance().getChests().getBoolean("blocks." + event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".protected") && !SpigotMain.getInstance().getChests().getBoolean("blocks." + event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".allowUse") && !SpigotMain.getInstance().getChests().getString("blocks." + event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName() + ".owner").equals(event.getPlayer().getUniqueId().toString())) {
+                event.setCancelled(true);
 
-            event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.notyours"))));
+                event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("chestProtection.notyours"))));
+            }
         }
     }
 
