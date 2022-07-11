@@ -217,7 +217,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.commands.add(new SeenCommand("lastSeen", "Check when someone was last online", Arrays.asList("seen"), "evercraft.commands.player.seen").register());
 
-        this.commands.add(new MessageCommand("message", "Message someone", Arrays.asList("msg"), "evercraft.commands.player.message").register());
+        this.commands.add(new MessageCommand("message", "Message someone", Arrays.asList("msg", "tell"), "evercraft.commands.player.message").register());
         this.commands.add(new ReplyCommand("reply", "Reply to someone", Arrays.asList("r"), "evercraft.commands.player.message").register());
 
         this.commands.add(new BalanceCommand("balance", "Check your balance", Arrays.asList("bal"), "evercraft.commands.economy.balance").register());
