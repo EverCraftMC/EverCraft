@@ -13,15 +13,15 @@ public class SimplePlayer {
         this.uuid = uuid;
         this.name = name;
 
-        this.prefix = "";
         this.nickname = name;
+        this.prefix = "";
     }
 
-    public SimplePlayer(UUID uuid, String name, String prefix, String nickname) {
+    public SimplePlayer(UUID uuid, String name, String nickname, String prefix) {
         this(uuid, name);
 
-        this.prefix = prefix;
         this.nickname = nickname;
+        this.prefix = prefix;
     }
 
     public UUID getUniqueId() {
