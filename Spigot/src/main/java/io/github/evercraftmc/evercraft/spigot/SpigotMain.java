@@ -38,7 +38,7 @@ import io.github.evercraftmc.evercraft.spigot.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.PvPListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.SpigotListener;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
-import net.luckperms.api.LuckPermsProvider;
+import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -246,7 +246,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.assets = new ArrayList<Closable>();
 
         for (Player player : this.getServer().getOnlinePlayers()) {
-            player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + SpigotMain.getInstance().getData().getString("players." + player.getUniqueId() + ".nickname"))));
+            player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotPlayerResolver.getDisplayName(data, player.getUniqueId()))));
             player.playerListName(player.displayName());
         }
 

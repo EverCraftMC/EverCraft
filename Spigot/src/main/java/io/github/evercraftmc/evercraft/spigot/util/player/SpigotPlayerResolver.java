@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutionException;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import io.github.evercraftmc.evercraft.shared.config.Config;
+import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.shared.util.player.SimplePlayer;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import net.luckperms.api.LuckPermsProvider;
@@ -46,7 +47,14 @@ public class SpigotPlayerResolver {
 
     public static String getNickname(Config config, UUID uuid) {
         if (config.getString("players." + uuid.toString() + ".nickname") != null) {
-            return config.getString("players." + uuid.toString() + ".nickname");
+            Boolean needsStar = true;
+            for (String string : TextFormatter.removeColors(config.getString("players." + uuid.toString() + ".nickname")).replace("_", "-").split("-")) {
+                if (getNameFromUUID(config, uuid).contains(string)) {
+                    needsStar = false;
+                }
+            }
+
+            return config.getString("players." + uuid.toString() + ".nickname") + (needsStar ? "*" : "");
         } else {
             return getNameFromUUID(config, uuid);
         }
