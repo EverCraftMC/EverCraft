@@ -3,6 +3,7 @@ package io.github.evercraftmc.evercraft.spigot.listeners;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
 import io.github.evercraftmc.evercraft.spigot.util.types.SerializableLocation;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -12,7 +13,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import net.kyori.adventure.text.Component;
-import net.luckperms.api.LuckPermsProvider;
 
 public class JoinListener extends SpigotListener {
     @EventHandler
@@ -23,7 +23,7 @@ public class JoinListener extends SpigotListener {
 
         event.joinMessage(Component.empty());
 
-        event.getPlayer().displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(event.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix() + SpigotMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".nickname"))));
+        event.getPlayer().displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotPlayerResolver.getDisplayName(SpigotMain.getInstance().getData(), event.getPlayer().getUniqueId()))));
         event.getPlayer().playerListName(event.getPlayer().displayName());
     }
 
