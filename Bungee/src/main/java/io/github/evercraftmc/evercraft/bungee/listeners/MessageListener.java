@@ -20,7 +20,7 @@ import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.event.EventHandler;
 
 public class MessageListener extends BungeeListener {
-    private Map<UUID, Integer> warnings = new HashMap<UUID, Integer>();
+    public static Map<UUID, Integer> warnings = new HashMap<UUID, Integer>();
 
     @EventHandler
     public void onMessage(PluginMessageEvent event) {
@@ -38,7 +38,7 @@ public class MessageListener extends BungeeListener {
 
                 if (!BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
                     if (ModerationUtil.isSuperInappropriateString(message.trim())) {
-                        BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(BungeeMain.getInstance().getProxy().getConsole(), "tempmute " + player.getName() + " 1h No, just no, get the fuck out");
+                        BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(BungeeMain.getInstance().getProxy().getConsole(), "tempmute " + player.getName() + " 1h No");
                     } else if (ModerationUtil.isInappropriateString(message.trim())) {
                         if (warnings.containsKey(player.getUniqueId())) {
                             Integer value = warnings.get(player.getUniqueId()) + 1;
@@ -98,6 +98,8 @@ public class MessageListener extends BungeeListener {
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.reason", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.by", null);
                         BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".mute.until", null);
+
+                        onMessage(event);
                     }
                 }
             } else if (subChannel.equals("globalPlayerMessage")) {
