@@ -8,6 +8,7 @@ import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
 import org.bukkit.GameRule;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -20,7 +21,6 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
-import net.luckperms.api.LuckPermsProvider;
 
 public class MessageListener extends SpigotListener implements PluginMessageListener {
     @EventHandler
@@ -105,7 +105,7 @@ public class MessageListener extends SpigotListener implements PluginMessageList
             } else if (subChannel.equals("updateName")) {
                 Player player = SpigotMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
 
-                player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + SpigotMain.getInstance().getData().getString("players." + player.getUniqueId() + ".nickname"))));
+                player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotPlayerResolver.getDisplayName(SpigotMain.getInstance().getData(), player.getUniqueId()))));
             } else if (subChannel.equals("playSound")) {
                 Player player = SpigotMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
 

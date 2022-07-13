@@ -264,7 +264,7 @@ public class BotMain implements EventListener {
 
                 if (ModerationUtil.isSuperInappropriateString(message.toString().trim())) {
                     if (event.getMember().getRoles().isEmpty() || event.getMember().getRoles().get(0).getPosition() <= event.getGuild().getSelfMember().getRoles().get(0).getPosition()) {
-                        String command = getConfig().getPrefix() + "mute " + event.getMember().getAsMention() + " 1h No, just no, get the fuck out";
+                        String command = getConfig().getPrefix() + "mute " + event.getMember().getAsMention() + " 1h No";
                         Long id = UUID.randomUUID().getMostSignificantBits();
                         Message fakemessage = new ReceivedMessage(id, event.getChannel(), MessageType.DEFAULT, new MessageReference(id, event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(command.trim()).build(), this.getJDA()), false, false, false, command.trim(), id + "", getJDA().getSelfUser(), event.getGuild().getSelfMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new MessageMentionsImpl((JDAImpl) event.getJDA(), (GuildImpl) event.getGuild(), command.trim(), false, DataArray.empty(), DataArray.empty()), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<StickerItem>(), new ArrayList<ActionRow>(), 0, null, null);
                         new MuteCommand().run(fakemessage);
