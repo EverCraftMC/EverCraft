@@ -31,18 +31,7 @@ public class ReplyCommand extends BungeeCommand {
                         message.append(args[i] + " ");
                     }
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.dm").replace("{player1}", "You").replace("{player2}", player2.getDisplayName()).replace("{message}", message.toString()))));
-                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.dm").replace("{player1}", player.getDisplayName()).replace("{player2}", "You").replace("{message}", message.toString()))));
-
-                    if (lastMessages.containsKey(player)) {
-                        lastMessages.remove(player);
-                    }
-                    lastMessages.put(player, player2);
-
-                    if (lastMessages.containsKey(player2)) {
-                        lastMessages.remove(player2);
-                    }
-                    lastMessages.put(player2, player);
+                    BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(player, "/message " + player2.getName() + " " + message.toString().trim());
                 } else {
                     sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.noReplyTo"))));
                 }

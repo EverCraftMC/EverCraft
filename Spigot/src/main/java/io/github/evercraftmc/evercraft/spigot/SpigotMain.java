@@ -106,20 +106,20 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
         this.messages.reload();
 
-        this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
+        this.messages.addDefault("error.noPerms", "&cYou need the permission \"{permission}\" to do that");
         this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
-        this.messages.addDefault("error.playerNotFound", "&cCouldn't find player {player}");
+        this.messages.addDefault("error.playerNotFound", "&cCouldn't find player \"{player}&r&c\"");
         this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
         this.messages.addDefault("reload.reloading", "&aReloading plugin..");
         this.messages.addDefault("reload.reloaded", "&aSuccessfully reloaded");
         this.messages.addDefault("warp.warped", "&aSuccessfully warped to {warp}");
-        this.messages.addDefault("warp.setWarp", "&aSuccessfully set warp {warp} to your location");
+        this.messages.addDefault("warp.setWarp", "&aSuccessfully set warp {warp}&r&a to your location");
         this.messages.addDefault("warp.delWarp", "&aSuccessfully deleted warp {warp}");
-        this.messages.addDefault("warp.notFound", "&cWarp {warp} does not exist");
+        this.messages.addDefault("warp.notFound", "&cWarp {warp}&r&c does not exist");
         this.messages.addDefault("kit.kit", "&aSuccessfully got kit {kit}");
-        this.messages.addDefault("kit.setkit", "&aSuccessfully set kit {kit} to your inventory");
+        this.messages.addDefault("kit.setkit", "&aSuccessfully set kit {kit}&r&a to your inventory");
         this.messages.addDefault("kit.delkit", "&cSuccessfully deleted kit {kit}");
-        this.messages.addDefault("kit.notFound", "&cKit {kit} does not exist");
+        this.messages.addDefault("kit.notFound", "&cKit {kit}&r&c does not exist");
         this.messages.addDefault("passive", "&aSuccessfully toggled passive mode {value}");
         this.messages.addDefault("chestProtection.claimed", "&aThis block is now claimed");
         this.messages.addDefault("chestProtection.unclaimed", "&cThis block is no longer claimed");

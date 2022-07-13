@@ -59,9 +59,9 @@ public class LimboMain extends LimboPlugin implements Plugin {
         this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
         this.messages.reload();
 
-        this.messages.addDefault("error.noPerms", "&cYou need the permission {permission} to do that");
+        this.messages.addDefault("error.noPerms", "&cYou need the permission \"{permission}\" to do that");
         this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
-        this.messages.addDefault("error.playerNotFound", "&cCouldn't find player {player}");
+        this.messages.addDefault("error.playerNotFound", "&cCouldn't find player \"{player}\"");
         this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
         this.messages.addDefault("reload.reloading", "&aReloading plugin..");
         this.messages.addDefault("reload.reloaded", "&aSuccessfully reloaded");
