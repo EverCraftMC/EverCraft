@@ -12,13 +12,15 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitTask;
+import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.SpawnCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
+import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 
 public abstract class Game implements Listener {
     public enum LeaveReason {
-        COMMAND, DEATH, TELEPORT, DISCONNECTED
+        GAMEOVER, COMMAND, DEATH, TELEPORT, DISCONNECTED
     }
 
     protected String name;
@@ -70,15 +72,35 @@ public abstract class Game implements Listener {
             new WarpCommand("warp", null, Arrays.asList(), null).run(player, new String[] { warpName, "true" });
 
             this.players.add(player);
+
+            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.joined").replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+
+            for (Player player2 : this.players) {
+                if (player2 != player) {
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.join").replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                }
+            }
         } else {
-            throw new RuntimeException("Game is full");
+            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.full"))));
         }
     }
 
     public void leave(Player player, LeaveReason leaveReason) {
         this.players.remove(player);
 
-        if (leaveReason == LeaveReason.COMMAND) {
+        if (leaveReason != LeaveReason.GAMEOVER) {
+            if (leaveReason != LeaveReason.DISCONNECTED) {
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.left").replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+            }
+
+            for (Player player2 : this.players) {
+                if (player2 != player) {
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.leave").replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                }
+            }
+        }
+
+        if (leaveReason == LeaveReason.COMMAND || leaveReason == LeaveReason.GAMEOVER) {
             new SpawnCommand("spawn", null, Arrays.asList(), null).run(player, new String[] { "true" });
         }
     }

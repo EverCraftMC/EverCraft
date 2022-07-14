@@ -3,6 +3,9 @@ package io.github.evercraftmc.evercraft.spigot.games;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.entity.Player;
+import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
+import io.github.evercraftmc.evercraft.spigot.SpigotMain;
+import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 
 public abstract class TeamedGame extends RoundedGame {
     protected Map<Player, String> teams = new HashMap<Player, String>();
@@ -19,11 +22,36 @@ public abstract class TeamedGame extends RoundedGame {
     }
 
     public void joinTeam(Player player, String team) {
-        this.teams.put(player, team);
+        if (!this.teams.containsKey(player)) {
+            this.teams.put(player, team);
+
+            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.joinedTeam").replace("{team}", team))));
+
+            for (Player player2 : this.players) {
+                if (player2 != player) {
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.teamJoin").replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{team}", team))));
+                }
+            }
+        } else {
+            throw new RuntimeException("Player is already on a team");
+        }
     }
 
     public void leaveTeam(Player player) {
-        this.teams.remove(player);
+        if (this.teams.containsKey(player)) {
+            String team = this.teams.get(player);
+            this.teams.remove(player);
+
+            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.leftTeam").replace("{team}", team))));
+
+            for (Player player2 : this.players) {
+                if (player2 != player) {
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.teamLeave").replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{team}", team))));
+                }
+            }
+        } else {
+            throw new RuntimeException("Player is not on a team");
+        }
     }
 
     public String getTeam(Player player) {

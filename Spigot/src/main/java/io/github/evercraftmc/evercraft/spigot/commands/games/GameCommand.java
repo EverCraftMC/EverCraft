@@ -43,13 +43,13 @@ public class GameCommand extends SpigotCommand {
                             }
 
                             if (!joinedGame) {
-                                // TODO Unknown game message
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.notFound").replace("{game}", args[1]))));
                             }
                         } else {
-                            // TODO Already in game message
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.alreadyInGame"))));
                         }
                     } else {
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
                     }
                 } else if (args[0].equalsIgnoreCase("leave")) {
                     Boolean inGame = false;
@@ -66,7 +66,7 @@ public class GameCommand extends SpigotCommand {
                             }
                         }
                     } else {
-                        // TODO Not in game message
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.notInGame"))));
                     }
                 } else if (args[0].equalsIgnoreCase("team")) {
                     if (args.length >= 2) {
@@ -93,7 +93,7 @@ public class GameCommand extends SpigotCommand {
                                         }
                                     }
                                 } else {
-                                    // TODO Not in game message
+                                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.notInGame"))));
                                 }
                             }
                         } else if (args[1].equalsIgnoreCase("leave")) {
@@ -121,22 +121,22 @@ public class GameCommand extends SpigotCommand {
                                         }
                                     }
                                 } else {
-                                    // TODO Not in team message
+                                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.notInGame"))));
                                 }
                             } else {
-                                // TODO Not in game message
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.notInGame"))));
                             }
                         } else {
-                            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
                         }
                     } else {
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
                     }
                 } else {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
             }
         } else {
             sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noConsole"))));
