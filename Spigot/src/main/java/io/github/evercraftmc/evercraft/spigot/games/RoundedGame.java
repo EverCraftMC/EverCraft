@@ -2,7 +2,9 @@ package io.github.evercraftmc.evercraft.spigot.games;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
+import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 
 public abstract class RoundedGame extends Game {
     protected Boolean started = false;
@@ -15,10 +17,10 @@ public abstract class RoundedGame extends Game {
 
     @Override
     public void join(Player player) {
-        super.join(player);
-
-        if (this.started) {
-            throw new RuntimeException("The game has already started");
+        if (!this.started) {
+            super.join(player);
+        } else {
+            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.started"))));
         }
     }
 
@@ -39,6 +41,10 @@ public abstract class RoundedGame extends Game {
 
             this.started = true;
 
+            for (Player player : this.players) {
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.start"))));
+            }
+
             this.tickTask = Bukkit.getScheduler().runTaskTimer(SpigotMain.getInstance(), new Runnable() {
                 public void run() {
                     tick();
@@ -51,11 +57,15 @@ public abstract class RoundedGame extends Game {
 
     public void stop() {
         if (this.started) {
+            this.started = false;
+
             for (Player player : this.players) {
-                this.leave(player, LeaveReason.COMMAND);
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.stop"))));
             }
 
-            this.started = false;
+            for (Player player : this.players) {
+                this.leave(player, LeaveReason.GAMEOVER);
+            }
 
             this.tickTask.cancel();
         } else {
