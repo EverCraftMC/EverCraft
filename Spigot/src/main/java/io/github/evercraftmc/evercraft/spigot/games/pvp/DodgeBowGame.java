@@ -39,14 +39,14 @@ public class DodgeBowGame extends TeamedGame {
 
         for (Player player : this.players) {
             if (!this.teams.containsKey(player)) {
-                this.teams.put(player, "runner");
+                this.teams.put(player, "runners");
             }
 
-            if (this.teams.get(player).equalsIgnoreCase("runner")) {
+            if (this.teams.get(player).equalsIgnoreCase("runners")) {
                 new WarpCommand("warp", null, Arrays.asList(), null).run(player, new String[] { runnerWarpName, "true" });
             }
 
-            if (this.teams.get(player).equalsIgnoreCase("bower")) {
+            if (this.teams.get(player).equalsIgnoreCase("bowers")) {
                 new WarpCommand("warp", null, Arrays.asList(), null).run(player, new String[] { bowerWarpName, "true" });
 
                 new KitCommand("kit", null, Arrays.asList(), null).run(player, new String[] { bowerKitName, "true" });
@@ -58,16 +58,18 @@ public class DodgeBowGame extends TeamedGame {
     public void leave(Player player, LeaveReason leaveReason) {
         super.leave(player, leaveReason);
 
-        if (this.started) {
-            Integer runners = 0;
-            for (Player player2 : this.players) {
-                if (this.teams.get(player2).equalsIgnoreCase("runner")) {
-                    runners++;
+        if (leaveReason != LeaveReason.GAMEOVER) {
+            if (this.started) {
+                Integer runners = 0;
+                for (Player player2 : this.players) {
+                    if (this.teams.get(player2).equalsIgnoreCase("runners")) {
+                        runners++;
+                    }
                 }
-            }
 
-            if (runners == 0) {
-                this.stop();
+                if (runners == 0) {
+                    this.stop();
+                }
             }
         }
     }
@@ -82,9 +84,9 @@ public class DodgeBowGame extends TeamedGame {
 
             for (Player player2 : this.players) {
                 if (this.teams.containsKey(player2)) {
-                    if (this.teams.get(player2).equalsIgnoreCase("runner")) {
+                    if (this.teams.get(player2).equalsIgnoreCase("runners")) {
                         runners++;
-                    } else if (this.teams.get(player2).equalsIgnoreCase("bower")) {
+                    } else if (this.teams.get(player2).equalsIgnoreCase("bowers")) {
                         bowers++;
                     }
                 }
