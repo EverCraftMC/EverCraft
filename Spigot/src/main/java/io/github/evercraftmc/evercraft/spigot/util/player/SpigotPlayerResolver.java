@@ -49,7 +49,7 @@ public class SpigotPlayerResolver {
         if (config.getString("players." + uuid.toString() + ".nickname") != null) {
             Boolean needsStar = true;
             for (String string : TextFormatter.removeColors(config.getString("players." + uuid.toString() + ".nickname")).replace("_", "-").split("-")) {
-                if (getNameFromUUID(config, uuid).contains(string)) {
+                if (getNameFromUUID(config, uuid).toLowerCase().contains(string.toLowerCase())) {
                     needsStar = false;
                 }
             }
