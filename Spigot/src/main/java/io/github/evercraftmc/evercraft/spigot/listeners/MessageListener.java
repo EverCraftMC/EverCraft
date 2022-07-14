@@ -105,7 +105,7 @@ public class MessageListener extends SpigotListener implements PluginMessageList
             } else if (subChannel.equals("updateName")) {
                 Player player = SpigotMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
 
-                player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotPlayerResolver.getDisplayName(SpigotMain.getInstance().getData(), player.getUniqueId()))));
+                player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotPlayerResolver.getDisplayName(SpigotMain.getInstance().getPluginData(), player.getUniqueId()))));
             } else if (subChannel.equals("playSound")) {
                 Player player = SpigotMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
 

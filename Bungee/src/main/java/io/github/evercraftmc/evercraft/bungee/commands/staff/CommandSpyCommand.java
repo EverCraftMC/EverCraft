@@ -20,22 +20,22 @@ public class CommandSpyCommand extends BungeeCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof ProxiedPlayer player) {
             if (args.length == 0) {
-                if (BungeeMain.getInstance().getData().getBoolean("players." + player.getUniqueId() + ".commandspy")) {
-                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".commandspy", false);
+                if (BungeeMain.getInstance().getPluginData().getBoolean("players." + player.getUniqueId() + ".commandspy")) {
+                    BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".commandspy", false);
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("commandspy").replace("{value}", "off"))));
                 } else {
-                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".commandspy", true);
+                    BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".commandspy", true);
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("commandspy").replace("{value}", "on"))));
                 }
             } else {
                 if (args[0].equalsIgnoreCase("on")) {
-                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".commandspy", true);
+                    BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".commandspy", true);
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("commandspy").replace("{value}", "on"))));
                 } else if (args[0].equalsIgnoreCase("off")) {
-                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".commandspy", false);
+                    BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".commandspy", false);
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("commandspy").replace("{value}", "off"))));
                 }

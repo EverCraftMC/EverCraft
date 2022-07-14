@@ -23,7 +23,7 @@ public class JoinListener extends SpigotListener {
 
         event.joinMessage(Component.empty());
 
-        event.getPlayer().displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotPlayerResolver.getDisplayName(SpigotMain.getInstance().getData(), event.getPlayer().getUniqueId()))));
+        event.getPlayer().displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotPlayerResolver.getDisplayName(SpigotMain.getInstance().getPluginData(), event.getPlayer().getUniqueId()))));
         event.getPlayer().playerListName(event.getPlayer().displayName());
     }
 
