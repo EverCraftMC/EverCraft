@@ -18,7 +18,9 @@ public abstract class TeamedGame extends RoundedGame {
     public void leave(Player player, LeaveReason leaveReason) {
         super.leave(player, leaveReason);
 
-        this.leaveTeam(player);
+        if (teams.containsKey(player)) {
+            this.leaveTeam(player);
+        }
     }
 
     public void joinTeam(Player player, String team) {
