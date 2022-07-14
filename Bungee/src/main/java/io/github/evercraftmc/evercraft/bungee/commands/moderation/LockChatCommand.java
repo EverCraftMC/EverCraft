@@ -18,22 +18,22 @@ public class LockChatCommand extends BungeeCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            if (BungeeMain.getInstance().getData().getBoolean("chatLock")) {
-                BungeeMain.getInstance().getData().set("chatLock", false);
+            if (BungeeMain.getInstance().getPluginData().getBoolean("chatLock")) {
+                BungeeMain.getInstance().getPluginData().set("chatLock", false);
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.chatLock.toggle").replace("{value}", "off"))));
             } else {
-                BungeeMain.getInstance().getData().set("chatLock", true);
+                BungeeMain.getInstance().getPluginData().set("chatLock", true);
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.chatLock.toggle").replace("{value}", "on"))));
             }
         } else {
             if (args[0].equalsIgnoreCase("on")) {
-                BungeeMain.getInstance().getData().set("chatLock", true);
+                BungeeMain.getInstance().getPluginData().set("chatLock", true);
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.chatLock.toggle").replace("{value}", "on"))));
             } else if (args[0].equalsIgnoreCase("off")) {
-                BungeeMain.getInstance().getData().set("chatLock", false);
+                BungeeMain.getInstance().getPluginData().set("chatLock", false);
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.chatLock.toggle").replace("{value}", "off"))));
             }

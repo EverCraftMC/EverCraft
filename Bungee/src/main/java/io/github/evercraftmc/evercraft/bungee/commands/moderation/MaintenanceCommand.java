@@ -19,12 +19,12 @@ public class MaintenanceCommand extends BungeeCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            if (BungeeMain.getInstance().getData().getBoolean("maintenance")) {
-                BungeeMain.getInstance().getData().set("maintenance", false);
+            if (BungeeMain.getInstance().getPluginData().getBoolean("maintenance")) {
+                BungeeMain.getInstance().getPluginData().set("maintenance", false);
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "off"))));
             } else {
-                BungeeMain.getInstance().getData().set("maintenance", true);
+                BungeeMain.getInstance().getPluginData().set("maintenance", true);
 
                 for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                     if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
@@ -36,7 +36,7 @@ public class MaintenanceCommand extends BungeeCommand {
             }
         } else {
             if (args[0].equalsIgnoreCase("on")) {
-                BungeeMain.getInstance().getData().set("maintenance", true);
+                BungeeMain.getInstance().getPluginData().set("maintenance", true);
 
                 for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                     if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
@@ -46,7 +46,7 @@ public class MaintenanceCommand extends BungeeCommand {
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "on"))));
             } else if (args[0].equalsIgnoreCase("off")) {
-                BungeeMain.getInstance().getData().set("maintenance", false);
+                BungeeMain.getInstance().getPluginData().set("maintenance", false);
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.toggle").replace("{value}", "off"))));
             }

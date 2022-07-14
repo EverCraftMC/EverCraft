@@ -8,8 +8,8 @@ import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.commands.BungeeCommand;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
+import io.github.evercraftmc.evercraft.bungee.util.player.BungeePlayerResolver;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
-import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -23,15 +23,14 @@ public class NickNameCommand extends BungeeCommand {
         if (sender instanceof ProxiedPlayer player) {
             if (args.length > 0) {
                 if (TextFormatter.removeColors(args[0]).length() > 0 && TextFormatter.removeColors(args[0]).length() < 16 && args[0].length() < 32) {
-                    BungeeMain.getInstance().getData().set("players." + player.getUniqueId() + ".nickname", args[0]);
+                    BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".nickname", args[0]);
 
-                    player.setDisplayName(TextFormatter.translateColors(LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix() + args[0]));
+                    player.setDisplayName(TextFormatter.translateColors(BungeePlayerResolver.getDisplayName(BungeeMain.getInstance().getPluginData(), player.getUniqueId())));
                     TabListUtil.updatePlayerName(player);
 
                     ByteArrayDataOutput out = ByteStreams.newDataOutput();
                     out.writeUTF("updateName");
                     out.writeUTF(player.getUniqueId().toString());
-
                     player.getServer().sendData("BungeeCord", out.toByteArray());
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("nickname").replace("{nickname}", args[0]))));

@@ -21,7 +21,7 @@ public class BalanceCommand extends BungeeCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (args.length > 0) {
-            SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
+            SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), args[0]);
 
             if (player != null) {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("economy.otherBalance").replace("{player}", player.getDisplayName()).replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()).toString()))));
