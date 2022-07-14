@@ -174,7 +174,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading economy..");
 
-        this.economy = new Economy(this.getData());
+        this.economy = new Economy(this.data);
 
         this.getLogger().info("Finished loading economy");
 
@@ -253,7 +253,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
             this.registeredGames.add(new PvpGame("sumo", "sumo", "sumo"));
 
             this.registeredGames.add(new DodgeBowGame("dodgebow", "dodgebow", "dodgebow-runners", "dodgebow-bowers", "dodgebow"));
-            
+
             this.registeredGames.add(new BoatRaceGame("boatrace", "boatrace", "boatrace"));
         }
 
@@ -351,7 +351,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         return this.messages;
     }
 
-    public MySQLConfig getData() {
+    public MySQLConfig getPluginData() {
         return this.data;
     }
 

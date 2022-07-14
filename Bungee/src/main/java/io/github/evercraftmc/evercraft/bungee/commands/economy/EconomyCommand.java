@@ -21,7 +21,7 @@ public class EconomyCommand extends BungeeCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (args.length >= 3) {
-            SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[1]);
+            SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), args[1]);
 
             if (player != null) {
                 if (args[0].equalsIgnoreCase("set")) {

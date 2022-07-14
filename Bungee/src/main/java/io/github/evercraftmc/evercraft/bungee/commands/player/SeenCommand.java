@@ -27,15 +27,15 @@ public class SeenCommand extends BungeeCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (args.length > 0) {
-            SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getData(), args[0]);
+            SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), args[0]);
 
             if (player != null) {
                 ProxiedPlayer bungeeplayer = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
                 if (bungeeplayer != null) {
                     sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("lastSeen.online").replace("{player}", args[0]))));
                 } else {
-                    if (BungeeMain.getInstance().getData().getRaw("players." + player.getUniqueId() + ".lastonline") != null) {
-                        Instant lastonline = Instant.ofEpochSecond(BungeeMain.getInstance().getData().getLong("players." + player.getUniqueId() + ".lastonline"));
+                    if (BungeeMain.getInstance().getPluginData().getRaw("players." + player.getUniqueId() + ".lastonline") != null) {
+                        Instant lastonline = Instant.ofEpochSecond(BungeeMain.getInstance().getPluginData().getLong("players." + player.getUniqueId() + ".lastonline"));
 
                         sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("lastSeen.lastSeen").replace("{player}", args[0]).replace("{lastSeen}", TimeUtil.getDifferenceString(Instant.now(), lastonline)))));
                     } else {

@@ -34,24 +34,24 @@ public class JoinListener extends BungeeListener {
 
     @EventHandler
     public void onPlayerJoin(PostLoginEvent event) {
-        if (BungeeMain.getInstance().getData().getBoolean("players." + event.getPlayer().getUniqueId() + ".ban.banned")) {
-            String time = BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.until");
+        if (BungeeMain.getInstance().getPluginData().getBoolean("players." + event.getPlayer().getUniqueId() + ".ban.banned")) {
+            String time = BungeeMain.getInstance().getPluginData().getString("players." + event.getPlayer().getUniqueId() + ".ban.until");
 
             if (time.equalsIgnoreCase("forever") || Instant.parse(time).isAfter(Instant.now())) {
-                if (BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.reason") != null) {
-                    event.getPlayer().disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.reason").replace("{reason}", BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.reason")).replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.by")).replace("{time}", time))));
+                if (BungeeMain.getInstance().getPluginData().getString("players." + event.getPlayer().getUniqueId() + ".ban.reason") != null) {
+                    event.getPlayer().disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.reason").replace("{reason}", BungeeMain.getInstance().getPluginData().getString("players." + event.getPlayer().getUniqueId() + ".ban.reason")).replace("{moderator}", BungeeMain.getInstance().getPluginData().getString("players." + event.getPlayer().getUniqueId() + ".ban.by")).replace("{time}", time))));
                 } else {
-                    event.getPlayer().disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.noReason").replace("{moderator}", BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".ban.by")).replace("{time}", time))));
+                    event.getPlayer().disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.ban.noReason").replace("{moderator}", BungeeMain.getInstance().getPluginData().getString("players." + event.getPlayer().getUniqueId() + ".ban.by")).replace("{time}", time))));
                 }
             } else if (Instant.parse(time).isBefore(Instant.now())) {
-                BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".ban.banned", null);
-                BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".ban.reason", null);
-                BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".ban.by", null);
-                BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".ban.until", null);
+                BungeeMain.getInstance().getPluginData().set("players." + event.getPlayer().getUniqueId() + ".ban.banned", null);
+                BungeeMain.getInstance().getPluginData().set("players." + event.getPlayer().getUniqueId() + ".ban.reason", null);
+                BungeeMain.getInstance().getPluginData().set("players." + event.getPlayer().getUniqueId() + ".ban.by", null);
+                BungeeMain.getInstance().getPluginData().set("players." + event.getPlayer().getUniqueId() + ".ban.until", null);
             }
 
             return;
-        } else if (BungeeMain.getInstance().getData().getBoolean("maintenance")) {
+        } else if (BungeeMain.getInstance().getPluginData().getBoolean("maintenance")) {
             if (!event.getPlayer().hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
                 event.getPlayer().disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.kick"))));
 
@@ -59,17 +59,17 @@ public class JoinListener extends BungeeListener {
             }
         }
 
-        BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".lastname", event.getPlayer().getName());
-        BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".lastip", ((InetSocketAddress) event.getPlayer().getSocketAddress()).getHostString());
+        BungeeMain.getInstance().getPluginData().set("players." + event.getPlayer().getUniqueId() + ".lastname", event.getPlayer().getName());
+        BungeeMain.getInstance().getPluginData().set("players." + event.getPlayer().getUniqueId() + ".lastip", ((InetSocketAddress) event.getPlayer().getSocketAddress()).getHostString());
 
-        if (BungeeMain.getInstance().getData().getString("players." + event.getPlayer().getUniqueId() + ".nickname") == null) {
-            BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".nickname", event.getPlayer().getName());
+        if (BungeeMain.getInstance().getPluginData().getString("players." + event.getPlayer().getUniqueId() + ".nickname") == null) {
+            BungeeMain.getInstance().getPluginData().set("players." + event.getPlayer().getUniqueId() + ".nickname", event.getPlayer().getName());
         }
 
-        event.getPlayer().setDisplayName(TextFormatter.translateColors(BungeePlayerResolver.getDisplayName(BungeeMain.getInstance().getData(), event.getPlayer().getUniqueId())));
+        event.getPlayer().setDisplayName(TextFormatter.translateColors(BungeePlayerResolver.getDisplayName(BungeeMain.getInstance().getPluginData(), event.getPlayer().getUniqueId())));
 
-        if (!BungeeMain.getInstance().getData().getBoolean("players." + event.getPlayer().getUniqueId() + ".joinedBefore")) {
-            BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".joinedBefore", true);
+        if (!BungeeMain.getInstance().getPluginData().getBoolean("players." + event.getPlayer().getUniqueId() + ".joinedBefore")) {
+            BungeeMain.getInstance().getPluginData().set("players." + event.getPlayer().getUniqueId() + ".joinedBefore", true);
 
             BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("welcome.firstJoin").replace("{player}", event.getPlayer().getDisplayName()))));
 
@@ -91,12 +91,12 @@ public class JoinListener extends BungeeListener {
             }
         }
 
-        if (BungeeMain.getInstance().getData().getFloat("votes." + event.getPlayer().getName() + ".toProcess") != null) {
-            for (int i = BungeeMain.getInstance().getData().getInteger("votes." + event.getPlayer().getName() + ".toProcess"); i > 0; i--) {
+        if (BungeeMain.getInstance().getPluginData().getFloat("votes." + event.getPlayer().getName() + ".toProcess") != null) {
+            for (int i = BungeeMain.getInstance().getPluginData().getInteger("votes." + event.getPlayer().getName() + ".toProcess"); i > 0; i--) {
                 VoteListener.process(event.getPlayer());
             }
 
-            BungeeMain.getInstance().getData().set("votes." + event.getPlayer().getName() + ".toProcess", null);
+            BungeeMain.getInstance().getPluginData().set("votes." + event.getPlayer().getName() + ".toProcess", null);
         }
     }
 
@@ -125,7 +125,7 @@ public class JoinListener extends BungeeListener {
 
     @EventHandler
     public void onPlayerQuit(PlayerDisconnectEvent event) {
-        BungeeMain.getInstance().getData().set("players." + event.getPlayer().getUniqueId() + ".lastonline", Instant.now().getEpochSecond());
+        BungeeMain.getInstance().getPluginData().set("players." + event.getPlayer().getUniqueId() + ".lastonline", Instant.now().getEpochSecond());
 
         BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("welcome.quit").replace("{player}", event.getPlayer().getDisplayName()))));
 

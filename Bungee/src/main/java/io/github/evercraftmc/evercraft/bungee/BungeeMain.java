@@ -199,7 +199,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.getLogger().info("Loading economy..");
 
-        this.economy = new Economy(this.getData());
+        this.economy = new Economy(this.data);
 
         this.getLogger().info("Finished loading economy");
 
@@ -378,7 +378,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         return this.messages;
     }
 
-    public MySQLConfig getData() {
+    public MySQLConfig getPluginData() {
         return this.data;
     }
 
