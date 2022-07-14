@@ -61,9 +61,7 @@ public abstract class RoundedGame extends Game {
 
             for (Player player : this.players) {
                 player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.stop"))));
-            }
 
-            for (Player player : this.players) {
                 this.leave(player, LeaveReason.GAMEOVER);
             }
 

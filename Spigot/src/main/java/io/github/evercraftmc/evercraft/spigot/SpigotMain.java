@@ -32,6 +32,7 @@ import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 import io.github.evercraftmc.evercraft.spigot.games.Game;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.DodgeBowGame;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.PvpGame;
+import io.github.evercraftmc.evercraft.spigot.games.race.BoatRaceGame;
 import io.github.evercraftmc.evercraft.spigot.listeners.ChestProtectionListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.JoinListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.MessageListener;
@@ -252,6 +253,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
             this.registeredGames.add(new PvpGame("sumo", "sumo", "sumo"));
 
             this.registeredGames.add(new DodgeBowGame("dodgebow", "dodgebow", "dodgebow-runners", "dodgebow-bowers", "dodgebow"));
+            
+            this.registeredGames.add(new BoatRaceGame("boatrace", "boatrace", "boatrace"));
         }
 
         this.getLogger().info("Finished loading games");
