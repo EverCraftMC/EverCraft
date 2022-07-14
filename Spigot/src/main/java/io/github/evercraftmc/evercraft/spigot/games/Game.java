@@ -68,40 +68,48 @@ public abstract class Game implements Listener {
     }
 
     public void join(Player player) {
-        if (this.players.size() < this.maxPlayers) {
-            new WarpCommand("warp", null, Arrays.asList(), null).run(player, new String[] { warpName, "true" });
+        if (!this.players.contains(player)) {
+            if (this.players.size() < this.maxPlayers) {
+                new WarpCommand("warp", null, Arrays.asList(), null).run(player, new String[] { warpName, "true" });
 
-            this.players.add(player);
+                this.players.add(player);
 
-            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.joined").replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.joined").replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
 
-            for (Player player2 : this.players) {
-                if (player2 != player) {
-                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.join").replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                for (Player player2 : this.players) {
+                    if (player2 != player) {
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.join").replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                    }
                 }
+            } else {
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.full"))));
             }
         } else {
-            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.full"))));
+            throw new RuntimeException("Player is already in game");
         }
     }
 
     public void leave(Player player, LeaveReason leaveReason) {
-        this.players.remove(player);
+        if (this.players.contains(player)) {
+            this.players.remove(player);
 
-        if (leaveReason != LeaveReason.GAMEOVER) {
-            if (leaveReason != LeaveReason.DISCONNECTED) {
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.left").replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
-            }
+            if (leaveReason != LeaveReason.GAMEOVER) {
+                if (leaveReason != LeaveReason.DISCONNECTED) {
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.left").replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                }
 
-            for (Player player2 : this.players) {
-                if (player2 != player) {
-                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.leave").replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                for (Player player2 : this.players) {
+                    if (player2 != player) {
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.leave").replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                    }
                 }
             }
-        }
 
-        if (leaveReason == LeaveReason.COMMAND || leaveReason == LeaveReason.GAMEOVER) {
-            new SpawnCommand("spawn", null, Arrays.asList(), null).run(player, new String[] { "true" });
+            if (leaveReason == LeaveReason.COMMAND || leaveReason == LeaveReason.GAMEOVER) {
+                new SpawnCommand("spawn", null, Arrays.asList(), null).run(player, new String[] { "true" });
+            }
+        } else {
+            throw new RuntimeException("Player is not in game");
         }
     }
 
