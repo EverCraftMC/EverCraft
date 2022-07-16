@@ -2,6 +2,7 @@ package io.github.evercraftmc.evercraft.shared.config;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
@@ -20,7 +21,7 @@ public class FileConfig extends AbstractConfig {
     private static Gson gson;
 
     static {
-        FileConfig.gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls().serializeSpecialFloatingPointValues().create();
+        FileConfig.gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeSpecialFloatingPointValues().create();
     }
 
     private File file;
@@ -220,13 +221,53 @@ public class FileConfig extends AbstractConfig {
 
     public void save() {
         try {
+            TreeMap<String, Object> mappedObjects = new TreeMap<String, Object>();
+
+            for (Map.Entry<String, Object> entry : this.objects.entrySet()) {
+                String fullkey = entry.getKey();
+                String[] keys = fullkey.split("\\.");
+                Object value = entry.getValue();
+
+                if (keys.length == 1) {
+                    mappedObjects.put(fullkey, value);
+                } else {
+                    Map<String, Object> object = mappedObjects;
+                    Integer i = 0;
+                    for (String key : keys) {
+                        if (!object.containsKey(key)) {
+                            if (i == keys.length - 1) {
+                                object.put(key, value);
+                            } else {
+                                TreeMap<String, Object> newobject = new TreeMap<String, Object>();
+
+                                object.put(key, newobject);
+
+                                object = newobject;
+                            }
+                        } else {
+                            if (i != keys.length - 1) {
+                                Object newobject = object.get(key);
+                                if (newobject instanceof TreeMap || newobject instanceof LinkedTreeMap) {
+                                    object = (Map<String, Object>) newobject;
+                                } else {
+                                    throw new RuntimeException("Object was expected to be a treemap, got " + newobject.getClass().getName());
+                                }
+                            }
+                        }
+
+                        i++;
+                    }
+                }
+            }
+
             BufferedWriter writter = new BufferedWriter(new FileWriter(file));
-            writter.write(gson.toJson(this.objects));
+            writter.write(gson.toJson(mappedObjects));
             writter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void close() {}
+    public void close() {
+    }
 }
