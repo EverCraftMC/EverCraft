@@ -268,6 +268,5 @@ public class FileConfig extends AbstractConfig {
         }
     }
 
-    public void close() {
-    }
+    public void close() {}
 }
