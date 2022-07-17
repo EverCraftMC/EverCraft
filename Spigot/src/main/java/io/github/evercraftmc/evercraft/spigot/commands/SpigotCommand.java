@@ -1,12 +1,12 @@
 package io.github.evercraftmc.evercraft.spigot.commands;
 
 import java.util.List;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import io.github.evercraftmc.evercraft.shared.PluginCommand;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 
 public abstract class SpigotCommand extends Command implements PluginCommand {
     protected SpigotCommand(String name, String description, List<String> aliases, String permission) {
@@ -17,7 +17,7 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
         this.setAliases(aliases);
         this.setPermission(permission);
         if (permission != null) {
-            this.permissionMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", permission))));
+            this.permissionMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noPerms.replace("{permission}", permission))));
         }
     }
 
@@ -35,7 +35,7 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
         if (this.testPermissionSilent(sender)) {
             return true;
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noPerms").replace("{permission}", this.getPermission()))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noPerms.replace("{permission}", this.getPermission()))));
 
             return false;
         }

@@ -30,10 +30,10 @@ import io.github.evercraftmc.evercraft.bungee.commands.staff.SudoCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.warp.HubCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.warp.ServerCommand;
 import io.github.evercraftmc.evercraft.bungee.listeners.BungeeListener;
+import io.github.evercraftmc.evercraft.bungee.listeners.JoinListener;
 import io.github.evercraftmc.evercraft.bungee.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.bungee.listeners.PingListener;
 import io.github.evercraftmc.evercraft.bungee.listeners.VoteListener;
-import io.github.evercraftmc.evercraft.bungee.listeners.JoinListener;
 import io.github.evercraftmc.evercraft.bungee.scoreboard.ScoreBoard;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
@@ -44,7 +44,6 @@ import io.github.evercraftmc.evercraft.shared.discord.DiscordBot;
 import io.github.evercraftmc.evercraft.shared.economy.Economy;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
-import net.dv8tion.jda.api.entities.Activity.ActivityType;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -56,8 +55,8 @@ import net.md_5.bungee.api.plugin.Plugin;
 public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraft.shared.Plugin {
     private static BungeeMain Instance;
 
-    private FileConfig config;
-    private FileConfig messages;
+    private FileConfig<BungeeConfig> config;
+    private FileConfig<BungeeMessages> messages;
     private MySQLConfig data;
 
     private Economy economy;
@@ -83,117 +82,21 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.getLogger().info("Loading config..");
 
-        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
+        this.config = new FileConfig<BungeeConfig>(BungeeConfig.class, this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
-
-        this.config.addDefault("server.default", "hub");
-        this.config.addDefault("server.fallback", "fallback");
-        this.config.addDefault("database.host", "localhost");
-        this.config.addDefault("database.port", 3306);
-        this.config.addDefault("database.name", "evercraft");
-        this.config.addDefault("database.username", "root");
-        this.config.addDefault("database.password", "");
-        this.config.addDefault("discord.token", "");
-        this.config.addDefault("discord.guildID", "");
-        this.config.addDefault("discord.channelId", "");
-        this.config.addDefault("discord.staffChannelId", "");
-        this.config.addDefault("discord.statusType", "PLAYING");
-        this.config.addDefault("discord.status", "on play.evercraft.ga");
-        this.config.addDefault("scoreboard.title", "&3&lEverCraft");
-        this.config.addDefault("scoreboard.lines", Arrays.asList());
-        this.config.addDefault("tablist.header", "");
-        this.config.addDefault("tablist.footer", "");
-        this.config.addDefault("broadcaster.interval", 600);
-        this.config.addDefault("broadcaster.messages", Arrays.asList());
-
-        this.config.copyDefaults();
 
         this.getLogger().info("Finished loading config");
 
         this.getLogger().info("Loading messages..");
 
-        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
+        this.messages = new FileConfig<BungeeMessages>(BungeeMessages.class, this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
         this.messages.reload();
-
-        this.messages.addDefault("error.noPerms", "&cYou need the permission \"{permission}\" to do that");
-        this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
-        this.messages.addDefault("error.playerNotFound", "&cCouldn't find player \"{player}\"");
-        this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
-        this.messages.addDefault("reload.reloading", "&aReloading plugin..");
-        this.messages.addDefault("reload.reloaded", "&aSuccessfully reloaded");
-        this.messages.addDefault("globalMessage", "[{server}&r] {message}");
-        this.messages.addDefault("chat.default", "{player} &r> {message}");
-        this.messages.addDefault("chat.dm", "{player1} &r-> {player2} &r> {message}");
-        this.messages.addDefault("chat.noReplyTo", "&cYou do not have anyone to reply to");
-        this.messages.addDefault("chat.staff", "&d&l[Staffchat] &r{player} &r> {message}");
-        this.messages.addDefault("chat.discord", "&b&l[Discord] &r{player} &r> {message}");
-        this.messages.addDefault("chat.commandSpy", "&d&l[Commandspy] &r{player} &rran {message}");
-        this.messages.addDefault("server.disconnected-no-com", "&cThe server you where on is temporarily down, you have been placed in the fallback server.");
-        this.messages.addDefault("server.disconnected-error", "&cYour connection to the server encountered an issue, you have been placed in the fallback server.");
-        this.messages.addDefault("info.about", "");
-        this.messages.addDefault("info.discord", "");
-        this.messages.addDefault("info.vote", "");
-        this.messages.addDefault("info.staff", "");
-        this.messages.addDefault("welcome.firstJoin", "&b&lWelcome {player} &r&b&lto the server!");
-        this.messages.addDefault("welcome.join", "&e{player} &r&ejoined the server");
-        this.messages.addDefault("welcome.move", "&e{player} &r&ehas moved to {server}");
-        this.messages.addDefault("welcome.quit", "&e{player} &r&eleft the server");
-        this.messages.addDefault("nickname", "&aSuccessfully changed your nickname to {nickname}");
-        this.messages.addDefault("lastSeen.lastSeen", "&a{player} &r&awas last seen {lastSeen} ago");
-        this.messages.addDefault("lastSeen.online", "&a{player} &r&ais online right now!");
-        this.messages.addDefault("economy.yourBalance", "&aYou balance is currently {balance}");
-        this.messages.addDefault("economy.otherBalance", "&a{player}&r&a's balance is currently {balance}");
-        this.messages.addDefault("economy.economy", "&aSuccessfully set {player}&r&a's balance to {balance}");
-        this.messages.addDefault("vote", "&aThanks so much for voting {player}&r&a! /vote");
-        this.messages.addDefault("warp.hub", "&aSuccessfully went to the hub");
-        this.messages.addDefault("warp.server", "&aSuccessfully went to {server}");
-        this.messages.addDefault("warp.alreadyConnected", "&cYou are already in the hub");
-        this.messages.addDefault("moderation.kick.noReason", "&cYou where kicked by {moderator}");
-        this.messages.addDefault("moderation.kick.reason", "&cYou where kicked by {moderator} &r&cfor {reason}");
-        this.messages.addDefault("moderation.kick.broadcast.noReason", "&a{player}&r&a was kicked by {moderator}");
-        this.messages.addDefault("moderation.kick.broadcast.reason", "&a{player}&r&a was kicked by {moderator} &r&afor {reason}");
-        this.messages.addDefault("moderation.kick.cantKickSelf", "&cYou can't kick yourself (If you are absolutely sure you want to kick yourself add --confirm to the end of the command");
-        this.messages.addDefault("moderation.ban.noReason", "&cYou where banned by {moderator}");
-        this.messages.addDefault("moderation.ban.reason", "&cYou where banned by {moderator} &r&cfor {time} {reason}");
-        this.messages.addDefault("moderation.ban.broadcast.noReason", "&a{player}&r&a was banned by {moderator}");
-        this.messages.addDefault("moderation.ban.broadcast.reason", "&a{player}&r&a was banned by {moderator} &r&afor {reason}");
-        this.messages.addDefault("moderation.ban.alreadyBanned", "&c{player}&r&c is already banned");
-        this.messages.addDefault("moderation.ban.cantBanSelf", "&cYou can't ban yourself (If you are absolutely sure you want to ban yourself (You can't unban yourself) add --confirm to the end of the command");
-        this.messages.addDefault("moderation.unban.noReason", "&cYou where unbanned by {moderator}");
-        this.messages.addDefault("moderation.unban.reason", "&cYou where unbanned by {moderator} &r&cfor {reason}");
-        this.messages.addDefault("moderation.unban.broadcast.noReason", "&a{player}&r&a was unbanned by {moderator}");
-        this.messages.addDefault("moderation.unban.broadcast.reason", "&a{player}&r&a was unbanned by {moderator} &r&afor {reason}");
-        this.messages.addDefault("moderation.unban.notBanned", "&c{player}&r&c is not banned");
-        this.messages.addDefault("moderation.unban.cantUnbanSelf", "&cYou can't unban yourself");
-        this.messages.addDefault("moderation.mute.noReason", "&cYou where muted by {moderator}");
-        this.messages.addDefault("moderation.mute.reason", "&cYou where muted by {moderator} &r&cfor {time} {reason}");
-        this.messages.addDefault("moderation.mute.broadcast.noReason", "&a{player}&r&a was muted by {moderator}&r&a for {time}");
-        this.messages.addDefault("moderation.mute.broadcast.reason", "&a{player}&r&a was muted by {moderator} &r&afor {time} {reason}");
-        this.messages.addDefault("moderation.mute.alreadyMuted", "&c{player}&r&c is already muted");
-        this.messages.addDefault("moderation.mute.cantMuteSelf", "&cYou can't mute yourself (If you are absolutely sure you want to mute yourself (You can't unmute yourself) add --confirm to the end of the command");
-        this.messages.addDefault("moderation.unmute.noReason", "&cYou where unmuted by {moderator}");
-        this.messages.addDefault("moderation.unmute.reason", "&cYou where unmuted by {moderator} &r&cfor {reason}");
-        this.messages.addDefault("moderation.unmute.broadcast.noReason", "&a{player}&r&a was unmuted by {moderator}");
-        this.messages.addDefault("moderation.unmute.broadcast.reason", "&a{player}&r&a was unmuted by {moderator} &r&afor {reason}");
-        this.messages.addDefault("moderation.unmute.notMuted", "&c{player}&r&c is not muted");
-        this.messages.addDefault("moderation.unmute.cantUnmuteSelf", "&cYou can't unmute yourself");
-        this.messages.addDefault("moderation.chatLock.toggle", "&aSuccessfully toggled chat lock mode {value}");
-        this.messages.addDefault("moderation.chatLock.chat", "&cChat lock is currently enabled");
-        this.messages.addDefault("moderation.maintenance.toggle", "&aSuccessfully toggled maintenance mode {value}");
-        this.messages.addDefault("moderation.maintenance.kick", "&cSorry but the server is currently in maintenance mode, please come back later");
-        this.messages.addDefault("moderation.maintenance.motd", "              &cCurrently under maintenance");
-        this.messages.addDefault("moderation.chat.warning", "&a{player}&r&a was warned by CONSOLE for Inappropriate language");
-        this.messages.addDefault("commandspy", "&aSuccessfully toggled your commandspy {value}");
-        this.messages.addDefault("sudo.message", "&aSuccessfully said {message}&r&a as {player}");
-        this.messages.addDefault("sudo.command", "&aSuccessfully ran {command}&r&a as {player}");
-
-        this.messages.copyDefaults();
 
         this.getLogger().info("Finished loading messages");
 
         this.getLogger().info("Loading player data..");
 
-        this.data = new MySQLConfig(this.config.getString("database.host"), this.config.getInteger("database.port"), this.config.getString("database.name"), "data", this.config.getString("database.username"), this.config.getString("database.password"));
+        this.data = new MySQLConfig(this.config.getParsed().database.host, this.config.getParsed().database.port, this.config.getParsed().database.name, "data", this.config.getParsed().database.username, this.config.getParsed().database.password);
 
         this.getLogger().info("Finished loading player data");
 
@@ -280,18 +183,18 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.getLogger().info("Starting Discord bot..");
 
-        this.bot = new DiscordBot(this.config.getString("discord.token"), this.config.getString("discord.guildID"), new GatewayIntent[] { GatewayIntent.GUILD_MESSAGES }, new CacheFlag[] {}, MemberCachePolicy.NONE, ActivityType.valueOf(this.config.getString("discord.statusType")), this.config.getString("discord.status"));
+        this.bot = new DiscordBot(this.config.getParsed().discord.token, this.config.getParsed().discord.guildId, new GatewayIntent[] { GatewayIntent.GUILD_MESSAGES }, new CacheFlag[] {}, MemberCachePolicy.NONE, this.config.getParsed().discord.statusType, this.config.getParsed().discord.status);
         this.bot.addListener((GenericEvent rawevent) -> {
             if (rawevent instanceof MessageReceivedEvent event) {
                 if (event.getAuthor() != this.bot.getJDA().getSelfUser()) {
-                    if (event.getMessage().getChannel().getId().equals(this.getPluginConfig().getString("discord.channelId"))) {
+                    if (event.getMessage().getChannel().getId().equals(this.config.getParsed().discord.channelId)) {
                         for (ProxiedPlayer player : this.getProxy().getPlayers()) {
-                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(this.getPluginMessages().getString("chat.discord").replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(this.messages.getParsed().chat.discord.replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
                         }
-                    } else if (event.getMessage().getChannel().getId().equals(this.getPluginConfig().getString("discord.staffChannelId"))) {
+                    } else if (event.getMessage().getChannel().getId().equals(this.config.getParsed().discord.staffChannelId)) {
                         for (ProxiedPlayer player : this.getProxy().getPlayers()) {
                             if (player.hasPermission("evercraft.commands.staff.staffchat")) {
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.staff").replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(this.messages.getParsed().chat.staff.replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
                             }
                         }
                     }
@@ -346,7 +249,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         }
 
         for (ProxiedPlayer player : this.getProxy().getPlayers()) {
-            player.setDisplayName(null);
+            player.setDisplayName(player.getName());
             TabListUtil.updatePlayerName(player);
         }
 
@@ -370,11 +273,11 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         return BungeeMain.Instance;
     }
 
-    public FileConfig getPluginConfig() {
+    public FileConfig<BungeeConfig> getPluginConfig() {
         return this.config;
     }
 
-    public FileConfig getPluginMessages() {
+    public FileConfig<BungeeMessages> getPluginMessages() {
         return this.messages;
     }
 

@@ -20,7 +20,7 @@ public abstract class RoundedGame extends Game {
         if (!this.started) {
             super.join(player);
         } else {
-            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.started"))));
+            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.started)));
         }
     }
 
@@ -42,7 +42,7 @@ public abstract class RoundedGame extends Game {
             this.started = true;
 
             for (Player player : this.players) {
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.start"))));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.start)));
             }
 
             this.tickTask = Bukkit.getScheduler().runTaskTimer(SpigotMain.getInstance(), new Runnable() {
@@ -60,7 +60,7 @@ public abstract class RoundedGame extends Game {
             this.started = false;
 
             for (Player player : this.players) {
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.stop"))));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.stop)));
 
                 this.leave(player, LeaveReason.GAMEOVER);
             }

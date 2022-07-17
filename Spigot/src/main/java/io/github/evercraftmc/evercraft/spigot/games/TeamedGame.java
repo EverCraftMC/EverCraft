@@ -27,11 +27,11 @@ public abstract class TeamedGame extends RoundedGame {
         if (!this.teams.containsKey(player)) {
             this.teams.put(player, team);
 
-            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.joinedTeam").replace("{team}", team))));
+            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.joinedTeam.replace("{team}", team))));
 
             for (Player player2 : this.players) {
                 if (player2 != player) {
-                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.teamJoin").replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{team}", team))));
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.teamJoin.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{team}", team))));
                 }
             }
         } else {
@@ -44,11 +44,11 @@ public abstract class TeamedGame extends RoundedGame {
             String team = this.teams.get(player);
             this.teams.remove(player);
 
-            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.leftTeam").replace("{team}", team))));
+            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.leftTeam.replace("{team}", team))));
 
             for (Player player2 : this.players) {
                 if (player2 != player) {
-                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.teamLeave").replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{team}", team))));
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.teamLeave.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{team}", team))));
                 }
             }
         } else {

@@ -2,14 +2,14 @@ package io.github.evercraftmc.evercraft.spigot.commands.player;
 
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class BungeeCommandCommand extends SpigotCommand {
     public BungeeCommandCommand(String name, String description, List<String> aliases, String permission) {
@@ -40,7 +40,7 @@ public class BungeeCommandCommand extends SpigotCommand {
                 player.sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
         }
     }
 

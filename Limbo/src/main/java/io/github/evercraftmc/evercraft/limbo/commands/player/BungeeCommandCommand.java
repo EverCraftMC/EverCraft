@@ -8,10 +8,10 @@ import com.google.common.io.ByteStreams;
 import com.loohp.limbo.commands.CommandSender;
 import com.loohp.limbo.player.Player;
 import com.loohp.limbo.utils.NamespacedKey;
-import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.limbo.LimboMain;
 import io.github.evercraftmc.evercraft.limbo.commands.LimboCommand;
 import io.github.evercraftmc.evercraft.limbo.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 
 public class BungeeCommandCommand extends LimboCommand {
     public BungeeCommandCommand(String name, String description, List<String> aliases, String permission) {
@@ -46,7 +46,7 @@ public class BungeeCommandCommand extends LimboCommand {
                 }
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LimboMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LimboMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
         }
     }
 

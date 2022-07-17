@@ -33,7 +33,7 @@ public class ScoreBoard implements Closable {
                 for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
                     if (player.getServer() != null) {
                         if (!scoreboardMap.containsKey(player)) {
-                            scoreboardMap.put(player, new ScoreboardObjective(player.getName(), ComponentFormatter.stringToJson(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("scoreboard.title"))), ScoreboardObjective.HealthDisplay.INTEGER, (byte) 0));
+                            scoreboardMap.put(player, new ScoreboardObjective(player.getName(), ComponentFormatter.stringToJson(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getParsed().scoreboard.title)), ScoreboardObjective.HealthDisplay.INTEGER, (byte) 0));
                             linesMap.put(player, new HashMap<String, Integer>());
 
                             player.unsafe().sendPacket(scoreboardMap.get(player));
@@ -42,11 +42,18 @@ public class ScoreBoard implements Closable {
                             player.unsafe().sendPacket(display);
                         }
 
-                        List<String> lines = BungeeMain.getInstance().getPluginConfig().getStringList("scoreboard.lines");
+                        List<String> lines = BungeeMain.getInstance().getPluginConfig().getParsed().scoreboard.lines;
 
                         for (int i = lines.size() - 1; i >= 0; i--) {
                             try {
-                                String line = TextFormatter.translateColors(lines.get(i).replace("{player}", player.getDisplayName()).replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "").replace("{ping}", player.getPing() + "").replace("{server}", StringUtils.toTtitleCase(player.getServer().getInfo().getName())).replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "").replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "").replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""));
+                                String line = TextFormatter.translateColors(lines.get(i)
+                                    .replace("{player}", player.getDisplayName())
+                                    .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
+                                    .replace("{ping}", player.getPing() + "")
+                                    .replace("{server}", StringUtils.toTtitleCase(player.getServer().getInfo().getName()))
+                                    .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
+                                    .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
+                                    .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""));
 
                                 if (getScore(player, lines.size() - i) == null) {
                                     ScoreboardScore score = new ScoreboardScore(line, (byte) 0, scoreboardMap.get(player).getName(), lines.size() - i);
@@ -65,7 +72,22 @@ public class ScoreBoard implements Closable {
                             }
                         }
 
-                        player.setTabHeader(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.header").replace("{player}", player.getDisplayName()).replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "").replace("{ping}", player.getPing() + "").replace("{server}", player.getServer().getInfo().getName()).replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "").replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "").replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))), ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getString("tablist.footer").replace("{player}", player.getDisplayName()).replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "").replace("{ping}", player.getPing() + "").replace("{server}", player.getServer().getInfo().getName()).replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "").replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "").replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))));
+                        player.setTabHeader(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getParsed().tabList.header
+                            .replace("{player}", player.getDisplayName())
+                            .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
+                            .replace("{ping}", player.getPing() + "")
+                            .replace("{server}", player.getServer().getInfo().getName())
+                            .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
+                            .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
+                            .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))),
+                        ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getParsed().tabList.footer
+                            .replace("{player}", player.getDisplayName())
+                            .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
+                            .replace("{ping}", player.getPing() + "")
+                            .replace("{server}", player.getServer().getInfo().getName())
+                            .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
+                            .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
+                            .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))));
                     }
                 }
             }
@@ -97,7 +119,7 @@ public class ScoreBoard implements Closable {
     public void close() {
         for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
             if (scoreboardMap.containsKey(player)) {
-                player.unsafe().sendPacket(new ScoreboardObjective(scoreboardMap.get(player).getName(), null, null, (byte) 2));
+                player.unsafe().sendPacket(new ScoreboardObjective(scoreboardMap.get(player).getName(), null, null, (byte) 1));
 
                 scoreboardMap.remove(player);
             }

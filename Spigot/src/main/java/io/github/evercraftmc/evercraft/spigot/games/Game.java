@@ -74,15 +74,15 @@ public abstract class Game implements Listener {
 
                 this.players.add(player);
 
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.joined").replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.joined.replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
 
                 for (Player player2 : this.players) {
                     if (player2 != player) {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.join").replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.join.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
                     }
                 }
             } else {
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.full"))));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.full)));
             }
         } else {
             throw new RuntimeException("Player is already in game");
@@ -95,12 +95,12 @@ public abstract class Game implements Listener {
 
             if (leaveReason != LeaveReason.GAMEOVER) {
                 if (leaveReason != LeaveReason.DISCONNECTED) {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.left").replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.left.replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
                 }
 
                 for (Player player2 : this.players) {
                     if (player2 != player) {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("games.leave").replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.leave.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
                     }
                 }
             }

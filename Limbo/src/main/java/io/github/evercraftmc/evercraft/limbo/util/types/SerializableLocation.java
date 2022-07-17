@@ -13,7 +13,7 @@ public class SerializableLocation {
     private Float yaw;
     private Float pitch;
 
-    private SerializableLocation(String world, Double x, Double y, Double z, Float yaw, Float pitch) {
+    public SerializableLocation(String world, Double x, Double y, Double z, Float yaw, Float pitch) {
         this.world = world;
 
         this.x = x;

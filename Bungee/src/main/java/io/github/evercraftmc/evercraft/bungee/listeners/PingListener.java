@@ -33,7 +33,7 @@ public class PingListener extends BungeeListener {
                 Players players = new Players(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers(), BungeeMain.getInstance().getProxy().getOnlineCount(), sample.toArray(new PlayerInfo[] {}));
                 ping.setPlayers(players);
             } else {
-                ping.setDescriptionComponent(ComponentFormatter.flatenComponent(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMotd().split("\n")[0] + "\n" + TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.maintenance.motd"))))));
+                ping.setDescriptionComponent(ComponentFormatter.flatenComponent(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMotd().split("\n")[0] + "\n" + TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.maintenance.motd)))));
 
                 Players players = new Players(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers(), 0, new PlayerInfo[] {});
                 ping.setPlayers(players);
