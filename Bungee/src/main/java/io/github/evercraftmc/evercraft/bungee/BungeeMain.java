@@ -24,6 +24,7 @@ import io.github.evercraftmc.evercraft.bungee.commands.player.ReplyCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SeenCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SpigotCommandCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.CommandSpyCommand;
+import io.github.evercraftmc.evercraft.bungee.commands.staff.ImpersonateCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.StaffChatCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.SudoCommand;
@@ -139,14 +140,15 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.commands.add(new TempMuteCommand("tempmute", "Temporarily mute a player on the server", Arrays.asList("mute"), "evercraft.commands.moderation.tempmute").register());
         this.commands.add(new PermMuteCommand("permmute", "Mute a player on the server", Arrays.asList(), "evercraft.commands.moderation.permmute").register());
         this.commands.add(new UnMuteCommand("unmute", "Unmute a player on the server", Arrays.asList(), "evercraft.commands.moderation.unmute").register());
-        this.commands.add(new LockChatCommand("lockchat", "Toggle chat lock", Arrays.asList("lockchat"), "evercraft.commands.moderation.chatlock").register());
-        this.commands.add(new MaintenanceCommand("maintenance", "Toggle maintenance mode", Arrays.asList(), "evercraft.commands.moderation.maintenance").register());
+        this.commands.add(new LockChatCommand("lockchat", "Toggle chat lock", Arrays.asList(), "evercraft.commands.moderation.chatlock").register());
+        this.commands.add(new MaintenanceCommand("maintenance", "Toggle maintenance mode", Arrays.asList("broken"), "evercraft.commands.moderation.maintenance").register());
 
         this.commands.add(new StaffChatCommand("staffchat", "Send a message to the staffchat", Arrays.asList("sc"), "evercraft.commands.staff.staffchat").register());
         this.commands.add(new CommandSpyCommand("commandspy", "Toggle your commandspy", Arrays.asList("cs"), "evercraft.commands.staff.commandspy").register());
 
         this.commands.add(new SpigotCommandCommand("spigotcommand", "Run a command on the spigot server", Arrays.asList(), null).register());
         this.commands.add(new SudoCommand("sudo", "Run a command or send a message as another player", Arrays.asList(), "evercraft.commands.staff.sudo").register());
+        this.commands.add(new ImpersonateCommand("impersonate", "Send a message as another player (Even an offline one)", Arrays.asList("imp"), "evercraft.commands.staff.impersonate").register());
 
         this.commands.add(new ReloadCommand("evercraftbungeereload", "Reload the plugin", Arrays.asList("ecbreload"), "evercraft.commands.staff.reload").register());
 
