@@ -4,23 +4,21 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.loohp.limbo.location.Location;
 import com.loohp.limbo.plugins.LimboPlugin;
-import io.github.evercraftmc.evercraft.shared.Plugin;
-import io.github.evercraftmc.evercraft.shared.config.FileConfig;
-import io.github.evercraftmc.evercraft.shared.util.Closable;
 import io.github.evercraftmc.evercraft.limbo.commands.LimboCommand;
 import io.github.evercraftmc.evercraft.limbo.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.limbo.listeners.LimboListener;
 import io.github.evercraftmc.evercraft.limbo.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.limbo.listeners.SpawnListener;
-import io.github.evercraftmc.evercraft.limbo.util.types.SerializableLocation;
+import io.github.evercraftmc.evercraft.shared.Plugin;
+import io.github.evercraftmc.evercraft.shared.config.FileConfig;
+import io.github.evercraftmc.evercraft.shared.util.Closable;
 
 public class LimboMain extends LimboPlugin implements Plugin {
     private static LimboMain Instance;
 
-    private FileConfig config;
-    private FileConfig messages;
+    private FileConfig<LimboConfig> config;
+    private FileConfig<LimboMessages> messages;
 
     private List<LimboCommand> commands;
     private List<LimboListener> listeners;
@@ -43,30 +41,17 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
         System.out.println("Loading config..");
 
-        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
+        this.config = new FileConfig<LimboConfig>(LimboConfig.class, this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
 
-        this.config.addDefault("spawnLocation", SerializableLocation.fromLimboLocation(new Location(this.getServer().getWorlds().get(0), 0, 64, 0, 0, 0)));
-
-        this.config.copyDefaults();
-
-        this.serverName = this.config.getString("serverName");
+        this.serverName = this.config.getParsed().serverName;
 
         System.out.println("Finished loading config");
 
         System.out.println("Loading messages..");
 
-        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
+        this.messages = new FileConfig<LimboMessages>(LimboMessages.class, this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
         this.messages.reload();
-
-        this.messages.addDefault("error.noPerms", "&cYou need the permission \"{permission}\" to do that");
-        this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
-        this.messages.addDefault("error.playerNotFound", "&cCouldn't find player \"{player}\"");
-        this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
-        this.messages.addDefault("reload.reloading", "&aReloading plugin..");
-        this.messages.addDefault("reload.reloaded", "&aSuccessfully reloaded");
-
-        this.messages.copyDefaults();
 
         System.out.println("Finished loading messages");
 
@@ -153,11 +138,11 @@ public class LimboMain extends LimboPlugin implements Plugin {
         return LimboMain.Instance;
     }
 
-    public FileConfig getPluginConfig() {
+    public FileConfig<LimboConfig> getPluginConfig() {
         return this.config;
     }
 
-    public FileConfig getPluginMessages() {
+    public FileConfig<LimboMessages> getPluginMessages() {
         return this.messages;
     }
 
@@ -180,6 +165,6 @@ public class LimboMain extends LimboPlugin implements Plugin {
     public void setServerName(String value) {
         this.serverName = value;
 
-        this.config.set("serverName", value);
+        this.config.getParsed().serverName = value;
     }
 }

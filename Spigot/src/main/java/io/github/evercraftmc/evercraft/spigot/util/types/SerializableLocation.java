@@ -1,7 +1,7 @@
 package io.github.evercraftmc.evercraft.spigot.util.types;
 
-import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import org.bukkit.Location;
+import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 
 public class SerializableLocation {
     private String world;
@@ -13,7 +13,7 @@ public class SerializableLocation {
     private Float yaw;
     private Float pitch;
 
-    private SerializableLocation(String world, Double x, Double y, Double z, Float yaw, Float pitch) {
+    public SerializableLocation(String world, Double x, Double y, Double z, Float yaw, Float pitch) {
         this.world = world;
 
         this.x = x;

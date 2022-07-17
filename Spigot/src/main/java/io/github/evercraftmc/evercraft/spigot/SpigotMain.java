@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.java.JavaPlugin;
 import io.github.evercraftmc.evercraft.shared.Plugin;
 import io.github.evercraftmc.evercraft.shared.config.FileConfig;
 import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
@@ -40,20 +43,17 @@ import io.github.evercraftmc.evercraft.spigot.listeners.PvPListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.SpigotListener;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
-import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class SpigotMain extends JavaPlugin implements Plugin {
     private static SpigotMain Instance;
 
-    private FileConfig config;
-    private FileConfig messages;
+    private FileConfig<SpigotConfig> config;
+    private FileConfig<SpigotMessages> messages;
     private MySQLConfig data;
 
-    private FileConfig warps;
-    private FileConfig kits;
-    private FileConfig chests;
+    private FileConfig<SpigotWarps> warps;
+    private FileConfig<SpigotKits> kits;
+    private FileConfig<SpigotChests> chests;
 
     private Economy economy;
 
@@ -61,7 +61,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
     private List<SpigotListener> listeners;
     private List<Closable> assets;
 
-    private FileConfig games;
     private List<Game> registeredGames;
 
     private String serverName = "unknown";
@@ -81,92 +80,36 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading config..");
 
-        this.config = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
+        this.config = new FileConfig<SpigotConfig>(SpigotConfig.class, this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
 
-        this.config.addDefault("serverName", "unknown");
-        this.config.addDefault("warp.overidespawn", true);
-        this.config.addDefault("warp.clearonwarp", false);
-        this.config.addDefault("chestProtectionEnabled", false);
-        this.config.addDefault("protectable", Arrays.asList("chest:0", "trapped_chest:0", "ender_chest:1", "barrel:0", "shulker_box:0", "{color}_shulker_box:0", "furnace:0", "blast_furnace:0", "smoker:0", "hopper:0", "dropper:0", "dispenser:0", "jukebox:0", "{color}_bed:1"));
-        this.config.addDefault("passiveEnabled", false);
-        this.config.addDefault("database.host", "localhost");
-        this.config.addDefault("database.port", 3306);
-        this.config.addDefault("database.name", "evercraft");
-        this.config.addDefault("database.username", "root");
-        this.config.addDefault("database.password", "");
-
-        this.config.copyDefaults();
-
-        this.serverName = this.config.getString("serverName");
+        this.serverName = this.config.getParsed().serverName;
 
         this.getLogger().info("Finished loading config");
 
         this.getLogger().info("Loading messages..");
 
-        this.messages = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
+        this.messages = new FileConfig<SpigotMessages>(SpigotMessages.class, this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
         this.messages.reload();
-
-        this.messages.addDefault("error.noPerms", "&cYou need the permission \"{permission}\" to do that");
-        this.messages.addDefault("error.noConsole", "&cYou can't do that from the console");
-        this.messages.addDefault("error.playerNotFound", "&cCouldn't find player \"{player}&r&c\"");
-        this.messages.addDefault("error.invalidArgs", "&cInvalid arguments");
-        this.messages.addDefault("reload.reloading", "&aReloading plugin..");
-        this.messages.addDefault("reload.reloaded", "&aSuccessfully reloaded");
-        this.messages.addDefault("warp.warped", "&aSuccessfully warped to {warp}");
-        this.messages.addDefault("warp.setWarp", "&aSuccessfully set warp {warp}&r&a to your location");
-        this.messages.addDefault("warp.delWarp", "&aSuccessfully deleted warp {warp}");
-        this.messages.addDefault("warp.notFound", "&cWarp {warp}&r&c does not exist");
-        this.messages.addDefault("kit.kit", "&aSuccessfully got kit {kit}");
-        this.messages.addDefault("kit.setkit", "&aSuccessfully set kit {kit}&r&a to your inventory");
-        this.messages.addDefault("kit.delkit", "&cSuccessfully deleted kit {kit}");
-        this.messages.addDefault("kit.notFound", "&cKit {kit}&r&c does not exist");
-        this.messages.addDefault("games.joined", "&aYou have joined {game} &r&a({players} / {max})");
-        this.messages.addDefault("games.join", "&a{player} &r&ahas joined the game ({players} / {max})");
-        this.messages.addDefault("games.left", "&aYou have left {game}");
-        this.messages.addDefault("games.leave", "&a{player} &r&ahas left the game ({players} / {max})");
-        this.messages.addDefault("games.joinedTeam", "&aYou have joined team {team}");
-        this.messages.addDefault("games.teamJoin", "&a{player} &r&ahas joined team {team}");
-        this.messages.addDefault("games.leftTeam", "&aYou have left team {team}");
-        this.messages.addDefault("games.teamLeave", "&a{player} &r&ahas left team {team}");
-        this.messages.addDefault("games.start", "&aThat game has started");
-        this.messages.addDefault("games.stop", "&aThat game has stopped");
-        this.messages.addDefault("games.full", "&cThat game is full");
-        this.messages.addDefault("games.started", "&cThat game has already started");
-        this.messages.addDefault("games.notFound", "&cGame {game} &r&ccould not be found");
-        this.messages.addDefault("games.alreadyInGame", "&cYou are already in a game");
-        this.messages.addDefault("games.notInGame", "&cYou are not in a game");
-        this.messages.addDefault("passive", "&aSuccessfully toggled passive mode {value}");
-        this.messages.addDefault("chestProtection.claimed", "&aThis block is now claimed");
-        this.messages.addDefault("chestProtection.unclaimed", "&cThis block is no longer claimed");
-        this.messages.addDefault("chestProtection.protected", "&aThis block is now protected");
-        this.messages.addDefault("chestProtection.unprotected", "&cThis block is no longer protected");
-        this.messages.addDefault("chestProtection.allowedUse", "&aThis block is now usable by others");
-        this.messages.addDefault("chestProtection.disallowedUse", "&cThis block is no longer usable by others");
-        this.messages.addDefault("chestProtection.notyours", "&cIm sorry but that isn't yours >:(");
-        this.messages.addDefault("chestProtection.noblock", "&cYou must be looking at a block to do that");
-        this.messages.addDefault("staff.gamemode", "&aSuccessfully set your gamemode to {gamemode}");
-
-        this.messages.copyDefaults();
 
         this.getLogger().info("Finished loading messages");
 
         this.getLogger().info("Loading player data..");
 
-        this.data = new MySQLConfig(this.config.getString("database.host"), this.config.getInteger("database.port"), this.config.getString("database.name"), "data", this.config.getString("database.username"), this.config.getString("database.password"));
+        this.data = new MySQLConfig(this.config.getParsed().database.host, this.config.getParsed().database.port, this.config.getParsed().database.name, "data", this.config.getParsed().database.username, this.config.getParsed().database.password);
 
         this.getLogger().info("Finished loading player data");
 
         this.getLogger().info("Loading other data..");
 
-        this.warps = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "warps.json");
+        this.warps = new FileConfig<SpigotWarps>(SpigotWarps.class, this.getDataFolder().getAbsolutePath() + File.separator + "warps.json");
         this.warps.reload();
 
-        this.kits = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "kits.json");
+        this.kits = new FileConfig<SpigotKits>(SpigotKits.class, this.getDataFolder().getAbsolutePath() + File.separator + "kits.json");
         this.kits.reload();
 
-        if (this.config.getBoolean("chestProtectionEnabled")) {
-            this.chests = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "chests.json");
+        if (this.getPluginConfig().getParsed().chestProtection.enabled) {
+            this.chests = new FileConfig<SpigotChests>(SpigotChests.class, this.getDataFolder().getAbsolutePath() + File.separator + "chests.json");
             this.chests.reload();
         }
 
@@ -192,12 +135,12 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new SetKitCommand("setkit", "Set a kit", Arrays.asList(), "evercraft.commands.kit.setkit").register());
         this.commands.add(new DelKitCommand("delkit", "Delete a kit", Arrays.asList(), "evercraft.commands.kit.delkit").register());
 
-        if (this.config.getBoolean("chestProtectionEnabled")) {
-            this.commands.add(new ChestProtectionCommand("chestprotection", "Manage you chest protections", Arrays.asList("cp", "chests"), "evercraft.commands.player.chestprotection").register());
+        if (this.getPluginConfig().getParsed().passiveEnabled) {
+            this.commands.add(new PassiveCommand("passive", "Toggle passive mode on/off", Arrays.asList("togglepassive", "pvp"), "evercraft.commands.player.passive").register());
         }
 
-        if (this.getPluginConfig().getBoolean("passiveEnabled")) {
-            this.commands.add(new PassiveCommand("passive", "Toggle passive mode on/off", Arrays.asList("togglepassive", "pvp"), "evercraft.commands.player.passive").register());
+        if (this.getPluginConfig().getParsed().chestProtection.enabled) {
+            this.commands.add(new ChestProtectionCommand("chestprotection", "Manage you chest protections", Arrays.asList("cp", "chests"), "evercraft.commands.player.chestprotection").register());
         }
 
         this.commands.add(new GameModeCommand("gamemode", "Change your gamemode", Arrays.asList("gm"), "evercraft.commands.gamemode.use").register());
@@ -219,11 +162,11 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.listeners.add(new MessageListener().register());
         this.listeners.add(new JoinListener().register());
 
-        if (this.config.getBoolean("chestProtectionEnabled")) {
+        if (this.getPluginConfig().getParsed().chestProtection.enabled) {
             this.listeners.add(new ChestProtectionListener().register());
         }
 
-        if (this.getPluginConfig().getBoolean("passiveEnabled")) {
+        if (this.getPluginConfig().getParsed().passiveEnabled) {
             this.listeners.add(new PvPListener().register());
         }
 
@@ -234,16 +177,9 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading games..");
 
-        this.games = new FileConfig(this.getDataFolder().getAbsolutePath() + File.separator + "games.json");
-        this.games.reload();
-
-        this.games.addDefault("enabled", false);
-
-        this.games.copyDefaults();
-
         this.registeredGames = new ArrayList<Game>();
 
-        if (this.games.getBoolean("enabled")) {
+        if (this.config.getParsed().games.enabled) {
             this.commands.add(new GameCommand("game", "Join/leave a game", Arrays.asList("games"), "evercraft.commands.games.game").register());
 
             this.registeredGames.add(new PvpGame("plainspvp", "plainspvp", "pvp"));
@@ -319,8 +255,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         }
 
         for (Player player : this.getServer().getOnlinePlayers()) {
-            player.displayName(null);
-            player.playerListName(null);
+            player.displayName(ComponentFormatter.stringToComponent(player.getName()));
+            player.playerListName(player.displayName());
         }
 
         this.getLogger().info("Finished closing assets..");
@@ -343,11 +279,11 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         return SpigotMain.Instance;
     }
 
-    public FileConfig getPluginConfig() {
+    public FileConfig<SpigotConfig> getPluginConfig() {
         return this.config;
     }
 
-    public FileConfig getPluginMessages() {
+    public FileConfig<SpigotMessages> getPluginMessages() {
         return this.messages;
     }
 
@@ -355,15 +291,15 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         return this.data;
     }
 
-    public FileConfig getWarps() {
+    public FileConfig<SpigotWarps> getWarps() {
         return this.warps;
     }
 
-    public FileConfig getKits() {
+    public FileConfig<SpigotKits> getKits() {
         return this.kits;
     }
 
-    public FileConfig getChests() {
+    public FileConfig<SpigotChests> getChests() {
         return this.chests;
     }
 
@@ -383,10 +319,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         return this.assets;
     }
 
-    public FileConfig getGames() {
-        return this.games;
-    }
-
     public List<Game> getRegisteredGames() {
         return this.registeredGames;
     }
@@ -398,6 +330,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
     public void setServerName(String value) {
         this.serverName = value;
 
-        this.config.set("serverName", value);
+        this.config.getParsed().serverName = value;
     }
 }

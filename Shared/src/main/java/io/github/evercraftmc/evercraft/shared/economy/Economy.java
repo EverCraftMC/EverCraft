@@ -1,12 +1,12 @@
 package io.github.evercraftmc.evercraft.shared.economy;
 
 import java.util.UUID;
-import io.github.evercraftmc.evercraft.shared.config.Config;
+import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
 
 public class Economy {
-    private Config config;
+    private MySQLConfig config;
 
-    public Economy(Config config) {
+    public Economy(MySQLConfig config) {
         this.config = config;
     }
 
@@ -22,7 +22,6 @@ public class Economy {
 
     public void setBalance(UUID uuid, Float balance) {
         this.config.set("players." + uuid + ".balance", balance);
-        this.config.save();
     }
 
     public void deposit(UUID uuid, Float balance) {

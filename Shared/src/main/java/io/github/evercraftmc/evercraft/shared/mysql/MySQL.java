@@ -28,7 +28,7 @@ public class MySQL implements Closable {
         this.password = password;
 
         try {
-            this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?tlsmode=verify-full", username, password);
+            this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -176,7 +176,7 @@ public class MySQL implements Closable {
             try {
                 this.connection.close();
 
-                this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?tlsmode=verify-full", username, password);
+                this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

@@ -3,14 +3,13 @@ package io.github.evercraftmc.evercraft.spigot.commands.warp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
-import io.github.evercraftmc.evercraft.spigot.util.types.SerializableLocation;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class WarpCommand extends SpigotCommand {
     public WarpCommand(String name, String description, List<String> aliases, String permission) {
@@ -21,25 +20,25 @@ public class WarpCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
-                if (SpigotMain.getInstance().getWarps().getSerializable(args[0], SerializableLocation.class) != null) {
-                    player.teleport(SpigotMain.getInstance().getWarps().getSerializable(args[0], SerializableLocation.class).toBukkitLocation());
+                if (SpigotMain.getInstance().getWarps().getParsed().warps.containsKey(args[0])) {
+                    player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get(args[0]).toBukkitLocation());
 
-                    if (SpigotMain.getInstance().getPluginConfig().getBoolean("warp.clearonwarp")) {
+                    if (SpigotMain.getInstance().getPluginConfig().getParsed().warp.clearOnWarp) {
                         player.getInventory().clear();
                         player.getActivePotionEffects().clear();
                     }
 
                     if (!(args.length >= 2 && args[1].equalsIgnoreCase("true"))) {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("warp.warped").replace("{warp}", args[0]))));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.warped.replace("{warp}", args[0]))));
                     }
                 } else {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("warp.notFound").replace("{warp}", args[0]))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.notFound.replace("{warp}", args[0]))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noConsole"))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
         }
     }
 
@@ -48,7 +47,7 @@ public class WarpCommand extends SpigotCommand {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 1) {
-            list = new ArrayList<String>(SpigotMain.getInstance().getWarps().getKeys(false));
+            list = new ArrayList<String>(SpigotMain.getInstance().getWarps().getParsed().warps.keySet());
         } else {
             return Arrays.asList();
         }

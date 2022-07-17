@@ -50,14 +50,14 @@ public class MessageCommand extends BungeeCommand {
 
                             if (MessageListener.warnings.get(player.getUniqueId()) >= 1 && MessageListener.warnings.get(player.getUniqueId()) <= 5) {
                                 for (ProxiedPlayer player3 : BungeeMain.getInstance().getProxy().getPlayers()) {
-                                    player3.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.chat.warning").replace("{player}", player.getDisplayName()))));
+                                    player3.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chat.warning.replace("{player}", player.getDisplayName()))));
                                 }
                             } else if (MessageListener.warnings.get(player.getUniqueId()) > 5) {
                                 BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(BungeeMain.getInstance().getProxy().getConsole(), "tempmute " + player.getName() + " " + (5 * (MessageListener.warnings.get(player.getUniqueId()) - 5)) + "m Inappropriate language");
                             }
                         } else {
-                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.dm").replace("{player1}", "You").replace("{player2}", player2.getDisplayName()).replace("{message}", message.toString()))));
-                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("chat.dm").replace("{player1}", player.getDisplayName()).replace("{player2}", "You").replace("{message}", message.toString()))));
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().chat.dm.replace("{player1}", "You").replace("{player2}", player2.getDisplayName()).replace("{message}", message.toString()))));
+                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().chat.dm.replace("{player1}", player.getDisplayName()).replace("{player2}", "You").replace("{message}", message.toString()))));
 
                             if (lastMessages.containsKey(player)) {
                                 lastMessages.remove(player);
@@ -74,9 +74,9 @@ public class MessageCommand extends BungeeCommand {
 
                         if (time.equalsIgnoreCase("forever") || Instant.parse(time).isAfter(Instant.now())) {
                             if (BungeeMain.getInstance().getPluginData().getString("players." + player.getUniqueId() + ".mute.reason") != null) {
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.reason").replace("{reason}", BungeeMain.getInstance().getPluginData().getString("players." + player.getUniqueId() + ".mute.reason")).replace("{moderator}", BungeeMain.getInstance().getPluginData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.reason.replace("{reason}", BungeeMain.getInstance().getPluginData().getString("players." + player.getUniqueId() + ".mute.reason")).replace("{moderator}", BungeeMain.getInstance().getPluginData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
                             } else {
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("moderation.mute.noReason").replace("{moderator}", BungeeMain.getInstance().getPluginData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.noReason.replace("{moderator}", BungeeMain.getInstance().getPluginData().getString("players." + player.getUniqueId() + ".mute.by")).replace("{time}", time))));
                             }
                         } else {
                             BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".mute.muted", null);
@@ -88,13 +88,13 @@ public class MessageCommand extends BungeeCommand {
                         }
                     }
                 } else {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.playerNotFound").replace("{player}", args[0]))));
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getString("error.noConsole"))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
         }
     }
 
