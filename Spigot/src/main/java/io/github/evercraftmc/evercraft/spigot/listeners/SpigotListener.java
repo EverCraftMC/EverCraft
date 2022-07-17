@@ -1,8 +1,8 @@
 package io.github.evercraftmc.evercraft.spigot.listeners;
 
+import org.bukkit.event.Listener;
 import io.github.evercraftmc.evercraft.shared.PluginListener;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
-import org.bukkit.event.Listener;
 
 public abstract class SpigotListener implements PluginListener, Listener {
     public SpigotListener register() {

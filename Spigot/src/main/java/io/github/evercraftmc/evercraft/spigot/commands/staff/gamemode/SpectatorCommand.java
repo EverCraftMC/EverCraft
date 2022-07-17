@@ -2,13 +2,13 @@ package io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode;
 
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.GameMode;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
-import org.bukkit.GameMode;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class SpectatorCommand extends SpigotCommand {
     public SpectatorCommand(String name, String description, List<String> aliases, String permission) {
@@ -20,9 +20,9 @@ public class SpectatorCommand extends SpigotCommand {
         if (sender instanceof Player player) {
             player.setGameMode(GameMode.SPECTATOR);
 
-            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("staff.gamemode").replace("{gamemode}", "spectator"))));
+            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().gamemode.replace("{gamemode}", "spectator"))));
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noConsole"))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
         }
     }
 

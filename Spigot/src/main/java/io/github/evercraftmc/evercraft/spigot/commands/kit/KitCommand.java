@@ -3,16 +3,16 @@ package io.github.evercraftmc.evercraft.spigot.commands.kit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.spigot.util.types.SerializableItemStack;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 
 public class KitCommand extends SpigotCommand {
     public KitCommand(String name, String description, List<String> aliases, String permission) {
@@ -23,11 +23,11 @@ public class KitCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
-                List<SerializableItemStack> serializableitems = SpigotMain.getInstance().getKits().getSerializableList(args[0], SerializableItemStack.class);
-                if (serializableitems != null) {
+                List<SerializableItemStack> serializableItems = SpigotMain.getInstance().getKits().getParsed().kits.get(args[0]);
+                if (serializableItems != null) {
                     List<ItemStack> items = new ArrayList<ItemStack>();
 
-                    for (SerializableItemStack item : serializableitems) {
+                    for (SerializableItemStack item : serializableItems) {
                         items.add(item.toBukkitItemStack());
                     }
 
@@ -44,16 +44,16 @@ public class KitCommand extends SpigotCommand {
                     }
 
                     if (!(args.length >= 2 && args[1].equalsIgnoreCase("true"))) {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.kit").replace("{kit}", args[0]))));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().kit.kit.replace("{kit}", args[0]))));
                     }
                 } else {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.notFound").replace("{kit}", args[0]))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().kit.notFound.replace("{kit}", args[0]))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noConsole"))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
         }
     }
 
@@ -62,7 +62,7 @@ public class KitCommand extends SpigotCommand {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 1) {
-            list = new ArrayList<String>(SpigotMain.getInstance().getKits().getKeys(false));
+            list = new ArrayList<String>(SpigotMain.getInstance().getKits().getParsed().kits.keySet());
         } else {
             return Arrays.asList();
         }

@@ -1,14 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.listeners;
 
 import java.util.UUID;
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-import io.github.evercraftmc.evercraft.shared.util.StringUtils;
-import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
-import io.github.evercraftmc.evercraft.spigot.SpigotMain;
-import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
-import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
 import org.bukkit.GameRule;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -19,6 +11,14 @@ import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import io.github.evercraftmc.evercraft.shared.util.StringUtils;
+import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
+import io.github.evercraftmc.evercraft.spigot.SpigotMain;
+import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 

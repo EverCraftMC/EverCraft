@@ -22,10 +22,10 @@ public class Broadcaster implements Closable {
         task = BungeeMain.getInstance().getProxy().getScheduler().schedule(BungeeMain.getInstance(), new Runnable() {
             public void run() {
                 for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getStringList("broadcaster.messages").get(random.nextInt(BungeeMain.getInstance().getPluginConfig().getStringList("broadcaster.messages").size())))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getParsed().broadcaster.messages.get(random.nextInt(BungeeMain.getInstance().getPluginConfig().getParsed().broadcaster.messages.size())))));
                 }
             }
-        }, 0, BungeeMain.getInstance().getPluginConfig().getInteger("broadcaster.interval"), TimeUnit.SECONDS);
+        }, 0, BungeeMain.getInstance().getPluginConfig().getParsed().broadcaster.interval, TimeUnit.SECONDS);
     }
 
     public static Broadcaster getInstance() {

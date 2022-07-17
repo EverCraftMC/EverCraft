@@ -3,13 +3,13 @@ package io.github.evercraftmc.evercraft.spigot.commands.kit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class DelKitCommand extends SpigotCommand {
     public DelKitCommand(String name, String description, List<String> aliases, String permission) {
@@ -20,15 +20,15 @@ public class DelKitCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
-                SpigotMain.getInstance().getKits().set(args[0], null);
+                SpigotMain.getInstance().getKits().getParsed().kits.remove(args[0]);
                 SpigotMain.getInstance().getKits().save();
 
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("kit.delkit").replace("{kit}", args[0]))));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().kit.delKit.replace("{kit}", args[0]))));
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.invalidArgs"))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getString("error.noConsole"))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
         }
     }
 
@@ -37,7 +37,7 @@ public class DelKitCommand extends SpigotCommand {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 1) {
-            list = new ArrayList<String>(SpigotMain.getInstance().getKits().getKeys(false));
+            list = new ArrayList<String>(SpigotMain.getInstance().getKits().getParsed().kits.keySet());
         } else {
             return Arrays.asList();
         }

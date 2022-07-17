@@ -1,17 +1,16 @@
 package io.github.evercraftmc.evercraft.spigot.listeners;
 
-import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
-import io.github.evercraftmc.evercraft.spigot.SpigotMain;
-import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
-import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
-import io.github.evercraftmc.evercraft.spigot.util.types.SerializableLocation;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
+import io.github.evercraftmc.evercraft.spigot.SpigotMain;
+import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
 import net.kyori.adventure.text.Component;
 
 public class JoinListener extends SpigotListener {
@@ -29,10 +28,10 @@ public class JoinListener extends SpigotListener {
 
     @EventHandler
     public void onPlayerSpawn(PlayerSpawnLocationEvent event) {
-        if (SpigotMain.getInstance().getPluginConfig().getBoolean("warp.overidespawn")) {
-            event.setSpawnLocation(SpigotMain.getInstance().getWarps().getSerializable("spawn", SerializableLocation.class).toBukkitLocation());
+        if (SpigotMain.getInstance().getPluginConfig().getParsed().warp.overrideSpawn) {
+            event.setSpawnLocation(SpigotMain.getInstance().getWarps().getParsed().warps.get("spawn").toBukkitLocation());
 
-            if (SpigotMain.getInstance().getPluginConfig().getBoolean("warp.clearonwarp")) {
+            if (SpigotMain.getInstance().getPluginConfig().getParsed().warp.clearOnWarp) {
                 event.getPlayer().getInventory().clear();
                 event.getPlayer().getActivePotionEffects().clear();
             }
@@ -41,10 +40,10 @@ public class JoinListener extends SpigotListener {
 
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        if (SpigotMain.getInstance().getPluginConfig().getBoolean("warp.overidespawn")) {
-            event.setRespawnLocation(SpigotMain.getInstance().getWarps().getSerializable("spawn", SerializableLocation.class).toBukkitLocation());
+        if (SpigotMain.getInstance().getPluginConfig().getParsed().warp.overrideSpawn) {
+            event.setRespawnLocation(SpigotMain.getInstance().getWarps().getParsed().warps.get("spawn").toBukkitLocation());
 
-            if (SpigotMain.getInstance().getPluginConfig().getBoolean("warp.clearonwarp")) {
+            if (SpigotMain.getInstance().getPluginConfig().getParsed().warp.clearOnWarp) {
                 event.getPlayer().getInventory().clear();
                 event.getPlayer().getActivePotionEffects().clear();
             }

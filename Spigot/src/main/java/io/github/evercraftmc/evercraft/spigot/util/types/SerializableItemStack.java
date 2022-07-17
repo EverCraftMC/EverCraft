@@ -18,7 +18,7 @@ public class SerializableItemStack {
     private List<String> lore;
     private List<SerializableEnchantment> enchantments;
 
-    private SerializableItemStack(Material type, String name, Integer amount, Integer damage, List<String> lore, List<SerializableEnchantment> enchantments) {
+    public SerializableItemStack(Material type, String name, Integer amount, Integer damage, List<String> lore, List<SerializableEnchantment> enchantments) {
         this.type = type;
         this.name = name;
         this.amount = amount;
