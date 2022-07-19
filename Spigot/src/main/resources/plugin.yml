@@ -6,7 +6,7 @@ description: A custom plugin to run on EverCraft
 author: Kale Ko
 website: https://github.com/EverCraft-MC/EverCraft
 
-api-version: "1.18"
+api-version: "1.19"
 load: POSTWORLD
 
 depend: [LuckPerms]
