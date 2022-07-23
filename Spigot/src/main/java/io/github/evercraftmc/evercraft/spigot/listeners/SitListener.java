@@ -24,6 +24,7 @@ public class SitListener extends SpigotListener {
             }
 
             player.teleport(new Location(player.getWorld(), Double.parseDouble(tag.split(":")[2].split(",")[0]), Double.parseDouble(tag.split(":")[2].split(",")[1]), Double.parseDouble(tag.split(":")[2].split(",")[2]), player.getLocation().getYaw(), player.getLocation().getPitch()));
+            event.getEntity().teleport(new Location(player.getWorld(), Double.parseDouble(tag.split(":")[2].split(",")[0]), Double.parseDouble(tag.split(":")[2].split(",")[1]), Double.parseDouble(tag.split(":")[2].split(",")[2])));
         }
     }
 
