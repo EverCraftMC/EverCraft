@@ -19,12 +19,12 @@ public class SitCommand extends SpigotCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
-            Pig pig = (Pig) player.getWorld().spawnEntity(player.getLocation().add(0, -1, 0), EntityType.PIG);
+            Pig pig = (Pig) player.getWorld().spawnEntity(player.getLocation().add(0, player.getWorld().getBlockAt(player.getLocation().add(0, -2, 0)).getType().toString().endsWith("_STAIRS") || player.getWorld().getBlockAt(player.getLocation().add(0, -2, 0)).getType().toString().endsWith("_SLAB") ? -2 : -1, 0), EntityType.PIG);
             pig.setInvisible(true);
             pig.setInvulnerable(true);
             pig.setAI(false);
             pig.setGravity(false);
-            pig.addScoreboardTag("playerSeat:" + player.getUniqueId().toString());
+            pig.addScoreboardTag("playerSeat:" + player.getUniqueId().toString() + ":" + player.getLocation().getX() + "," + player.getLocation().getY() + "," + player.getLocation().getZ());
             pig.addPassenger(player);
         } else {
             sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));

@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.listeners;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,6 +22,8 @@ public class SitListener extends SpigotListener {
                 event.getDismounted().eject();
                 event.getDismounted().remove();
             }
+
+            event.getEntity().teleport(new Location(player.getWorld(), Double.parseDouble(tag.split(":")[2].split(",")[0]), Double.parseDouble(tag.split(":")[2].split(",")[1]), Double.parseDouble(tag.split(":")[2].split(",")[2])));
         }
     }
 
