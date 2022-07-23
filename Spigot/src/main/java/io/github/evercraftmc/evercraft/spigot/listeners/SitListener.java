@@ -23,14 +23,12 @@ public class SitListener extends SpigotListener {
                 event.getDismounted().remove();
             }
 
-            event.getEntity().teleport(new Location(player.getWorld(), Double.parseDouble(tag.split(":")[2].split(",")[0]), Double.parseDouble(tag.split(":")[2].split(",")[1]), Double.parseDouble(tag.split(":")[2].split(",")[2])));
+            player.teleport(new Location(player.getWorld(), Double.parseDouble(tag.split(":")[2].split(",")[0]), Double.parseDouble(tag.split(":")[2].split(",")[1]), Double.parseDouble(tag.split(":")[2].split(",")[2]), player.getLocation().getYaw(), player.getLocation().getPitch()));
         }
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-        System.out.println(event.getPlayer());
-
         for (Pig entity : event.getPlayer().getWorld().getEntitiesByClass(Pig.class)) {
             String tag = null;
             for (String tag2 : entity.getScoreboardTags()) {
