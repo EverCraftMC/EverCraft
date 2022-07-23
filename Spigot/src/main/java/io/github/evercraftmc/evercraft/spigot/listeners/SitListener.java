@@ -29,6 +29,8 @@ public class SitListener extends SpigotListener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
+        System.out.println(event.getPlayer());
+
         for (Pig entity : event.getPlayer().getWorld().getEntitiesByClass(Pig.class)) {
             String tag = null;
             for (String tag2 : entity.getScoreboardTags()) {

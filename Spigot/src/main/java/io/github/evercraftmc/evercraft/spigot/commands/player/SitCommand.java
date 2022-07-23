@@ -28,12 +28,14 @@ public class SitCommand extends SpigotCommand {
                 pig = (Pig) player.getWorld().spawnEntity(player.getLocation().toBlockLocation().add(0.5, player.getWorld().getBlockAt(player.getLocation().toBlockLocation().add(0, -1, 0)).getType().getKey().getKey().endsWith("_stairs") || player.getWorld().getBlockAt(player.getLocation().toBlockLocation().add(0, -1, 0)).getType().getKey().getKey().endsWith("_slab") ? -1.5 : (player.getWorld().getBlockAt(player.getLocation().toBlockLocation()).getType().getKey().getKey().endsWith("_stairs") || player.getWorld().getBlockAt(player.getLocation().toBlockLocation()).getType().getKey().getKey().endsWith("_slab") ? -0.5 : -1), 0.5), EntityType.PIG);
             }
 
+            Pig pig = (Pig) player.getWorld().spawnEntity(player.getLocation().add(0, -1, 0), EntityType.PIG);
             pig.setInvisible(true);
             pig.setInvulnerable(true);
             pig.setAI(false);
             pig.setGravity(false);
             pig.setSilent(true);
             pig.addScoreboardTag("playerSeat:" + player.getUniqueId().toString() + ":" + player.getLocation().getX() + "," + player.getLocation().getY() + "," + player.getLocation().getZ());
+            pig.addScoreboardTag("playerSeat:" + player.getUniqueId().toString());
             pig.addPassenger(player);
         } else {
             sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
@@ -55,5 +57,6 @@ public class SitCommand extends SpigotCommand {
         } else {
             return list;
         }
+        return Arrays.asList();
     }
 }
