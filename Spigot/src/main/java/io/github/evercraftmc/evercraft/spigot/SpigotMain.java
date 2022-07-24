@@ -22,6 +22,8 @@ import io.github.evercraftmc.evercraft.spigot.commands.player.BungeeCommandComma
 import io.github.evercraftmc.evercraft.spigot.commands.player.ChestProtectionCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.PassiveCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.SitCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.staff.EnderSeeCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.staff.InviSeeCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.AdventureCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.CreativeCommand;
@@ -152,6 +154,9 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new CreativeCommand("gmc", "Change your gamemode to creative", Arrays.asList("gm1"), "evercraft.commands.gamemode.creative").register());
         this.commands.add(new AdventureCommand("gma", "Change your gamemode to adventure", Arrays.asList("gm2"), "evercraft.commands.gamemode.adventure").register());
         this.commands.add(new SpectatorCommand("gmsp", "Change your gamemode to spectator", Arrays.asList("gm3"), "evercraft.commands.gamemode.spectator").register());
+
+        this.commands.add(new InviSeeCommand("inventorysee", "View and modify a players inventory", Arrays.asList("invsee", "invisee"), "evercraft.commands.staff.invisee").register());
+        this.commands.add(new EnderSeeCommand("enderchestsee", "View and modify a players enderchest", Arrays.asList("endersee", "endsee", "ecsee"), "evercraft.commands.staff.endersee").register());
 
         this.commands.add(new BungeeCommandCommand("bungeecommand", "Run a command on the bungee sever", Arrays.asList(), null).register());
 

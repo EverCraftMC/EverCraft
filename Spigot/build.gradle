@@ -12,6 +12,8 @@ repositories {
 dependencies {
     depencancy project(':Shared')
 
+    depencancy "com.flowpowered:flow-nbt:${flow_version}"
+
     compileOnly "org.purpurmc.purpur:purpur-api:${project.purpur_version}"
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
