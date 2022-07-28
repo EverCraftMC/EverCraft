@@ -7,6 +7,10 @@ exclude_patterns = [
 ]
 
 [[analyzers]]
+name = "secrets"
+enabled = true
+
+[[analyzers]]
 name = "java"
 enabled = true
 
