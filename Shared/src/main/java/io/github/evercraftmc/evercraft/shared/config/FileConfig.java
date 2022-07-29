@@ -70,6 +70,4 @@ public class FileConfig<T> {
             e.printStackTrace();
         }
     }
-
-    public void close() {}
 }

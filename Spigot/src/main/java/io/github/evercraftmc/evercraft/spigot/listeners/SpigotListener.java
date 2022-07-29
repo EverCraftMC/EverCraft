@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.listeners;
 
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import io.github.evercraftmc.evercraft.shared.PluginListener;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
@@ -11,5 +12,7 @@ public abstract class SpigotListener implements PluginListener, Listener {
         return this;
     }
 
-    public void unregister() {}
+    public void unregister() {
+        HandlerList.unregisterAll(this);
+    }
 }

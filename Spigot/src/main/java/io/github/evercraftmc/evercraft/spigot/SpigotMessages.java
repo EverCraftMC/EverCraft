@@ -56,11 +56,17 @@ public class SpigotMessages {
         public String notInGame = "&cYou are not in a game";
     }
 
+    public static class InvSee {
+        public String invsee = "&aNow viewing {player}'s inventory";
+        public String endersee = "&aNow viewing {player}'s enderchest";
+    }
+
     public Error error = new Error();
 
     public Reload reload = new Reload();
 
     public String gamemode = "&aSuccessfully set your gamemode to {gamemode}";
+    public String gamemodeOther = "&aSuccessfully set {player}&r&a's gamemode to {gamemode}";
 
     public Warp warp = new Warp();
 
@@ -70,4 +76,6 @@ public class SpigotMessages {
     public ChestProtection chestProtection = new ChestProtection();
 
     public Games games = new Games();
+
+    public InvSee invsee = new InvSee();
 }

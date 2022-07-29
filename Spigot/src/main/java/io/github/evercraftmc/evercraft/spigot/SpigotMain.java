@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import io.github.evercraftmc.evercraft.shared.Plugin;
 import io.github.evercraftmc.evercraft.shared.config.FileConfig;
@@ -21,6 +20,9 @@ import io.github.evercraftmc.evercraft.spigot.commands.kit.SetKitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.BungeeCommandCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.ChestProtectionCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.PassiveCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.player.SitCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.staff.EnderSeeCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.staff.InviSeeCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.AdventureCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.CreativeCommand;
@@ -40,6 +42,7 @@ import io.github.evercraftmc.evercraft.spigot.listeners.ChestProtectionListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.JoinListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.PvPListener;
+import io.github.evercraftmc.evercraft.spigot.listeners.SitListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.SpigotListener;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
@@ -135,6 +138,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new SetKitCommand("setkit", "Set a kit", Arrays.asList(), "evercraft.commands.kit.setkit").register());
         this.commands.add(new DelKitCommand("delkit", "Delete a kit", Arrays.asList(), "evercraft.commands.kit.delkit").register());
 
+        this.commands.add(new SitCommand("sit", "Sit on the ground", Arrays.asList(), "evercraft.commands.player.sit").register());
+
         if (this.getPluginConfig().getParsed().passiveEnabled) {
             this.commands.add(new PassiveCommand("passive", "Toggle passive mode on/off", Arrays.asList("togglepassive", "pvp"), "evercraft.commands.player.passive").register());
         }
@@ -148,6 +153,9 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new CreativeCommand("gmc", "Change your gamemode to creative", Arrays.asList("gm1"), "evercraft.commands.gamemode.creative").register());
         this.commands.add(new AdventureCommand("gma", "Change your gamemode to adventure", Arrays.asList("gm2"), "evercraft.commands.gamemode.adventure").register());
         this.commands.add(new SpectatorCommand("gmsp", "Change your gamemode to spectator", Arrays.asList("gm3"), "evercraft.commands.gamemode.spectator").register());
+
+        this.commands.add(new InviSeeCommand("inventorysee", "View and modify a players inventory", Arrays.asList("invsee", "invisee"), "evercraft.commands.staff.invisee").register());
+        this.commands.add(new EnderSeeCommand("enderchestsee", "View and modify a players enderchest", Arrays.asList("endersee", "endsee", "ecsee"), "evercraft.commands.staff.endersee").register());
 
         this.commands.add(new BungeeCommandCommand("bungeecommand", "Run a command on the bungee sever", Arrays.asList(), null).register());
 
@@ -169,6 +177,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         if (this.getPluginConfig().getParsed().passiveEnabled) {
             this.listeners.add(new PvPListener().register());
         }
+
+        this.listeners.add(new SitListener().register());
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
@@ -213,18 +223,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
     public void onDisable() {
         this.getLogger().info("Disabling plugin..");
 
-        this.getLogger().info("Closing config..");
-
-        config.close();
-
-        this.getLogger().info("Finished closing config..");
-
-        this.getLogger().info("Closing messages..");
-
-        messages.close();
-
-        this.getLogger().info("Finished closing messages..");
-
         this.getLogger().info("Closing player data..");
 
         data.close();
@@ -241,7 +239,9 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Unregistering listeners..");
 
-        HandlerList.unregisterAll(this);
+        for (SpigotListener listener : this.listeners) {
+            listener.unregister();
+        }
 
         this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
         this.getServer().getMessenger().unregisterIncomingPluginChannel(this);
