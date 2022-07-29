@@ -85,18 +85,6 @@ public class LimboMain extends LimboPlugin implements Plugin {
     public void onDisable() {
         System.out.println("Disabling plugin..");
 
-        System.out.println("Closing config..");
-
-        config.close();
-
-        System.out.println("Finished closing config..");
-
-        System.out.println("Closing messages..");
-
-        messages.close();
-
-        System.out.println("Finished closing messages..");
-
         System.out.println("Unregistering commands..");
 
         LimboMain.getInstance().getServer().getPluginManager().unregsiterAllCommands(LimboMain.getInstance());
@@ -106,9 +94,6 @@ public class LimboMain extends LimboPlugin implements Plugin {
         System.out.println("Unregistering listeners..");
 
         LimboMain.getInstance().getServer().getEventsManager().unregisterAllListeners(this);
-
-        // this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
-        // this.getServer().getMessenger().unregisterIncomingPluginChannel(this);
 
         System.out.println("Finished unregistering listeners..");
 
