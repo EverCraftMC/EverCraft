@@ -210,18 +210,6 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
     public void onDisable() {
         this.getLogger().info("Disabling plugin..");
 
-        this.getLogger().info("Closing config..");
-
-        config.close();
-
-        this.getLogger().info("Finished closing config..");
-
-        this.getLogger().info("Closing messages..");
-
-        messages.close();
-
-        this.getLogger().info("Finished closing messages..");
-
         this.getLogger().info("Closing player data..");
 
         data.close();

@@ -7,14 +7,19 @@ version = project.spigot_plugin_version
 
 repositories {
     maven { url "https://repo.purpurmc.org/snapshots/" }
+    flatDir { dirs "lib" }
 }
 
 dependencies {
     depencancy project(':Shared')
 
+    depencancy "com.flowpowered:flow-nbt:${flow_version}"
+
     compileOnly "org.purpurmc.purpur:purpur-api:${project.purpur_version}"
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
+
+    compileOnly name: "craftbukkit-${project.craftbukkit_version}"
 }
 
 jar {
