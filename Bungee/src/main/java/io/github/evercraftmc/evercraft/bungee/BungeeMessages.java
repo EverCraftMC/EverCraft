@@ -53,6 +53,11 @@ public class BungeeMessages {
         public String alreadyConnected = "&cYou are already in the hub";
     }
 
+    public static class PlayerInfo {
+        public String offline = "&a&l{player}'s User Info\n&r&aUsername: {player}\nUUID: {uuid}\nIP: {ip}\nNickname: {nickname}";
+        public String online = offline + "\n\n&r&a&l{player}'s Connection Info\n&r&aPing: {ping}\nVersion: {version} ({protocolVersion})";
+    }
+
     public static class Moderation {
         public static class Kick {
             public static class Broadcast {
@@ -175,6 +180,8 @@ public class BungeeMessages {
     public String vote = "&aThanks so much for voting {player}&r&a! /vote";
 
     public Warp warp = new Warp();
+
+    public PlayerInfo playerInfo = new PlayerInfo();
 
     public Moderation moderation = new Moderation();
 

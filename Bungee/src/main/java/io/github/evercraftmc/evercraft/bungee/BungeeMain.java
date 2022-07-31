@@ -25,6 +25,7 @@ import io.github.evercraftmc.evercraft.bungee.commands.player.SeenCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SpigotCommandCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.CommandSpyCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.ImpersonateCommand;
+import io.github.evercraftmc.evercraft.bungee.commands.staff.PlayerInfoCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.StaffChatCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.SudoCommand;
@@ -39,6 +40,7 @@ import io.github.evercraftmc.evercraft.bungee.scoreboard.ScoreBoard;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
 import io.github.evercraftmc.evercraft.bungee.util.player.BungeePlayerResolver;
+import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.config.FileConfig;
 import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
 import io.github.evercraftmc.evercraft.shared.discord.DiscordBot;
@@ -58,7 +60,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
     private FileConfig<BungeeConfig> config;
     private FileConfig<BungeeMessages> messages;
-    private MySQLConfig data;
+    private MySQLConfig<PluginData> data;
 
     private Economy economy;
 
@@ -86,18 +88,14 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.config = new FileConfig<BungeeConfig>(BungeeConfig.class, this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
 
-        this.getLogger().info("Finished loading config");
-
-        this.getLogger().info("Loading messages..");
-
         this.messages = new FileConfig<BungeeMessages>(BungeeMessages.class, this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
         this.messages.reload();
 
-        this.getLogger().info("Finished loading messages");
+        this.getLogger().info("Finished loading config");
 
         this.getLogger().info("Loading player data..");
 
-        this.data = new MySQLConfig(this.config.getParsed().database.host, this.config.getParsed().database.port, this.config.getParsed().database.name, "data", this.config.getParsed().database.username, this.config.getParsed().database.password);
+        this.data = new MySQLConfig<PluginData>(PluginData.class, this.config.getParsed().database.host, this.config.getParsed().database.port, this.config.getParsed().database.name, this.config.getParsed().database.tableName, "data", this.config.getParsed().database.username, this.config.getParsed().database.password);
 
         this.getLogger().info("Finished loading player data");
 
@@ -132,6 +130,8 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         for (String server : this.getProxy().getServersCopy().keySet()) {
             this.commands.add(new ServerCommand(server, "Go to the " + server + " server", Arrays.asList(), "evercraft.commands.warp.server").register());
         }
+
+        this.commands.add(new PlayerInfoCommand("playerinfo", "Get information about a player", Arrays.asList(), "evercraft.commands.staff.playerinfo").register());
 
         this.commands.add(new KickCommand("kick", "Kick a player from the server", Arrays.asList(), "evercraft.commands.moderation.kick").register());
         this.commands.add(new TempBanCommand("tempban", "Temporarily ban a player from the server", Arrays.asList("ban"), "evercraft.commands.moderation.tempban").register());
@@ -210,6 +210,13 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
     public void onDisable() {
         this.getLogger().info("Disabling plugin..");
 
+        this.getLogger().info("Closing config..");
+
+        config.close();
+        messages.close();
+
+        this.getLogger().info("Finished closing config..");
+
         this.getLogger().info("Closing player data..");
 
         data.close();
@@ -271,7 +278,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         return this.messages;
     }
 
-    public MySQLConfig getPluginData() {
+    public MySQLConfig<PluginData> getPluginData() {
         return this.data;
     }
 

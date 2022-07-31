@@ -27,11 +27,11 @@ subprojects {
     group = "io.github.evercraftmc.evercraft"
 
     configurations {
-        depencancy
-        depencancy.canBeResolved = true
+        dependency
+        dependency.canBeResolved = true
 
         compileOnly {
-            extendsFrom depencancy
+            extendsFrom dependency
         }
     }
 

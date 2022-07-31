@@ -32,7 +32,7 @@ public class TempMuteCommand extends BungeeCommand {
             SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), args[0]);
 
             if (player != null) {
-                if (!BungeeMain.getInstance().getPluginData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
+                if (!BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted) {
                     Boolean confirm = (args.length == 3 && args[2].equalsIgnoreCase("--confirm"));
 
                     if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId()) && !confirm) {
@@ -40,10 +40,10 @@ public class TempMuteCommand extends BungeeCommand {
                     } else {
                         BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.broadcast.noReason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{time}", args[1]))));
 
-                        BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".mute.muted", true);
-                        BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".mute.reason", null);
-                        BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".mute.by", senderName);
-                        BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".mute.until", TimeUtil.parseFuture(args[1]).toString());
+                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted = true;
+                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.reason = null;
+                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.by = senderName;
+                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.until = TimeUtil.parseFuture(args[1]).toString();
                     }
                 } else {
                     sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.alreadyMuted.replace("{player}", player.getDisplayName()))));
@@ -55,7 +55,7 @@ public class TempMuteCommand extends BungeeCommand {
             SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), args[0]);
 
             if (player != null) {
-                if (!BungeeMain.getInstance().getPluginData().getBoolean("players." + player.getUniqueId() + ".mute.muted")) {
+                if (!BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted) {
                     StringBuilder reason = new StringBuilder();
 
                     Boolean confirm = false;
@@ -73,10 +73,10 @@ public class TempMuteCommand extends BungeeCommand {
                     } else {
                         BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.broadcast.reason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)).replace("{time}", args[1]))));
 
-                        BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".mute.muted", true);
-                        BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".mute.reason", reason.substring(0, reason.length() - 1));
-                        BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".mute.by", senderName);
-                        BungeeMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".mute.until", TimeUtil.parseFuture(args[1]).toString());
+                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted = true;
+                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.reason = reason.substring(0, reason.length() - 1);
+                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.by = senderName;
+                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.until = TimeUtil.parseFuture(args[1]).toString();
                     }
                 } else {
                     sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.alreadyMuted.replace("{player}", player.getDisplayName()))));

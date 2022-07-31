@@ -9,21 +9,19 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class FileConfig<T> {
-    private static Gson gson;
+public class FileConfig<T> extends Config<T> {
+    protected static Gson gson;
 
     static {
         FileConfig.gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeSpecialFloatingPointValues().create();
     }
 
-    private File file;
+    protected File file;
 
-    private Class<T> clazz;
-
-    private T config;
+    protected T config;
 
     public FileConfig(Class<T> clazz, String file) {
-        this.clazz = clazz;
+        super(clazz);
 
         this.file = new File(file);
 
@@ -69,5 +67,9 @@ public class FileConfig<T> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void close() {
+        this.config = null;
     }
 }

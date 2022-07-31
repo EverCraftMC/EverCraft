@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import io.github.evercraftmc.evercraft.shared.Plugin;
+import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.config.FileConfig;
 import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
 import io.github.evercraftmc.evercraft.shared.economy.Economy;
@@ -52,7 +53,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     private FileConfig<SpigotConfig> config;
     private FileConfig<SpigotMessages> messages;
-    private MySQLConfig data;
+    private MySQLConfig<PluginData> data;
 
     private FileConfig<SpigotWarps> warps;
     private FileConfig<SpigotKits> kits;
@@ -88,18 +89,14 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.serverName = this.config.getParsed().serverName;
 
-        this.getLogger().info("Finished loading config");
-
-        this.getLogger().info("Loading messages..");
-
         this.messages = new FileConfig<SpigotMessages>(SpigotMessages.class, this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
         this.messages.reload();
 
-        this.getLogger().info("Finished loading messages");
+        this.getLogger().info("Finished loading config");
 
         this.getLogger().info("Loading player data..");
 
-        this.data = new MySQLConfig(this.config.getParsed().database.host, this.config.getParsed().database.port, this.config.getParsed().database.name, "data", this.config.getParsed().database.username, this.config.getParsed().database.password);
+        this.data = new MySQLConfig<PluginData>(PluginData.class, this.config.getParsed().database.host, this.config.getParsed().database.port, this.config.getParsed().database.name, this.config.getParsed().database.tableName, "data", this.config.getParsed().database.username, this.config.getParsed().database.password);
 
         this.getLogger().info("Finished loading player data");
 
@@ -223,6 +220,13 @@ public class SpigotMain extends JavaPlugin implements Plugin {
     public void onDisable() {
         this.getLogger().info("Disabling plugin..");
 
+        this.getLogger().info("Closing config..");
+
+        config.close();
+        messages.close();
+
+        this.getLogger().info("Finished closing config..");
+
         this.getLogger().info("Closing player data..");
 
         data.close();
@@ -287,7 +291,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         return this.messages;
     }
 
-    public MySQLConfig getPluginData() {
+    public MySQLConfig<PluginData> getPluginData() {
         return this.data;
     }
 

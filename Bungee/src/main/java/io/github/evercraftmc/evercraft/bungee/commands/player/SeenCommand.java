@@ -34,13 +34,9 @@ public class SeenCommand extends BungeeCommand {
                 if (bungeeplayer != null) {
                     sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().lastSeen.online.replace("{player}", args[0]))));
                 } else {
-                    if (BungeeMain.getInstance().getPluginData().getRaw("players." + player.getUniqueId() + ".lastonline") != null) {
-                        Instant lastonline = Instant.ofEpochSecond(BungeeMain.getInstance().getPluginData().getLong("players." + player.getUniqueId() + ".lastonline"));
+                    Instant lastOnline = Instant.ofEpochSecond(BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).lastOnline);
 
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().lastSeen.lastSeen.replace("{player}", args[0]).replace("{lastSeen}", TimeUtil.getDifferenceString(Instant.now(), lastonline)))));
-                    } else {
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
-                    }
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().lastSeen.lastSeen.replace("{player}", args[0]).replace("{lastSeen}", TimeUtil.getDifferenceString(Instant.now(), lastOnline)))));
                 }
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));

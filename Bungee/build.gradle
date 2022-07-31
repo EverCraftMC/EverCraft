@@ -7,18 +7,20 @@ version = project.bungee_plugin_version
 
 repositories {
     maven { url "https://papermc.io/repo/repository/maven-public/" }
+    maven { url "https://repo.viaversion.com" }
     maven { url "https://jitpack.io/" }
 }
 
 dependencies {
-    depencancy project(':Shared')
+    dependency project(':Shared')
 
     compileOnly "io.github.waterfallmc:waterfall-api:${project.waterfall_version}"
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
+    compileOnly "com.viaversion:viaversion-api:${project.viaversion_version}"
     compileOnly "com.github.NuVotifier:NuVotifier:${project.votifier_version}"
 
-    depencancy "net.dv8tion:JDA:${project.jda_version}"
+    dependency "net.dv8tion:JDA:${project.jda_version}"
 }
 
 jar {
@@ -36,7 +38,7 @@ tasks.register("buildFat", Jar) {
     classifier = "fat"
 
     from files(project.sourceSets.main.output)
-    from files(project.configurations.depencancy.collect { it.isDirectory() ? it : zipTree(it) })
+    from files(project.configurations.dependency.collect { it.isDirectory() ? it : zipTree(it) })
 }
 
 processResources {

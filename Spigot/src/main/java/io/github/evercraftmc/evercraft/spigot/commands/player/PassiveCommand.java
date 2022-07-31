@@ -20,22 +20,22 @@ public class PassiveCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length == 0) {
-                if (SpigotMain.getInstance().getPluginData().getBoolean("players." + player.getUniqueId() + ".passive." + SpigotMain.getInstance().getServerName())) {
-                    SpigotMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".passive." + SpigotMain.getInstance().getServerName(), false);
+                if (SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive) {
+                    SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive = false;
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().passive.replace("{value}", "off"))));
                 } else {
-                    SpigotMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".passive." + SpigotMain.getInstance().getServerName(), true);
+                    SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive = true;
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().passive.replace("{value}", "on"))));
                 }
             } else {
                 if (args[0].equalsIgnoreCase("on")) {
-                    SpigotMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".passive." + SpigotMain.getInstance().getServerName(), true);
+                    SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive = true;
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().passive.replace("{value}", "on"))));
                 } else if (args[0].equalsIgnoreCase("off")) {
-                    SpigotMain.getInstance().getPluginData().set("players." + player.getUniqueId() + ".passive." + SpigotMain.getInstance().getServerName(), false);
+                    SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive = false;
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().passive.replace("{value}", "off"))));
                 }
