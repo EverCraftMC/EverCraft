@@ -83,6 +83,7 @@ public class MessageCommand extends BungeeCommand {
                             BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.reason = null;
                             BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.by = null;
                             BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.until = null;
+                            BungeeMain.getInstance().getPluginData().save();
 
                             run(sender, args);
                         }

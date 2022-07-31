@@ -41,6 +41,7 @@ public class PermBanCommand extends BungeeCommand {
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.reason = null;
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.by = senderName;
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.until = "forever";
+                        BungeeMain.getInstance().getPluginData().save();
 
                         ProxiedPlayer bungeeplayer = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
                         if (bungeeplayer != null) {
@@ -79,6 +80,7 @@ public class PermBanCommand extends BungeeCommand {
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.reason = reason.substring(0, reason.length() - 1);
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.by = senderName;
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.until = "forever";
+                        BungeeMain.getInstance().getPluginData().save();
 
                         ProxiedPlayer bungeeplayer = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
                         if (bungeeplayer != null) {

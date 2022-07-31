@@ -41,6 +41,7 @@ public class UnMuteCommand extends BungeeCommand {
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.reason = null;
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.by = null;
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.until = null;
+                        BungeeMain.getInstance().getPluginData().save();
                     } else {
                         sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.unmute.notMuted.replace("{player}", player.getDisplayName()))));
                     }
@@ -68,6 +69,7 @@ public class UnMuteCommand extends BungeeCommand {
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.reason = null;
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.by = null;
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.until = null;
+                        BungeeMain.getInstance().getPluginData().save();
                     } else {
                         sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.unmute.notMuted.replace("{player}", player.getDisplayName()))));
                     }

@@ -24,6 +24,7 @@ public class NickNameCommand extends BungeeCommand {
             if (args.length > 0) {
                 if (TextFormatter.removeColors(args[0]).length() > 0 && TextFormatter.removeColors(args[0]).length() < 16 && args[0].length() < 32) {
                     BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).nickname = args[0];
+                    BungeeMain.getInstance().getPluginData().save();
 
                     player.setDisplayName(TextFormatter.translateColors(BungeePlayerResolver.getDisplayName(BungeeMain.getInstance().getPluginData(), player.getUniqueId())));
                     TabListUtil.updatePlayerName(player);

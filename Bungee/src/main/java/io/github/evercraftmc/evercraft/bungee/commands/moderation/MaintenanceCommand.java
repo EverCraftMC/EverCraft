@@ -21,10 +21,12 @@ public class MaintenanceCommand extends BungeeCommand {
         if (args.length == 0) {
             if (BungeeMain.getInstance().getPluginData().getParsed().maintenance) {
                 BungeeMain.getInstance().getPluginData().getParsed().maintenance = false;
+                BungeeMain.getInstance().getPluginData().save();
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.maintenance.toggle.replace("{value}", "off"))));
             } else {
                 BungeeMain.getInstance().getPluginData().getParsed().maintenance = true;
+                BungeeMain.getInstance().getPluginData().save();
 
                 for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                     if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
@@ -37,6 +39,7 @@ public class MaintenanceCommand extends BungeeCommand {
         } else {
             if (args[0].equalsIgnoreCase("on")) {
                 BungeeMain.getInstance().getPluginData().getParsed().maintenance = true;
+                BungeeMain.getInstance().getPluginData().save();
 
                 for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                     if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
@@ -47,6 +50,7 @@ public class MaintenanceCommand extends BungeeCommand {
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.maintenance.toggle.replace("{value}", "on"))));
             } else if (args[0].equalsIgnoreCase("off")) {
                 BungeeMain.getInstance().getPluginData().getParsed().maintenance = false;
+                BungeeMain.getInstance().getPluginData().save();
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.maintenance.toggle.replace("{value}", "off"))));
             }

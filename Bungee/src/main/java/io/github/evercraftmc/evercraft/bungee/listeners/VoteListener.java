@@ -16,6 +16,7 @@ public class VoteListener extends BungeeListener {
             VoteListener.process(player);
         } else {
             BungeeMain.getInstance().getPluginData().getParsed().votes.get(event.getVote().getUsername()).toProcess = BungeeMain.getInstance().getPluginData().getParsed().votes.get(event.getVote().getUsername()).toProcess + 1;
+            BungeeMain.getInstance().getPluginData().save();
         }
     }
 
@@ -25,5 +26,6 @@ public class VoteListener extends BungeeListener {
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getParsed().discord.channelId).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getParsed().vote.replace("{player}", player.getDisplayName()))).queue();
 
         BungeeMain.getInstance().getPluginData().getParsed().votes.get(player.getName()).total = BungeeMain.getInstance().getPluginData().getParsed().votes.get(player.getName()).total + 1;
+        BungeeMain.getInstance().getPluginData().save();
     }
 }

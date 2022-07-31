@@ -7,6 +7,7 @@ import io.github.evercraftmc.evercraft.bungee.scoreboard.ScoreBoard;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
 import io.github.evercraftmc.evercraft.bungee.util.player.BungeePlayerResolver;
+import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
@@ -34,6 +35,16 @@ public class JoinListener extends BungeeListener {
 
     @EventHandler
     public void onPlayerJoin(PostLoginEvent event) {
+        if (!BungeeMain.getInstance().getPluginData().getParsed().players.containsKey(event.getPlayer().getUniqueId().toString())) {
+            BungeeMain.getInstance().getPluginData().getParsed().players.put(event.getPlayer().getUniqueId().toString(), new PluginData.Player());
+        }
+
+        if (!BungeeMain.getInstance().getPluginData().getParsed().votes.containsKey(event.getPlayer().getName())) {
+            BungeeMain.getInstance().getPluginData().getParsed().votes.put(event.getPlayer().getName(), new PluginData.Vote());
+        }
+
+        BungeeMain.getInstance().getPluginData().save();
+
         if (BungeeMain.getInstance().getPluginData().getParsed().players.get(event.getPlayer().getUniqueId().toString()).ban.banned) {
             String time = BungeeMain.getInstance().getPluginData().getParsed().players.get(event.getPlayer().getUniqueId().toString()).ban.until;
 
@@ -48,6 +59,7 @@ public class JoinListener extends BungeeListener {
                 BungeeMain.getInstance().getPluginData().getParsed().players.get(event.getPlayer().getUniqueId().toString()).ban.reason = null;
                 BungeeMain.getInstance().getPluginData().getParsed().players.get(event.getPlayer().getUniqueId().toString()).ban.by = null;
                 BungeeMain.getInstance().getPluginData().getParsed().players.get(event.getPlayer().getUniqueId().toString()).ban.until = null;
+                BungeeMain.getInstance().getPluginData().save();
             }
 
             return;
@@ -77,6 +89,8 @@ public class JoinListener extends BungeeListener {
             BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getParsed().discord.channelId).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getParsed().welcome.firstJoin.replace("{player}", event.getPlayer().getDisplayName()))).queue();
         }
 
+        BungeeMain.getInstance().getPluginData().save();
+
         BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().welcome.join.replace("{player}", event.getPlayer().getDisplayName()))));
 
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getParsed().discord.channelId).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getParsed().welcome.join.replace("{player}", event.getPlayer().getDisplayName()))).queue();
@@ -97,6 +111,7 @@ public class JoinListener extends BungeeListener {
         }
 
         BungeeMain.getInstance().getPluginData().getParsed().votes.get(event.getPlayer().getName()).toProcess = 0;
+        BungeeMain.getInstance().getPluginData().save();
     }
 
     @EventHandler
@@ -125,6 +140,7 @@ public class JoinListener extends BungeeListener {
     @EventHandler
     public void onPlayerQuit(PlayerDisconnectEvent event) {
         BungeeMain.getInstance().getPluginData().getParsed().players.get(event.getPlayer().getUniqueId().toString()).lastOnline = Instant.now().getEpochSecond();
+        BungeeMain.getInstance().getPluginData().save();
 
         BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().welcome.quit.replace("{player}", event.getPlayer().getDisplayName()))));
 

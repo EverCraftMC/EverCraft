@@ -22,20 +22,24 @@ public class PassiveCommand extends SpigotCommand {
             if (args.length == 0) {
                 if (SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive) {
                     SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive = false;
+                    SpigotMain.getInstance().getPluginData().save();
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().passive.replace("{value}", "off"))));
                 } else {
                     SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive = true;
+                    SpigotMain.getInstance().getPluginData().save();
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().passive.replace("{value}", "on"))));
                 }
             } else {
                 if (args[0].equalsIgnoreCase("on")) {
                     SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive = true;
+                    SpigotMain.getInstance().getPluginData().save();
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().passive.replace("{value}", "on"))));
                 } else if (args[0].equalsIgnoreCase("off")) {
                     SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive = false;
+                    SpigotMain.getInstance().getPluginData().save();
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().passive.replace("{value}", "off"))));
                 }
