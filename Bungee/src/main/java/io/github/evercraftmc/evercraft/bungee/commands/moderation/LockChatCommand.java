@@ -20,20 +20,24 @@ public class LockChatCommand extends BungeeCommand {
         if (args.length == 0) {
             if (BungeeMain.getInstance().getPluginData().getParsed().chatLock) {
                 BungeeMain.getInstance().getPluginData().getParsed().chatLock = false;
+                BungeeMain.getInstance().getPluginData().save();
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chatLock.toggle.replace("{value}", "off"))));
             } else {
                 BungeeMain.getInstance().getPluginData().getParsed().chatLock = true;
+                BungeeMain.getInstance().getPluginData().save();
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chatLock.toggle.replace("{value}", "on"))));
             }
         } else {
             if (args[0].equalsIgnoreCase("on")) {
                 BungeeMain.getInstance().getPluginData().getParsed().chatLock = true;
+                BungeeMain.getInstance().getPluginData().save();
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chatLock.toggle.replace("{value}", "on"))));
             } else if (args[0].equalsIgnoreCase("off")) {
                 BungeeMain.getInstance().getPluginData().getParsed().chatLock = false;
+                BungeeMain.getInstance().getPluginData().save();
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chatLock.toggle.replace("{value}", "off"))));
             }

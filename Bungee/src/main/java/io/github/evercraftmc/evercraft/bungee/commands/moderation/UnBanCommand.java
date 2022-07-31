@@ -41,6 +41,7 @@ public class UnBanCommand extends BungeeCommand {
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.reason = null;
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.by = null;
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.until = null;
+                        BungeeMain.getInstance().getPluginData().save();
                     } else {
                         sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.unban.notBanned.replace("{player}", player.getDisplayName()))));
                     }
@@ -68,6 +69,7 @@ public class UnBanCommand extends BungeeCommand {
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.reason = null;
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.by = null;
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.until = null;
+                        BungeeMain.getInstance().getPluginData().save();
                     } else {
                         sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.unban.notBanned.replace("{player}", player.getDisplayName()))));
                     }

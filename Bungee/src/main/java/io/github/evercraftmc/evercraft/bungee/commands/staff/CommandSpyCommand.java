@@ -22,20 +22,24 @@ public class CommandSpyCommand extends BungeeCommand {
             if (args.length == 0) {
                 if (BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.commandspy) {
                     BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.commandspy = false;
+                    BungeeMain.getInstance().getPluginData().save();
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().commandSpy.replace("{value}", "off"))));
                 } else {
                     BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.commandspy = true;
+                    BungeeMain.getInstance().getPluginData().save();
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().commandSpy.replace("{value}", "on"))));
                 }
             } else {
                 if (args[0].equalsIgnoreCase("on")) {
                     BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.commandspy = true;
+                    BungeeMain.getInstance().getPluginData().save();
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().commandSpy.replace("{value}", "on"))));
                 } else if (args[0].equalsIgnoreCase("off")) {
                     BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.commandspy = false;
+                    BungeeMain.getInstance().getPluginData().save();
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().commandSpy.replace("{value}", "off"))));
                 }

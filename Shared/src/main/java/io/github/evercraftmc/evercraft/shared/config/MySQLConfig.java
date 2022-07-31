@@ -24,11 +24,11 @@ public class MySQLConfig<T> extends Config<T> {
         this.tableName = tableName;
         this.keyName = keyName;
 
-        this.mysql.createTable(this.tableName, "(key LONGTEXT NOT NULL, data LONGTEXT NOT NULL)");
+        this.mysql.createTable(this.tableName, "(keyName LONGTEXT NOT NULL, data LONGTEXT NOT NULL)");
     }
 
     public T getParsed() {
-        this.config = gson.fromJson(mysql.selectFirst(this.tableName, "data", "key = '" + this.keyName + "'"), clazz);
+        this.config = gson.fromJson(mysql.selectFirst(this.tableName, "data", "keyName = '" + this.keyName + "'"), clazz);
 
         return this.config;
     }
@@ -41,10 +41,10 @@ public class MySQLConfig<T> extends Config<T> {
         String json = gson.toJson(this.config);
 
         if (json != null) {
-            if (mysql.selectFirst(this.tableName, "data", "key = '" + this.keyName + "'") == null) {
+            if (mysql.selectFirst(this.tableName, "data", "keyName = '" + this.keyName + "'") == null) {
                 mysql.insert(this.tableName, "('" + this.keyName + "', '" + json + "')");
             } else {
-                mysql.update(this.tableName, "data = '" + json + "'", "key = '" + this.keyName + "'");
+                mysql.update(this.tableName, "data = '" + json + "'", "keyName = '" + this.keyName + "'");
             }
         }
     }
