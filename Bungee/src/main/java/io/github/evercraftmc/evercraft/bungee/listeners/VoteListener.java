@@ -15,11 +15,7 @@ public class VoteListener extends BungeeListener {
         if (player != null) {
             VoteListener.process(player);
         } else {
-            if (BungeeMain.getInstance().getPluginData().getFloat("votes." + event.getVote().getUsername() + ".toProcess") == null) {
-                BungeeMain.getInstance().getPluginData().set("votes." + event.getVote().getUsername() + ".toProcess", 1);
-            } else {
-                BungeeMain.getInstance().getPluginData().set("votes." + event.getVote().getUsername() + ".toProcess", BungeeMain.getInstance().getPluginData().getFloat("votes." + event.getVote().getUsername() + ".toProcess") + 1);
-            }
+            BungeeMain.getInstance().getPluginData().getParsed().votes.get(event.getVote().getUsername()).toProcess = BungeeMain.getInstance().getPluginData().getParsed().votes.get(event.getVote().getUsername()).toProcess + 1;
         }
     }
 
@@ -28,10 +24,6 @@ public class VoteListener extends BungeeListener {
 
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getParsed().discord.channelId).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getParsed().vote.replace("{player}", player.getDisplayName()))).queue();
 
-        if (BungeeMain.getInstance().getPluginData().getFloat("votes." + player.getDisplayName() + ".total") == null) {
-            BungeeMain.getInstance().getPluginData().set("votes." + player.getDisplayName() + ".total", 1);
-        } else {
-            BungeeMain.getInstance().getPluginData().set("votes." + player.getDisplayName() + ".total", BungeeMain.getInstance().getPluginData().getFloat("votes." + player.getDisplayName() + ".total") + 1);
-        }
+        BungeeMain.getInstance().getPluginData().getParsed().votes.get(player.getName()).total = BungeeMain.getInstance().getPluginData().getParsed().votes.get(player.getName()).total + 1;
     }
 }

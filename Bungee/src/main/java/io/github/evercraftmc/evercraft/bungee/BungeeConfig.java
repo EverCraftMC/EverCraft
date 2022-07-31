@@ -13,6 +13,8 @@ public class BungeeConfig {
 
         public String username = "root";
         public String password = "";
+
+        public String tableName = "evercraft";
     }
 
     public static class Server {

@@ -18,22 +18,22 @@ public class LockChatCommand extends BungeeCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            if (BungeeMain.getInstance().getPluginData().getBoolean("chatLock")) {
-                BungeeMain.getInstance().getPluginData().set("chatLock", false);
+            if (BungeeMain.getInstance().getPluginData().getParsed().chatLock) {
+                BungeeMain.getInstance().getPluginData().getParsed().chatLock = false;
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chatLock.toggle.replace("{value}", "off"))));
             } else {
-                BungeeMain.getInstance().getPluginData().set("chatLock", true);
+                BungeeMain.getInstance().getPluginData().getParsed().chatLock = true;
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chatLock.toggle.replace("{value}", "on"))));
             }
         } else {
             if (args[0].equalsIgnoreCase("on")) {
-                BungeeMain.getInstance().getPluginData().set("chatLock", true);
+                BungeeMain.getInstance().getPluginData().getParsed().chatLock = true;
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chatLock.toggle.replace("{value}", "on"))));
             } else if (args[0].equalsIgnoreCase("off")) {
-                BungeeMain.getInstance().getPluginData().set("chatLock", false);
+                BungeeMain.getInstance().getPluginData().getParsed().chatLock = false;
 
                 BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chatLock.toggle.replace("{value}", "off"))));
             }

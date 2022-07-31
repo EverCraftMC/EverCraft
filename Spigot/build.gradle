@@ -11,9 +11,7 @@ repositories {
 }
 
 dependencies {
-    depencancy project(':Shared')
-
-    depencancy "com.flowpowered:flow-nbt:${flow_version}"
+    dependency project(':Shared')
 
     compileOnly "org.purpurmc.purpur:purpur-api:${project.purpur_version}"
 
@@ -37,7 +35,7 @@ tasks.register("buildFat", Jar) {
     classifier = "fat"
 
     from files(project.sourceSets.main.output)
-    from files(project.configurations.depencancy.collect { it.isDirectory() ? it : zipTree(it) })
+    from files(project.configurations.dependency.collect { it.isDirectory() ? it : zipTree(it) })
 }
 
 processResources {

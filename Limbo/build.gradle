@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    depencancy project(':Shared')
+    dependency project(':Shared')
 
     compileOnly "com.loohp:Limbo:${project.limbo_version}"
 }
@@ -32,7 +32,7 @@ tasks.register("buildFat", Jar) {
     classifier = "fat"
 
     from files(project.sourceSets.main.output)
-    from files(project.configurations.depencancy.collect { it.isDirectory() ? it : zipTree(it) })
+    from files(project.configurations.dependency.collect { it.isDirectory() ? it : zipTree(it) })
 }
 
 processResources {
