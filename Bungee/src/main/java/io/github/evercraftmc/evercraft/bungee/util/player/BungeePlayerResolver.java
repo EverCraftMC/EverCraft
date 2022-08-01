@@ -31,7 +31,7 @@ public class BungeePlayerResolver {
     public static UUID getUUIDFromName(Config<PluginData> config, String name) {
         for (String key : config.getParsed().players.keySet()) {
             if (config.getParsed().players.get(key).lastName.equalsIgnoreCase(name)) {
-                return UUID.fromString(key.split("\\.")[1]);
+                return UUID.fromString(config.getParsed().players.get(key).uuid);
             }
         }
 
