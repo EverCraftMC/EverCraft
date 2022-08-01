@@ -10,15 +10,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class FileConfig<T> extends Config<T> {
-    protected static Gson gson;
+    private static Gson gson;
 
     static {
         FileConfig.gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeSpecialFloatingPointValues().create();
     }
 
-    protected File file;
+    private File file;
 
-    protected T config;
+    private T config;
 
     public FileConfig(Class<T> clazz, String file) {
         super(clazz);
