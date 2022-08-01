@@ -20,7 +20,7 @@ public class PluginData {
         }
 
         public static class Mute {
-            public Boolean muted;
+            public Boolean muted = false;
 
             public String reason = null;
             public String until = null;
