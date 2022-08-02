@@ -19,8 +19,8 @@ import io.github.evercraftmc.evercraft.spigot.util.bukkit.ChestGUI;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTCompressedStreamTools;
+import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.item.ItemStack;
 
@@ -35,7 +35,7 @@ public class EnderSeeCommand extends SpigotCommand {
             OfflinePlayer player2 = SpigotMain.getInstance().getServer().getOfflinePlayer(args[0]);
 
             if (player2 != null) {
-                ChestGUI gui = new ChestGUI("&7" + player.getName() + "&r&7's ender chest", 5, false, false) {
+                ChestGUI gui = new ChestGUI("&7" + player2.getName() + "&r&7's ender chest", 5, false, false) {
                     @EventHandler
                     public void onItemMove(InventoryEvent event) {
 
@@ -56,7 +56,7 @@ public class EnderSeeCommand extends SpigotCommand {
                             NBTTagCompound nbt = NBTCompressedStreamTools.a(file);
                             NBTTagList items = (NBTTagList) nbt.c("EnderItems");
                             for (NBTBase item : items) {
-                                gui.addItem(CraftItemStack.asBukkitCopy(ItemStack.a((NBTTagCompound) item)), ((NBTTagInt) ((NBTTagCompound) item).c("Slot")).f());
+                                gui.addItem(CraftItemStack.asBukkitCopy(ItemStack.a((NBTTagCompound) item)), (int) ((NBTTagByte) ((NBTTagCompound) item).c("Slot")).a());
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
