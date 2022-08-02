@@ -8,6 +8,12 @@ import java.util.Map;
 public class PluginData {
     public static class Player {
         public static class Settings {
+            public enum MessageSetting {
+                EVERYONE, FRIENDS, NOONE
+            }
+
+            public MessageSetting messaging = MessageSetting.EVERYONE;
+
             public Boolean passive = false;
 
             public Boolean commandspy = false;
