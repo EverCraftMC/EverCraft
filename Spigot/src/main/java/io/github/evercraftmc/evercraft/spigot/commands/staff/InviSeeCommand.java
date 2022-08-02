@@ -50,24 +50,42 @@ public class InviSeeCommand extends SpigotCommand {
                     }
 
                     for (Integer i = 0; i < 9; i++) {
-                        gui.addItem(onlinePlayer2.getInventory().getItem(i), 27 + i);
+                        gui.addItem(onlinePlayer2.getInventory().getItem(i), i + 27);
                     }
 
-                    gui.addItem(onlinePlayer2.getInventory().getHelmet(), 27);
-                    gui.addItem(onlinePlayer2.getInventory().getChestplate(), 28);
-                    gui.addItem(onlinePlayer2.getInventory().getLeggings(), 29);
-                    gui.addItem(onlinePlayer2.getInventory().getBoots(), 30);
+                    gui.addItem(onlinePlayer2.getInventory().getHelmet(), 36);
+                    gui.addItem(onlinePlayer2.getInventory().getChestplate(), 37);
+                    gui.addItem(onlinePlayer2.getInventory().getLeggings(), 38);
+                    gui.addItem(onlinePlayer2.getInventory().getBoots(), 39);
 
-                    gui.addItem(onlinePlayer2.getInventory().getItemInOffHand(), 31);
+                    gui.addItem(onlinePlayer2.getInventory().getItemInOffHand(), 40);
                 } else {
-                    File file = new File(SpigotMain.getInstance().getServer().getWorldContainer() + "/" + SpigotMain.getInstance().getServer().getWorlds().get(0).getName() + "/playerdata/" + player.getUniqueId().toString() + ".dat");
+                    File file = new File(SpigotMain.getInstance().getServer().getWorldContainer() + "/" + SpigotMain.getInstance().getServer().getWorlds().get(0).getName() + "/playerdata/" + player2.getUniqueId().toString() + ".dat");
 
                     if (file.exists()) {
                         try {
                             NBTTagCompound nbt = NBTCompressedStreamTools.a(file);
                             NBTTagList items = (NBTTagList) nbt.c("Inventory");
                             for (NBTBase item : items) {
-                                gui.addItem(CraftItemStack.asBukkitCopy(ItemStack.a((NBTTagCompound) item)), (int) ((NBTTagByte) ((NBTTagCompound) item).c("Slot")).a());
+                                Integer slot = (int) ((NBTTagByte) ((NBTTagCompound) item).c("Slot")).a();
+
+                                if (slot >= 0 && slot < 9) {
+                                    slot = slot + 27;
+                                } else if (slot >= 9 && slot < 36) {
+                                    slot = slot - 9;
+                                } else if (slot == 103) {
+                                    slot = 36;
+                                } else if (slot == 102) {
+                                    slot = 37;
+                                } else if (slot == 101) {
+                                    slot = 38;
+                                } else if (slot == 100) {
+                                    slot = 39;
+                                } else if (slot == -106) {
+                                    slot = 40;
+                                }
+
+                                gui.addItem(CraftItemStack.asBukkitCopy(ItemStack.a((NBTTagCompound) item)), slot);
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
