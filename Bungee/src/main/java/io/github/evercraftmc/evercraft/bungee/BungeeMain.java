@@ -23,6 +23,7 @@ import io.github.evercraftmc.evercraft.bungee.commands.player.MessageCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.NickNameCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.ReplyCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SeenCommand;
+import io.github.evercraftmc.evercraft.bungee.commands.player.SettingsCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SpigotCommandCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.CommandSpyCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.ImpersonateCommand;
@@ -127,6 +128,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.commands.add(new EconomyCommand("economy", "Modify someones balance", Arrays.asList("eco"), "evercraft.commands.economy.economy").register());
 
         this.commands.add(new FriendCommand("friend", "Manage your friends", Arrays.asList("friends", "f"), "evercraft.commands.player.friend").register());
+        this.commands.add(new SettingsCommand("settings", "Manage your settings", Arrays.asList("setting", "set", "s"), "evercraft.commands.player.settings").register());
 
         this.commands.add(new HubCommand("hub", "Go to the hub", Arrays.asList("lobby"), "evercraft.commands.warp.hub").register());
 
