@@ -22,9 +22,9 @@ public class FriendCommand extends BungeeCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof ProxiedPlayer player) {
-            if (args.length > 1) {
+            if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("add")) {
-                    if (args.length > 2) {
+                    if (args.length > 1) {
                         ProxiedPlayer player2 = BungeeMain.getInstance().getProxy().getPlayer(args[1]);
 
                         if (player2 != null) {
@@ -84,7 +84,7 @@ public class FriendCommand extends BungeeCommand {
                         player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
                     }
                 } else if (args[0].equalsIgnoreCase("remove")) {
-                    if (args.length > 2) {
+                    if (args.length > 1) {
                         ProxiedPlayer player2 = BungeeMain.getInstance().getProxy().getPlayer(args[1]);
 
                         if (player2 != null) {
