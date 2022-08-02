@@ -9,7 +9,7 @@ public class MySQLConfig<T> extends Config<T> {
     private static Gson gson;
 
     static {
-        MySQLConfig.gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeSpecialFloatingPointValues().create();
+        MySQLConfig.gson = new GsonBuilder().disableHtmlEscaping().serializeSpecialFloatingPointValues().create();
     }
 
     private MySQL mysql;

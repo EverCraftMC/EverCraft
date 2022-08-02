@@ -17,7 +17,7 @@ public class BungeeMessages {
 
     public static class Chat {
         public String main = "{player} &r> {message}";
-        public String dm = "{player1} &r-> {player2} &r> {message}";
+        public String dm = "&8[DM] {player1} &r-> {player2} &r> {message}";
         public String noReplyTo = "&cYou do not have anyone to reply to";
         public String staff = "&d&l[Staffchat] &r{player} &r> {message}";
         public String discord = "&b&l[Discord] &r{player} &r> {message}";
@@ -45,6 +45,23 @@ public class BungeeMessages {
         public String yourBalance = "&aYou balance is currently {balance}";
         public String otherBalance = "&a{player}&r&a's balance is currently {balance}";
         public String economy = "&aSuccessfully set {player}&r&a's balance to {balance}";
+    }
+
+    public static class Friend {
+        public String invite = "&aInvited {player} to be your friend";
+        public String invited = "&a{player} invited you to be their friend";
+        public String alreadyInvited = "&c{player} is already your friend!";
+
+        public String add = "&a{player} is now your friend!";
+        public String added = "&a{player} is now your friend!";
+        public String alreadyFriends = "&c{player} is already your friend!";
+
+        public String remove = "&c{player} is no longer your friend";
+        public String removed = "&c{player} is no longer your friend";
+        public String notFriends = "&c{player} is not your friend!";
+
+        public String list = "&a&lFriends\n&r&a{friends}";
+        public String listInvites = list + "\n&a&lFriends\n&r&a{invites}";
     }
 
     public static class Warp {
@@ -178,6 +195,8 @@ public class BungeeMessages {
     public Economy economy = new Economy();
 
     public String vote = "&aThanks so much for voting {player}&r&a! /vote";
+
+    public Friend friend = new Friend();
 
     public Warp warp = new Warp();
 
