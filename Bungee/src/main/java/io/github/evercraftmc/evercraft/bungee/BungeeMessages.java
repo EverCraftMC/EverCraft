@@ -61,7 +61,7 @@ public class BungeeMessages {
         public String notFriends = "&c{player} is not your friend!";
 
         public String list = "&a&lFriends\n&r&a{friends}";
-        public String listInvites = list + "\n&a&lFriends\n&r&a{invites}";
+        public String listInvites = list + "\n&a&lInvites\n&r&a{invites}";
     }
 
     public static class Warp {
