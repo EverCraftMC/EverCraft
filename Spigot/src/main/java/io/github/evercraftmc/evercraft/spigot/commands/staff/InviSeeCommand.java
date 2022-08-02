@@ -35,28 +35,49 @@ public class InviSeeCommand extends SpigotCommand {
             OfflinePlayer player2 = SpigotMain.getInstance().getServer().getOfflinePlayer(args[0]);
 
             if (player2 != null) {
-                File file = new File(SpigotMain.getInstance().getServer().getWorldContainer() + "/" + SpigotMain.getInstance().getServer().getWorlds().get(0).getName() + "/playerdata/" + player.getUniqueId());
+                ChestGUI gui = new ChestGUI("&7" + player.getName() + "&r&7's inventory", 5, false, false) {
+                    @EventHandler
+                    public void onItemMove(InventoryEvent event) {
 
-                if (file.exists()) {
-                    try {
-                        ChestGUI gui = new ChestGUI("&7" + player.getName() + "&r&7's inventory", 3, false, false) {
-                            @EventHandler
-                            public void onItemMove(InventoryEvent event) {
-
-                            }
-                        };
-
-                        NBTTagCompound nbt = NBTCompressedStreamTools.a(file);
-                        NBTTagList items = (NBTTagList) nbt.c("Inventory");
-                        for (NBTBase item: items) {
-                            gui.addItem(CraftItemStack.asBukkitCopy(ItemStack.a((NBTTagCompound) item)), ((NBTTagInt) ((NBTTagCompound) item).c("Slot")).f());
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
+                };
+
+                Player onlinePlayer2 = SpigotMain.getInstance().getServer().getPlayer(args[0]);
+
+                if (onlinePlayer2 != null) {
+                    for (Integer i = 9; i < 36; i++) {
+                        gui.addItem(onlinePlayer2.getInventory().getItem(i), i - 9);
+                    }
+
+                    for (Integer i = 0; i < 9; i++) {
+                        gui.addItem(onlinePlayer2.getInventory().getItem(i), 27 + i);
+                    }
+
+                    gui.addItem(onlinePlayer2.getInventory().getItem(100), 30);
+                    gui.addItem(onlinePlayer2.getInventory().getItem(101), 29);
+                    gui.addItem(onlinePlayer2.getInventory().getItem(102), 28);
+                    gui.addItem(onlinePlayer2.getInventory().getItem(103), 27);
+
+                    gui.addItem(onlinePlayer2.getInventory().getItem(-106), 31);
                 } else {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                    File file = new File(SpigotMain.getInstance().getServer().getWorldContainer() + "/" + SpigotMain.getInstance().getServer().getWorlds().get(0).getName() + "/playerdata/" + player.getUniqueId().toString() + ".dat");
+
+                    if (file.exists()) {
+                        try {
+                            NBTTagCompound nbt = NBTCompressedStreamTools.a(file);
+                            NBTTagList items = (NBTTagList) nbt.c("Inventory");
+                            for (NBTBase item : items) {
+                                gui.addItem(CraftItemStack.asBukkitCopy(ItemStack.a((NBTTagCompound) item)), ((NBTTagInt) ((NBTTagCompound) item).c("Slot")).f());
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                    }
                 }
+
+                gui.open(player);
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
             }
