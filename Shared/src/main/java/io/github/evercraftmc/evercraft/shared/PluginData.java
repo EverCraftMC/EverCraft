@@ -1,6 +1,8 @@
 package io.github.evercraftmc.evercraft.shared;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PluginData {
@@ -9,6 +11,16 @@ public class PluginData {
             public Boolean passive = false;
 
             public Boolean commandspy = false;
+        }
+
+        public static class FriendInvite {
+            public String uuid;
+            public Boolean inbound;
+
+            public FriendInvite(String uuid, Boolean inbound) {
+                this.uuid = uuid;
+                this.inbound = inbound;
+            }
         }
 
         public static class Ban {
@@ -37,6 +49,9 @@ public class PluginData {
         public Long lastOnline = null;
 
         public Float balance = 0f;
+
+        public List<String> friends = new ArrayList<String>();
+        public List<FriendInvite> friendInvites = new ArrayList<FriendInvite>();
 
         public Settings settings = new Settings();
 
