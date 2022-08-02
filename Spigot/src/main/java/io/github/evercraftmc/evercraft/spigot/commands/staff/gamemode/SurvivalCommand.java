@@ -33,7 +33,7 @@ public class SurvivalCommand extends SpigotCommand {
             if (player != null) {
                 player.setGameMode(GameMode.SURVIVAL);
 
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().gamemodeOther.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{gamemode}", "survival"))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().gamemodeOther.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{gamemode}", "survival"))));
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
             }

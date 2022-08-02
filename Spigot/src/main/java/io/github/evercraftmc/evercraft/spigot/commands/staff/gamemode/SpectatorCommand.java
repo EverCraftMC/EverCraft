@@ -33,7 +33,7 @@ public class SpectatorCommand extends SpigotCommand {
             if (player != null) {
                 player.setGameMode(GameMode.SPECTATOR);
 
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().gamemodeOther.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{gamemode}", "spectator"))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().gamemodeOther.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{gamemode}", "spectator"))));
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
             }
