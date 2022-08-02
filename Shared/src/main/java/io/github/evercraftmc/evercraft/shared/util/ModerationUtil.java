@@ -2,7 +2,7 @@ package io.github.evercraftmc.evercraft.shared.util;
 
 public class ModerationUtil {
     private static final String[] inappropriateRegexes = new String[] {};
-    // More Strict: { "ass(hole)?(s)?", "bastard(s)?", "bitch(es)?", "blowjob(s)?", "clitoris(es)?", "cock(s)?", "cocksucker(s)?", "cunt(s)?", "cum(s)?", "cumsock(s)?", "dick(s)?", "fu(c)?k(er)?(s)?", "fuck(ing)?", "motherfuck(er)?(s)?", "gay", "nigg(a)?(s)?", "nig(g)?er(s)?", "penis(es)?", "pp(s)", "pervert(s)?", "porn", "pornstar(s)?", "prostitute(s)?", "pussy", "pussies", "shit(s)?", "shit(er)?", "slut(s)?", "sex(y)?", "vag", "vagina(s)?", "whore(s)?" }
+    // More Strict: { "ass(hole)?(s)?", "bastard(s)?", "bitch(es)?", "blowjob(s)?", "clitoris(es)?", "cock(s)?", "cocksucker(s)?", "cum(s)?", "cumsock(s)?", "dick(s)?", "fu(c)?k(er)?(s)?", "fuck(ing)?", "motherfuck(er)?(s)?", "gay", "penis(es)?", "pp(s)", "pervert(s)?", "porn", "pornstar(s)?", "prostitute(s)?", "pussy", "pussies", "shit(s)?", "shit(er)?", "slut(s)?", "sex(y)?", "vag", "vagina(s)?", "whore(s)?" }
     private static final String[] inappropriateWords = new String[] {};
     // More Strict: { "fu", ".|." }
 

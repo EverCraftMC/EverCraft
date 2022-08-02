@@ -174,7 +174,7 @@ public class MessageListener extends BungeeListener {
 
                 if (!message.equalsIgnoreCase("/")) {
                     for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
-                        if (player2 != player && player2.hasPermission("evercraft.commands.staff.commandspy") && BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.commandspy) {
+                        if (player2 != player && player2.hasPermission("evercraft.commands.staff.commandspy") && BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).settings.commandspy) {
                             if (!(!player2.hasPermission("evercraft.commands.staff.commandspy.extra") && (message.startsWith("/message") || message.startsWith("/msg") || message.startsWith("/reply") || message.startsWith("/r") || message.startsWith("/staffchat") || message.startsWith("/sc")))) {
                                 if (player2.getServer().getInfo().getName().equalsIgnoreCase(sender)) {
                                     player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().chat.commandSpy.replace("{player}", player.getDisplayName()).replace("{message}", message))));
@@ -212,7 +212,7 @@ public class MessageListener extends BungeeListener {
                 ProxiedPlayer player = BungeePlayerResolver.bungeePlayerFromPlayer(BungeePlayerResolver.playerFromConnection(BungeeMain.getInstance().getPluginData(), event.getSender()));
 
                 for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
-                    if (player2 != player && player2.hasPermission("evercraft.commands.staff.commandspy") && BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.commandspy) {
+                    if (player2 != player && player2.hasPermission("evercraft.commands.staff.commandspy") && BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).settings.commandspy) {
                         player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().chat.commandSpy.replace("{player}", player.getDisplayName()).replace("{message}", message))));
                     }
                 }
