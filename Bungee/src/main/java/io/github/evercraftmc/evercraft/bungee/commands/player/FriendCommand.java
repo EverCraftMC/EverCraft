@@ -52,6 +52,7 @@ public class FriendCommand extends BungeeCommand {
 
                                     BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friends.add(player2.getUniqueId().toString());
                                     BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friends.add(player.getUniqueId().toString());
+                                    BungeeMain.getInstance().getPluginData().save();
 
                                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.add.replace("{player}", player2.getDisplayName()))));
                                     player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.added.replace("{player}", player.getDisplayName()))));
@@ -70,6 +71,7 @@ public class FriendCommand extends BungeeCommand {
                                 if (!alreadyInvited) {
                                     BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friendInvites.add(new PluginData.Player.FriendInvite(player2.getUniqueId().toString(), false));
                                     BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites.add(new PluginData.Player.FriendInvite(player.getUniqueId().toString(), true));
+                                    BungeeMain.getInstance().getPluginData().save();
 
                                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.invite.replace("{player}", player2.getDisplayName()))));
                                     player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.invited.replace("{player}", player.getDisplayName()))));
@@ -114,6 +116,8 @@ public class FriendCommand extends BungeeCommand {
                             }
 
                             if (removed) {
+                                BungeeMain.getInstance().getPluginData().save();
+
                                 player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.remove.replace("{player}", player2.getDisplayName()))));
                                 player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.removed.replace("{player}", player.getDisplayName()))));
                             } else {
