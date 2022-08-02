@@ -48,17 +48,17 @@ public class BungeeMessages {
     }
 
     public static class Friend {
-        public String invite = "&aInvited {player} to be your friend";
-        public String invited = "&a{player} invited you to be their friend";
-        public String alreadyInvited = "&c{player} is already your friend!";
+        public String invite = "&aInvited {player} &r&ato be your friend";
+        public String invited = "&a{player} &r&ainvited you to be their friend";
+        public String alreadyInvited = "&c{player} &r&cis already your friend!";
 
-        public String add = "&a{player} is now your friend!";
-        public String added = "&a{player} is now your friend!";
-        public String alreadyFriends = "&c{player} is already your friend!";
+        public String add = "&a{player} &r&ais now your friend!";
+        public String added = "&a{player} &r&ais now your friend!";
+        public String alreadyFriends = "&c{player} &r&cis already your friend!";
 
-        public String remove = "&c{player} is no longer your friend";
-        public String removed = "&c{player} is no longer your friend";
-        public String notFriends = "&c{player} is not your friend!";
+        public String remove = "&c{player} &r&cis no longer your friend";
+        public String removed = "&c{player} &r&cis no longer your friend";
+        public String notFriends = "&c{player} &r&cis not your friend!";
 
         public String list = "&a&lFriends\n&r&a{friends}";
         public String listInvites = list + "\n&a&lInvites\n&r&a{invites}";
@@ -197,6 +197,8 @@ public class BungeeMessages {
     public String vote = "&aThanks so much for voting {player}&r&a! /vote";
 
     public Friend friend = new Friend();
+    
+    public String settings = "&aSuccessfully set {setting} to {value}";
 
     public Warp warp = new Warp();
 
