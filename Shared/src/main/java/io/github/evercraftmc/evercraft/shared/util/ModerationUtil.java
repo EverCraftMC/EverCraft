@@ -6,7 +6,7 @@ public class ModerationUtil {
     private static final String[] inappropriateWords = new String[] {};
     // More Strict: { "fu", ".|." }
 
-    private static final String[] superInappropriateRegexes = new String[] { "nig(g)?(a)(s)?", "nig(g)?er(s)?" };
+    private static final String[] superInappropriateRegexes = new String[] { "nig(g)?(a)(s)?", "nig(g)?er(s)?", "cunt(s)?" };
     private static final String[] superInappropriateWords = new String[] {};
 
     public static boolean isInappropriateString(String string) {
