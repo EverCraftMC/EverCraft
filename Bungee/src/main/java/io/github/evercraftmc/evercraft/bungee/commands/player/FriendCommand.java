@@ -23,7 +23,7 @@ public class FriendCommand extends BungeeCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof ProxiedPlayer player) {
             if (args.length > 1) {
-                if (args[0] == "add") {
+                if (args[0].equalsIgnoreCase("add")) {
                     if (args.length > 2) {
                         ProxiedPlayer player2 = BungeeMain.getInstance().getProxy().getPlayer(args[1]);
 
@@ -83,7 +83,7 @@ public class FriendCommand extends BungeeCommand {
                     } else {
                         player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
                     }
-                } else if (args[0] == "remove") {
+                } else if (args[0].equalsIgnoreCase("remove")) {
                     if (args.length > 2) {
                         ProxiedPlayer player2 = BungeeMain.getInstance().getProxy().getPlayer(args[1]);
 
@@ -125,7 +125,7 @@ public class FriendCommand extends BungeeCommand {
                     } else {
                         player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
                     }
-                } else if (args[0] == "list") {
+                } else if (args[0].equalsIgnoreCase("list")) {
                     StringBuilder friends = new StringBuilder();
 
                     for (String friend : BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friends) {
