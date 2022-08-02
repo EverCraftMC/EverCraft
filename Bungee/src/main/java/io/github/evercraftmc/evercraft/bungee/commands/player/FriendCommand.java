@@ -39,13 +39,13 @@ public class FriendCommand extends BungeeCommand {
 
                             if (hasInvite) {
                                 if (!BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friends.contains(player2.getUniqueId().toString())) {
-                                    for (PluginData.Player.FriendInvite friendInvite : BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friendInvites) {
+                                    for (PluginData.Player.FriendInvite friendInvite : new ArrayList<PluginData.Player.FriendInvite>(BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friendInvites)) {
                                         if (friendInvite.uuid.equals(player2.getUniqueId().toString())) {
                                             BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites.remove(friendInvite);
                                         }
                                     }
 
-                                    for (PluginData.Player.FriendInvite friendInvite : BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites) {
+                                    for (PluginData.Player.FriendInvite friendInvite : new ArrayList<PluginData.Player.FriendInvite>(BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites)) {
                                         if (friendInvite.uuid.equals(player.getUniqueId().toString())) {
                                             BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites.remove(friendInvite);
                                         }
@@ -93,7 +93,7 @@ public class FriendCommand extends BungeeCommand {
                         if (player2 != null) {
                             Boolean removed = false;
 
-                            for (PluginData.Player.FriendInvite friendInvite : BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friendInvites) {
+                            for (PluginData.Player.FriendInvite friendInvite : new ArrayList<PluginData.Player.FriendInvite>(BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friendInvites)) {
                                 if (friendInvite.uuid.equals(player2.getUniqueId().toString())) {
                                     BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites.remove(friendInvite);
 
@@ -101,7 +101,7 @@ public class FriendCommand extends BungeeCommand {
                                 }
                             }
 
-                            for (PluginData.Player.FriendInvite friendInvite : BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites) {
+                            for (PluginData.Player.FriendInvite friendInvite : new ArrayList<PluginData.Player.FriendInvite>(BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites)) {
                                 if (friendInvite.uuid.equals(player.getUniqueId().toString())) {
                                     BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites.remove(friendInvite);
 
