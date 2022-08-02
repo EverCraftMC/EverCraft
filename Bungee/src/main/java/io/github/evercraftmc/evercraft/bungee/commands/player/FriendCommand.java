@@ -3,6 +3,7 @@ package io.github.evercraftmc.evercraft.bungee.commands.player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.commands.BungeeCommand;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
@@ -133,7 +134,7 @@ public class FriendCommand extends BungeeCommand {
                     StringBuilder friends = new StringBuilder();
 
                     for (String friend : BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friends) {
-                        SimplePlayer player2 = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), friend);
+                        SimplePlayer player2 = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), UUID.fromString(friend));
 
                         friends.append(player2.getDisplayName() + "\n&r&a");
                     }
@@ -142,7 +143,7 @@ public class FriendCommand extends BungeeCommand {
                         StringBuilder friendInvites = new StringBuilder();
 
                         for (PluginData.Player.FriendInvite friend : BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friendInvites) {
-                            SimplePlayer player2 = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), friend.uuid);
+                            SimplePlayer player2 = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), UUID.fromString(friend.uuid));
 
                             friendInvites.append((friend.inbound ? "&aInbound " : "&aOutbound ") + player2.getDisplayName() + "\n&r&a");
                         }
