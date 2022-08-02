@@ -18,6 +18,7 @@ import io.github.evercraftmc.evercraft.bungee.commands.moderation.TempBanCommand
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.TempMuteCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.UnBanCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.UnMuteCommand;
+import io.github.evercraftmc.evercraft.bungee.commands.player.FriendCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.MessageCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.NickNameCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.ReplyCommand;
@@ -124,6 +125,8 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.commands.add(new BalanceCommand("balance", "Check your balance", Arrays.asList("bal"), "evercraft.commands.economy.balance").register());
         this.commands.add(new EconomyCommand("economy", "Modify someones balance", Arrays.asList("eco"), "evercraft.commands.economy.economy").register());
+
+        this.commands.add(new FriendCommand("friend", "Manage your friends", Arrays.asList("friends", "f"), "evercraft.commands.player.friend").register());
 
         this.commands.add(new HubCommand("hub", "Go to the hub", Arrays.asList("lobby"), "evercraft.commands.warp.hub").register());
 
