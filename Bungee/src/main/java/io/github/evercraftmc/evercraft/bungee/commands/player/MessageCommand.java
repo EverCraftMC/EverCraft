@@ -10,6 +10,7 @@ import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.commands.BungeeCommand;
 import io.github.evercraftmc.evercraft.bungee.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.util.ModerationUtil;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
@@ -36,7 +37,9 @@ public class MessageCommand extends BungeeCommand {
                         message.append(args[i] + " ");
                     }
 
-                    if (!BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted) {
+                    if (BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).settings.messaging != PluginData.Player.Settings.MessageSetting.EVERYONE && !(BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).settings.messaging == PluginData.Player.Settings.MessageSetting.FRIENDS && BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friends.contains(player.getUniqueId().toString()))) {
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().chat.cantDM)));
+                    } else if (!BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted) {
                         if (ModerationUtil.isSuperInappropriateString(message.toString().trim())) {
                             BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(BungeeMain.getInstance().getProxy().getConsole(), "tempmute " + player.getName() + " 1h No");
                         } else if (ModerationUtil.isInappropriateString(message.toString().trim())) {

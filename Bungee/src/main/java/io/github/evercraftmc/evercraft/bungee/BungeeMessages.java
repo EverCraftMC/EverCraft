@@ -19,6 +19,7 @@ public class BungeeMessages {
         public String main = "{player} &r> {message}";
         public String dm = "&8[DM] {player1} &r-> {player2} &r> {message}";
         public String noReplyTo = "&cYou do not have anyone to reply to";
+        public String cantDM = "&cYou can't message that person";
         public String staff = "&d&l[Staffchat] &r{player} &r> {message}";
         public String discord = "&b&l[Discord] &r{player} &r> {message}";
         public String commandSpy = "&d&l[Commandspy] &r{player} &rran {message}";
@@ -197,7 +198,7 @@ public class BungeeMessages {
     public String vote = "&aThanks so much for voting {player}&r&a! /vote";
 
     public Friend friend = new Friend();
-    
+
     public String settings = "&aSuccessfully set {setting} to {value}";
 
     public Warp warp = new Warp();
