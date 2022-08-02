@@ -19,8 +19,8 @@ import io.github.evercraftmc.evercraft.spigot.util.bukkit.ChestGUI;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTCompressedStreamTools;
+import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.item.ItemStack;
 
@@ -35,7 +35,7 @@ public class InviSeeCommand extends SpigotCommand {
             OfflinePlayer player2 = SpigotMain.getInstance().getServer().getOfflinePlayer(args[0]);
 
             if (player2 != null) {
-                ChestGUI gui = new ChestGUI("&7" + player.getName() + "&r&7's inventory", 5, false, false) {
+                ChestGUI gui = new ChestGUI("&7" + player2.getName() + "&r&7's inventory", 5, false, false) {
                     @EventHandler
                     public void onItemMove(InventoryEvent event) {
 
@@ -53,12 +53,12 @@ public class InviSeeCommand extends SpigotCommand {
                         gui.addItem(onlinePlayer2.getInventory().getItem(i), 27 + i);
                     }
 
-                    gui.addItem(onlinePlayer2.getInventory().getItem(100), 30);
-                    gui.addItem(onlinePlayer2.getInventory().getItem(101), 29);
-                    gui.addItem(onlinePlayer2.getInventory().getItem(102), 28);
-                    gui.addItem(onlinePlayer2.getInventory().getItem(103), 27);
+                    gui.addItem(onlinePlayer2.getInventory().getHelmet(), 27);
+                    gui.addItem(onlinePlayer2.getInventory().getChestplate(), 28);
+                    gui.addItem(onlinePlayer2.getInventory().getLeggings(), 29);
+                    gui.addItem(onlinePlayer2.getInventory().getBoots(), 30);
 
-                    gui.addItem(onlinePlayer2.getInventory().getItem(-106), 31);
+                    gui.addItem(onlinePlayer2.getInventory().getItemInOffHand(), 31);
                 } else {
                     File file = new File(SpigotMain.getInstance().getServer().getWorldContainer() + "/" + SpigotMain.getInstance().getServer().getWorlds().get(0).getName() + "/playerdata/" + player.getUniqueId().toString() + ".dat");
 
@@ -67,7 +67,7 @@ public class InviSeeCommand extends SpigotCommand {
                             NBTTagCompound nbt = NBTCompressedStreamTools.a(file);
                             NBTTagList items = (NBTTagList) nbt.c("Inventory");
                             for (NBTBase item : items) {
-                                gui.addItem(CraftItemStack.asBukkitCopy(ItemStack.a((NBTTagCompound) item)), ((NBTTagInt) ((NBTTagCompound) item).c("Slot")).f());
+                                gui.addItem(CraftItemStack.asBukkitCopy(ItemStack.a((NBTTagCompound) item)), (int) ((NBTTagByte) ((NBTTagCompound) item).c("Slot")).a());
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
