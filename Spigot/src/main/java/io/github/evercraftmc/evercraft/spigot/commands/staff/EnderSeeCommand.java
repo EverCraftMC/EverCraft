@@ -49,7 +49,7 @@ public class EnderSeeCommand extends SpigotCommand {
                         gui.addItem(onlinePlayer2.getEnderChest().getItem(i), i);
                     }
                 } else {
-                    File file = new File(SpigotMain.getInstance().getServer().getWorldContainer() + "/" + SpigotMain.getInstance().getServer().getWorlds().get(0).getName() + "/playerdata/" + player.getUniqueId().toString() + ".dat");
+                    File file = new File(SpigotMain.getInstance().getServer().getWorldContainer() + "/" + SpigotMain.getInstance().getServer().getWorlds().get(0).getName() + "/playerdata/" + player2.getUniqueId().toString() + ".dat");
 
                     if (file.exists()) {
                         try {
