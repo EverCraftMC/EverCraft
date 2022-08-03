@@ -22,17 +22,17 @@ public class SettingsCommand extends BungeeCommand {
         if (sender instanceof ProxiedPlayer player) {
             if (args.length > 1) {
                 if (args[0].equalsIgnoreCase("messaging")) {
-                    if (args[0].equalsIgnoreCase("everyone")) {
+                    if (args[1].equalsIgnoreCase("everyone")) {
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.messaging = PluginData.Player.Settings.MessageSetting.EVERYONE;
                         BungeeMain.getInstance().getPluginData().save();
 
                         player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().settings.replace("{setting}", "messaging").replace("{value}", "everyone"))));
-                    } else if (args[0].equalsIgnoreCase("friends")) {
+                    } else if (args[1].equalsIgnoreCase("friends")) {
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.messaging = PluginData.Player.Settings.MessageSetting.FRIENDS;
                         BungeeMain.getInstance().getPluginData().save();
 
                         player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().settings.replace("{setting}", "messaging").replace("{value}", "friends"))));
-                    } else if (args[0].equalsIgnoreCase("noone")) {
+                    } else if (args[1].equalsIgnoreCase("noone")) {
                         BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.messaging = PluginData.Player.Settings.MessageSetting.NOONE;
                         BungeeMain.getInstance().getPluginData().save();
 
@@ -57,10 +57,10 @@ public class SettingsCommand extends BungeeCommand {
 
         if (args.length == 1) {
             list.add("messaging");
-        } else if (args.length == 2 && (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove"))) {
-            for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
-                list.add(player.getName());
-            }
+        } else if (args.length == 2 && (args[0].equalsIgnoreCase("messaging"))) {
+            list.add("everyone");
+            list.add("friends");
+            list.add("noone");
         } else {
             return Arrays.asList();
         }
