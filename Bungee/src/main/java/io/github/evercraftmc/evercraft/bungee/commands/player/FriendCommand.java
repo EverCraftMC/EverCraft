@@ -110,8 +110,8 @@ public class FriendCommand extends BungeeCommand {
                             }
 
                             if (BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friends.add(player2.getUniqueId().toString())) {
-                                BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friends.add(player2.getUniqueId().toString());
-                                BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friends.add(player.getUniqueId().toString());
+                                BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friends.remove(player2.getUniqueId().toString());
+                                BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friends.remove(player.getUniqueId().toString());
 
                                 removed = true;
                             }
