@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
+import io.github.evercraftmc.evercraft.spigot.SpigotChests;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
@@ -51,6 +52,7 @@ public class ChestProtectionCommand extends SpigotCommand {
 
                             player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().chestProtection.unprotected)));
                         } else if (args[0].equalsIgnoreCase("claim") && !SpigotMain.getInstance().getChests().getParsed().blocks.containsKey(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName())) {
+                            SpigotMain.getInstance().getChests().getParsed().blocks.put(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName(), new SpigotChests.Chest());
                             SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).isProtected = true;
                             SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner = player.getUniqueId().toString();
                             SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).allowUse = allowUse;

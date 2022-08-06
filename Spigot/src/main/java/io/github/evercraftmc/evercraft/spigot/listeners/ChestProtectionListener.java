@@ -12,6 +12,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
+import io.github.evercraftmc.evercraft.spigot.SpigotChests;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 
@@ -59,6 +60,7 @@ public class ChestProtectionListener extends SpigotListener {
         }
 
         if (protectable) {
+            SpigotMain.getInstance().getChests().getParsed().blocks.put(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName(), new SpigotChests.Chest());
             SpigotMain.getInstance().getChests().getParsed().blocks.get(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName()).isProtected = true;
             SpigotMain.getInstance().getChests().getParsed().blocks.get(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName()).owner = event.getPlayer().getUniqueId().toString();
             SpigotMain.getInstance().getChests().getParsed().blocks.get(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName()).allowUse = allowUse;
@@ -88,11 +90,13 @@ public class ChestProtectionListener extends SpigotListener {
         }
 
         if (protectable) {
+            SpigotMain.getInstance().getChests().getParsed().blocks.put(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName(), new SpigotChests.Chest());
             SpigotMain.getInstance().getChests().getParsed().blocks.get(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName()).isProtected = true;
             SpigotMain.getInstance().getChests().getParsed().blocks.get(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName()).owner = event.getPlayer().getUniqueId().toString();
             SpigotMain.getInstance().getChests().getParsed().blocks.get(event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + event.getBlock().getWorld().getName()).allowUse = allowUse;
 
             for (BlockState block : event.getReplacedBlockStates()) {
+                SpigotMain.getInstance().getChests().getParsed().blocks.put(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName(), new SpigotChests.Chest());
                 SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).isProtected = true;
                 SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner = event.getPlayer().getUniqueId().toString();
                 SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).allowUse = allowUse;
