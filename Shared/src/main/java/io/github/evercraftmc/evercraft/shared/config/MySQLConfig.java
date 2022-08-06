@@ -31,8 +31,11 @@ public class MySQLConfig<T> extends Config<T> {
 
     public T getParsed() {
         if (Instant.now().getEpochSecond() > this.configExpiresAt) {
-            this.config = gson.fromJson(mysql.selectFirst(this.tableName, "data", "keyName = '" + this.keyName + "'"), clazz);
-            this.configExpiresAt = Instant.now().getEpochSecond() + 1;
+            String data = mysql.selectFirst(this.tableName, "data", "keyName = '" + this.keyName + "'");
+            if (!data.equals("RES:EMPTY")) {
+                this.config = gson.fromJson(data, clazz);
+                this.configExpiresAt = Instant.now().getEpochSecond() + 1;
+            }
         }
 
         return this.config;
@@ -46,10 +49,13 @@ public class MySQLConfig<T> extends Config<T> {
         String json = gson.toJson(this.config);
 
         if (json != null) {
-            if (mysql.selectFirst(this.tableName, "data", "keyName = '" + this.keyName + "'") == null) {
-                mysql.insert(this.tableName, "('" + this.keyName + "', '" + json + "')");
-            } else {
-                mysql.update(this.tableName, "data = '" + json + "'", "keyName = '" + this.keyName + "'");
+            String data = mysql.selectFirst(this.tableName, "data", "keyName = '" + this.keyName + "'");
+            if (data == null || !data.equals("RES:EMPTY")) {
+                if (data == null) {
+                    mysql.insert(this.tableName, "('" + this.keyName + "', '" + json + "')");
+                } else {
+                    mysql.update(this.tableName, "data = '" + json + "'", "keyName = '" + this.keyName + "'");
+                }
             }
         }
     }
