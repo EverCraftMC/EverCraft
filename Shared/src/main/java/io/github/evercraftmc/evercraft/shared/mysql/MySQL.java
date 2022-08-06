@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Instant;
+import java.util.Timer;
+import java.util.TimerTask;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 
 public class MySQL implements Closable {
@@ -16,6 +19,9 @@ public class MySQL implements Closable {
     private String password;
 
     private Connection connection;
+
+    private Integer reconnectTimeout = 0;
+    private Long lastReconnect = 0l;
 
     private Boolean closed = false;
 
@@ -35,9 +41,18 @@ public class MySQL implements Closable {
     }
 
     @SuppressWarnings("unused")
-    private class Query {
+    private static class Query {
+        private static final Query EMPTY;
+
+        static {
+            EMPTY = new Query(null, null);
+            EMPTY.isEmpty = true;
+        }
+
         private Statement statement;
         private ResultSet results;
+
+        private Boolean isEmpty = false;
 
         protected Query(Statement statement, ResultSet results) {
             this.statement = statement;
@@ -50,6 +65,10 @@ public class MySQL implements Closable {
 
         public ResultSet getResults() {
             return this.results;
+        }
+
+        public Boolean isEmpty() {
+            return this.isEmpty;
         }
 
         public void close() {
@@ -67,41 +86,67 @@ public class MySQL implements Closable {
 
     public void query(String query) {
         try {
-            if (!this.connection.isClosed()) {
-                Statement statement = this.connection.createStatement();
+            Statement statement = this.connection.createStatement();
 
-                statement.execute(query);
+            statement.execute(query);
 
-                statement.close();
-            } else {
-                this.reconnect();
-
-                this.query(query);
-            }
+            statement.close();
         } catch (SQLException e) {
-            this.reconnect();
+            if (e.getMessage().startsWith("The last packet successfully received from the server was ")) {
+                System.out.println("Lost mysql connection, reconnecting in " + reconnectTimeout);
 
-            this.query(query);
+                new Timer().schedule(new TimerTask() {
+                    public void run() {
+                        if (Instant.now().getEpochSecond() - lastReconnect > 300) {
+                            reconnectTimeout = 0;
+                        }
+
+                        reconnectTimeout++;
+                        lastReconnect = Instant.now().getEpochSecond();
+
+                        reconnect();
+
+                        query(query);
+                    }
+                }, reconnectTimeout * 1000);
+            } else {
+                e.printStackTrace();
+            }
         }
     }
 
     public Query queryResponse(String query) {
         try {
-            if (!this.connection.isClosed()) {
-                Statement statement = this.connection.createStatement();
+            Statement statement = this.connection.createStatement();
 
-                ResultSet results = statement.executeQuery(query);
+            ResultSet results = statement.executeQuery(query);
 
-                return new Query(statement, results);
-            } else {
-                this.reconnect();
-
-                return this.queryResponse(query);
-            }
+            return new Query(statement, results);
         } catch (SQLException e) {
-            this.reconnect();
+            if (e.getMessage().startsWith("The last packet successfully received from the server was ")) {
+                System.out.println("Lost mysql connection, reconnecting in " + reconnectTimeout);
 
-            return this.queryResponse(query);
+                new Timer().schedule(new TimerTask() {
+                    public void run() {
+                        if (Instant.now().getEpochSecond() - lastReconnect > 300) {
+                            reconnectTimeout = 0;
+                        }
+
+                        reconnectTimeout++;
+                        lastReconnect = Instant.now().getEpochSecond();
+
+                        reconnect();
+
+                        query(query);
+                    }
+                }, reconnectTimeout * 1000);
+
+                return Query.EMPTY;
+            } else {
+                e.printStackTrace();
+
+                return Query.EMPTY;
+            }
         }
     }
 
@@ -116,43 +161,53 @@ public class MySQL implements Closable {
     public String select(String table, String[] fields, String condition) {
         Query query = queryResponse("SELECT * FROM " + table + " " + "WHERE " + condition + ";");
 
-        StringBuilder ret = new StringBuilder();
+        if (!query.isEmpty()) {
+            try {
+                StringBuilder ret = new StringBuilder();
 
-        try {
-            while (query.getResults().next()) {
-                for (String field : fields) {
-                    ret.append(query.getResults().getString(field) + "\t");
+                while (query.getResults().next()) {
+                    for (String field : fields) {
+                        ret.append(query.getResults().getString(field) + "\t");
+                    }
+
+                    ret = new StringBuilder(ret.substring(0, ret.length() - 1) + "\n");
                 }
 
-                ret = new StringBuilder(ret.substring(0, ret.length() - 1) + "\n");
+                query.close();
+
+                return ret.toString();
+            } catch (SQLException e) {
+                e.printStackTrace();
+
+                return "RES:EMPTY";
             }
-
-            query.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } else {
+            return "RES:EMPTY";
         }
-
-        return ret.toString();
     }
 
     public String selectFirst(String table, String field, String condition) {
         Query query = queryResponse("SELECT * FROM " + table + " " + "WHERE " + condition + ";");
 
-        try {
-            String res = null;
+        if (!query.isEmpty()) {
+            try {
+                String res = null;
 
-            if (query.getResults().next()) {
-                res = query.getResults().getString(field);
+                if (query.getResults().next()) {
+                    res = query.getResults().getString(field);
+                }
+
+                query.close();
+
+                return res;
+            } catch (SQLException e) {
+                e.printStackTrace();
+
+                return "RES:EMPTY";
             }
-
-            query.close();
-
-            return res;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } else {
+            return "RES:EMPTY";
         }
-
-        return null;
     }
 
     public void insert(String table, String values) {
