@@ -93,22 +93,35 @@ public class MySQL implements Closable {
             statement.close();
         } catch (SQLException e) {
             if (e.getMessage().startsWith("The last packet successfully received from the server was ")) {
-                System.out.println("Lost mysql connection, reconnecting in " + reconnectTimeout);
+                System.out.println("Lost mysql connection, reconnecting in " + reconnectTimeout + "..");
 
-                new Timer().schedule(new TimerTask() {
-                    public void run() {
-                        if (Instant.now().getEpochSecond() - lastReconnect > 300) {
-                            reconnectTimeout = 0;
+                if (reconnectTimeout != 0) {
+                    new Timer().schedule(new TimerTask() {
+                        public void run() {
+                            if (Instant.now().getEpochSecond() - lastReconnect > 300) {
+                                reconnectTimeout = 0;
+                            }
+
+                            reconnectTimeout++;
+                            lastReconnect = Instant.now().getEpochSecond();
+
+                            reconnect();
+
+                            query(query);
                         }
-
-                        reconnectTimeout++;
-                        lastReconnect = Instant.now().getEpochSecond();
-
-                        reconnect();
-
-                        query(query);
+                    }, reconnectTimeout * 1000);
+                } else {
+                    if (Instant.now().getEpochSecond() - lastReconnect > 300) {
+                        reconnectTimeout = 0;
                     }
-                }, reconnectTimeout * 1000);
+
+                    reconnectTimeout++;
+                    lastReconnect = Instant.now().getEpochSecond();
+
+                    reconnect();
+
+                    query(query);
+                }
             } else {
                 e.printStackTrace();
             }
@@ -124,24 +137,37 @@ public class MySQL implements Closable {
             return new Query(statement, results);
         } catch (SQLException e) {
             if (e.getMessage().startsWith("The last packet successfully received from the server was ")) {
-                System.out.println("Lost mysql connection, reconnecting in " + reconnectTimeout);
+                System.out.println("Lost mysql connection, reconnecting in " + reconnectTimeout + "..");
 
-                new Timer().schedule(new TimerTask() {
-                    public void run() {
-                        if (Instant.now().getEpochSecond() - lastReconnect > 300) {
-                            reconnectTimeout = 0;
+                if (reconnectTimeout != 0) {
+                    new Timer().schedule(new TimerTask() {
+                        public void run() {
+                            if (Instant.now().getEpochSecond() - lastReconnect > 300) {
+                                reconnectTimeout = 0;
+                            }
+
+                            reconnectTimeout++;
+                            lastReconnect = Instant.now().getEpochSecond();
+
+                            reconnect();
+
+                            query(query);
                         }
+                    }, reconnectTimeout * 1000);
 
-                        reconnectTimeout++;
-                        lastReconnect = Instant.now().getEpochSecond();
-
-                        reconnect();
-
-                        query(query);
+                    return Query.EMPTY;
+                } else {
+                    if (Instant.now().getEpochSecond() - lastReconnect > 300) {
+                        reconnectTimeout = 0;
                     }
-                }, reconnectTimeout * 1000);
 
-                return Query.EMPTY;
+                    reconnectTimeout++;
+                    lastReconnect = Instant.now().getEpochSecond();
+
+                    reconnect();
+
+                    return queryResponse(query);
+                }
             } else {
                 e.printStackTrace();
 
