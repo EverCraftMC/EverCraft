@@ -8,6 +8,7 @@ import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
+import io.github.evercraftmc.evercraft.spigot.SpigotChests;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
@@ -19,6 +20,10 @@ public class JoinListener extends SpigotListener {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("GetServer");
         event.getPlayer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
+
+        if (!SpigotMain.getInstance().getChests().getParsed().players.containsKey(event.getPlayer().getUniqueId().toString())) {
+            SpigotMain.getInstance().getChests().getParsed().players.put(event.getPlayer().getUniqueId().toString(), new SpigotChests.Player());
+        }
 
         event.joinMessage(Component.empty());
 
