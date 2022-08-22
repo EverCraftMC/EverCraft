@@ -44,6 +44,10 @@ public class LimboMain extends LimboPlugin implements Plugin {
         this.config = new FileConfig<LimboConfig>(LimboConfig.class, this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
 
+        if (this.config.getParsed() != null) {
+            this.config.save();
+        }
+
         this.serverName = this.config.getParsed().serverName;
 
         System.out.println("Finished loading config");
@@ -52,6 +56,10 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
         this.messages = new FileConfig<LimboMessages>(LimboMessages.class, this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
         this.messages.reload();
+
+        if (this.messages.getParsed() != null) {
+            this.messages.save();
+        }
 
         System.out.println("Finished loading messages");
 
@@ -84,6 +92,13 @@ public class LimboMain extends LimboPlugin implements Plugin {
     @Override
     public void onDisable() {
         System.out.println("Disabling plugin..");
+
+        System.out.println("Closing config..");
+
+        this.config.close();
+        this.messages.close();
+
+        System.out.println("Finished closing config..");
 
         System.out.println("Unregistering commands..");
 

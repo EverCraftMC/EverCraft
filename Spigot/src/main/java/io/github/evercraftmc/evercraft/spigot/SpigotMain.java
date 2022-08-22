@@ -87,10 +87,18 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.config = new FileConfig<SpigotConfig>(SpigotConfig.class, this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
 
+        if (this.config.getParsed() != null) {
+            this.config.save();
+        }
+
         this.serverName = this.config.getParsed().serverName;
 
         this.messages = new FileConfig<SpigotMessages>(SpigotMessages.class, this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
         this.messages.reload();
+
+        if (this.messages.getParsed() != null) {
+            this.messages.save();
+        }
 
         this.getLogger().info("Finished loading config");
 
@@ -105,12 +113,26 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.warps = new FileConfig<SpigotWarps>(SpigotWarps.class, this.getDataFolder().getAbsolutePath() + File.separator + "warps.json");
         this.warps.reload();
 
+        if (this.warps.getParsed() != null) {
+            this.warps.save();
+        }
+
         this.kits = new FileConfig<SpigotKits>(SpigotKits.class, this.getDataFolder().getAbsolutePath() + File.separator + "kits.json");
         this.kits.reload();
+
+        if (this.kits.getParsed() != null) {
+            this.kits.save();
+        }
 
         if (this.getPluginConfig().getParsed().chestProtection.enabled) {
             this.chests = new FileConfig<SpigotChests>(SpigotChests.class, this.getDataFolder().getAbsolutePath() + File.separator + "chests.json");
             this.chests.reload();
+
+            if (this.chests.getParsed() != null) {
+                this.chests.save();
+            }
+        } else {
+            this.chests = null;
         }
 
         this.getLogger().info("Finished loading other data..");
@@ -222,16 +244,27 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Closing config..");
 
-        config.close();
-        messages.close();
+        this.config.close();
+        this.messages.close();
 
         this.getLogger().info("Finished closing config..");
 
         this.getLogger().info("Closing player data..");
 
-        data.close();
+        this.data.close();
 
         this.getLogger().info("Finished closing player data..");
+
+        this.getLogger().info("Closing other data..");
+
+        this.warps.close();
+        this.kits.close();
+
+        if (this.chests != null) {
+            this.chests.close();
+        }
+
+        this.getLogger().info("Finished closing other data..");
 
         this.getLogger().info("Unregistering commands..");
 

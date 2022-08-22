@@ -90,8 +90,16 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.config = new FileConfig<BungeeConfig>(BungeeConfig.class, this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
 
+        if (this.config.getParsed() != null) {
+            this.config.save();
+        }
+
         this.messages = new FileConfig<BungeeMessages>(BungeeMessages.class, this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
         this.messages.reload();
+
+        if (this.messages.getParsed() != null) {
+            this.messages.save();
+        }
 
         this.getLogger().info("Finished loading config");
 
@@ -217,14 +225,14 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.getLogger().info("Closing config..");
 
-        config.close();
-        messages.close();
+        this.config.close();
+        this.messages.close();
 
         this.getLogger().info("Finished closing config..");
 
         this.getLogger().info("Closing player data..");
 
-        data.close();
+        this.data.close();
 
         this.getLogger().info("Finished closing player data..");
 
