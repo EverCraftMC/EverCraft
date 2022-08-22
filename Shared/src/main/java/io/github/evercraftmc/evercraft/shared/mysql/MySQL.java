@@ -136,7 +136,7 @@ public class MySQL implements Closable {
 
             return new Query(statement, results);
         } catch (SQLException e) {
-            if (e.getMessage().startsWith("The last packet successfully received from the server was ")) {
+            if (e.getMessage().startsWith("The last packet successfully received from the server was ") || (e.getCause() != null && e.getCause().getMessage().startsWith("The last packet successfully received from the server was "))) {
                 System.out.println("Lost mysql connection, reconnecting in " + reconnectTimeout + "..");
 
                 if (reconnectTimeout != 0) {
