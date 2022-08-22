@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
+import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
@@ -88,6 +89,8 @@ public class ScoreBoard implements Closable {
                             .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
                             .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
                             .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))));
+
+                        TabListUtil.updatePlayer(player, player.getServer().getInfo());
                     }
                 }
             }
