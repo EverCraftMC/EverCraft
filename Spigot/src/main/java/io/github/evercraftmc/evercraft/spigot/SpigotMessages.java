@@ -34,6 +34,10 @@ public class SpigotMessages {
         public String unprotected = "&cThis block is no longer protected";
         public String allowedUse = "&aThis block is now usable by others";
         public String disallowedUse = "&cThis block is no longer usable by others";
+        public String enabledAutoClaim = "&aSuccessfully enabled auto claim";
+        public String disabledAutoClaim = "&aSuccessfully disabled auto claim";
+        public String addedFriend = "&aSuccessfully added {player}&r&a as a friend";
+        public String removedFriend = "&aSuccessfully removed {player}&r&a as a friend";
         public String notYours = "&cIm sorry but that isn't yours >:(";
         public String noBlock = "&cYou must be looking at a block to do that";
     }
