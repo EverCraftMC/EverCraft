@@ -21,7 +21,7 @@ public class JoinListener extends SpigotListener {
         out.writeUTF("GetServer");
         event.getPlayer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
 
-        if (!SpigotMain.getInstance().getChests().getParsed().players.containsKey(event.getPlayer().getUniqueId().toString())) {
+        if (SpigotMain.getInstance().getChests() != null && !SpigotMain.getInstance().getChests().getParsed().players.containsKey(event.getPlayer().getUniqueId().toString())) {
             SpigotMain.getInstance().getChests().getParsed().players.put(event.getPlayer().getUniqueId().toString(), new SpigotChests.Player());
         }
 
