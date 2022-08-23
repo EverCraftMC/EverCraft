@@ -9,7 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -66,15 +65,6 @@ public class MessageListener extends SpigotListener implements PluginMessageList
 
             event.message(Component.empty());
         }
-    }
-
-    @EventHandler
-    public void onGamemodeChange(PlayerGameModeChangeEvent event) {
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("updateGamemode");
-        out.writeUTF(event.getPlayer().getUniqueId().toString());
-
-        event.getPlayer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
     }
 
     @EventHandler

@@ -90,7 +90,8 @@ public class ScoreBoard implements Closable {
                             .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
                             .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))));
 
-                        TabListUtil.updatePlayer(player, player.getServer().getInfo());
+                        TabListUtil.removeFromList(player);
+                        TabListUtil.addToList(player, player.getServer().getInfo());
                     }
                 }
             }
