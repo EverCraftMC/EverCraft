@@ -61,9 +61,9 @@ public class ScoreBoard implements Closable {
                                     linesMap.get(player).put(score.getItemName(), score.getValue());
                                     player.unsafe().sendPacket(score);
                                 } else if (!getScore(player, lines.size() - i).equals(line)) {
-                                    ScoreboardScore removescore = new ScoreboardScore(getScore(player, lines.size() - i), (byte) 1, scoreboardMap.get(player).getName(), lines.size() - i);
-                                    linesMap.get(player).remove(removescore.getItemName());
-                                    player.unsafe().sendPacket(removescore);
+                                    ScoreboardScore removeScore = new ScoreboardScore(getScore(player, lines.size() - i), (byte) 1, scoreboardMap.get(player).getName(), lines.size() - i);
+                                    linesMap.get(player).remove(removeScore.getItemName());
+                                    player.unsafe().sendPacket(removeScore);
 
                                     ScoreboardScore score = new ScoreboardScore(line, (byte) 0, scoreboardMap.get(player).getName(), lines.size() - i);
                                     linesMap.get(player).put(score.getItemName(), score.getValue());
@@ -90,8 +90,7 @@ public class ScoreBoard implements Closable {
                             .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
                             .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))));
 
-                        TabListUtil.removeFromList(player);
-                        TabListUtil.addToList(player, player.getServer().getInfo());
+                        TabListUtil.updatePlayer(player, player.getServer().getInfo());
                     }
                 }
             }
