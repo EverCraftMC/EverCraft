@@ -35,7 +35,7 @@ public class TabListUtil {
             PlayerListItem.Item item = new PlayerListItem.Item();
             item.setUuid(player.getUniqueId());
             item.setUsername(player.getName());
-            item.setDisplayName(ComponentFormatter.stringToJson(((player2.getServer() != null && player2.getServer().getInfo() != server) ? ComponentFormatter.stringToJson("[" + StringUtils.toTtitleCase(server.getName()) + "] ") : "") + player.getDisplayName()));
+            item.setDisplayName(ComponentFormatter.stringToJson(((player2.getServer() != null && player2.getServer().getInfo() != server) ? "[" + StringUtils.toTtitleCase(server.getName()) + "] " : "") + player.getDisplayName()));
             item.setPing(player.getPing());
             item.setProperties(new Property[] {});
 
@@ -68,7 +68,7 @@ public class TabListUtil {
         PlayerListItem.Item item = new PlayerListItem.Item();
         item.setUuid(player.getUniqueId());
         item.setUsername(player.getName());
-        item.setDisplayName(ComponentFormatter.stringToJson(((player2.getServer() != null && player2.getServer().getInfo() != server) ? ComponentFormatter.stringToJson("[" + StringUtils.toTtitleCase(server.getName()) + "] ") : "") + player.getDisplayName()));
+        item.setDisplayName(ComponentFormatter.stringToJson(((player2.getServer() != null && player2.getServer().getInfo() != server) ? "[" + StringUtils.toTtitleCase(server.getName()) + "] " : "") + player.getDisplayName()));
         item.setPing(player.getPing());
         item.setProperties(new Property[] {});
 
@@ -145,7 +145,7 @@ public class TabListUtil {
 
             PlayerListItem.Item item = new PlayerListItem.Item();
             item.setUuid(player.getUniqueId());
-            item.setDisplayName(ComponentFormatter.stringToJson(((player2.getServer() != null && player2.getServer().getInfo() != server) ? ComponentFormatter.stringToJson("[" + StringUtils.toTtitleCase(server.getName()) + "] ") : "") + player.getDisplayName()));
+            item.setDisplayName(ComponentFormatter.stringToJson(((player2.getServer() != null && player2.getServer().getInfo() != server) ? "[" + StringUtils.toTtitleCase(server.getName()) + "] " : "") + player.getDisplayName()));
 
             packet.setItems(new PlayerListItem.Item[] { item });
 
@@ -172,7 +172,7 @@ public class TabListUtil {
 
         PlayerListItem.Item item = new PlayerListItem.Item();
         item.setUuid(player.getUniqueId());
-        item.setDisplayName(ComponentFormatter.stringToJson(((player2.getServer() != null && player2.getServer().getInfo() != server) ? ComponentFormatter.stringToJson("[" + StringUtils.toTtitleCase(server.getName()) + "] ") : "") + player.getDisplayName()));
+        item.setDisplayName(ComponentFormatter.stringToJson(((player2.getServer() != null && player2.getServer().getInfo() != server) ? "[" + StringUtils.toTtitleCase(server.getName()) + "] " : "") + player.getDisplayName()));
 
         packet.setItems(new PlayerListItem.Item[] { item });
 
