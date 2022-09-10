@@ -54,7 +54,7 @@ public class ArgsValidator {
 
         for (Integer index = 0; index < expectedArgs.size(); index++) {
             if (index >= args.length - 1 && !expectedArgs.get(index).optional()) {
-                BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Expected more args", message.getAuthor());
+                BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "Expected more args", message.getAuthor());
 
                 return false;
             } else if (!expectedArgs.get(index).optional()) {
@@ -62,7 +62,7 @@ public class ArgsValidator {
                     try {
                         ArgsParser.getFloatArg(message, index + 1);
                     } catch (NumberFormatException err) {
-                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be a number", message.getAuthor());
+                        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "Arg " + (index + 1) + " must be a number", message.getAuthor());
 
                         return false;
                     }
@@ -70,13 +70,13 @@ public class ArgsValidator {
                     try {
                         ArgsParser.getIntegerArg(message, index + 1);
                     } catch (NumberFormatException err) {
-                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be a integer", message.getAuthor());
+                        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "Arg " + (index + 1) + " must be a integer", message.getAuthor());
 
                         return false;
                     }
                 } else if (expectedArgs.get(index).type() == ArgType.Boolean) {
                     if (ArgsParser.getBooleanArg(message, index + 1) == null) {
-                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be a boolean", message.getAuthor());
+                        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "Arg " + (index + 1) + " must be a boolean", message.getAuthor());
 
                         return false;
                     }
@@ -84,7 +84,7 @@ public class ArgsValidator {
                     try {
                         ArgsParser.getDurrationArg(message, index + 1);
                     } catch (NumberFormatException | ArithmeticException err) {
-                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be a duration", message.getAuthor());
+                        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "Arg " + (index + 1) + " must be a duration", message.getAuthor());
 
                         return false;
                     }
@@ -92,7 +92,7 @@ public class ArgsValidator {
                     try {
                         ArgsParser.getUserArg(message, index + 1);
                     } catch (NumberFormatException err) {
-                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be a user", message.getAuthor());
+                        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "Arg " + (index + 1) + " must be a user", message.getAuthor());
 
                         return false;
                     }
@@ -101,48 +101,48 @@ public class ArgsValidator {
                         Member member = ArgsParser.getMemberArg(message, index + 1);
 
                         if (!member.getRoles().isEmpty() && member.getRoles().get(0).getPosition() >= message.getMember().getRoles().get(0).getPosition()) {
-                            BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "You can't affect that user", message.getAuthor());
+                            BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "You can't affect that user", message.getAuthor());
 
                             return false;
                         }
                     } catch (NumberFormatException | ErrorResponseException err) {
-                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be a guild member", message.getAuthor());
+                        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "Arg " + (index + 1) + " must be a guild member", message.getAuthor());
 
                         return false;
                     }
                 } else if (expectedArgs.get(index).type() == ArgType.Role) {
                     if (ArgsParser.getRoleArg(message, index + 1) == null) {
-                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be a role", message.getAuthor());
+                        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "Arg " + (index + 1) + " must be a role", message.getAuthor());
 
                         return false;
                     }
                 } else if (expectedArgs.get(index).type() == ArgType.Channel) {
                     if (ArgsParser.getChannelArg(message, index + 1) == null) {
-                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be a channel", message.getAuthor());
+                        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "Arg " + (index + 1) + " must be a channel", message.getAuthor());
 
                         return false;
                     }
                 } else if (expectedArgs.get(index).type() == ArgType.TextChannel) {
                     if (ArgsParser.getTextChannelArg(message, index + 1) == null) {
-                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be a text channel", message.getAuthor());
+                        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "Arg " + (index + 1) + " must be a text channel", message.getAuthor());
 
                         return false;
                     }
                 } else if (expectedArgs.get(index).type() == ArgType.Message) {
                     if (ArgsParser.getMessageArg(message, index + 1) == null) {
-                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be a message", message.getAuthor());
+                        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "Arg " + (index + 1) + " must be a message", message.getAuthor());
 
                         return false;
                     }
                 } else if (expectedArgs.get(index).type() == ArgType.VoiceChannel) {
                     if (ArgsParser.getVoiceChannelArg(message, index + 1) == null) {
-                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be a voice channel", message.getAuthor());
+                        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "Arg " + (index + 1) + " must be a voice channel", message.getAuthor());
 
                         return false;
                     }
                 } else if (expectedArgs.get(index).type() == ArgType.Emoji) {
                     if (ArgsParser.getEmojiArg(message, index + 1) == null) {
-                        BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", "Arg " + (index + 1) + " must be an emoji", message.getAuthor());
+                        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", "Arg " + (index + 1) + " must be an emoji", message.getAuthor());
 
                         return false;
                     }

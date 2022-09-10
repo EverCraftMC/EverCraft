@@ -40,11 +40,12 @@ import io.github.evercraftmc.evercraft.shared.discord.DiscordBot;
 import io.github.evercraftmc.evercraft.shared.util.ModerationUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.EmbedType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Message.Attachment;
+import net.dv8tion.jda.api.entities.Message.Interaction;
 import net.dv8tion.jda.api.entities.MessageActivity;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.MessageReaction;
@@ -53,8 +54,6 @@ import net.dv8tion.jda.api.entities.MessageType;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.Message.Attachment;
-import net.dv8tion.jda.api.entities.Message.Interaction;
 import net.dv8tion.jda.api.entities.sticker.StickerItem;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -243,7 +242,7 @@ public class BotMain implements EventListener {
                         messages.remove(message);
                     }
 
-                    sendEmbed(event.getTextChannel(), ":(", "Please don't spam");
+                    sendEmbed(event.getChannel().asTextChannel(), ":(", "Please don't spam");
 
                     return;
                 }
@@ -266,7 +265,7 @@ public class BotMain implements EventListener {
                     if (event.getMember().getRoles().isEmpty() || event.getMember().getRoles().get(0).getPosition() <= event.getGuild().getSelfMember().getRoles().get(0).getPosition()) {
                         String command = getConfig().getPrefix() + "mute " + event.getMember().getAsMention() + " 1h No";
                         Long id = UUID.randomUUID().getMostSignificantBits();
-                        Message fakemessage = new ReceivedMessage(id, event.getChannel(), MessageType.DEFAULT, new MessageReference(id, event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(command.trim()).build(), this.getJDA()), false, false, false, command.trim(), id + "", getJDA().getSelfUser(), event.getGuild().getSelfMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new MessageMentionsImpl((JDAImpl) event.getJDA(), (GuildImpl) event.getGuild(), command.trim(), false, DataArray.empty(), DataArray.empty()), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<StickerItem>(), new ArrayList<ActionRow>(), 0, null, null);
+                        Message fakemessage = new ReceivedMessage(id, event.getChannel(), MessageType.DEFAULT, new MessageReference(id, event.getChannel().getIdLong(), event.getGuild().getIdLong(), null, event.getJDA()), false, false, false, command.trim(), id + "", getJDA().getSelfUser(), event.getGuild().getSelfMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new MessageMentionsImpl((JDAImpl) event.getJDA(), (GuildImpl) event.getGuild(), command.trim(), false, DataArray.empty(), DataArray.empty()), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<StickerItem>(), new ArrayList<ActionRow>(), 0, null, null);
                         new MuteCommand().run(fakemessage);
 
                         event.getMessage().delete().queue();
@@ -274,7 +273,7 @@ public class BotMain implements EventListener {
                 } else if (ModerationUtil.isInappropriateString(message.toString().trim())) {
                     String command = getConfig().getPrefix() + "warn " + event.getMember().getAsMention() + " Inappropriate language";
                     Long id = UUID.randomUUID().getMostSignificantBits();
-                    Message fakemessage = new ReceivedMessage(id, event.getChannel(), MessageType.DEFAULT, new MessageReference(id, event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(command.trim()).build(), this.getJDA()), false, false, false, command.trim(), id + "", getJDA().getSelfUser(), event.getGuild().getSelfMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new MessageMentionsImpl((JDAImpl) event.getJDA(), (GuildImpl) event.getGuild(), command.trim(), false, DataArray.empty(), DataArray.empty()), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<StickerItem>(), new ArrayList<ActionRow>(), 0, null, null);
+                    Message fakemessage = new ReceivedMessage(id, event.getChannel(), MessageType.DEFAULT, new MessageReference(id, event.getChannel().getIdLong(), event.getGuild().getIdLong(), null, event.getJDA()), false, false, false, command.trim(), id + "", getJDA().getSelfUser(), event.getGuild().getSelfMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new MessageMentionsImpl((JDAImpl) event.getJDA(), (GuildImpl) event.getGuild(), command.trim(), false, DataArray.empty(), DataArray.empty()), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<StickerItem>(), new ArrayList<ActionRow>(), 0, null, null);
                     new WarnCommand().run(fakemessage);
 
                     Integer warningCount = 0;
@@ -288,7 +287,7 @@ public class BotMain implements EventListener {
                         if (warningCount > 5) {
                             String command2 = getConfig().getPrefix() + "mute " + event.getMember().getAsMention() + " " + (5 * (warningCount - 5)) + "m Inappropriate language";
                             Long id2 = UUID.randomUUID().getMostSignificantBits();
-                            Message fakemessage2 = new ReceivedMessage(id2, event.getChannel(), MessageType.DEFAULT, new MessageReference(id2, event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(command2.trim()).build(), this.getJDA()), false, false, false, command2.trim(), id2 + "", getJDA().getSelfUser(), event.getGuild().getSelfMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new MessageMentionsImpl((JDAImpl) event.getJDA(), (GuildImpl) event.getGuild(), command2.trim(), false, DataArray.empty(), DataArray.empty()), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<StickerItem>(), new ArrayList<ActionRow>(), 0, null, null);
+                            Message fakemessage2 = new ReceivedMessage(id2, event.getChannel(), MessageType.DEFAULT, new MessageReference(id2, event.getChannel().getIdLong(), event.getGuild().getIdLong(), null, this.getJDA()), false, false, false, command2.trim(), id2 + "", getJDA().getSelfUser(), event.getGuild().getSelfMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new MessageMentionsImpl((JDAImpl) event.getJDA(), (GuildImpl) event.getGuild(), command2.trim(), false, DataArray.empty(), DataArray.empty()), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<StickerItem>(), new ArrayList<ActionRow>(), 0, null, null);
                             new MuteCommand().run(fakemessage2);
                         }
 
@@ -319,13 +318,13 @@ public class BotMain implements EventListener {
                                 command.run(event.getMessage());
                             }
                         } else {
-                            sendEmbed(event.getTextChannel(), "Error", "You can't do that", event.getAuthor());
+                            sendEmbed(event.getChannel().asTextChannel(), "Error", "You can't do that", event.getAuthor());
                         }
                     }
                 }
 
                 if (!isCommand) {
-                    sendEmbed(event.getTextChannel(), "Error", "That is not a command", event.getAuthor());
+                    sendEmbed(event.getChannel().asTextChannel(), "Error", "That is not a command", event.getAuthor());
                 }
 
                 if (!event.getChannel().getId().equals(config.getBotCommandsChannel())) {
@@ -352,7 +351,7 @@ public class BotMain implements EventListener {
                         for (OptionMapping option : event.getOptions()) {
                             content.append(" " + option.getAsString());
                         }
-                        Message message = new ReceivedMessage(event.getIdLong(), event.getChannel(), MessageType.DEFAULT, new MessageReference(event.getIdLong(), event.getChannel().getIdLong(), event.getGuild().getIdLong(), new MessageBuilder(content.toString().trim()).build(), this.getJDA()), false, false, false, content.toString().trim(), event.getId(), event.getUser(), event.getMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new MessageMentionsImpl((JDAImpl) event.getJDA(), (GuildImpl) event.getGuild(), content.toString().trim(), false, DataArray.empty(), DataArray.empty()), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<StickerItem>(), new ArrayList<ActionRow>(), 0, new Interaction(event.getIdLong(), event.getTypeRaw(), event.getName(), event.getUser(), event.getMember()), null);
+                        Message message = new ReceivedMessage(event.getIdLong(), event.getChannel(), MessageType.DEFAULT, new MessageReference(event.getIdLong(), event.getChannel().getIdLong(), event.getGuild().getIdLong(), null, this.getJDA()), false, false, false, content.toString().trim(), event.getId(), event.getUser(), event.getMember(), new MessageActivity(null, null, null), OffsetDateTime.now(), new MessageMentionsImpl((JDAImpl) event.getJDA(), (GuildImpl) event.getGuild(), content.toString().trim(), false, DataArray.empty(), DataArray.empty()), new ArrayList<MessageReaction>(), new ArrayList<Attachment>(), new ArrayList<MessageEmbed>(), new ArrayList<StickerItem>(), new ArrayList<ActionRow>(), 0, new Interaction(event.getIdLong(), event.getTypeRaw(), event.getName(), event.getUser(), event.getMember()), null);
 
                         if (ArgsValidator.validateArgs(message, command.getArgs())) {
                             command.run(message);
@@ -362,7 +361,7 @@ public class BotMain implements EventListener {
                             event.getHook().sendMessage("Error").queue();
                         }
                     } else {
-                        event.getHook().sendMessage(new MessageBuilder(buildEmbed("Error", "You can't do that")).build()).queue();
+                        event.getHook().sendMessageEmbeds(buildEmbed("Error", "You can't do that")).queue();
                     }
                 }
             }
@@ -395,7 +394,7 @@ public class BotMain implements EventListener {
                 Message message = messageCache.get(event.getMessageId());
 
                 if (!message.getContentRaw().startsWith(config.getPrefix()) && message.getAuthor() != message.getJDA().getSelfUser()) {
-                    log("Message by " + message.getAuthor().getAsMention() + " \"" + message.getContentRaw() + "\" deleted in " + message.getTextChannel().getAsMention());
+                    log("Message by " + message.getAuthor().getAsMention() + " \"" + message.getContentRaw() + "\" deleted in " + message.getChannel().asTextChannel().getAsMention());
                 }
             } else {
                 log("An uncached message (" + event.getMessageId() + ") was deleted in " + event.getChannel().getAsMention());
@@ -406,7 +405,7 @@ public class BotMain implements EventListener {
                     Message message = messageCache.get(messageId);
 
                     if (!message.getContentRaw().startsWith(config.getPrefix()) && message.getAuthor() != message.getJDA().getSelfUser()) {
-                        log("Message by " + message.getAuthor().getAsMention() + " \"" + message.getContentRaw() + "\" deleted in " + message.getTextChannel().getAsMention());
+                        log("Message by " + message.getAuthor().getAsMention() + " \"" + message.getContentRaw() + "\" deleted in " + message.getChannel().asTextChannel().getAsMention());
                     }
                 } else {
                     log("An uncached message (" + messageId + ") was deleted in " + event.getChannel().getAsMention());

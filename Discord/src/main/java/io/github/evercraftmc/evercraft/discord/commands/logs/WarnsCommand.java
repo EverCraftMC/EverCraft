@@ -25,6 +25,6 @@ public class WarnsCommand extends Command {
             warningString.append("Warned by " + message.getJDA().retrieveUserById(warning.getMod()).complete().getAsMention() + " for " + warning.getReason() + " at " + warning.getTimestamp().toString() + "\n");
         }
 
-        BotMain.Instance.sendEmbed(message.getTextChannel(), "Warnings", warningString.toString().trim(), message.getAuthor());
+        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Warnings", warningString.toString().trim(), message.getAuthor());
     }
 }

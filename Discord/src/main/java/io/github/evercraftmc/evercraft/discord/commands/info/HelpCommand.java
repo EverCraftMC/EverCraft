@@ -40,6 +40,6 @@ public class HelpCommand extends Command {
             }
         }
 
-        BotMain.Instance.sendEmbed(message.getTextChannel(), "Help", helpString.toString().trim(), message.getAuthor());
+        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Help", helpString.toString().trim(), message.getAuthor());
     }
 }

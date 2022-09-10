@@ -27,7 +27,7 @@ public class SudoCommand extends Command {
     public void run(Message message) {
         Member member = ArgsParser.getMemberArg(message, 1);
 
-        Webhook webhook = message.getTextChannel().createWebhook("Sudo").complete();
+        Webhook webhook = message.getChannel().asTextChannel().createWebhook("Sudo").complete();
         webhook.getManager().setName(member.getNickname() != null ? member.getNickname() : member.getUser().getName()).complete();
         try {
             URLConnection connection = new URL(member.getUser().getAvatarUrl() != null ? member.getUser().getAvatarUrl() : member.getUser().getDefaultAvatarUrl()).openConnection();

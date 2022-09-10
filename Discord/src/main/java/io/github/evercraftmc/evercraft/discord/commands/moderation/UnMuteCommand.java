@@ -22,18 +22,18 @@ public class UnMuteCommand extends Command {
             ArgsParser.getMemberArg(message, 1).removeTimeout().queue();
 
             if (ArgsParser.hasArg(message, 2)) {
-                BotMain.Instance.sendEmbed(message.getTextChannel(), "Unmute", ArgsParser.getUserArg(message, 1).getAsMention() + " was unmuted for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
+                BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Unmute", ArgsParser.getUserArg(message, 1).getAsMention() + " was unmuted for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
                 BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + " was unmuted by " + message.getMember().getAsMention() + " for " + ArgsParser.getStringArg(message, 2));
                 BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.UNMUTE, ArgsParser.getStringArg(message, 2), Instant.now()));
                 BotMain.Instance.getData().getParser().save();
             } else {
-                BotMain.Instance.sendEmbed(message.getTextChannel(), "Unmute", ArgsParser.getUserArg(message, 1).getAsMention() + " was unmuted", message.getAuthor());
+                BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Unmute", ArgsParser.getUserArg(message, 1).getAsMention() + " was unmuted", message.getAuthor());
                 BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + " was unmuted by " + message.getMember().getAsMention());
                 BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.UNMUTE, null, Instant.now()));
                 BotMain.Instance.getData().getParser().save();
             }
         } else {
-            BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", ArgsParser.getUserArg(message, 1).getAsMention() + " is not muted", message.getAuthor());
+            BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", ArgsParser.getUserArg(message, 1).getAsMention() + " is not muted", message.getAuthor());
         }
     }
 }
