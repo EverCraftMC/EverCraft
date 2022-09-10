@@ -25,12 +25,12 @@ public class LockChannelCommand extends Command {
         }
 
         if (ArgsParser.hasArg(message, 2)) {
-            BotMain.Instance.sendEmbed(message.getTextChannel(), "Lock Channel", ArgsParser.getTextChannelArg(message, 1).getAsMention() + " has been locked for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
+            BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Lock Channel", ArgsParser.getTextChannelArg(message, 1).getAsMention() + " has been locked for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
             BotMain.Instance.log(ArgsParser.getTextChannelArg(message, 1).getAsMention() + " was locked by " + message.getMember().getAsMention() + " for " + ArgsParser.getStringArg(message, 2));
             BotMain.Instance.getData().history.add(new ModCase(null, message.getAuthor().getId(), ModType.LOCKCHANNEL, ArgsParser.getStringArg(message, 2), Instant.now()));
             BotMain.Instance.getData().getParser().save();
         } else {
-            BotMain.Instance.sendEmbed(message.getTextChannel(), "Lock Channel", ArgsParser.getTextChannelArg(message, 1).getAsMention() + " has been locked", message.getAuthor());
+            BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Lock Channel", ArgsParser.getTextChannelArg(message, 1).getAsMention() + " has been locked", message.getAuthor());
             BotMain.Instance.log(ArgsParser.getTextChannelArg(message, 1).getAsMention() + " was locked by " + message.getMember().getAsMention());
             BotMain.Instance.getData().history.add(new ModCase(null, message.getAuthor().getId(), ModType.LOCKCHANNEL, null, Instant.now()));
             BotMain.Instance.getData().getParser().save();

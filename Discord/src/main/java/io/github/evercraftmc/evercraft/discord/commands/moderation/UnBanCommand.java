@@ -25,18 +25,18 @@ public class UnBanCommand extends Command {
             message.getGuild().unban(ArgsParser.getUserArg(message, 1)).queue();
 
             if (ArgsParser.hasArg(message, 2)) {
-                BotMain.Instance.sendEmbed(message.getTextChannel(), "Unbanned", ArgsParser.getUserArg(message, 1).getAsMention() + " was unbanned for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
+                BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Unbanned", ArgsParser.getUserArg(message, 1).getAsMention() + " was unbanned for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
                 BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + " was unbanned by " + message.getMember().getAsMention() + " for " + ArgsParser.getStringArg(message, 2));
                 BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.UNBAN, ArgsParser.getStringArg(message, 2), Instant.now()));
                 BotMain.Instance.getData().getParser().save();
             } else {
-                BotMain.Instance.sendEmbed(message.getTextChannel(), "Unbanned", ArgsParser.getUserArg(message, 1).getAsMention() + " was unbanned", message.getAuthor());
+                BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Unbanned", ArgsParser.getUserArg(message, 1).getAsMention() + " was unbanned", message.getAuthor());
                 BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + " was unbanned by " + message.getMember().getAsMention());
                 BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.UNBAN, null, Instant.now()));
                 BotMain.Instance.getData().getParser().save();
             }
         } catch (ErrorResponseException err) {
-            BotMain.Instance.sendEmbed(message.getTextChannel(), "Error", ArgsParser.getUserArg(message, 1).getAsMention() + " is not banned", message.getAuthor());
+            BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", ArgsParser.getUserArg(message, 1).getAsMention() + " is not banned", message.getAuthor());
         }
     }
 }

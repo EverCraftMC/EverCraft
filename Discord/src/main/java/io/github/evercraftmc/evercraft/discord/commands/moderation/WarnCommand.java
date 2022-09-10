@@ -20,7 +20,7 @@ public class WarnCommand extends Command {
 
     @Override
     public void run(Message message) {
-        BotMain.Instance.sendEmbed(message.getTextChannel(), "Warn", ArgsParser.getUserArg(message, 1).getAsMention() + " was warned for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
+        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Warn", ArgsParser.getUserArg(message, 1).getAsMention() + " was warned for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
         BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + " was warned by " + message.getMember().getAsMention() + " for " + ArgsParser.getStringArg(message, 2));
         BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.WARN, ArgsParser.getStringArg(message, 2), Instant.now()));
 

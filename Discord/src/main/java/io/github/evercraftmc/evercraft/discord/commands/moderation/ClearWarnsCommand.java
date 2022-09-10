@@ -21,10 +21,10 @@ public class ClearWarnsCommand extends Command {
     @Override
     public void run(Message message) {
         if (ArgsParser.hasArg(message, 2)) {
-            BotMain.Instance.sendEmbed(message.getTextChannel(), "Warn", ArgsParser.getUserArg(message, 1).getAsMention() + "'s warns where cleared for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
+            BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Warn", ArgsParser.getUserArg(message, 1).getAsMention() + "'s warns where cleared for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
             BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + "'s warns where cleared by " + message.getAuthor().getAsMention() + " for " + ArgsParser.getStringArg(message, 2));
         } else {
-            BotMain.Instance.sendEmbed(message.getTextChannel(), "Warn", ArgsParser.getUserArg(message, 1).getAsMention() + "'s warns where cleared", message.getAuthor());
+            BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Warn", ArgsParser.getUserArg(message, 1).getAsMention() + "'s warns where cleared", message.getAuthor());
             BotMain.Instance.log(ArgsParser.getUserArg(message, 1).getAsMention() + "'s warns where cleared by " + message.getAuthor().getAsMention());
         }
 

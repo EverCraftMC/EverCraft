@@ -20,7 +20,7 @@ public class NickCommand extends Command {
     public void run(Message message) {
         ArgsParser.getMemberArg(message, 1).modifyNickname(ArgsParser.getStringArg(message, 2)).queue();
 
-        BotMain.Instance.sendEmbed(message.getTextChannel(), "Nick", "Set " + ArgsParser.getUserArg(message, 1).getAsMention() + "'s nick to " + ArgsParser.getStringArg(message, 2), message.getAuthor());
+        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Nick", "Set " + ArgsParser.getUserArg(message, 1).getAsMention() + "'s nick to " + ArgsParser.getStringArg(message, 2), message.getAuthor());
         BotMain.Instance.log(message.getMember().getAsMention() + " set " + ArgsParser.getUserArg(message, 1).getAsMention() + "'s nick to " + ArgsParser.getStringArg(message, 2));
         BotMain.Instance.getData().history.add(new ModCase(ArgsParser.getUserArg(message, 1).getId(), message.getAuthor().getId(), ModType.CHANGENICK, ArgsParser.getStringArg(message, 2), Instant.now()));
         BotMain.Instance.getData().getParser().save();

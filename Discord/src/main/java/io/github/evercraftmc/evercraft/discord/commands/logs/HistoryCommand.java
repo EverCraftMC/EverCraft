@@ -68,6 +68,6 @@ public class HistoryCommand extends Command {
             }
         }
 
-        BotMain.Instance.sendEmbed(message.getTextChannel(), "History", modsString.toString().trim(), message.getAuthor());
+        BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "History", modsString.toString().trim(), message.getAuthor());
     }
 }
