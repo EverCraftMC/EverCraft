@@ -53,7 +53,7 @@ import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
 public class SpigotMain extends JavaPlugin implements Plugin {
     private static SpigotMain Instance;
 
-    private Logger logger = Logger.getLogger(this.getName());
+    private Logger logger;
 
     private FileConfig<SpigotConfig> config;
     private FileConfig<SpigotMessages> messages;
@@ -82,6 +82,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     @Override
     public void onEnable() {
+        this.logger = Logger.getLogger(this.getDescription().getName());
+
         this.getLogger().info("Loading plugin..");
 
         if (!this.getDataFolder().exists()) {
