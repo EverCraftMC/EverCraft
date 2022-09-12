@@ -4,10 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import io.github.evercraftmc.evercraft.shared.Plugin;
 import io.github.evercraftmc.evercraft.shared.PluginData;
+import io.github.evercraftmc.evercraft.shared.PluginManager;
 import io.github.evercraftmc.evercraft.shared.config.FileConfig;
 import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
 import io.github.evercraftmc.evercraft.shared.economy.Economy;
@@ -51,6 +53,8 @@ import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
 public class SpigotMain extends JavaPlugin implements Plugin {
     private static SpigotMain Instance;
 
+    private Logger logger = Logger.getLogger(this.getName());
+
     private FileConfig<SpigotConfig> config;
     private FileConfig<SpigotMessages> messages;
     private MySQLConfig<PluginData> data;
@@ -72,6 +76,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
     @Override
     public void onLoad() {
         SpigotMain.Instance = this;
+
+        PluginManager.register(this);
     }
 
     @Override
@@ -314,6 +320,11 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     public static SpigotMain getInstance() {
         return SpigotMain.Instance;
+    }
+
+    @Override
+    public Logger getLogger() {
+        return this.logger;
     }
 
     public FileConfig<SpigotConfig> getPluginConfig() {
