@@ -19,7 +19,7 @@ import io.github.evercraftmc.evercraft.shared.util.Closable;
 public class LimboMain extends LimboPlugin implements Plugin {
     private static LimboMain Instance;
 
-    private Logger logger = Logger.getLogger(this.getName());
+    private Logger logger;
 
     private FileConfig<LimboConfig> config;
     private FileConfig<LimboMessages> messages;
@@ -39,6 +39,8 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
     @Override
     public void onEnable() {
+        this.logger = Logger.getLogger(this.getInfo().getName());
+
         this.getLogger().info("Loading plugin..");
 
         if (!this.getDataFolder().exists()) {

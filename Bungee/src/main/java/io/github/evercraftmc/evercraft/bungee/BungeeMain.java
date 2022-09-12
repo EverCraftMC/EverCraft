@@ -62,7 +62,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraft.shared.Plugin {
     private static BungeeMain Instance;
 
-    private Logger logger = Logger.getLogger(this.getDescription().getName());
+    private Logger logger;
 
     private FileConfig<BungeeConfig> config;
     private FileConfig<BungeeMessages> messages;
@@ -85,6 +85,8 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
     @Override
     public void onEnable() {
+        this.logger = Logger.getLogger(this.getDescription().getName());
+
         this.getLogger().info("Loading plugin..");
 
         if (!this.getDataFolder().exists()) {
