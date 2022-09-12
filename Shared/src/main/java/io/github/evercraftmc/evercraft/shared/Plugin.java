@@ -1,5 +1,7 @@
 package io.github.evercraftmc.evercraft.shared;
 
+import java.util.logging.Logger;
+
 public interface Plugin {
     public void onEnable();
 
@@ -10,4 +12,6 @@ public interface Plugin {
 
         this.onEnable();
     }
+
+    public Logger getLogger();
 }

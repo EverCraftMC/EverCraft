@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import io.github.evercraftmc.evercraft.bungee.broadcast.Broadcaster;
 import io.github.evercraftmc.evercraft.bungee.commands.BungeeCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.economy.BalanceCommand;
@@ -43,6 +44,7 @@ import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter
 import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
 import io.github.evercraftmc.evercraft.bungee.util.player.BungeePlayerResolver;
 import io.github.evercraftmc.evercraft.shared.PluginData;
+import io.github.evercraftmc.evercraft.shared.PluginManager;
 import io.github.evercraftmc.evercraft.shared.config.FileConfig;
 import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
 import io.github.evercraftmc.evercraft.shared.discord.DiscordBot;
@@ -60,6 +62,8 @@ import net.md_5.bungee.api.plugin.Plugin;
 public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraft.shared.Plugin {
     private static BungeeMain Instance;
 
+    private Logger logger = Logger.getLogger(this.getDescription().getName());
+
     private FileConfig<BungeeConfig> config;
     private FileConfig<BungeeMessages> messages;
     private MySQLConfig<PluginData> data;
@@ -75,6 +79,8 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
     @Override
     public void onLoad() {
         BungeeMain.Instance = this;
+
+        PluginManager.register(this);
     }
 
     @Override
@@ -281,6 +287,11 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
     public static BungeeMain getInstance() {
         return BungeeMain.Instance;
+    }
+
+    @Override
+    public Logger getLogger() {
+        return this.logger;
     }
 
     public FileConfig<BungeeConfig> getPluginConfig() {

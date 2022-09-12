@@ -5,17 +5,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.loohp.limbo.plugins.LimboPlugin;
+import java.util.logging.Logger;
 import io.github.evercraftmc.evercraft.limbo.commands.LimboCommand;
 import io.github.evercraftmc.evercraft.limbo.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.limbo.listeners.LimboListener;
 import io.github.evercraftmc.evercraft.limbo.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.limbo.listeners.SpawnListener;
 import io.github.evercraftmc.evercraft.shared.Plugin;
+import io.github.evercraftmc.evercraft.shared.PluginManager;
 import io.github.evercraftmc.evercraft.shared.config.FileConfig;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 
 public class LimboMain extends LimboPlugin implements Plugin {
     private static LimboMain Instance;
+
+    private Logger logger = Logger.getLogger(this.getName());
 
     private FileConfig<LimboConfig> config;
     private FileConfig<LimboMessages> messages;
@@ -29,17 +33,19 @@ public class LimboMain extends LimboPlugin implements Plugin {
     @Override
     public void onLoad() {
         LimboMain.Instance = this;
+
+        PluginManager.register(this);
     }
 
     @Override
     public void onEnable() {
-        System.out.println("Loading plugin..");
+        this.getLogger().info("Loading plugin..");
 
         if (!this.getDataFolder().exists()) {
             this.getDataFolder().mkdir();
         }
 
-        System.out.println("Loading config..");
+        this.getLogger().info("Loading config..");
 
         this.config = new FileConfig<LimboConfig>(LimboConfig.class, this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
         this.config.reload();
@@ -50,9 +56,9 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
         this.serverName = this.config.getParsed().serverName;
 
-        System.out.println("Finished loading config");
+        this.getLogger().info("Finished loading config");
 
-        System.out.println("Loading messages..");
+        this.getLogger().info("Loading messages..");
 
         this.messages = new FileConfig<LimboMessages>(LimboMessages.class, this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
         this.messages.reload();
@@ -61,81 +67,86 @@ public class LimboMain extends LimboPlugin implements Plugin {
             this.messages.save();
         }
 
-        System.out.println("Finished loading messages");
+        this.getLogger().info("Finished loading messages");
 
-        System.out.println("Loading commands..");
+        this.getLogger().info("Loading commands..");
 
         this.commands = new ArrayList<LimboCommand>();
 
         this.commands.add(new ReloadCommand("evercraftreload", "Reload the plugin", Arrays.asList("ecreload"), "evercraft.commands.staff.reload").register());
 
-        System.out.println("Finished loading commands");
+        this.getLogger().info("Finished loading commands");
 
-        System.out.println("Loading listeners..");
+        this.getLogger().info("Loading listeners..");
 
         this.listeners = new ArrayList<LimboListener>();
 
         this.listeners.add(new MessageListener().register());
         this.listeners.add(new SpawnListener().register());
 
-        System.out.println("Finished loading listeners");
+        this.getLogger().info("Finished loading listeners");
 
-        System.out.println("Loading other assets..");
+        this.getLogger().info("Loading other assets..");
 
         this.assets = new ArrayList<Closable>();
 
-        System.out.println("Finished loading other assets..");
+        this.getLogger().info("Finished loading other assets..");
 
-        System.out.println("Finished loading plugin");
+        this.getLogger().info("Finished loading plugin");
     }
 
     @Override
     public void onDisable() {
-        System.out.println("Disabling plugin..");
+        this.getLogger().info("Disabling plugin..");
 
-        System.out.println("Closing config..");
+        this.getLogger().info("Closing config..");
 
         this.config.close();
         this.messages.close();
 
-        System.out.println("Finished closing config..");
+        this.getLogger().info("Finished closing config..");
 
-        System.out.println("Unregistering commands..");
+        this.getLogger().info("Unregistering commands..");
 
         LimboMain.getInstance().getServer().getPluginManager().unregsiterAllCommands(LimboMain.getInstance());
 
-        System.out.println("Finished unregistering commands..");
+        this.getLogger().info("Finished unregistering commands..");
 
-        System.out.println("Unregistering listeners..");
+        this.getLogger().info("Unregistering listeners..");
 
         LimboMain.getInstance().getServer().getEventsManager().unregisterAllListeners(this);
 
-        System.out.println("Finished unregistering listeners..");
+        this.getLogger().info("Finished unregistering listeners..");
 
-        System.out.println("Closing assets..");
+        this.getLogger().info("Closing assets..");
 
         for (Closable asset : this.assets) {
             asset.close();
         }
 
-        System.out.println("Finished closing assets..");
+        this.getLogger().info("Finished closing assets..");
 
-        System.out.println("Finished disabling plugin");
+        this.getLogger().info("Finished disabling plugin");
     }
 
     @Override
     public void reload() {
-        System.out.println("Reloading plugin..");
+        this.getLogger().info("Reloading plugin..");
 
         this.onDisable();
 
         this.onEnable();
 
-        System.out.println("Finished reloading plugin");
+        this.getLogger().info("Finished reloading plugin");
     }
 
     public static LimboMain getInstance() {
         return LimboMain.Instance;
+    }
+
+    @Override
+    public Logger getLogger() {
+        return this.logger;
     }
 
     public FileConfig<LimboConfig> getPluginConfig() {
