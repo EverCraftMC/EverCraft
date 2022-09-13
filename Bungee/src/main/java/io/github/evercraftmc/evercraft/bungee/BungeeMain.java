@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 import io.github.evercraftmc.evercraft.bungee.commands.BungeeCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.economy.BalanceCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.economy.EconomyCommand;
@@ -61,8 +60,6 @@ import net.md_5.bungee.api.plugin.Plugin;
 public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraft.shared.Plugin {
     private static BungeeMain Instance;
 
-    private Logger logger;
-
     private FileConfig<BungeeConfig> config;
     private FileConfig<BungeeMessages> messages;
     private MySQLConfig<PluginData> data;
@@ -84,8 +81,6 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
     @Override
     public void onEnable() {
-        this.logger = PluginManager.createLogger(this.getDescription().getName(), "[{timeC} {typeU}]: [{name}] {message}");
-
         this.getLogger().info("Loading plugin..");
 
         if (!this.getDataFolder().exists()) {
@@ -287,11 +282,6 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
     public static BungeeMain getInstance() {
         return BungeeMain.Instance;
-    }
-
-    @Override
-    public Logger getLogger() {
-        return this.logger;
     }
 
     public FileConfig<BungeeConfig> getPluginConfig() {
