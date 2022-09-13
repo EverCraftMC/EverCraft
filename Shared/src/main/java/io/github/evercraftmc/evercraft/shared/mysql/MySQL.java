@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.time.Instant;
 import java.util.Timer;
 import java.util.TimerTask;
+import io.github.evercraftmc.evercraft.shared.PluginManager;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 
 public class MySQL implements Closable {
@@ -93,7 +94,7 @@ public class MySQL implements Closable {
             statement.close();
         } catch (SQLException e) {
             if (e.getMessage().startsWith("The last packet successfully received from the server was ") || (e.getCause() != null && e.getCause().getMessage().startsWith("The last packet successfully received from the server was "))) {
-                System.out.println("Lost mysql connection, reconnecting in " + reconnectTimeout + "..");
+                PluginManager.getInstance().getLogger().severe("Lost mysql connection, reconnecting in " + reconnectTimeout + "..");
 
                 if (reconnectTimeout != 0) {
                     new Timer().schedule(new TimerTask() {
@@ -137,7 +138,7 @@ public class MySQL implements Closable {
             return new Query(statement, results);
         } catch (SQLException e) {
             if (e.getMessage().startsWith("The last packet successfully received from the server was ") || (e.getCause() != null && e.getCause().getMessage().startsWith("The last packet successfully received from the server was "))) {
-                System.out.println("Lost mysql connection, reconnecting in " + reconnectTimeout + "..");
+                PluginManager.getInstance().getLogger().severe("Lost mysql connection, reconnecting in " + reconnectTimeout + "..");
 
                 if (reconnectTimeout != 0) {
                     new Timer().schedule(new TimerTask() {
