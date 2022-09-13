@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.loohp.limbo.plugins.LimboPlugin;
 import java.util.logging.Logger;
+import com.loohp.limbo.plugins.LimboPlugin;
 import io.github.evercraftmc.evercraft.limbo.commands.LimboCommand;
 import io.github.evercraftmc.evercraft.limbo.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.limbo.listeners.LimboListener;
@@ -39,7 +39,7 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
     @Override
     public void onEnable() {
-        this.logger = Logger.getLogger(this.getInfo().getName());
+        this.logger = PluginManager.createLogger(this.getInfo().getName(), "[{timeC} {typeT}] [{name}] {message}");
 
         this.getLogger().info("Loading plugin..");
 

@@ -84,7 +84,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
     @Override
     public void onEnable() {
-        this.logger = Logger.getLogger(this.getDescription().getName());
+        this.logger = PluginManager.createLogger(this.getDescription().getName(), "[{timeC} {typeU}]: [{name}] {message}");
 
         this.getLogger().info("Loading plugin..");
 
