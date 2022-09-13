@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 
 public class PluginManager {
-    public static List<Plugin> registeredPlugins = new ArrayList<Plugin>();
+    private static List<Plugin> registeredPlugins = new ArrayList<Plugin>();
 
     public static Plugin getInstance() {
         return PluginManager.registeredPlugins.get(0);
