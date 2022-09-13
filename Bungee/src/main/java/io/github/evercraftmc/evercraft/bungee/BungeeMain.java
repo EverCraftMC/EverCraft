@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
-import io.github.evercraftmc.evercraft.bungee.broadcast.Broadcaster;
 import io.github.evercraftmc.evercraft.bungee.commands.BungeeCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.economy.BalanceCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.economy.EconomyCommand;
@@ -193,7 +192,6 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.assets = new ArrayList<Closable>();
 
         this.assets.add(new ScoreBoard());
-        this.assets.add(new Broadcaster());
 
         for (ProxiedPlayer player : this.getProxy().getPlayers()) {
             player.setDisplayName(TextFormatter.translateColors(BungeePlayerResolver.getDisplayName(data, player.getUniqueId())));

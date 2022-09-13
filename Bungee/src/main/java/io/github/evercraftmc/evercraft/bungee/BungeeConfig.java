@@ -44,11 +44,6 @@ public class BungeeConfig {
         public String footer = "";
     }
 
-    public static class Broadcaster {
-        public Integer interval = 600;
-        public List<String> messages = new ArrayList<String>();
-    }
-
     public Database database = new Database();
 
     public Server server = new Server();
@@ -58,6 +53,4 @@ public class BungeeConfig {
     public Scoreboard scoreboard = new Scoreboard();
 
     public TabList tabList = new TabList();
-
-    public Broadcaster broadcaster = new Broadcaster();
 }
