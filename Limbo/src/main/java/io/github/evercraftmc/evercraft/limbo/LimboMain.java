@@ -35,12 +35,12 @@ public class LimboMain extends LimboPlugin implements Plugin {
         LimboMain.Instance = this;
 
         PluginManager.register(this);
+
+        this.logger = PluginManager.createLogger(this.getInfo().getName(), "[{timeC} {typeT}] [{name}] {message}");
     }
 
     @Override
     public void onEnable() {
-        this.logger = PluginManager.createLogger(this.getInfo().getName(), "[{timeC} {typeT}] [{name}] {message}");
-
         this.getLogger().info("Loading plugin..");
 
         if (!this.getDataFolder().exists()) {
