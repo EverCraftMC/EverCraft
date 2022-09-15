@@ -39,6 +39,8 @@ tasks.register("buildFat", Jar) {
 }
 
 processResources {
+	inputs.property "plugin_version", project.version
+
     filesMatching("plugin.yml") {
         expand "plugin_version": project.version
     }
