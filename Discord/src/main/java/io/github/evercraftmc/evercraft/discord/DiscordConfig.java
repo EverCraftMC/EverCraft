@@ -27,4 +27,6 @@ public class DiscordConfig {
     public Database database = new Database();
 
     public Discord discord = new Discord();
+
+    public String prefix = "!";
 }

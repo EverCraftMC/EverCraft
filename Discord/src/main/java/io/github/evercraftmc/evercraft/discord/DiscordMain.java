@@ -2,9 +2,11 @@ package io.github.evercraftmc.evercraft.discord;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import io.github.evercraftmc.evercraft.discord.commands.DiscordCommand;
+import io.github.evercraftmc.evercraft.discord.commands.info.TestCommand;
 import io.github.evercraftmc.evercraft.discord.listeners.DiscordListener;
 import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.PluginManager;
@@ -16,6 +18,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -80,7 +83,7 @@ public class DiscordMain implements io.github.evercraftmc.evercraft.shared.Plugi
 
         this.commands = new ArrayList<DiscordCommand>();
 
-        // TODO Commands
+        this.commands.add(new TestCommand("test", "Just a test command", Arrays.asList("test2"), null).register());
 
         this.getLogger().info("Finished loading commands");
 
@@ -106,6 +109,28 @@ public class DiscordMain implements io.github.evercraftmc.evercraft.shared.Plugi
         this.bot.addListener((GenericEvent rawevent) -> {
             if (rawevent instanceof ReadyEvent event) {
                 this.getLogger().info("JDA Logged in as \"" + event.getJDA().getSelfUser().getAsTag() + "\"");
+            }
+
+            if (rawevent instanceof MessageReceivedEvent event) {
+                if (event.getMessage().getContentRaw().startsWith(this.getPluginConfig().getParsed().prefix) && !event.getAuthor().equals(event.getJDA().getSelfUser())) {
+                    List<String> args = Arrays.asList(event.getMessage().getContentRaw().substring(this.getPluginConfig().getParsed().prefix.length()).split(" "));
+                    String command = args.get(0);
+                    args = args.subList(1, args.size());
+
+                    Boolean found = false;
+
+                    for (DiscordCommand discCommand : this.commands) {
+                        if (discCommand.getName().equalsIgnoreCase(command)) {
+                            found = true;
+
+                            discCommand.execute(event.getMessage(), args.toArray(new String[] {}));
+                        }
+                    }
+
+                    if (!found) {
+                        event.getMessage().reply(this.getPluginMessages().getParsed().error.invalidArgs).queue();;
+                    }
+                }
             }
 
             // TODO Do stuff for event listeners
