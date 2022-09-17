@@ -9,7 +9,7 @@ buildscript {
 }
 
 plugins {
-    id 'java'
+    id "java"
 }
 
 sourceCompatibility = JavaVersion.toVersion(project.java_version)

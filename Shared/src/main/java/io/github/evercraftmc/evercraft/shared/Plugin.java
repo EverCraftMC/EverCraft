@@ -3,6 +3,8 @@ package io.github.evercraftmc.evercraft.shared;
 import java.util.logging.Logger;
 
 public interface Plugin {
+    public void onLoad();
+
     public void onEnable();
 
     public void onDisable();

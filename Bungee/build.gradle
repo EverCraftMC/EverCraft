@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id "java"
 }
 
 archivesBaseName = "bungee"
@@ -12,15 +12,14 @@ repositories {
 }
 
 dependencies {
-    dependency project(':Shared')
+    dependency project(":Shared")
+    dependency project(path: ":Shared", configuration: "dependency")
 
     compileOnly "io.github.waterfallmc:waterfall-api:${project.waterfall_version}"
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
     compileOnly "com.viaversion:viaversion-api:${project.viaversion_version}"
     compileOnly "com.github.NuVotifier:NuVotifier:${project.votifier_version}"
-
-    dependency "net.dv8tion:JDA:${project.jda_version}"
 }
 
 jar {

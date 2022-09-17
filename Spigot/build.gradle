@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id "java"
 }
 
 archivesBaseName = "spigot"
@@ -11,13 +11,13 @@ repositories {
 }
 
 dependencies {
-    dependency project(':Shared')
+    dependency project(":Shared")
+    dependency project(path: ":Shared", configuration: "dependency")
 
     compileOnly "org.purpurmc.purpur:purpur-api:${project.purpur_version}"
+    compileOnly name: "craftbukkit-${project.craftbukkit_version}"
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
-
-    compileOnly name: "craftbukkit-${project.craftbukkit_version}"
 }
 
 jar {
