@@ -19,7 +19,7 @@ import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
-public class DiscordBot implements Closable, EventListener {
+public class DiscordBot implements EventListener, Closable {
     private JDA jda;
 
     private String guild;
@@ -30,7 +30,7 @@ public class DiscordBot implements Closable, EventListener {
         try {
             this.jda = JDABuilder.createDefault(token)
                 .setAutoReconnect(true)
-                .disableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_MESSAGE_TYPING, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_WEBHOOKS, GatewayIntent.GUILD_BANS, GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGE_TYPING)
+                .disableIntents(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
                 .enableIntents(Arrays.asList(intents))
                 .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.EMOJI, CacheFlag.MEMBER_OVERRIDES, CacheFlag.ONLINE_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.STICKER, CacheFlag.VOICE_STATE)
                 .enableCache(Arrays.asList(caches))

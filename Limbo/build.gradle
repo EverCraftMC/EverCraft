@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id "java"
 }
 
 archivesBaseName = "limbo"
@@ -12,7 +12,8 @@ repositories {
 }
 
 dependencies {
-    dependency project(':Shared')
+    dependency project(":Shared")
+    dependency project(path: ":Shared", configuration: "dependency")
 
     compileOnly "com.loohp:Limbo:${project.limbo_version}"
 }
