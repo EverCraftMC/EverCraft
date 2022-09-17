@@ -1,6 +1,7 @@
 package io.github.evercraftmc.evercraft.discord.commands;
 
 import java.util.List;
+import io.github.evercraftmc.evercraft.discord.DiscordMain;
 import io.github.evercraftmc.evercraft.shared.PluginCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
@@ -40,14 +41,12 @@ public abstract class DiscordCommand implements PluginCommand {
         if (this.hasPermission(message.getAuthor())) {
             this.run(message, args);
         } else {
-            // TODO No permission message
+            message.reply(DiscordMain.getInstance().getPluginMessages().getParsed().error.noPerms.replace("{permission}", this.getPermission().toString())).queue();
         }
     }
 
     public boolean hasPermission(User sender) {
-        // TODO Has permission
-
-        return true;
+        return this.getPermission() == null || DiscordMain.getInstance().getGuild().getMember(sender).hasPermission(this.getPermission());
     }
 
     public abstract void run(Message message, String[] args);

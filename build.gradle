@@ -61,7 +61,7 @@ tasks.register("upload") {
         servers.each() {
             def server = it
 
-            if (findProject(":" + server.split(":")[1]) != null) {
+            if ((System.getProperty("type") == null || System.getProperty("type").equalsIgnoreCase(server.split(":")[1])) && findProject(":" + server.split(":")[1]) != null) {
                 SSHClient ssh = new SSHClient()
                 ssh.loadKnownHosts()
                 ssh.connect(System.getenv("EVERCRAFT_FTP_HOST").split(":")[0], Integer.parseInt(System.getenv("EVERCRAFT_FTP_HOST").split(":")[1]))
