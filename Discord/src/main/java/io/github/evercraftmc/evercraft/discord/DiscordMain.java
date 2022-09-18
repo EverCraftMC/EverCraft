@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import io.github.evercraftmc.evercraft.discord.commands.DiscordCommand;
+import io.github.evercraftmc.evercraft.discord.commands.info.InfoCommand;
+import io.github.evercraftmc.evercraft.discord.commands.link.LinkCommand;
 import io.github.evercraftmc.evercraft.discord.listeners.DiscordListener;
 import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.PluginManager;
@@ -82,7 +84,13 @@ public class DiscordMain implements io.github.evercraftmc.evercraft.shared.Plugi
 
         this.commands = new ArrayList<DiscordCommand>();
 
-        // this.commands.add(new TestCommand("test", "Just a test command", Arrays.asList("test2"), null).register());
+        this.commands.add(new InfoCommand("about", "Get the server about", Arrays.asList("info"), null).register());
+        this.commands.add(new InfoCommand("rules", "Get the server rules", Arrays.asList(), null).register());
+        this.commands.add(new InfoCommand("ip", "Get the server ip", Arrays.asList("minecraft", "mc", "join", "connect"), null).register());
+        this.commands.add(new InfoCommand("vote", "Get the server vote link", Arrays.asList(), null).register());
+        this.commands.add(new InfoCommand("staff", "Get the server staff", Arrays.asList(), null).register());
+
+        this.commands.add(new LinkCommand("link", "Link your Discord account to Minecraft", Arrays.asList(), null).register());
 
         this.getLogger().info("Finished loading commands");
 
