@@ -16,6 +16,7 @@ public class DiscordMessages {
 
     public static class Linking {
         public String success = "Successfully linked your account to {account}!";
+        public String linked = "Your account is linked to {account}";
         public String needCode = "To link your account to Minecraft, join the server and type /link";
         public String invalidCode = "That code is not a valid/known code";
     }
