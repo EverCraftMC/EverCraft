@@ -149,9 +149,9 @@ public class DiscordMain implements io.github.evercraftmc.evercraft.shared.Plugi
                 for (String channel : this.getPluginConfig().getParsed().clearChannels) {
                     if (event.getChannel().getId().equals(channel)) {
                         if (!event.getAuthor().equals(this.getJDA().getSelfUser())) {
-                            event.getMessage().delete().delay(3, TimeUnit.SECONDS);
+                            event.getMessage().delete().queueAfter(3, TimeUnit.SECONDS);
                         } else {
-                            event.getMessage().delete().delay(5, TimeUnit.SECONDS);
+                            event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
                         }
                     }
                 }
