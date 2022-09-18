@@ -30,7 +30,6 @@ import io.github.evercraftmc.evercraft.discord.commands.moderation.UnMuteCommand
 import io.github.evercraftmc.evercraft.discord.commands.moderation.WarnCommand;
 import io.github.evercraftmc.evercraft.discord.commands.rr.CreateReactionRoleCommand;
 import io.github.evercraftmc.evercraft.discord.commands.rr.RemoveReactionRoleCommand;
-import io.github.evercraftmc.evercraft.discord.commands.util.SudoCommand;
 import io.github.evercraftmc.evercraft.discord.data.DataParser;
 import io.github.evercraftmc.evercraft.discord.data.types.config.Config;
 import io.github.evercraftmc.evercraft.discord.data.types.data.Data;
@@ -124,7 +123,6 @@ public class BotMain implements EventListener {
         commands.add(new UnLockChannelCommand());
         commands.add(new ClearCommand());
         commands.add(new NickCommand());
-        commands.add(new SudoCommand());
         commands.add(new CreateReactionRoleCommand());
         commands.add(new RemoveReactionRoleCommand());
 
