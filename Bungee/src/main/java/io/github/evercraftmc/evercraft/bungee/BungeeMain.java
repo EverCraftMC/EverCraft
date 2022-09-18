@@ -26,11 +26,9 @@ import io.github.evercraftmc.evercraft.bungee.commands.player.SeenCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SettingsCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SpigotCommandCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.CommandSpyCommand;
-import io.github.evercraftmc.evercraft.bungee.commands.staff.ImpersonateCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.PlayerInfoCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.StaffChatCommand;
-import io.github.evercraftmc.evercraft.bungee.commands.staff.SudoCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.warp.HubCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.warp.ServerCommand;
 import io.github.evercraftmc.evercraft.bungee.listeners.BungeeListener;
@@ -164,8 +162,6 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.commands.add(new CommandSpyCommand("commandspy", "Toggle your commandspy", Arrays.asList("cs"), "evercraft.commands.staff.commandspy").register());
 
         this.commands.add(new SpigotCommandCommand("spigotcommand", "Run a command on the spigot server", Arrays.asList(), null).register());
-        this.commands.add(new SudoCommand("sudo", "Run a command or send a message as another player", Arrays.asList(), "evercraft.commands.staff.sudo").register());
-        this.commands.add(new ImpersonateCommand("impersonate", "Send a message as another player (Even an offline one)", Arrays.asList("imp"), "evercraft.commands.staff.impersonate").register());
 
         this.commands.add(new ReloadCommand("evercraftbungeereload", "Reload the plugin", Arrays.asList("ecbreload"), "evercraft.commands.staff.reload").register());
 

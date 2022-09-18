@@ -72,8 +72,8 @@ public class BungeeMessages {
     }
 
     public static class PlayerInfo {
-        public String offline = "&a&l{player}'s User Info\n&r&aUsername: {player}\nUUID: {uuid}\nIP: {ip}\nNickname: {nickname}";
-        public String online = offline + "\n\n&r&a&l{player}'s Connection Info\n&r&aPing: {ping}\nVersion: {version} ({protocolVersion})";
+        public String offline = "&a&l{player}'s User Info\n&r&aUsername: {player}\n&r&aUUID: {uuid}\n&r&aIP: {ip}\n&r&aNickname: {nickname}\n&r&aDiscord: {discord}";
+        public String online = offline + "\n&r&aPing: {ping}\n&r&aVersion: {version} ({protocolVersion})";
     }
 
     public static class Moderation {
