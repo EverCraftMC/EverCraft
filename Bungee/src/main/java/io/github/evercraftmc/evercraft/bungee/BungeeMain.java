@@ -140,6 +140,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.commands.add(new FriendCommand("friend", "Manage your friends", Arrays.asList("friends", "f"), "evercraft.commands.player.friend").register());
         this.commands.add(new LinkCommand("link", "Link your Minecraft account to Discord", Arrays.asList("linkdiscord"), null).register());
+        this.commands.add(new LinkCommand("unlink", "Unlink your Minecraft account from Discord", Arrays.asList("unlinkdiscord"), null).register());
         this.commands.add(new SettingsCommand("settings", "Manage your settings", Arrays.asList("setting", "set", "s"), "evercraft.commands.player.settings").register());
 
         this.commands.add(new HubCommand("hub", "Go to the hub", Arrays.asList("lobby"), "evercraft.commands.warp.hub").register());
