@@ -200,7 +200,9 @@ public class BungeeMessages {
     public Friend friend = new Friend();
 
     public String linking = "&aNow type \"!link {code}\" into #link in the Discord";
+    public String unlinked = "&aSuccessfully unlinked your account";
     public String linked = "&aYour account is linked to {account}";
+    public String notLinked = "&cYour account is not linked";
 
     public String settings = "&aSuccessfully set {setting} to {value}";
 

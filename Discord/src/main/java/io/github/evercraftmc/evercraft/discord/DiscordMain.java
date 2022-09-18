@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import io.github.evercraftmc.evercraft.discord.commands.DiscordCommand;
 import io.github.evercraftmc.evercraft.discord.commands.info.InfoCommand;
 import io.github.evercraftmc.evercraft.discord.commands.link.LinkCommand;
+import io.github.evercraftmc.evercraft.discord.commands.link.UnLinkCommand;
 import io.github.evercraftmc.evercraft.discord.listeners.DiscordListener;
 import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.PluginManager;
@@ -91,6 +92,7 @@ public class DiscordMain implements io.github.evercraftmc.evercraft.shared.Plugi
         this.commands.add(new InfoCommand("staff", "Get the server staff", Arrays.asList(), null).register());
 
         this.commands.add(new LinkCommand("link", "Link your Discord account to Minecraft", Arrays.asList(), null).register());
+        this.commands.add(new UnLinkCommand("unlink", "Unlink your Discord account from Minecraft", Arrays.asList(), null).register());
 
         this.getLogger().info("Finished loading commands");
 
