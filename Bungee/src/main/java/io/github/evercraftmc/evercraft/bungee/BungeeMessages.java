@@ -171,11 +171,6 @@ public class BungeeMessages {
         public Chat chat = new Chat();
     }
 
-    public static class Sudo {
-        public String message = "&aSuccessfully said {message}&r&a as {player}";
-        public String command = "&aSuccessfully ran {command}&r&a as {player}";
-    }
-
     public Error error = new Error();
 
     public Reload reload = new Reload();
@@ -199,11 +194,6 @@ public class BungeeMessages {
 
     public Friend friend = new Friend();
 
-    public String linking = "&aNow type \"!link {code}\" into #link in the Discord";
-    public String unlinked = "&aSuccessfully unlinked your account";
-    public String linked = "&aYour account is linked to {account}";
-    public String notLinked = "&cYour account is not linked";
-
     public String settings = "&aSuccessfully set {setting} to {value}";
 
     public Warp warp = new Warp();
@@ -213,6 +203,4 @@ public class BungeeMessages {
     public Moderation moderation = new Moderation();
 
     public String commandSpy = "&aSuccessfully toggled your commandspy {value}";
-
-    public Sudo sudo = new Sudo();
 }
