@@ -8,7 +8,6 @@ import io.github.evercraftmc.evercraft.bungee.commands.BungeeCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.economy.BalanceCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.economy.EconomyCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.info.InfoCommand;
-import io.github.evercraftmc.evercraft.bungee.commands.link.LinkCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.KickCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.LockChatCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.MaintenanceCommand;
@@ -137,7 +136,6 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.commands.add(new EconomyCommand("economy", "Modify someones balance", Arrays.asList("eco"), "evercraft.commands.economy.economy").register());
 
         this.commands.add(new FriendCommand("friend", "Manage your friends", Arrays.asList("friends", "f"), "evercraft.commands.player.friend").register());
-        this.commands.add(new LinkCommand("link", "Link your Minecraft account to Discord", Arrays.asList("linkdiscord"), null).register());
         this.commands.add(new SettingsCommand("settings", "Manage your settings", Arrays.asList("setting", "set", "s"), "evercraft.commands.player.settings").register());
 
         this.commands.add(new HubCommand("hub", "Go to the hub", Arrays.asList("lobby"), "evercraft.commands.warp.hub").register());
