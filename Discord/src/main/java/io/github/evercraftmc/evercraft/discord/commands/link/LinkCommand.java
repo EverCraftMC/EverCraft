@@ -22,6 +22,7 @@ public class LinkCommand extends DiscordCommand {
                 message.reply(DiscordMain.getInstance().getPluginMessages().getParsed().linking.success.replace("{account}", DiscordMain.getInstance().getPluginData().getParsed().players.get(DiscordMain.getInstance().getPluginData().getParsed().linking.get(args[0]).account).lastName)).queue();
 
                 DiscordMain.getInstance().getPluginData().getParsed().linking.remove(args[0]);
+                DiscordMain.getInstance().getPluginData().save();
             } else {
                 message.reply(DiscordMain.getInstance().getPluginMessages().getParsed().linking.invalidCode).queue();
             }

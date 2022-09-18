@@ -199,7 +199,7 @@ public class BungeeMessages {
 
     public Friend friend = new Friend();
 
-    public String linking = "&cNow type \"!verify {code}\" into #verify in the discord";
+    public String linking = "&aNow type \"!link {code}\" into #link in the Discord";
 
     public String settings = "&aSuccessfully set {setting} to {value}";
 
