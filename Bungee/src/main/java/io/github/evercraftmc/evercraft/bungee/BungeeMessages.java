@@ -199,6 +199,8 @@ public class BungeeMessages {
 
     public Friend friend = new Friend();
 
+    public String linking = "&cNow type \"!verify {code}\" into #verify in the discord";
+
     public String settings = "&aSuccessfully set {setting} to {value}";
 
     public Warp warp = new Warp();
