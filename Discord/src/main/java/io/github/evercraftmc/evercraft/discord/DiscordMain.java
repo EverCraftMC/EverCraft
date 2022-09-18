@@ -9,6 +9,7 @@ import io.github.evercraftmc.evercraft.discord.commands.DiscordCommand;
 import io.github.evercraftmc.evercraft.discord.commands.info.InfoCommand;
 import io.github.evercraftmc.evercraft.discord.commands.link.LinkCommand;
 import io.github.evercraftmc.evercraft.discord.commands.link.UnLinkCommand;
+import io.github.evercraftmc.evercraft.discord.commands.staff.UserInfoCommand;
 import io.github.evercraftmc.evercraft.discord.listeners.DiscordListener;
 import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.PluginManager;
@@ -17,6 +18,7 @@ import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
 import io.github.evercraftmc.evercraft.shared.discord.DiscordBot;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -90,6 +92,8 @@ public class DiscordMain implements io.github.evercraftmc.evercraft.shared.Plugi
         this.commands.add(new InfoCommand("ip", "Get the server ip", Arrays.asList("minecraft", "mc", "join", "connect"), null).register());
         this.commands.add(new InfoCommand("vote", "Get the server vote link", Arrays.asList(), null).register());
         this.commands.add(new InfoCommand("staff", "Get the server staff", Arrays.asList(), null).register());
+
+        this.commands.add(new UserInfoCommand("userinfo", "Get information about a user", Arrays.asList(), Permission.ADMINISTRATOR).register());
 
         this.commands.add(new LinkCommand("link", "Link your Discord account to Minecraft", Arrays.asList(), null).register());
         this.commands.add(new UnLinkCommand("unlink", "Unlink your Discord account from Minecraft", Arrays.asList(), null).register());

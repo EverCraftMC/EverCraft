@@ -30,4 +30,6 @@ public class DiscordMessages {
     public Map<String, String> info = Map.ofEntries(Map.entry("about", ""), Map.entry("ip", ""), Map.entry("vote", ""), Map.entry("staff", ""));
 
     public Linking linking = new Linking();
+
+    public String userInfo = "{user}'s User Info\nName: {user}\nID: {id}\nNickname: {nickname}\nMinecraft: {minecraft}";
 }
