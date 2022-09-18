@@ -26,12 +26,13 @@ public class LinkCommand extends BungeeCommand {
             while (sb.length() < 8) {
                 sb.append(Integer.toHexString(random.nextInt()));
             }
-            String code = sb.toString().substring(0, 8);
+            String code = sb.toString().substring(0, 8).toUpperCase();
 
             PluginData.Linking linking = new PluginData.Linking();
             linking.account = player.getUniqueId().toString();
             linking.expires = Instant.now().plus(5, ChronoUnit.MINUTES).getEpochSecond();
             BungeeMain.getInstance().getPluginData().getParsed().linking.put(code, linking);
+            BungeeMain.getInstance().getPluginData().save();
 
             sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().linking.replace("{code}", code))));
         } else {
