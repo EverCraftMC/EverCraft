@@ -1,5 +1,7 @@
 package io.github.evercraftmc.evercraft.discord;
 
+import java.util.ArrayList;
+import java.util.List;
 import net.dv8tion.jda.api.entities.Activity.ActivityType;
 
 public class DiscordConfig {
@@ -29,6 +31,8 @@ public class DiscordConfig {
     public Discord discord = new Discord();
 
     public String prefix = "!";
+
+    public List<String> clearChannels = new ArrayList<String>();
 
     public String linkedRole = "";
 }
