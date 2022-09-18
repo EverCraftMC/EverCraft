@@ -3,6 +3,7 @@ package io.github.evercraftmc.evercraft.discord.commands.link;
 import java.util.List;
 import io.github.evercraftmc.evercraft.discord.DiscordMain;
 import io.github.evercraftmc.evercraft.discord.commands.DiscordCommand;
+import io.github.evercraftmc.evercraft.discord.util.player.DiscordPlayerResolver;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 
@@ -14,7 +15,11 @@ public class LinkCommand extends DiscordCommand {
     @Override
     public void run(Message message, String[] args) {
         if (args.length == 0) {
-            message.reply(DiscordMain.getInstance().getPluginMessages().getParsed().linking.needCode).queue();
+            if (DiscordPlayerResolver.getUUIDFromID(DiscordMain.getInstance().getPluginData(), message.getAuthor().getId()) != null) {
+                message.reply(DiscordMain.getInstance().getPluginMessages().getParsed().linking.linked.replace("{account}", DiscordMain.getInstance().getPluginData().getParsed().players.get(DiscordPlayerResolver.getUUIDFromID(DiscordMain.getInstance().getPluginData(), message.getAuthor().getId()).toString()).lastName)).queue();
+            } else {
+                message.reply(DiscordMain.getInstance().getPluginMessages().getParsed().linking.needCode).queue();
+            }
         } else {
             if (DiscordMain.getInstance().getPluginData().getParsed().linking.containsKey(args[0])) {
                 DiscordMain.getInstance().getPluginData().getParsed().players.get(DiscordMain.getInstance().getPluginData().getParsed().linking.get(args[0]).account).discordAccount = message.getAuthor().getId();

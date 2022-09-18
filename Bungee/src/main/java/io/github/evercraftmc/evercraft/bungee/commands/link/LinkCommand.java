@@ -21,20 +21,26 @@ public class LinkCommand extends BungeeCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof ProxiedPlayer player) {
-            Random random = new Random();
-            StringBuilder sb = new StringBuilder();
-            while (sb.length() < 8) {
-                sb.append(Integer.toHexString(random.nextInt()));
+            if (BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).discordAccount == null) {
+                Random random = new Random();
+                StringBuilder sb = new StringBuilder();
+                while (sb.length() < 8) {
+                    sb.append(Integer.toHexString(random.nextInt()));
+                }
+                String code = sb.toString().substring(0, 8).toUpperCase();
+
+                PluginData.Linking linking = new PluginData.Linking();
+                linking.account = player.getUniqueId().toString();
+                linking.expires = Instant.now().plus(5, ChronoUnit.MINUTES).getEpochSecond();
+                BungeeMain.getInstance().getPluginData().getParsed().linking.put(code, linking);
+                BungeeMain.getInstance().getPluginData().save();
+
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().linking.replace("{code}", code))));
+            } else {
+                BungeeMain.getInstance().getDiscordBot().getJDA().retrieveUserById(BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).discordAccount).queue((user) -> {
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().linked.replace("{account}", user.getAsTag()))));
+                });
             }
-            String code = sb.toString().substring(0, 8).toUpperCase();
-
-            PluginData.Linking linking = new PluginData.Linking();
-            linking.account = player.getUniqueId().toString();
-            linking.expires = Instant.now().plus(5, ChronoUnit.MINUTES).getEpochSecond();
-            BungeeMain.getInstance().getPluginData().getParsed().linking.put(code, linking);
-            BungeeMain.getInstance().getPluginData().save();
-
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().linking.replace("{code}", code))));
         } else {
             sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
         }
