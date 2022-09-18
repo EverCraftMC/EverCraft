@@ -54,8 +54,6 @@ public class PluginData {
         public Boolean joinedBefore = false;
         public Long lastOnline = null;
 
-        public String discordAccount = null;
-
         public Float balance = 0f;
 
         public List<String> friends = new ArrayList<String>();
@@ -79,8 +77,6 @@ public class PluginData {
     }
 
     public Map<String, Player> players = new HashMap<String, Player>();
-
-    public Map<String, Linking> linking = new HashMap<String, Linking>();
 
     public Map<String, Vote> votes = new HashMap<String, Vote>();
 

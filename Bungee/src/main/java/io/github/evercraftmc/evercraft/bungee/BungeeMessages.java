@@ -72,7 +72,7 @@ public class BungeeMessages {
     }
 
     public static class PlayerInfo {
-        public String offline = "&a&l{player}'s User Info\n&r&aUsername: {player}\n&r&aUUID: {uuid}\n&r&aIP: {ip}\n&r&aNickname: {nickname}\n&r&aDiscord: {discord}";
+        public String offline = "&a&l{player}'s User Info\n&r&aUsername: {player}\n&r&aUUID: {uuid}\n&r&aIP: {ip}\n&r&aNickname: {nickname}";
         public String online = offline + "\n&r&aPing: {ping}\n&r&aVersion: {version} ({protocolVersion})";
     }
 

@@ -28,18 +28,12 @@ public class PlayerInfoCommand extends BungeeCommand {
             if (player != null) {
                 ProxiedPlayer bungeePlayer = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
 
-                String discAccount = "null";
-                if (BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).discordAccount != null) {
-                    discAccount = BungeeMain.getInstance().getDiscordBot().getJDA().retrieveUserById(BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).discordAccount).complete().getAsTag();
-                }
-
                 if (bungeePlayer != null) {
                     sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().playerInfo.online
                         .replace("{player}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).lastName)
                         .replace("{uuid}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).uuid)
                         .replace("{ip}", sender.hasPermission("evercraft.commands.staff.playerinfo.ip") ? BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).lastIP : "hidden")
                         .replace("{nickname}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).nickname)
-                        .replace("{discord}", discAccount)
                         .replace("{ping}", bungeePlayer.getPing() + "ms")
                         .replace("{version}", ProtocolVersion.getProtocol(Via.getAPI().getPlayerVersion(player.getUniqueId())).getName())
                         .replace("{protocolVersion}", Via.getAPI().getPlayerVersion(player.getUniqueId()) + ""))));
@@ -48,8 +42,7 @@ public class PlayerInfoCommand extends BungeeCommand {
                         .replace("{player}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).lastName)
                         .replace("{uuid}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).uuid)
                         .replace("{ip}", sender.hasPermission("evercraft.commands.staff.playerinfo.ip") ? BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).lastIP : "hidden")
-                        .replace("{nickname}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).nickname))
-                        .replace("{discord}", discAccount)));
+                        .replace("{nickname}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).nickname))));
                 }
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
