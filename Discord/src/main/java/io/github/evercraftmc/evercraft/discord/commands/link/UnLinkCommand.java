@@ -18,6 +18,8 @@ public class UnLinkCommand extends DiscordCommand {
             DiscordMain.getInstance().getPluginData().getParsed().players.get(DiscordPlayerResolver.getUUIDFromID(DiscordMain.getInstance().getPluginData(), message.getAuthor().getId()).toString()).discordAccount = null;
             DiscordMain.getInstance().getPluginData().save();
 
+            message.getGuild().removeRoleFromMember(message.getMember(), message.getGuild().getRoleById(DiscordMain.getInstance().getPluginConfig().getParsed().linkedRole)).queue();
+
             message.reply(DiscordMain.getInstance().getPluginMessages().getParsed().linking.unsuccess).queue();
         } else {
             message.reply(DiscordMain.getInstance().getPluginMessages().getParsed().linking.notLinked).queue();

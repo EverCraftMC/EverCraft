@@ -24,6 +24,8 @@ public class LinkCommand extends DiscordCommand {
             if (DiscordMain.getInstance().getPluginData().getParsed().linking.containsKey(args[0])) {
                 DiscordMain.getInstance().getPluginData().getParsed().players.get(DiscordMain.getInstance().getPluginData().getParsed().linking.get(args[0]).account).discordAccount = message.getAuthor().getId();
 
+                message.getGuild().addRoleToMember(message.getMember(), message.getGuild().getRoleById(DiscordMain.getInstance().getPluginConfig().getParsed().linkedRole)).queue();
+
                 message.reply(DiscordMain.getInstance().getPluginMessages().getParsed().linking.success.replace("{account}", DiscordMain.getInstance().getPluginData().getParsed().players.get(DiscordMain.getInstance().getPluginData().getParsed().linking.get(args[0]).account).lastName)).queue();
 
                 DiscordMain.getInstance().getPluginData().getParsed().linking.remove(args[0]);

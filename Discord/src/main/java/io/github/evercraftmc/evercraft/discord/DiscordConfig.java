@@ -29,4 +29,6 @@ public class DiscordConfig {
     public Discord discord = new Discord();
 
     public String prefix = "!";
+
+    public String linkedRole = "";
 }
