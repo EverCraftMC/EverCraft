@@ -195,7 +195,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.getLogger().info("Starting Discord bot..");
 
-        this.bot = new DiscordBot(this.config.getParsed().discord.token, this.config.getParsed().discord.guildId, new GatewayIntent[] { GatewayIntent.GUILD_MESSAGES }, new CacheFlag[] {}, MemberCachePolicy.NONE, this.config.getParsed().discord.statusType, this.config.getParsed().discord.status);
+        this.bot = new DiscordBot(this.config.getParsed().discord.token, this.config.getParsed().discord.guildId, new GatewayIntent[] { GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT }, new CacheFlag[] {}, MemberCachePolicy.NONE, this.config.getParsed().discord.statusType, this.config.getParsed().discord.status);
         this.bot.addListener((GenericEvent rawevent) -> {
             if (rawevent instanceof MessageReceivedEvent event) {
                 if (event.getAuthor() != this.bot.getJDA().getSelfUser()) {

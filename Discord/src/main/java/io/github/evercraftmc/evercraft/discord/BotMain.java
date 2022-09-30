@@ -126,7 +126,7 @@ public class BotMain implements EventListener {
         commands.add(new CreateReactionRoleCommand());
         commands.add(new RemoveReactionRoleCommand());
 
-        this.bot = new DiscordBot(this.getConfig().getToken(), config.getGuildId(), new GatewayIntent[] { GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_BANS, GatewayIntent.GUILD_EMOJIS_AND_STICKERS }, new CacheFlag[] { CacheFlag.MEMBER_OVERRIDES, CacheFlag.EMOJI }, MemberCachePolicy.ONLINE, config.getStatusType(), config.getStatus());
+        this.bot = new DiscordBot(this.getConfig().getToken(), config.getGuildId(), new GatewayIntent[] { GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_BANS, GatewayIntent.GUILD_EMOJIS_AND_STICKERS }, new CacheFlag[] { CacheFlag.MEMBER_OVERRIDES, CacheFlag.EMOJI }, MemberCachePolicy.ONLINE, config.getStatusType(), config.getStatus());
 
         this.bot.addListener((GenericEvent rawevent) -> {
             if (rawevent instanceof ReadyEvent event) {
