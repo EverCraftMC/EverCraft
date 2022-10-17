@@ -38,6 +38,7 @@ public class SpigotConfig {
     public Warp warp = new Warp();
 
     public Boolean passiveEnabled = false;
+    public Boolean creativeProtectionEnabled = true;
     public ChestProtection chestProtection = new ChestProtection();
 
     public Games games = new Games();

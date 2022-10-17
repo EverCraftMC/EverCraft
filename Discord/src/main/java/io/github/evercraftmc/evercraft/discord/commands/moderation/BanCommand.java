@@ -2,6 +2,7 @@ package io.github.evercraftmc.evercraft.discord.commands.moderation;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 import io.github.evercraftmc.evercraft.discord.BotMain;
 import io.github.evercraftmc.evercraft.discord.args.ArgsParser;
 import io.github.evercraftmc.evercraft.discord.args.ArgsValidator;
@@ -24,7 +25,7 @@ public class BanCommand extends Command {
 
             BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Error", ArgsParser.getUserArg(message, 1).getAsMention() + " is already banned", message.getAuthor());
         } catch (ErrorResponseException err) {
-            ArgsParser.getMemberArg(message, 1).ban(0).queue();
+            ArgsParser.getMemberArg(message, 1).ban(0, TimeUnit.DAYS).queue();
 
             if (ArgsParser.hasArg(message, 2)) {
                 BotMain.Instance.sendEmbed(message.getChannel().asTextChannel(), "Banned", ArgsParser.getUserArg(message, 1).getAsMention() + " was banned for " + ArgsParser.getStringArg(message, 2), message.getAuthor());
