@@ -41,6 +41,7 @@ import io.github.evercraftmc.evercraft.spigot.games.pvp.DodgeBowGame;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.PvpGame;
 import io.github.evercraftmc.evercraft.spigot.games.race.BoatRaceGame;
 import io.github.evercraftmc.evercraft.spigot.listeners.ChestProtectionListener;
+import io.github.evercraftmc.evercraft.spigot.listeners.CreativeItemListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.JoinListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.PvPListener;
@@ -194,6 +195,10 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         if (this.getPluginConfig().getParsed().chestProtection.enabled) {
             this.listeners.add(new ChestProtectionListener().register());
+        }
+
+        if (this.getPluginConfig().getParsed().creativeProtectionEnabled) {
+            this.listeners.add(new CreativeItemListener().register());
         }
 
         if (this.getPluginConfig().getParsed().passiveEnabled) {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
-import javax.security.auth.login.LoginException;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -27,22 +26,18 @@ public class DiscordBot implements EventListener, Closable {
     private List<Consumer<GenericEvent>> listeners = new ArrayList<Consumer<GenericEvent>>();
 
     public DiscordBot(String token, String guild, GatewayIntent[] intents, CacheFlag[] caches, MemberCachePolicy memberCachePolicy, ActivityType statusType, String status) {
-        try {
-            this.jda = JDABuilder.createDefault(token)
-                .setAutoReconnect(true)
-                .disableIntents(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
-                .enableIntents(Arrays.asList(intents))
-                .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.EMOJI, CacheFlag.MEMBER_OVERRIDES, CacheFlag.ONLINE_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.STICKER, CacheFlag.VOICE_STATE)
-                .enableCache(Arrays.asList(caches))
-                .setMemberCachePolicy(memberCachePolicy)
-                .setCompression(Compression.ZLIB)
-                .setStatus(OnlineStatus.ONLINE)
-                .setActivity(Activity.of(statusType, status))
-                .addEventListeners(this)
-                .build();
-        } catch (LoginException e) {
-            e.printStackTrace();
-        }
+        this.jda = JDABuilder.createDefault(token)
+            .setAutoReconnect(true)
+            .disableIntents(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
+            .enableIntents(Arrays.asList(intents))
+            .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.EMOJI, CacheFlag.MEMBER_OVERRIDES, CacheFlag.ONLINE_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.STICKER, CacheFlag.VOICE_STATE)
+            .enableCache(Arrays.asList(caches))
+            .setMemberCachePolicy(memberCachePolicy)
+            .setCompression(Compression.ZLIB)
+            .setStatus(OnlineStatus.ONLINE)
+            .setActivity(Activity.of(statusType, status))
+            .addEventListeners(this)
+            .build();
 
         this.guild = guild;
     }
