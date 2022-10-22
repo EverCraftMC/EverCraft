@@ -39,7 +39,9 @@ public class PingListener extends BungeeListener {
                 ping.setPlayers(players);
             }
         } catch (NullPointerException | ConcurrentModificationException e) {
-            onPing(event);
+            e.printStackTrace();
+
+            return;
         }
 
         event.setResponse(ping);
