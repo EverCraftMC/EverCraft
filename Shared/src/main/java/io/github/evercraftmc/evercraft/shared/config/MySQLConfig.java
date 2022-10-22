@@ -16,7 +16,7 @@ public class MySQLConfig<T> extends Config<T> {
     private String tableName;
     private String keyName;
 
-    private T config;
+    private T config = null;
     private Long configExpiresAt = 0l;
 
     public MySQLConfig(Class<T> clazz, String host, Integer port, String database, String tableName, String keyName, String username, String password) {
@@ -27,6 +27,8 @@ public class MySQLConfig<T> extends Config<T> {
         this.keyName = keyName;
 
         this.mysql.createTable(this.tableName, "(keyName LONGTEXT NOT NULL, data LONGTEXT NOT NULL)");
+
+        this.getParsed();
     }
 
     public T getParsed() {
