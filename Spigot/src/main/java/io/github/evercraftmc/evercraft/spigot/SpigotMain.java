@@ -230,6 +230,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
             this.registeredGames.add(new DodgeBowGame("dodgebow", "dodgebow", 15, Arrays.asList("runners", "bowers"), "dodgebow-runners", "dodgebow-bowers", "dodgebow"));
 
             this.registeredGames.add(new MazeGame("hedgemaze", "maze", "maze-finish"));
+            this.registeredGames.add(new MazeGame("puzzlemaze", "puzzlemaze", "puzzlemaze-finish"));
 
             this.registeredGames.add(new BoatRaceGame("boatrace", "boatrace", "boatrace"));
         }
