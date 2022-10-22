@@ -23,23 +23,23 @@ public class PingListener extends BungeeListener {
                 if (event.getConnection().getVirtualHost() != null && BungeeMain.getInstance().getProxy().getServerInfo(event.getConnection().getVirtualHost().getHostName().split("\\.")[0]) != null) {
                     ping.setDescriptionComponent(ComponentFormatter.flatenComponent(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getProxy().getServerInfo(event.getConnection().getVirtualHost().getHostName().split("\\.")[0]).getMotd()))));
                 } else {
-                    ping.setDescriptionComponent(ComponentFormatter.flatenComponent(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().stream().findFirst().get().getMotd()))));
+                    ping.setDescriptionComponent(ComponentFormatter.flatenComponent(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMotd()))));
                 }
 
                 List<PlayerInfo> sample = new ArrayList<PlayerInfo>();
                 for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
                     sample.add(new PlayerInfo(player.getDisplayName(), player.getUniqueId()));
                 }
-                Players players = new Players(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().stream().findFirst().get().getMaxPlayers(), BungeeMain.getInstance().getProxy().getOnlineCount(), sample.toArray(new PlayerInfo[] {}));
+                Players players = new Players(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers(), BungeeMain.getInstance().getProxy().getOnlineCount(), sample.toArray(new PlayerInfo[] {}));
                 ping.setPlayers(players);
             } else {
-                ping.setDescriptionComponent(ComponentFormatter.flatenComponent(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().stream().findFirst().get().getMotd().split("\n")[0] + "\n" + TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.maintenance.motd)))));
+                ping.setDescriptionComponent(ComponentFormatter.flatenComponent(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMotd().split("\n")[0] + "\n" + TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.maintenance.motd)))));
 
-                Players players = new Players(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().stream().findFirst().get().getMaxPlayers(), 0, new PlayerInfo[] {});
+                Players players = new Players(BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers(), 0, new PlayerInfo[] {});
                 ping.setPlayers(players);
             }
         } catch (NullPointerException | ConcurrentModificationException e) {
-            e.printStackTrace();
+            return;
         }
 
         event.setResponse(ping);
