@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.games;
 
+import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -89,7 +90,7 @@ public abstract class RoundedGame extends Game {
         if (this.started) {
             this.started = false;
 
-            for (Player player : this.players) {
+            for (Player player : new ArrayList<Player>(this.players)) {
                 player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.stop)));
 
                 this.leave(player, LeaveReason.GAMEOVER);
