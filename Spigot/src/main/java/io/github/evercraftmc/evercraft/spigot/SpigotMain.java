@@ -40,6 +40,7 @@ import io.github.evercraftmc.evercraft.spigot.games.Game;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.DodgeBowGame;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.KittedGame;
 import io.github.evercraftmc.evercraft.spigot.games.race.BoatRaceGame;
+import io.github.evercraftmc.evercraft.spigot.games.race.MazeGame;
 import io.github.evercraftmc.evercraft.spigot.listeners.ChestProtectionListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.CreativeItemListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.JoinListener;
@@ -227,6 +228,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
             this.registeredGames.add(new KittedGame("sumo", "sumo", "sumo"));
 
             this.registeredGames.add(new DodgeBowGame("dodgebow", "dodgebow", 15, Arrays.asList("runners", "bowers"), "dodgebow-runners", "dodgebow-bowers", "dodgebow"));
+
+            this.registeredGames.add(new MazeGame("hedgemaze", "maze", "maze-finish"));
 
             this.registeredGames.add(new BoatRaceGame("boatrace", "boatrace", "boatrace"));
         }
