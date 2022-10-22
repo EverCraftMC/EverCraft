@@ -18,7 +18,7 @@ public class MazeGame extends Game {
     @EventHandler
     public void onPlayerFinish(PlayerInteractEvent event) {
         if (event.getAction() == Action.PHYSICAL && event.getClickedBlock() != null && event.getClickedBlock().getType().toString().endsWith("_PRESSURE_PLATE")) {
-            if (event.getClickedBlock().getLocation().equals(SpigotMain.getInstance().getWarps().getParsed().warps.get(this.finishWarpName).toBukkitLocation().toBlockLocation())) {
+            if (event.getClickedBlock().getLocation().toBlockLocation().equals(SpigotMain.getInstance().getWarps().getParsed().warps.get(this.finishWarpName).toBukkitLocation().toBlockLocation())) {
                 event.setCancelled(true);
 
                 this.leave(event.getPlayer(), LeaveReason.GAMEOVER);
