@@ -175,7 +175,7 @@ public class JoinListener extends BungeeListener {
 
     @EventHandler
     public void onPlayerLogin(PreLoginEvent event) {
-        if (event.getConnection().getName().startsWith("Tester_") && BungeeMain.getInstance().getPluginConfig().getParsed().testerIps.contains(((InetSocketAddress) event.getConnection().getSocketAddress()).getHostName())) {
+        if (event.getConnection().getName().startsWith("Tester_") && BungeeMain.getInstance().getPluginConfig().getParsed().testerIps.contains(((InetSocketAddress) event.getConnection().getSocketAddress()).getHostString())) {
             event.getConnection().setOnlineMode(false);
         }
     }
