@@ -38,7 +38,7 @@ import io.github.evercraftmc.evercraft.spigot.commands.warp.SpawnCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 import io.github.evercraftmc.evercraft.spigot.games.Game;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.DodgeBowGame;
-import io.github.evercraftmc.evercraft.spigot.games.pvp.PvpGame;
+import io.github.evercraftmc.evercraft.spigot.games.pvp.KittedGame;
 import io.github.evercraftmc.evercraft.spigot.games.race.BoatRaceGame;
 import io.github.evercraftmc.evercraft.spigot.listeners.ChestProtectionListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.CreativeItemListener;
@@ -219,13 +219,14 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         if (this.config.getParsed().games.enabled) {
             this.commands.add(new GameCommand("game", "Join/leave a game", Arrays.asList("games"), "evercraft.commands.games.game").register());
 
-            this.registeredGames.add(new PvpGame("plainspvp", "plainspvp", "pvp"));
-            this.registeredGames.add(new PvpGame("endpvp", "endpvp", "end"));
-            this.registeredGames.add(new PvpGame("crystalpvp", "crystalpvp", "crystal"));
-            this.registeredGames.add(new PvpGame("ventpvp", "ventpvp", "vents"));
-            this.registeredGames.add(new PvpGame("sumo", "sumo", "sumo"));
+            this.registeredGames.add(new KittedGame("plainspvp", "plainspvp", "pvp"));
+            this.registeredGames.add(new KittedGame("endpvp", "endpvp", "end"));
+            this.registeredGames.add(new KittedGame("crystalpvp", "crystalpvp", "crystal"));
+            this.registeredGames.add(new KittedGame("ventpvp", "ventpvp", "vents"));
 
-            this.registeredGames.add(new DodgeBowGame("dodgebow", "dodgebow", "dodgebow-runners", "dodgebow-bowers", "dodgebow"));
+            this.registeredGames.add(new KittedGame("sumo", "sumo", "sumo"));
+
+            this.registeredGames.add(new DodgeBowGame("dodgebow", "dodgebow", 15, Arrays.asList("runners", "bowers"), "dodgebow-runners", "dodgebow-bowers", "dodgebow"));
 
             this.registeredGames.add(new BoatRaceGame("boatrace", "boatrace", "boatrace"));
         }

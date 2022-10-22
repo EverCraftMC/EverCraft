@@ -1,6 +1,7 @@
 package io.github.evercraftmc.evercraft.spigot.games.pvp;
 
 import java.util.Arrays;
+import java.util.List;
 import org.bukkit.entity.Player;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
@@ -12,8 +13,8 @@ public class DodgeBowGame extends TeamedGame {
 
     protected String bowerKitName;
 
-    public DodgeBowGame(String name, String warpName, String runnerWarpName, String bowerWarpName, String bowerKitName) {
-        super(name, warpName, 1f, Float.MAX_VALUE);
+    public DodgeBowGame(String name, String warpName, Integer countdownLength, List<String> teamsList, String runnerWarpName, String bowerWarpName, String bowerKitName) {
+        super(name, warpName, 1f, Float.MAX_VALUE, countdownLength, teamsList);
 
         this.runnerWarpName = runnerWarpName;
         this.bowerWarpName = bowerWarpName;
@@ -34,19 +35,17 @@ public class DodgeBowGame extends TeamedGame {
     }
 
     @Override
-    public void start() {
-        super.start();
+    public void startNoCountdown() {
+        super.startNoCountdown();
 
         for (Player player : this.players) {
-            if (!this.teams.containsKey(player)) {
-                this.teams.put(player, "runners");
+            if (!this.playerTeams.containsKey(player)) {
+                this.playerTeams.put(player, "runners");
             }
 
-            if (this.teams.get(player).equalsIgnoreCase("runners")) {
+            if (this.playerTeams.get(player).equalsIgnoreCase("runners")) {
                 new WarpCommand("warp", null, Arrays.asList(), null).run(player, new String[] { runnerWarpName, "true" });
-            }
-
-            if (this.teams.get(player).equalsIgnoreCase("bowers")) {
+            } else if (this.playerTeams.get(player).equalsIgnoreCase("bowers")) {
                 new WarpCommand("warp", null, Arrays.asList(), null).run(player, new String[] { bowerWarpName, "true" });
 
                 new KitCommand("kit", null, Arrays.asList(), null).run(player, new String[] { bowerKitName, "true" });
@@ -62,7 +61,7 @@ public class DodgeBowGame extends TeamedGame {
             if (this.started) {
                 Integer runners = 0;
                 for (Player player2 : this.players) {
-                    if (this.teams.get(player2).equalsIgnoreCase("runners")) {
+                    if (this.playerTeams.get(player2).equalsIgnoreCase("runners")) {
                         runners++;
                     }
                 }
@@ -83,10 +82,10 @@ public class DodgeBowGame extends TeamedGame {
             Integer bowers = 0;
 
             for (Player player2 : this.players) {
-                if (this.teams.containsKey(player2)) {
-                    if (this.teams.get(player2).equalsIgnoreCase("runners")) {
+                if (this.playerTeams.containsKey(player2)) {
+                    if (this.playerTeams.get(player2).equalsIgnoreCase("runners")) {
                         runners++;
-                    } else if (this.teams.get(player2).equalsIgnoreCase("bowers")) {
+                    } else if (this.playerTeams.get(player2).equalsIgnoreCase("bowers")) {
                         bowers++;
                     }
                 }

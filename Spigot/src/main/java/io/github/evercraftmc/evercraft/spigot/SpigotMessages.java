@@ -44,17 +44,22 @@ public class SpigotMessages {
 
     public static class Games {
         public String joined = "&aYou have joined {game} &r&a({players} / {max})";
+        public String joinedNoMax = "&aYou have joined {game} &r&a({players})";
         public String join = "&a{player} &r&ahas joined the game ({players} / {max})";
+        public String joinNoMax = "&a{player} &r&ahas joined the game ({players})";
         public String left = "&aYou have left {game}";
         public String leave = "&a{player} &r&ahas left the game ({players} / {max})";
+        public String leaveNoMax = "&a{player} &r&ahas left the game ({players})";
         public String joinedTeam = "&aYou have joined team {team}";
         public String teamJoin = "&a{player} &r&ahas joined team {team}";
         public String leftTeam = "&aYou have left team {team}";
         public String teamLeave = "&a{player} &r&ahas left team {team}";
+        public String teamNotFound = "&cTeam {team} &r&ccould not be found";
         public String start = "&aThat game has started";
         public String stop = "&aThat game has stopped";
         public String full = "&cThat game is full";
         public String started = "&cThat game has already started";
+        public String countdown = "&aGame will start in {time} seconds";
         public String notFound = "&cGame {game} &r&ccould not be found";
         public String alreadyInGame = "&cYou are already in a game";
         public String notInGame = "&cYou are not in a game";
