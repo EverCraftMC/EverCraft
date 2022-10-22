@@ -53,4 +53,6 @@ public class BungeeConfig {
     public Scoreboard scoreboard = new Scoreboard();
 
     public TabList tabList = new TabList();
+
+    public List<String> testerIps = new ArrayList<String>();
 }

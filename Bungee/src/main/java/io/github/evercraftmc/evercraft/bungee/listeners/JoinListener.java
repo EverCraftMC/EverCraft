@@ -12,6 +12,7 @@ import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.event.PreLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent.Reason;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
@@ -169,6 +170,13 @@ public class JoinListener extends BungeeListener {
 
                 event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().server.disconnectedError.replace("{error}", ComponentFormatter.componentToString(event.getKickReasonComponent())))));
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerLogin(PreLoginEvent event) {
+        if (event.getConnection().getName().startsWith("Tester_") && BungeeMain.getInstance().getPluginConfig().getParsed().testerIps.contains(((InetSocketAddress) event.getConnection().getSocketAddress()).getHostName())) {
+            event.getConnection().setOnlineMode(false);
         }
     }
 }
