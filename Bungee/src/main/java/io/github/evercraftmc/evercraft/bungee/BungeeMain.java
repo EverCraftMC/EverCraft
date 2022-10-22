@@ -3,7 +3,9 @@ package io.github.evercraftmc.evercraft.bungee;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import io.github.evercraftmc.evercraft.bungee.commands.BungeeCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.economy.BalanceCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.economy.EconomyCommand;
@@ -52,6 +54,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -69,6 +72,10 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
     private List<BungeeCommand> commands;
     private List<BungeeListener> listeners;
     private List<Closable> assets;
+
+    public Integer serverMaxPlayers = 100;
+    public String serverMotd = "";
+    public Map<String, String> serverMotds = new HashMap<String, String>();
 
     @Override
     public void onLoad() {
@@ -183,6 +190,12 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.assets = new ArrayList<Closable>();
 
         this.assets.add(new ScoreBoard());
+
+        this.serverMaxPlayers = this.getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers();
+        this.serverMotd = this.getProxy().getConfigurationAdapter().getListeners().iterator().next().getMotd();
+        for (ServerInfo server : this.getProxy().getServersCopy().values()) {
+            this.serverMotds.put(server.getName().toLowerCase(), server.getMotd());
+        }
 
         for (ProxiedPlayer player : this.getProxy().getPlayers()) {
             player.setDisplayName(TextFormatter.translateColors(BungeePlayerResolver.getDisplayName(data, player.getUniqueId())));
