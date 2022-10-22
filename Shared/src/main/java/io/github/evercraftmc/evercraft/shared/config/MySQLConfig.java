@@ -41,7 +41,14 @@ public class MySQLConfig<T> extends Config<T> {
         return this.config;
     }
 
+    public T getCached() {
+        return this.config;
+    }
+
     public void reload() {
+        this.config = null;
+        this.configExpiresAt = 0l;
+
         mysql.reconnect();
     }
 
