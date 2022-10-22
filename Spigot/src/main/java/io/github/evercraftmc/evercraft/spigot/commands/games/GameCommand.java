@@ -80,9 +80,12 @@ public class GameCommand extends SpigotCommand {
                                 }
 
                                 if (inGame) {
+                                    Boolean joinedTeam = false;
                                     for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
                                         if (game instanceof TeamedGame teamedGame) {
-                                            if (teamedGame.isPlaying(player)) {
+                                            if (teamedGame.isPlaying(player) && teamedGame.getTeamsList().contains(args[2])) {
+                                                joinedTeam = true;
+
                                                 if (teamedGame.getTeam(player) == null) {
                                                     teamedGame.joinTeam(player, args[2]);
                                                 } else {
@@ -91,6 +94,10 @@ public class GameCommand extends SpigotCommand {
                                                 }
                                             }
                                         }
+                                    }
+
+                                    if (!joinedTeam) {
+                                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.teamNotFound.replace("{team}", args[2]))));
                                     }
                                 } else {
                                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.notInGame)));

@@ -20,7 +20,7 @@ import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter
 
 public abstract class Game implements Listener {
     public enum LeaveReason {
-        GAMEOVER, COMMAND, DEATH, TELEPORT, DISCONNECTED
+        GAMEOVER, COMMAND, DEATH, TELEPORT, DISCONNECT
     }
 
     protected String name;
@@ -42,13 +42,13 @@ public abstract class Game implements Listener {
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
 
+        SpigotMain.getInstance().getServer().getPluginManager().registerEvents(this, SpigotMain.getInstance());
+
         this.tickTask = Bukkit.getScheduler().runTaskTimer(SpigotMain.getInstance(), new Runnable() {
             public void run() {
                 tick();
             }
         }, 1, 1);
-
-        SpigotMain.getInstance().getServer().getPluginManager().registerEvents(this, SpigotMain.getInstance());
     }
 
     public String getName() {
@@ -67,6 +67,14 @@ public abstract class Game implements Listener {
         return this.maxPlayers;
     }
 
+    public List<Player> getPlayers() {
+        return new ArrayList<Player>(this.players);
+    }
+
+    public Boolean isPlaying(Player player) {
+        return this.players.contains(player);
+    }
+
     public void join(Player player) {
         if (!this.players.contains(player)) {
             if (this.players.size() < this.maxPlayers) {
@@ -74,11 +82,19 @@ public abstract class Game implements Listener {
 
                 this.players.add(player);
 
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.joined.replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                if (this.maxPlayers != Float.MAX_VALUE) {
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.joined.replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
+                } else {
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.joinedNoMax.replace("{game}", this.name).replace("{players}", this.players.size() + ""))));
+                }
 
                 for (Player player2 : this.players) {
                     if (player2 != player) {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.join.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                        if (this.maxPlayers != Float.MAX_VALUE) {
+                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.join.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
+                        } else {
+                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.joinNoMax.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + ""))));
+                        }
                     }
                 }
             } else {
@@ -94,13 +110,15 @@ public abstract class Game implements Listener {
             this.players.remove(player);
 
             if (leaveReason != LeaveReason.GAMEOVER) {
-                if (leaveReason != LeaveReason.DISCONNECTED) {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.left.replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                if (leaveReason != LeaveReason.DISCONNECT) {
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.left.replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
                 }
 
                 for (Player player2 : this.players) {
-                    if (player2 != player) {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.leave.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", (this.maxPlayers == Float.MAX_VALUE ? "Infinite" : this.maxPlayers + "")))));
+                    if (this.maxPlayers != Float.MAX_VALUE) {
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.leave.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
+                    } else {
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.leaveNoMax.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + ""))));
                     }
                 }
             }
@@ -115,14 +133,10 @@ public abstract class Game implements Listener {
 
     public void tick() {}
 
-    public Boolean isPlaying(Player player) {
-        return this.players.contains(player);
-    }
-
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         if (this.players.contains(event.getPlayer())) {
-            this.leave(event.getPlayer(), LeaveReason.DISCONNECTED);
+            this.leave(event.getPlayer(), LeaveReason.DISCONNECT);
         }
     }
 
