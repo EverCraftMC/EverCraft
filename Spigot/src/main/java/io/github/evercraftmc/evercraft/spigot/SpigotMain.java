@@ -38,6 +38,7 @@ import io.github.evercraftmc.evercraft.spigot.commands.warp.SpawnCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 import io.github.evercraftmc.evercraft.spigot.games.Game;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.DodgeBowGame;
+import io.github.evercraftmc.evercraft.spigot.games.pvp.HideAndSeekGame;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.KittedGame;
 import io.github.evercraftmc.evercraft.spigot.games.race.BoatRaceGame;
 import io.github.evercraftmc.evercraft.spigot.games.race.MazeGame;
@@ -220,19 +221,22 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         if (this.config.getParsed().games.enabled) {
             this.commands.add(new GameCommand("game", "Join/leave a game", Arrays.asList("games"), "evercraft.commands.games.game").register());
 
-            this.registeredGames.add(new KittedGame("plainspvp", "plainspvp", "pvp"));
-            this.registeredGames.add(new KittedGame("endpvp", "endpvp", "end"));
-            this.registeredGames.add(new KittedGame("crystalpvp", "crystalpvp", "crystal"));
-            this.registeredGames.add(new KittedGame("ventpvp", "ventpvp", "vents"));
+            this.registeredGames.add(new KittedGame("plainspvp", "~plainspvp", "pvp"));
+            this.registeredGames.add(new KittedGame("endpvp", "~endpvp", "end"));
+            this.registeredGames.add(new KittedGame("crystalpvp", "~crystalpvp", "crystal"));
+            this.registeredGames.add(new KittedGame("ventpvp", "~ventpvp", "vents"));
 
-            this.registeredGames.add(new KittedGame("sumo", "sumo", "sumo"));
+            this.registeredGames.add(new KittedGame("sumo", "~sumo", "sumo"));
 
-            this.registeredGames.add(new DodgeBowGame("dodgebow", "dodgebow", 15, Arrays.asList("runners", "bowers"), "dodgebow-runners", "dodgebow-bowers", "dodgebow"));
+            this.registeredGames.add(new HideAndSeekGame("deserthideandseek", "~deserthideandseek", 15, Arrays.asList("hiders", "seekers"), "~deserthideandseek-start", "hideandseek"));
+            this.registeredGames.add(new HideAndSeekGame("cavehideandseek", "~cavehideandseek", 15, Arrays.asList("hiders", "seekers"), "~cavehideandseek-start", "hideandseek"));
 
-            this.registeredGames.add(new MazeGame("hedgemaze", "maze", "maze-finish"));
-            this.registeredGames.add(new MazeGame("puzzlemaze", "puzzlemaze", "puzzlemaze-finish"));
+            this.registeredGames.add(new DodgeBowGame("dodgebow", "~dodgebow", 15, Arrays.asList("runners", "bowers"), "~dodgebow-runners", "~dodgebow-bowers", "dodgebow"));
 
-            this.registeredGames.add(new BoatRaceGame("boatrace", "boatrace", "boatrace"));
+            this.registeredGames.add(new MazeGame("hedgemaze", "~maze", "~maze-finish"));
+            this.registeredGames.add(new MazeGame("puzzlemaze", "~puzzlemaze", "~puzzlemaze-finish"));
+
+            this.registeredGames.add(new BoatRaceGame("boatrace", "~boatrace", "boatrace"));
         }
 
         this.getLogger().info("Finished loading games");
