@@ -3,8 +3,8 @@ package io.github.evercraftmc.evercraft.spigot.games.pvp;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.entity.Player;
+import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
-import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 import io.github.evercraftmc.evercraft.spigot.games.TeamedGame;
 
 public class DodgeBowGame extends TeamedGame {
@@ -44,9 +44,9 @@ public class DodgeBowGame extends TeamedGame {
             }
 
             if (this.playerTeams.get(player).equalsIgnoreCase("runners")) {
-                new WarpCommand("warp", null, Arrays.asList(), null).run(player, new String[] { runnerWarpName, "true" });
+                player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get(runnerWarpName).toBukkitLocation());
             } else if (this.playerTeams.get(player).equalsIgnoreCase("bowers")) {
-                new WarpCommand("warp", null, Arrays.asList(), null).run(player, new String[] { bowerWarpName, "true" });
+                player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get(bowerWarpName).toBukkitLocation());
 
                 new KitCommand("kit", null, Arrays.asList(), null).run(player, new String[] { bowerKitName, "true" });
             }

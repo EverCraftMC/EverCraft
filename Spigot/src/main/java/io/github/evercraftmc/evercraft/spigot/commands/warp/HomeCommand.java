@@ -20,9 +20,7 @@ public class HomeCommand extends SpigotCommand {
             if (player.getBedSpawnLocation() != null) {
                 player.teleport(player.getBedSpawnLocation());
 
-                if (!(args.length >= 1 && args[0].equalsIgnoreCase("true"))) {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.warped.replace("{warp}", "home"))));
-                }
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.warped.replace("{warp}", "home"))));
             } else {
                 player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.notFound.replace("{warp}", "home"))));
             }

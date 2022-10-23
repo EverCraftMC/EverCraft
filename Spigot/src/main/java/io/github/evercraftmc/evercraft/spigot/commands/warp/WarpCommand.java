@@ -20,7 +20,7 @@ public class WarpCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
-                if (SpigotMain.getInstance().getWarps().getParsed().warps.containsKey(args[0])) {
+                if (SpigotMain.getInstance().getWarps().getParsed().warps.containsKey(args[0]) && !(args[0].startsWith("~") && (player.isOp() || player.hasPermission("evercraft.commands.warp.secretWarp")))) {
                     player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get(args[0]).toBukkitLocation());
 
                     if (SpigotMain.getInstance().getPluginConfig().getParsed().warp.clearOnWarp) {
@@ -28,9 +28,7 @@ public class WarpCommand extends SpigotCommand {
                         player.getActivePotionEffects().clear();
                     }
 
-                    if (!(args.length >= 2 && args[1].equalsIgnoreCase("true"))) {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.warped.replace("{warp}", args[0]))));
-                    }
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.warped.replace("{warp}", args[0]))));
                 } else {
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.notFound.replace("{warp}", args[0]))));
                 }
@@ -47,7 +45,15 @@ public class WarpCommand extends SpigotCommand {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 1) {
-            list = new ArrayList<String>(SpigotMain.getInstance().getWarps().getParsed().warps.keySet());
+            List<String> warps = new ArrayList<String>();
+
+            for (String warp : SpigotMain.getInstance().getWarps().getParsed().warps.keySet()) {
+                if (!(args[0].startsWith("~") && (sender.isOp() || sender.hasPermission("evercraft.commands.warp.secretWarp")))) {
+                    warps.add(warp);
+                }
+            }
+
+            list = new ArrayList<String>(warps);
         } else {
             return Arrays.asList();
         }

@@ -1,7 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.games;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -11,11 +10,10 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitTask;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
-import io.github.evercraftmc.evercraft.spigot.commands.warp.SpawnCommand;
-import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 
 public abstract class Game implements Listener {
@@ -78,7 +76,12 @@ public abstract class Game implements Listener {
     public void join(Player player) {
         if (!this.players.contains(player)) {
             if (this.players.size() < this.maxPlayers) {
-                new WarpCommand("warp", null, Arrays.asList(), null).run(player, new String[] { warpName, "true" });
+                player.getInventory().clear();
+                for (PotionEffect effect : player.getActivePotionEffects()) {
+                    player.removePotionEffect(effect.getType());
+                }
+
+                player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get(warpName).toBukkitLocation());
 
                 this.players.add(player);
 
@@ -124,7 +127,7 @@ public abstract class Game implements Listener {
             }
 
             if (leaveReason == LeaveReason.COMMAND || leaveReason == LeaveReason.GAMEOVER) {
-                new SpawnCommand("spawn", null, Arrays.asList(), null).run(player, new String[] { "true" });
+                player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get("spawn").toBukkitLocation());
             }
         } else {
             throw new RuntimeException("Player is not in game");

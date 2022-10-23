@@ -13,6 +13,8 @@ public class MazeGame extends Game {
         super(name, warpName, 1f, Float.MAX_VALUE);
 
         this.finishWarpName = finishWarpName;
+
+        // TODO Maybe dynamicly generate the maze
     }
 
     @EventHandler
