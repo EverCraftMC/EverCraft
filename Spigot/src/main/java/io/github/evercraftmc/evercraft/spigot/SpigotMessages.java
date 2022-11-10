@@ -87,4 +87,6 @@ public class SpigotMessages {
     public Games games = new Games();
 
     public InvSee invsee = new InvSee();
+
+    public String restarting = "&cThe server is restarting!\n&cRejoin soon.";
 }

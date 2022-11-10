@@ -171,6 +171,11 @@ public class BungeeMessages {
         public Chat chat = new Chat();
     }
 
+    public static class Sudo {
+        public String message = "&aSuccessfully said {message}&r&a as {player}";
+        public String command = "&aSuccessfully ran {command}&r&a as {player}";
+    }
+
     public Error error = new Error();
 
     public Reload reload = new Reload();
@@ -203,4 +208,8 @@ public class BungeeMessages {
     public Moderation moderation = new Moderation();
 
     public String commandSpy = "&aSuccessfully toggled your commandspy {value}";
+
+    public Sudo sudo = new Sudo();
+
+    public String restarting = "&cThe proxy is restarting!\n&cRejoin soon.";
 }

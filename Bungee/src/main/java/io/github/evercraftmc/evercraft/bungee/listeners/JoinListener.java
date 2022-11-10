@@ -10,6 +10,7 @@ import io.github.evercraftmc.evercraft.bungee.util.player.BungeePlayerResolver;
 import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.PreLoginEvent;
@@ -159,7 +160,12 @@ public class JoinListener extends BungeeListener {
     @EventHandler
     public void onPlayerKicked(ServerKickEvent event) {
         if (event.getPlayer().isConnected()) {
-            if (event.getCause() == Cause.LOST_CONNECTION) {
+            if (TextFormatter.removeColors(ComponentFormatter.componentToString(event.getKickReasonComponent())).startsWith("The server is restarting")) {
+                event.setCancelled(true);
+                event.setCancelServer(BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getPluginConfig().getParsed().server.fallback));
+
+                event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().server.disconnectedNoCom)));
+            } else if (event.getCause() == Cause.LOST_CONNECTION) {
                 event.setCancelled(true);
                 event.setCancelServer(BungeeMain.getInstance().getProxy().getServerInfo(BungeeMain.getInstance().getPluginConfig().getParsed().server.fallback));
 
@@ -170,6 +176,19 @@ public class JoinListener extends BungeeListener {
 
                 event.getPlayer().sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().server.disconnectedError.replace("{error}", ComponentFormatter.componentToString(event.getKickReasonComponent())))));
             }
+        }
+    }
+
+    @EventHandler
+    public void onServerStop(ChatEvent event) {
+        if (event.getMessage().startsWith("/end")) {
+            event.setCancelled(true);
+
+            for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
+                player.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().restarting)));
+            }
+
+            BungeeMain.getInstance().getProxy().stop();
         }
     }
 

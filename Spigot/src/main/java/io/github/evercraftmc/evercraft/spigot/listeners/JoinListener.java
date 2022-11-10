@@ -1,7 +1,10 @@
 package io.github.evercraftmc.evercraft.spigot.listeners;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent.Cause;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
@@ -58,5 +61,18 @@ public class JoinListener extends SpigotListener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         event.quitMessage(Component.empty());
+    }
+
+    @EventHandler
+    public void onServerStop(PlayerCommandPreprocessEvent event) {
+        if (event.getMessage().startsWith("/stop") || event.getMessage().startsWith("/restart")) {
+            event.setCancelled(true);
+
+            for (Player player : SpigotMain.getInstance().getServer().getOnlinePlayers()) {
+                player.kick(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().restarting)), Cause.RESTART_COMMAND);
+            }
+
+            SpigotMain.getInstance().getServer().shutdown();
+        }
     }
 }
