@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent.Cause;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.server.ServerCommandEvent;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -66,6 +67,19 @@ public class JoinListener extends SpigotListener {
     @EventHandler
     public void onServerStop(PlayerCommandPreprocessEvent event) {
         if (event.getMessage().startsWith("/stop") || event.getMessage().startsWith("/restart")) {
+            event.setCancelled(true);
+
+            for (Player player : SpigotMain.getInstance().getServer().getOnlinePlayers()) {
+                player.kick(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().restarting)), Cause.RESTART_COMMAND);
+            }
+
+            SpigotMain.getInstance().getServer().shutdown();
+        }
+    }
+
+    @EventHandler
+    public void onServerStop(ServerCommandEvent event) {
+        if (event.getCommand().startsWith("stop") || event.getCommand().startsWith("restart")) {
             event.setCancelled(true);
 
             for (Player player : SpigotMain.getInstance().getServer().getOnlinePlayers()) {
