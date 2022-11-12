@@ -23,6 +23,7 @@ import io.github.evercraftmc.evercraft.spigot.commands.player.BungeeCommandComma
 import io.github.evercraftmc.evercraft.spigot.commands.player.ChestProtectionCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.PassiveCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.SitCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.staff.DebugCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.EnderSeeCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.InviSeeCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.ReloadCommand;
@@ -185,6 +186,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new BungeeCommandCommand("bungeecommand", "Run a command on the bungee sever", Arrays.asList(), null).register());
 
         this.commands.add(new ReloadCommand("evercraftreload", "Reload the plugin", Arrays.asList("ecreload"), "evercraft.commands.staff.reload").register());
+        this.commands.add(new DebugCommand("evercraftdebug", "Debug the plugin", Arrays.asList("ecdebug"), "evercraft.commands.staff.debug").register());
 
         this.getLogger().info("Finished loading commands");
 

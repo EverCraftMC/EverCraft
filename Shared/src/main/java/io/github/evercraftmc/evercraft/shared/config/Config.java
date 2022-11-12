@@ -1,5 +1,7 @@
 package io.github.evercraftmc.evercraft.shared.config;
 
+import com.google.gson.JsonElement;
+
 public abstract class Config<T> {
     protected Class<T> clazz;
 
@@ -8,6 +10,8 @@ public abstract class Config<T> {
     }
 
     public abstract T getParsed();
+
+    public abstract JsonElement getRaw();
 
     public abstract void reload();
 
