@@ -28,9 +28,9 @@ public class DiscordBot implements EventListener, Closable {
     public DiscordBot(String token, String guild, GatewayIntent[] intents, CacheFlag[] caches, MemberCachePolicy memberCachePolicy, ActivityType statusType, String status) {
         this.jda = JDABuilder.createDefault(token)
             .setAutoReconnect(true)
-            .disableIntents(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
+            .disableIntents(Arrays.asList(GatewayIntent.values()))
             .enableIntents(Arrays.asList(intents))
-            .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.EMOJI, CacheFlag.MEMBER_OVERRIDES, CacheFlag.ONLINE_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.STICKER, CacheFlag.VOICE_STATE)
+            .disableCache(Arrays.asList(CacheFlag.values()))
             .enableCache(Arrays.asList(caches))
             .setMemberCachePolicy(memberCachePolicy)
             .setCompression(Compression.ZLIB)
