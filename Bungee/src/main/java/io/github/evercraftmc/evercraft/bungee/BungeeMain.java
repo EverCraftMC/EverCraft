@@ -27,6 +27,7 @@ import io.github.evercraftmc.evercraft.bungee.commands.player.SeenCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SettingsCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SpigotCommandCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.CommandSpyCommand;
+import io.github.evercraftmc.evercraft.bungee.commands.staff.DebugCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.PlayerInfoCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.StaffChatCommand;
@@ -171,6 +172,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.commands.add(new SudoCommand("sudo", "Run a command or send a message as another player", Arrays.asList(), "evercraft.commands.staff.sudo").register());
 
         this.commands.add(new ReloadCommand("evercraftbungeereload", "Reload the plugin", Arrays.asList("ecbreload"), "evercraft.commands.staff.reload").register());
+        this.commands.add(new DebugCommand("evercraftbungeedebug", "Debug the plugin", Arrays.asList("ecbdebug"), "evercraft.commands.staff.debug").register());
 
         this.getLogger().info("Finished loading commands");
 

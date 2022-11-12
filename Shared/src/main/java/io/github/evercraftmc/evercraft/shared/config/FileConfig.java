@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 public class FileConfig<T> extends Config<T> {
     private static Gson gson;
@@ -39,6 +41,10 @@ public class FileConfig<T> extends Config<T> {
 
     public T getParsed() {
         return this.config;
+    }
+
+    public JsonElement getRaw() {
+        return JsonParser.parseString(gson.toJson(this.getParsed()));
     }
 
     public void reload() {

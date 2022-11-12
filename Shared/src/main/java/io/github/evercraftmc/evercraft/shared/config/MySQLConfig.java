@@ -3,6 +3,8 @@ package io.github.evercraftmc.evercraft.shared.config;
 import java.time.Instant;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import io.github.evercraftmc.evercraft.shared.mysql.MySQL;
 
 public class MySQLConfig<T> extends Config<T> {
@@ -45,6 +47,10 @@ public class MySQLConfig<T> extends Config<T> {
 
     public T getCached() {
         return this.config;
+    }
+
+    public JsonElement getRaw() {
+        return JsonParser.parseString(gson.toJson(this.getParsed()));
     }
 
     public void reload() {

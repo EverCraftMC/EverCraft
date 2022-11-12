@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import com.loohp.limbo.plugins.LimboPlugin;
 import io.github.evercraftmc.evercraft.limbo.commands.LimboCommand;
+import io.github.evercraftmc.evercraft.limbo.commands.staff.DebugCommand;
 import io.github.evercraftmc.evercraft.limbo.commands.staff.ReloadCommand;
 import io.github.evercraftmc.evercraft.limbo.listeners.LimboListener;
 import io.github.evercraftmc.evercraft.limbo.listeners.MessageListener;
@@ -76,6 +77,7 @@ public class LimboMain extends LimboPlugin implements Plugin {
         this.commands = new ArrayList<LimboCommand>();
 
         this.commands.add(new ReloadCommand("evercraftreload", "Reload the plugin", Arrays.asList("ecreload"), "evercraft.commands.staff.reload").register());
+        this.commands.add(new DebugCommand("evercraftdebug", "Debug the plugin", Arrays.asList("ecdebug"), "evercraft.commands.staff.debug").register());
 
         this.getLogger().info("Finished loading commands");
 
