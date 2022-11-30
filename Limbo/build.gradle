@@ -19,7 +19,7 @@ dependencies {
 }
 
 jar {
-    archiveVersion = project.version + "-" + rootProject.version
+    archiveVersion = rootProject.version + "-" + project.version
 }
 
 tasks.register("buildFat", Jar) {
@@ -29,7 +29,7 @@ tasks.register("buildFat", Jar) {
     targetCompatibility = JavaVersion.toVersion(project.java_version)
 
     duplicatesStrategy = "exclude"
-    archiveVersion = project.version + "-" + rootProject.version
+    archiveVersion = rootProject.version + "-" + project.version
     classifier = "fat"
 
     from files(project.sourceSets.main.output)
@@ -37,9 +37,9 @@ tasks.register("buildFat", Jar) {
 }
 
 processResources {
-	inputs.property "plugin_version", project.version
+	inputs.property "plugin_version", rootProject.version + "-" + project.version
 
     filesMatching("plugin.yml") {
-        expand "plugin_version": project.version
+        expand "plugin_version": rootProject.version + "-" + project.version
     }
 }

@@ -11,7 +11,7 @@ dependencies {
 }
 
 jar {
-    archiveVersion = project.version + "-" + rootProject.version
+    archiveVersion = rootProject.version + "-" + project.version
 
     manifest {
         attributes "Main-Class": "io.github.evercraftmc.evercraft.discord.BotMain"
@@ -25,7 +25,7 @@ tasks.register("buildFat", Jar) {
     targetCompatibility = JavaVersion.toVersion(project.java_version)
 
     duplicatesStrategy = "exclude"
-    archiveVersion = project.version + "-" + rootProject.version
+    archiveVersion = rootProject.version + "-" + project.version
     classifier = "fat"
 
     from files(project.sourceSets.main.output)
