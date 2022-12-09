@@ -7,11 +7,11 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.loohp.limbo.commands.CommandSender;
 import com.loohp.limbo.player.Player;
-import com.loohp.limbo.utils.NamespacedKey;
 import io.github.evercraftmc.evercraft.limbo.LimboMain;
 import io.github.evercraftmc.evercraft.limbo.commands.LimboCommand;
 import io.github.evercraftmc.evercraft.limbo.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
+import net.kyori.adventure.key.Key;
 
 public class BungeeCommandCommand extends LimboCommand {
     public BungeeCommandCommand(String name, String description, List<String> aliases, String permission) {
@@ -40,7 +40,7 @@ public class BungeeCommandCommand extends LimboCommand {
                 out.writeUTF(commandString.trim());
 
                 try {
-                    player.sendPluginMessage(new NamespacedKey("bungeecord:main"), out.toByteArray());
+                    player.sendPluginMessage(Key.key("bungeecord:main"), out.toByteArray());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

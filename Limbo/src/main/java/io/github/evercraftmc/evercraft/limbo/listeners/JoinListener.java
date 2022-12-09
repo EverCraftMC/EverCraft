@@ -5,7 +5,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.loohp.limbo.events.EventHandler;
 import com.loohp.limbo.events.player.PlayerJoinEvent;
-import com.loohp.limbo.utils.NamespacedKey;
+import net.kyori.adventure.key.Key;
 
 public class JoinListener extends LimboListener {
     @EventHandler
@@ -13,7 +13,7 @@ public class JoinListener extends LimboListener {
         try {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("GetServer");
-            event.getPlayer().sendPluginMessage(new NamespacedKey("bungee:main"), out.toByteArray());
+            event.getPlayer().sendPluginMessage(Key.key("bungee:main"), out.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
         }

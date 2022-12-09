@@ -9,9 +9,9 @@ import com.loohp.limbo.events.EventHandler;
 import com.loohp.limbo.events.player.PlayerChatEvent;
 import com.loohp.limbo.events.player.PluginMessageEvent;
 import com.loohp.limbo.player.Player;
-import com.loohp.limbo.utils.NamespacedKey;
 import io.github.evercraftmc.evercraft.limbo.LimboMain;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
+import net.kyori.adventure.key.Key;
 
 public class MessageListener extends LimboListener {
     @EventHandler
@@ -25,7 +25,7 @@ public class MessageListener extends LimboListener {
         out.writeUTF(event.getMessage());
 
         try {
-            event.getPlayer().sendPluginMessage(new NamespacedKey("bungeecord:main"), out.toByteArray());
+            event.getPlayer().sendPluginMessage(Key.key("bungeecord:main"), out.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
         }
