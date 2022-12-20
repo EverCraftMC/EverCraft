@@ -3,6 +3,8 @@ package io.github.evercraftmc.evercraft.spigot.commands.player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -63,7 +65,7 @@ public class ChestProtectionCommand extends SpigotCommand {
                         player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
                     }
                 } else {
-                    Block block = player.getTargetBlock(8);
+                    Block block = player.getTargetBlock(Set.of(Material.AIR, Material.WATER, Material.LAVA), 8);
 
                     if (block != null) {
                         Boolean protectable = false;
