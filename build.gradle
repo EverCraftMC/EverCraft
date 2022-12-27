@@ -30,7 +30,7 @@ subprojects {
         dependency
         dependency.canBeResolved = true
 
-        compileOnly {
+        implementation {
             extendsFrom dependency
         }
     }
