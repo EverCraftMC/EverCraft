@@ -22,7 +22,6 @@ import io.github.evercraftmc.evercraft.spigot.commands.kit.SetKitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.BungeeCommandCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.ChestProtectionCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.player.PassiveCommand;
-import io.github.evercraftmc.evercraft.spigot.commands.player.SitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.DebugCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.EnderSeeCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.InviSeeCommand;
@@ -48,7 +47,6 @@ import io.github.evercraftmc.evercraft.spigot.listeners.CreativeItemListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.JoinListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.PvPListener;
-import io.github.evercraftmc.evercraft.spigot.listeners.SitListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.SpigotListener;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
@@ -164,8 +162,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new SetKitCommand("setkit", "Set a kit", Arrays.asList(), "evercraft.commands.kit.setkit").register());
         this.commands.add(new DelKitCommand("delkit", "Delete a kit", Arrays.asList(), "evercraft.commands.kit.delkit").register());
 
-        this.commands.add(new SitCommand("sit", "Sit on the ground", Arrays.asList(), "evercraft.commands.player.sit").register());
-
         if (this.getPluginConfig().getParsed().passiveEnabled) {
             this.commands.add(new PassiveCommand("passive", "Toggle passive mode on/off", Arrays.asList("togglepassive", "pvp"), "evercraft.commands.player.passive").register());
         }
@@ -208,8 +204,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         if (this.getPluginConfig().getParsed().passiveEnabled) {
             this.listeners.add(new PvPListener().register());
         }
-
-        this.listeners.add(new SitListener().register());
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
