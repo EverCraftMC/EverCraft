@@ -1,5 +1,6 @@
 plugins {
     id "java"
+    id "io.papermc.paperweight.userdev" version "1.4.0"
 }
 
 archivesBaseName = "spigot"
@@ -7,17 +8,21 @@ version = project.spigot_plugin_version
 
 repositories {
     maven { url "https://repo.purpurmc.org/snapshots/" }
-    flatDir { dirs "lib" }
 }
 
 dependencies {
     dependency project(":Shared")
     dependency project(path: ":Shared", configuration: "dependency")
 
-    compileOnly "org.purpurmc.purpur:purpur-api:${project.purpur_version}"
-    compileOnly name: "craftbukkit-${project.craftbukkit_version}"
+    paperweightDevelopmentBundle "org.purpurmc.purpur:dev-bundle:${project.purpur_version}"
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
+}
+
+tasks {
+    assemble {
+        dependsOn(reobfJar)
+    }
 }
 
 jar {
