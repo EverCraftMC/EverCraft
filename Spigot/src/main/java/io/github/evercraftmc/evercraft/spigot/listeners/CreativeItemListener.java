@@ -11,7 +11,7 @@ import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
 public class CreativeItemListener extends SpigotListener {
@@ -19,9 +19,9 @@ public class CreativeItemListener extends SpigotListener {
     public void onItemCreate(InventoryClickEvent event) {
         if (!event.getWhoClicked().hasPermission("evercraft.commands.gamemode.creative")) {
             ItemStack itemStack = CraftItemStack.asNMSCopy(event.getCursor());
-            NBTTagCompound nbtCompound = itemStack.v();
+            CompoundTag nbtCompound = itemStack.getOrCreateTag();
 
-            if (nbtCompound.e("BlockTag") || nbtCompound.e("EntityTag") || nbtCompound.e("BlockState")) {
+            if (nbtCompound.contains("BlockTag") || nbtCompound.contains("EntityTag") || nbtCompound.contains("BlockState")) {
                 event.setCancelled(true);
 
                 event.getCursor().setType(Material.AIR);
@@ -33,9 +33,9 @@ public class CreativeItemListener extends SpigotListener {
     public void onItemCreate(InventoryMoveItemEvent event) {
         if (!(event.getSource().getHolder() instanceof Player && ((Player) event.getSource().getHolder()).hasPermission("evercraft.commands.gamemode.creative")) && !(event.getDestination().getHolder() instanceof Player && ((Player) event.getDestination().getHolder()).hasPermission("evercraft.commands.gamemode.creative"))) {
             ItemStack itemStack = CraftItemStack.asNMSCopy(event.getItem());
-            NBTTagCompound nbtCompound = itemStack.v();
+            CompoundTag nbtCompound = itemStack.getOrCreateTag();
 
-            if (nbtCompound.e("BlockTag") || nbtCompound.e("EntityTag") || nbtCompound.e("BlockState")) {
+            if (nbtCompound.contains("BlockTag") || nbtCompound.contains("EntityTag") || nbtCompound.contains("BlockState")) {
                 event.setCancelled(true);
 
                 event.getItem().setType(Material.AIR);
@@ -47,9 +47,9 @@ public class CreativeItemListener extends SpigotListener {
     public void onItemCreate(PlayerDropItemEvent event) {
         if (!event.getPlayer().hasPermission("evercraft.commands.gamemode.creative")) {
             ItemStack itemStack = CraftItemStack.asNMSCopy(event.getItemDrop().getItemStack());
-            NBTTagCompound nbtCompound = itemStack.v();
+            CompoundTag nbtCompound = itemStack.getOrCreateTag();
 
-            if (nbtCompound.e("BlockTag") || nbtCompound.e("EntityTag") || nbtCompound.e("BlockState")) {
+            if (nbtCompound.contains("BlockTag") || nbtCompound.contains("EntityTag") || nbtCompound.contains("BlockState")) {
                 event.setCancelled(true);
 
                 event.getItemDrop().remove();
@@ -61,9 +61,9 @@ public class CreativeItemListener extends SpigotListener {
     public void onItemCreate(InventoryPickupItemEvent event) {
         if (!(event.getInventory().getHolder() instanceof Player && ((Player) event.getInventory().getHolder()).hasPermission("evercraft.commands.gamemode.creative"))) {
             ItemStack itemStack = CraftItemStack.asNMSCopy(event.getItem().getItemStack());
-            NBTTagCompound nbtCompound = itemStack.v();
+            CompoundTag nbtCompound = itemStack.getOrCreateTag();
 
-            if (nbtCompound.e("BlockTag") || nbtCompound.e("EntityTag") || nbtCompound.e("BlockState")) {
+            if (nbtCompound.contains("BlockTag") || nbtCompound.contains("EntityTag") || nbtCompound.contains("BlockState")) {
                 event.setCancelled(true);
 
                 event.getItem().remove();
@@ -75,9 +75,9 @@ public class CreativeItemListener extends SpigotListener {
     public void onItemCreate(PlayerItemHeldEvent event) {
         if (!event.getPlayer().hasPermission("evercraft.commands.gamemode.creative")) {
             ItemStack itemStack = CraftItemStack.asNMSCopy(event.getPlayer().getInventory().getItem(event.getNewSlot()));
-            NBTTagCompound nbtCompound = itemStack.v();
+            CompoundTag nbtCompound = itemStack.getOrCreateTag();
 
-            if (nbtCompound.e("BlockTag") || nbtCompound.e("EntityTag") || nbtCompound.e("BlockState")) {
+            if (nbtCompound.contains("BlockTag") || nbtCompound.contains("EntityTag") || nbtCompound.contains("BlockState")) {
                 event.setCancelled(true);
 
                 event.getPlayer().getInventory().setItem(event.getNewSlot(), null);
@@ -89,9 +89,9 @@ public class CreativeItemListener extends SpigotListener {
     public void onItemCreate(PlayerInteractEvent event) {
         if ((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) && event.getItem() != null && !event.getPlayer().hasPermission("evercraft.commands.gamemode.creative")) {
             ItemStack itemStack = CraftItemStack.asNMSCopy(event.getItem());
-            NBTTagCompound nbtCompound = itemStack.v();
+            CompoundTag nbtCompound = itemStack.getOrCreateTag();
 
-            if (nbtCompound.e("BlockTag") || nbtCompound.e("EntityTag") || nbtCompound.e("BlockState")) {
+            if (nbtCompound.contains("BlockTag") || nbtCompound.contains("EntityTag") || nbtCompound.contains("BlockState")) {
                 event.getItem().setType(Material.AIR);
 
                 event.setCancelled(true);

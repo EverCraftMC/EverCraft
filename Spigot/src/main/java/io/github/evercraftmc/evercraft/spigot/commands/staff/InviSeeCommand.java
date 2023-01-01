@@ -17,11 +17,10 @@ import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.util.bukkit.ChestGUI;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTCompressedStreamTools;
-import net.minecraft.nbt.NBTTagByte;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 
 public class InviSeeCommand extends SpigotCommand {
@@ -64,10 +63,10 @@ public class InviSeeCommand extends SpigotCommand {
 
                     if (file.exists()) {
                         try {
-                            NBTTagCompound nbt = NBTCompressedStreamTools.a(file);
-                            NBTTagList items = (NBTTagList) nbt.c("Inventory");
-                            for (NBTBase item : items) {
-                                Integer slot = (int) ((NBTTagByte) ((NBTTagCompound) item).c("Slot")).a();
+                            CompoundTag nbt = NbtIo.read(file);
+                            ListTag items = (ListTag) nbt.getList("Inventory", ListTag.TAG_COMPOUND);
+                            for (Tag item : items) {
+                                Integer slot = (int) ((CompoundTag) item).getByte("Slot");
 
                                 if (slot >= 0 && slot < 9) {
                                     slot = slot + 27;
@@ -85,7 +84,7 @@ public class InviSeeCommand extends SpigotCommand {
                                     slot = 40;
                                 }
 
-                                gui.addItem(CraftItemStack.asBukkitCopy(ItemStack.a((NBTTagCompound) item)), slot);
+                                gui.addItem(CraftItemStack.asBukkitCopy(ItemStack.of((CompoundTag) item)), slot);
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
