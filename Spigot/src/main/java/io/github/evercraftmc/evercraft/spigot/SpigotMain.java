@@ -47,6 +47,7 @@ import io.github.evercraftmc.evercraft.spigot.listeners.CreativeItemListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.JoinListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.PvPListener;
+import io.github.evercraftmc.evercraft.spigot.listeners.ServerIdleListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.SpigotListener;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
@@ -190,6 +191,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.listeners = new ArrayList<SpigotListener>();
 
+        this.listeners.add(new ServerIdleListener().register());
         this.listeners.add(new MessageListener().register());
         this.listeners.add(new JoinListener().register());
 
