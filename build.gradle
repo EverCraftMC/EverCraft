@@ -48,7 +48,7 @@ subprojects {
 }
 
 tasks.register("buildAll") {
-    dependsOn subprojects.collect { it.tasks.jar }
+    dependsOn subprojects.collect { it.tasks.build }
 }
 
 import net.schmizz.sshj.SSHClient
@@ -77,7 +77,11 @@ tasks.register("upload") {
                     }
                 }
 
-                ftp.put(project(":" + server.split(":")[1]).tasks.jar.outputs.files[0].getPath(), server.split(":")[2] + "/EverCraft-" + project(":" + server.split(":")[1]).tasks.jar.outputs.files[0].getName())
+                if (server.split(":")[1].equalsIgnoreCase("Spigot")) {
+                    ftp.put(project(":" + server.split(":")[1]).tasks.reobfJar.outputs.files[0].getPath(), server.split(":")[2] + "/EverCraft-" + project(":" + server.split(":")[1]).tasks.reobfJar.outputs.files[0].getName().replace("-dev", ""))
+                } else {
+                    ftp.put(project(":" + server.split(":")[1]).tasks.jar.outputs.files[0].getPath(), server.split(":")[2] + "/EverCraft-" + project(":" + server.split(":")[1]).tasks.jar.outputs.files[0].getName())
+                }
 
                 ftp.close()
                 ssh.disconnect()
