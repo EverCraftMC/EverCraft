@@ -1,5 +1,7 @@
 package io.github.evercraftmc.evercraft.bungee.util.network;
 
+import java.util.EnumSet;
+import java.util.UUID;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
@@ -7,20 +9,18 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.Property;
 import net.md_5.bungee.protocol.packet.PlayerListItem;
+import net.md_5.bungee.protocol.packet.PlayerListItemRemove;
+import net.md_5.bungee.protocol.packet.PlayerListItemUpdate;
 
 public class TabListUtil {
     public static void addToList(ProxiedPlayer player) {
-        if (true) {
-            return;
-        }
-
         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
             if (player == player2) {
                 continue;
             }
 
-            PlayerListItem packet = new PlayerListItem();
-            packet.setAction(PlayerListItem.Action.ADD_PLAYER);
+            PlayerListItemUpdate packet = new PlayerListItemUpdate();
+            packet.setActions(EnumSet.of(PlayerListItemUpdate.Action.ADD_PLAYER, PlayerListItemUpdate.Action.UPDATE_DISPLAY_NAME, PlayerListItemUpdate.Action.UPDATE_LATENCY, PlayerListItemUpdate.Action.UPDATE_GAMEMODE));
 
             PlayerListItem.Item item = new PlayerListItem.Item();
             item.setUuid(player.getUniqueId());
@@ -30,24 +30,20 @@ public class TabListUtil {
             item.setGamemode(0);
             item.setProperties(new Property[] {});
 
-            packet.setItems(new PlayerListItem.Item[] { item });
+            packet.setItems(new PlayerListItem.Item[] { item, item, item });
 
             player2.unsafe().sendPacket(packet);
         }
     }
 
     public static void addToList(ProxiedPlayer player, ServerInfo server) {
-        if (true) {
-            return;
-        }
-
         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
             if (player == player2) {
                 continue;
             }
 
-            PlayerListItem packet = new PlayerListItem();
-            packet.setAction(PlayerListItem.Action.ADD_PLAYER);
+            PlayerListItemUpdate packet = new PlayerListItemUpdate();
+            packet.setActions(EnumSet.of(PlayerListItemUpdate.Action.ADD_PLAYER, PlayerListItemUpdate.Action.UPDATE_DISPLAY_NAME, PlayerListItemUpdate.Action.UPDATE_LATENCY, PlayerListItemUpdate.Action.UPDATE_GAMEMODE));
 
             PlayerListItem.Item item = new PlayerListItem.Item();
             item.setUuid(player.getUniqueId());
@@ -57,23 +53,19 @@ public class TabListUtil {
             item.setGamemode(0);
             item.setProperties(new Property[] {});
 
-            packet.setItems(new PlayerListItem.Item[] { item });
+            packet.setItems(new PlayerListItem.Item[] { item, item, item });
 
             player2.unsafe().sendPacket(packet);
         }
     }
 
     public static void addToList(ProxiedPlayer player, ProxiedPlayer player2) {
-        if (true) {
-            return;
-        }
-
         if (player == player2) {
             return;
         }
 
-        PlayerListItem packet = new PlayerListItem();
-        packet.setAction(PlayerListItem.Action.ADD_PLAYER);
+        PlayerListItemUpdate packet = new PlayerListItemUpdate();
+        packet.setActions(EnumSet.of(PlayerListItemUpdate.Action.ADD_PLAYER, PlayerListItemUpdate.Action.UPDATE_DISPLAY_NAME, PlayerListItemUpdate.Action.UPDATE_LATENCY, PlayerListItemUpdate.Action.UPDATE_GAMEMODE));
 
         PlayerListItem.Item item = new PlayerListItem.Item();
         item.setUuid(player.getUniqueId());
@@ -83,22 +75,18 @@ public class TabListUtil {
         item.setGamemode(0);
         item.setProperties(new Property[] {});
 
-        packet.setItems(new PlayerListItem.Item[] { item });
+        packet.setItems(new PlayerListItem.Item[] { item, item, item });
 
         player2.unsafe().sendPacket(packet);
     }
 
     public static void addToList(ProxiedPlayer player, ProxiedPlayer player2, ServerInfo server) {
-        if (true) {
-            return;
-        }
-
         if (player == player2) {
             return;
         }
 
-        PlayerListItem packet = new PlayerListItem();
-        packet.setAction(PlayerListItem.Action.ADD_PLAYER);
+        PlayerListItemUpdate packet = new PlayerListItemUpdate();
+        packet.setActions(EnumSet.of(PlayerListItemUpdate.Action.ADD_PLAYER, PlayerListItemUpdate.Action.UPDATE_DISPLAY_NAME, PlayerListItemUpdate.Action.UPDATE_LATENCY, PlayerListItemUpdate.Action.UPDATE_GAMEMODE));
 
         PlayerListItem.Item item = new PlayerListItem.Item();
         item.setUuid(player.getUniqueId());
@@ -108,100 +96,62 @@ public class TabListUtil {
         item.setGamemode(0);
         item.setProperties(new Property[] {});
 
-        packet.setItems(new PlayerListItem.Item[] { item });
+        packet.setItems(new PlayerListItem.Item[] { item, item, item });
 
         player2.unsafe().sendPacket(packet);
     }
 
     public static void removeFromList(ProxiedPlayer player) {
-        if (true) {
-            return;
-        }
-
         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
             if (player == player2) {
                 continue;
             }
 
-            PlayerListItem packet = new PlayerListItem();
-            packet.setAction(PlayerListItem.Action.REMOVE_PLAYER);
-
-            PlayerListItem.Item item = new PlayerListItem.Item();
-            item.setUuid(player.getUniqueId());
-
-            packet.setItems(new PlayerListItem.Item[] { item });
+            PlayerListItemRemove packet = new PlayerListItemRemove();
+            packet.setUuids(new UUID[] { player.getUniqueId() });
 
             player2.unsafe().sendPacket(packet);
         }
     }
 
     public static void removeFromList(ProxiedPlayer player, ProxiedPlayer player2) {
-        if (true) {
-            return;
-        }
-
         if (player == player2) {
             return;
         }
 
-        PlayerListItem packet = new PlayerListItem();
-        packet.setAction(PlayerListItem.Action.REMOVE_PLAYER);
-
-        PlayerListItem.Item item = new PlayerListItem.Item();
-        item.setUuid(player.getUniqueId());
-
-        packet.setItems(new PlayerListItem.Item[] { item });
+        PlayerListItemRemove packet = new PlayerListItemRemove();
+        packet.setUuids(new UUID[] { player.getUniqueId() });
 
         player2.unsafe().sendPacket(packet);
     }
 
     public static void updatePlayer(ProxiedPlayer player) {
-        if (true) {
-            return;
-        }
-
         updatePlayerName(player);
         updatePlayerPing(player);
     }
 
     public static void updatePlayer(ProxiedPlayer player, ServerInfo server) {
-        if (true) {
-            return;
-        }
-
         updatePlayerName(player, server);
         updatePlayerPing(player);
         updatePlayerGamemode(player);
     }
 
     public static void updatePlayer(ProxiedPlayer player, ProxiedPlayer player2) {
-        if (true) {
-            return;
-        }
-
         updatePlayerName(player, player2);
         updatePlayerPing(player, player2);
         updatePlayerGamemode(player, player2);
     }
 
     public static void updatePlayer(ProxiedPlayer player, ProxiedPlayer player2, ServerInfo server) {
-        if (true) {
-            return;
-        }
-
         updatePlayerName(player, player2, server);
         updatePlayerPing(player, player2);
         updatePlayerGamemode(player, player2);
     }
 
     public static void updatePlayerName(ProxiedPlayer player) {
-        if (true) {
-            return;
-        }
-
         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
-            PlayerListItem packet = new PlayerListItem();
-            packet.setAction(PlayerListItem.Action.UPDATE_DISPLAY_NAME);
+            PlayerListItemUpdate packet = new PlayerListItemUpdate();
+            packet.setActions(EnumSet.of(PlayerListItemUpdate.Action.UPDATE_DISPLAY_NAME));
 
             PlayerListItem.Item item = new PlayerListItem.Item();
             item.setUuid(player.getUniqueId());
@@ -214,13 +164,9 @@ public class TabListUtil {
     }
 
     public static void updatePlayerName(ProxiedPlayer player, ServerInfo server) {
-        if (true) {
-            return;
-        }
-
         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
-            PlayerListItem packet = new PlayerListItem();
-            packet.setAction(PlayerListItem.Action.UPDATE_DISPLAY_NAME);
+            PlayerListItemUpdate packet = new PlayerListItemUpdate();
+            packet.setActions(EnumSet.of(PlayerListItemUpdate.Action.UPDATE_DISPLAY_NAME));
 
             PlayerListItem.Item item = new PlayerListItem.Item();
             item.setUuid(player.getUniqueId());
@@ -233,12 +179,8 @@ public class TabListUtil {
     }
 
     public static void updatePlayerName(ProxiedPlayer player, ProxiedPlayer player2) {
-        if (true) {
-            return;
-        }
-
-        PlayerListItem packet = new PlayerListItem();
-        packet.setAction(PlayerListItem.Action.UPDATE_DISPLAY_NAME);
+        PlayerListItemUpdate packet = new PlayerListItemUpdate();
+        packet.setActions(EnumSet.of(PlayerListItemUpdate.Action.UPDATE_DISPLAY_NAME));
 
         PlayerListItem.Item item = new PlayerListItem.Item();
         item.setUuid(player.getUniqueId());
@@ -250,12 +192,8 @@ public class TabListUtil {
     }
 
     public static void updatePlayerName(ProxiedPlayer player, ProxiedPlayer player2, ServerInfo server) {
-        if (true) {
-            return;
-        }
-
-        PlayerListItem packet = new PlayerListItem();
-        packet.setAction(PlayerListItem.Action.UPDATE_DISPLAY_NAME);
+        PlayerListItemUpdate packet = new PlayerListItemUpdate();
+        packet.setActions(EnumSet.of(PlayerListItemUpdate.Action.UPDATE_DISPLAY_NAME));
 
         PlayerListItem.Item item = new PlayerListItem.Item();
         item.setUuid(player.getUniqueId());
@@ -267,13 +205,9 @@ public class TabListUtil {
     }
 
     public static void updatePlayerPing(ProxiedPlayer player) {
-        if (true) {
-            return;
-        }
-
         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
-            PlayerListItem packet = new PlayerListItem();
-            packet.setAction(PlayerListItem.Action.UPDATE_LATENCY);
+            PlayerListItemUpdate packet = new PlayerListItemUpdate();
+            packet.setActions(EnumSet.of(PlayerListItemUpdate.Action.UPDATE_LATENCY));
 
             PlayerListItem.Item item = new PlayerListItem.Item();
             item.setUuid(player.getUniqueId());
@@ -286,12 +220,8 @@ public class TabListUtil {
     }
 
     public static void updatePlayerPing(ProxiedPlayer player, ProxiedPlayer player2) {
-        if (true) {
-            return;
-        }
-
-        PlayerListItem packet = new PlayerListItem();
-        packet.setAction(PlayerListItem.Action.UPDATE_LATENCY);
+        PlayerListItemUpdate packet = new PlayerListItemUpdate();
+        packet.setActions(EnumSet.of(PlayerListItemUpdate.Action.UPDATE_LATENCY));
 
         PlayerListItem.Item item = new PlayerListItem.Item();
         item.setUuid(player.getUniqueId());
@@ -303,17 +233,13 @@ public class TabListUtil {
     }
 
     public static void updatePlayerGamemode(ProxiedPlayer player) {
-        if (true) {
-            return;
-        }
-
         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
             if (player == player2) {
                 continue;
             }
 
-            PlayerListItem packet = new PlayerListItem();
-            packet.setAction(PlayerListItem.Action.UPDATE_GAMEMODE);
+            PlayerListItemUpdate packet = new PlayerListItemUpdate();
+            packet.setActions(EnumSet.of(PlayerListItemUpdate.Action.UPDATE_GAMEMODE));
 
             PlayerListItem.Item item = new PlayerListItem.Item();
             item.setUuid(player.getUniqueId());
@@ -326,16 +252,12 @@ public class TabListUtil {
     }
 
     public static void updatePlayerGamemode(ProxiedPlayer player, ProxiedPlayer player2) {
-        if (true) {
-            return;
-        }
-
         if (player == player2) {
             return;
         }
 
-        PlayerListItem packet = new PlayerListItem();
-        packet.setAction(PlayerListItem.Action.UPDATE_GAMEMODE);
+        PlayerListItemUpdate packet = new PlayerListItemUpdate();
+        packet.setActions(EnumSet.of(PlayerListItemUpdate.Action.UPDATE_GAMEMODE));
 
         PlayerListItem.Item item = new PlayerListItem.Item();
         item.setUuid(player.getUniqueId());
