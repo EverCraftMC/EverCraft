@@ -16,6 +16,8 @@ import io.github.evercraftmc.evercraft.shared.util.Closable;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.games.GameCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.games.JoinCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.games.LeaveCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.DelKitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.SetKitCommand;
@@ -218,6 +220,8 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         if (this.config.getParsed().games.enabled) {
             this.commands.add(new GameCommand("game", "Join/leave a game", Arrays.asList("games"), "evercraft.commands.games.game").register());
+            this.commands.add(new JoinCommand("join", "Join a game", Arrays.asList(), "evercraft.commands.games.game").register());
+            this.commands.add(new LeaveCommand("leave", "Leave a game", Arrays.asList(), "evercraft.commands.games.game").register());
 
             this.registeredGames.add(new KittedGame("plainspvp", "~plainspvp", "pvp"));
             this.registeredGames.add(new KittedGame("endpvp", "~endpvp", "end"));
