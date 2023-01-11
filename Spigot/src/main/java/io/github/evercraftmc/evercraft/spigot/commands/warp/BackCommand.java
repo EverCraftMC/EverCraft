@@ -25,7 +25,7 @@ public class BackCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (lastTeleport.containsKey(player) && lastLocations.containsKey(player)) {
-                if (Instant.now().getEpochSecond() - lastTeleport.get(player) > 60) {
+                if (Instant.now().getEpochSecond() - lastTeleport.get(player) < 60) {
                     player.teleport(lastLocations.get(player));
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.warped.replace("{warp}", "back"))));
