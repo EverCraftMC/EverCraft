@@ -33,6 +33,7 @@ import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.CreativeCo
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.GameModeCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.SpectatorCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.staff.gamemode.SurvivalCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.warp.BackCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.DelWarpCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.HomeCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.SetWarpCommand;
@@ -158,6 +159,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new WarpCommand("warp", "Teleport to a warp", Arrays.asList(), "evercraft.commands.warp.warp").register());
         this.commands.add(new SpawnCommand("spawn", "Teleport to the spawn", Arrays.asList(), "evercraft.commands.warp.spawn").register());
         this.commands.add(new HomeCommand("home", "Teleport to your home (bed)", Arrays.asList("bed"), "evercraft.commands.warp.home").register());
+        this.commands.add(new BackCommand("back", "Teleport you back where you where", Arrays.asList(), "evercraft.commands.warp.back").register());
         this.commands.add(new SetWarpCommand("setwarp", "Set a warp to your location", Arrays.asList(), "evercraft.commands.warp.setwarp").register());
         this.commands.add(new DelWarpCommand("delwarp", "Delete a warp", Arrays.asList(), "evercraft.commands.warp.delwarp").register());
 
