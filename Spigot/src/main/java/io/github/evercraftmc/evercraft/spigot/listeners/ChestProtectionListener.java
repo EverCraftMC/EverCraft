@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.listeners;
 
+import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
@@ -19,7 +20,7 @@ import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter
 public class ChestProtectionListener extends SpigotListener {
     @EventHandler
     public void onChestOpen(PlayerInteractEvent event) {
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && SpigotMain.getInstance().getChests().getParsed().blocks.containsKey(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName())) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && (SpigotMain.getInstance().getChests().getParsed().blocks.containsKey(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName()) || ((event.getPlayer().isOp() || event.getPlayer().hasPermission("evercraft.chestProtectionBypass")) && event.getPlayer().getGameMode() == GameMode.CREATIVE))) {
             if (SpigotMain.getInstance().getChests().getParsed().blocks.get(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName()).isProtected && !SpigotMain.getInstance().getChests().getParsed().blocks.get(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName()).allowUse && !SpigotMain.getInstance().getChests().getParsed().blocks.get(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName()).owner.equals(event.getPlayer().getUniqueId().toString()) && !(SpigotMain.getInstance().getChests().getParsed().players.containsKey(SpigotMain.getInstance().getChests().getParsed().blocks.get(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName()).owner) && SpigotMain.getInstance().getChests().getParsed().players.get(SpigotMain.getInstance().getChests().getParsed().blocks.get(event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + "," + event.getClickedBlock().getWorld().getName()).owner).friends.contains(event.getPlayer().getUniqueId().toString()))) {
                 event.setCancelled(true);
 
