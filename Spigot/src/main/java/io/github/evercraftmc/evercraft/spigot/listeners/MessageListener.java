@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.listeners;
 
+import java.time.Instant;
 import java.util.UUID;
 import org.bukkit.GameRule;
 import org.bukkit.Sound;
@@ -9,6 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -16,6 +19,7 @@ import com.google.common.io.ByteStreams;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
+import io.github.evercraftmc.evercraft.spigot.commands.warp.BackCommand;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -102,5 +106,37 @@ public class MessageListener extends SpigotListener implements PluginMessageList
                 player.playSound(player, Sound.valueOf(in.readUTF()), SoundCategory.valueOf(in.readUTF()), in.readFloat(), in.readFloat());
             }
         }
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent event) {
+        if (event.getCause() != TeleportCause.CHORUS_FRUIT && event.getCause() != TeleportCause.DISMOUNT && event.getCause() != TeleportCause.ENDER_PEARL && event.getCause() != TeleportCause.SPECTATE) {
+            if (BackCommand.lastTeleport.containsKey(event.getPlayer())) {
+                BackCommand.lastTeleport.remove(event.getPlayer());
+            }
+
+            BackCommand.lastTeleport.put(event.getPlayer(), Instant.now().getEpochSecond());
+
+            if (BackCommand.lastLocations.containsKey(event.getPlayer())) {
+                BackCommand.lastLocations.remove(event.getPlayer());
+            }
+
+            BackCommand.lastLocations.put(event.getPlayer(), event.getFrom());
+        }
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerDeathEvent event) {
+        if (BackCommand.lastTeleport.containsKey(event.getPlayer())) {
+            BackCommand.lastTeleport.remove(event.getPlayer());
+        }
+
+        BackCommand.lastTeleport.put(event.getPlayer(), Instant.now().getEpochSecond());
+
+        if (BackCommand.lastLocations.containsKey(event.getPlayer())) {
+            BackCommand.lastLocations.remove(event.getPlayer());
+        }
+
+        BackCommand.lastLocations.put(event.getPlayer(), event.getPlayer().getLocation());
     }
 }
