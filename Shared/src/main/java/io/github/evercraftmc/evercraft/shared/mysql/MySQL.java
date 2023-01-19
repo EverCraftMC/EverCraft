@@ -93,7 +93,7 @@ public class MySQL implements Closable {
 
             statement.close();
         } catch (SQLException e) {
-            if (e.getMessage().startsWith("The last packet successfully received from the server was ") || (e.getCause() != null && e.getCause().getMessage().startsWith("The last packet successfully received from the server was "))) {
+            if (e.getMessage().toLowerCase().trim().startsWith("the last packet successfully received from the server was") || (e.getCause() != null && e.getCause().getMessage().toLowerCase().trim().startsWith("the last packet successfully received from the server was"))) {
                 PluginManager.getInstance().getLogger().severe("Lost mysql connection, reconnecting in " + reconnectTimeout + "..");
 
                 if (reconnectTimeout != 0) {
@@ -137,7 +137,7 @@ public class MySQL implements Closable {
 
             return new Query(statement, results);
         } catch (SQLException e) {
-            if (e.getMessage().startsWith("The last packet successfully received from the server was ") || (e.getCause() != null && e.getCause().getMessage().startsWith("The last packet successfully received from the server was "))) {
+            if (e.getMessage().toLowerCase().trim().startsWith("the last packet successfully received from the server was") || (e.getCause() != null && e.getCause().getMessage().toLowerCase().trim().startsWith("the last packet successfully received from the server was"))) {
                 PluginManager.getInstance().getLogger().severe("Lost mysql connection, reconnecting in " + reconnectTimeout + "..");
 
                 if (reconnectTimeout != 0) {
