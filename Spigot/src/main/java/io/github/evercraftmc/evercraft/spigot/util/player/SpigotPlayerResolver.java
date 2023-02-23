@@ -5,10 +5,10 @@ import java.util.concurrent.ExecutionException;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import io.github.evercraftmc.evercraft.shared.PluginData;
-import io.github.evercraftmc.evercraft.shared.config.Config;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.shared.util.player.SimplePlayer;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
+import io.github.kale_ko.ejcl.Config;
 import net.luckperms.api.LuckPermsProvider;
 
 public class SpigotPlayerResolver {
@@ -29,9 +29,9 @@ public class SpigotPlayerResolver {
     }
 
     public static UUID getUUIDFromName(Config<PluginData> config, String name) {
-        for (String key : config.getParsed().players.keySet()) {
-            if (config.getParsed().players.get(key).lastName.equalsIgnoreCase(name)) {
-                return UUID.fromString(config.getParsed().players.get(key).uuid);
+        for (String key : config.get().players.keySet()) {
+            if (config.get().players.get(key).lastName.equalsIgnoreCase(name)) {
+                return UUID.fromString(config.get().players.get(key).uuid);
             }
         }
 
@@ -39,7 +39,7 @@ public class SpigotPlayerResolver {
     }
 
     public static String getNameFromUUID(Config<PluginData> config, UUID uuid) {
-        return config.getParsed().players.get(uuid.toString()).lastName;
+        return config.get().players.get(uuid.toString()).lastName;
     }
 
     public static String getDisplayName(Config<PluginData> config, UUID uuid) {
@@ -47,15 +47,15 @@ public class SpigotPlayerResolver {
     }
 
     public static String getNickname(Config<PluginData> config, UUID uuid) {
-        if (config.getParsed().players.get(uuid.toString()).nickname != null) {
+        if (config.get().players.get(uuid.toString()).nickname != null) {
             Boolean needsStar = true;
-            for (String string : TextFormatter.removeColors(config.getParsed().players.get(uuid.toString()).nickname).replace("_", "-").split("-")) {
+            for (String string : TextFormatter.removeColors(config.get().players.get(uuid.toString()).nickname).replace("_", "-").split("-")) {
                 if (getNameFromUUID(config, uuid).toLowerCase().contains(string.toLowerCase())) {
                     needsStar = false;
                 }
             }
 
-            return config.getParsed().players.get(uuid.toString()).nickname + (needsStar ? "*" : "");
+            return config.get().players.get(uuid.toString()).nickname + (needsStar ? "*" : "");
         } else {
             return getNameFromUUID(config, uuid);
         }

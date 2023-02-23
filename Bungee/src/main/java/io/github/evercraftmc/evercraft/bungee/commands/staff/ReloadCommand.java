@@ -15,11 +15,11 @@ public class ReloadCommand extends BungeeCommand {
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().reload.reloading)));
+        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().reload.reloading)));
 
         BungeeMain.getInstance().reload();
 
-        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().reload.reloaded)));
+        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().reload.reloaded)));
     }
 
     @Override

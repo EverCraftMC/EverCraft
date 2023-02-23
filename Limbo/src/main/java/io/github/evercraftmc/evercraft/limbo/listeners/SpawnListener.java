@@ -8,13 +8,13 @@ import io.github.evercraftmc.evercraft.limbo.LimboMain;
 public class SpawnListener extends LimboListener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        event.getPlayer().teleport(LimboMain.getInstance().getPluginConfig().getParsed().spawnLocation.toLimboLocation());
+        event.getPlayer().teleport(LimboMain.getInstance().getPluginConfig().get().spawnLocation.toLimboLocation());
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getTo().getY() < -64) {
-            event.getPlayer().teleport(LimboMain.getInstance().getPluginConfig().getParsed().spawnLocation.toLimboLocation());
+            event.getPlayer().teleport(LimboMain.getInstance().getPluginConfig().get().spawnLocation.toLimboLocation());
         }
     }
 }

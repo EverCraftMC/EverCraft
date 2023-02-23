@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee.commands.player;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import com.google.common.io.ByteArrayDataOutput;
@@ -23,8 +24,12 @@ public class NickNameCommand extends BungeeCommand {
         if (sender instanceof ProxiedPlayer player) {
             if (args.length > 0) {
                 if (TextFormatter.removeColors(args[0]).length() > 0 && TextFormatter.removeColors(args[0]).length() < 16 && args[0].length() < 32) {
-                    BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).nickname = args[0];
-                    BungeeMain.getInstance().getPluginData().save();
+                    BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).nickname = args[0];
+                    try {
+                        BungeeMain.getInstance().getPluginData().save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     player.setDisplayName(TextFormatter.translateColors(BungeePlayerResolver.getDisplayName(BungeeMain.getInstance().getPluginData(), player.getUniqueId())));
                     TabListUtil.updatePlayerName(player);
@@ -34,15 +39,15 @@ public class NickNameCommand extends BungeeCommand {
                     out.writeUTF(player.getUniqueId().toString());
                     player.getServer().sendData("BungeeCord", out.toByteArray());
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().nickname.replace("{nickname}", args[0]))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().nickname.replace("{nickname}", args[0]))));
                 } else {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 

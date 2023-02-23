@@ -1,6 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -45,12 +45,12 @@ import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
 import io.github.evercraftmc.evercraft.bungee.util.player.BungeePlayerResolver;
 import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.PluginManager;
-import io.github.evercraftmc.evercraft.shared.config.FileConfig;
-import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
 import io.github.evercraftmc.evercraft.shared.discord.DiscordBot;
 import io.github.evercraftmc.evercraft.shared.economy.Economy;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
+import io.github.kale_ko.ejcl.file.JsonConfig;
+import io.github.kale_ko.ejcl.mysql.MySQLConfig;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -63,8 +63,8 @@ import net.md_5.bungee.api.plugin.Plugin;
 public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraft.shared.Plugin {
     private static BungeeMain Instance;
 
-    private FileConfig<BungeeConfig> config;
-    private FileConfig<BungeeMessages> messages;
+    private JsonConfig<BungeeConfig> config;
+    private JsonConfig<BungeeMessages> messages;
     private MySQLConfig<PluginData> data;
 
     private Economy economy;
@@ -96,25 +96,30 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.getLogger().info("Loading config..");
 
-        this.config = new FileConfig<BungeeConfig>(BungeeConfig.class, this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
-        this.config.reload();
-
-        if (this.config.getParsed() != null) {
-            this.config.save();
+        this.config = new JsonConfig<BungeeConfig>(BungeeConfig.class, this.getDataFolder().toPath().resolve("config.json").toFile());
+        try {
+            this.config.load();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        this.messages = new FileConfig<BungeeMessages>(BungeeMessages.class, this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
-        this.messages.reload();
-
-        if (this.messages.getParsed() != null) {
-            this.messages.save();
+        this.messages = new JsonConfig<BungeeMessages>(BungeeMessages.class, this.getDataFolder().toPath().resolve("messages.json").toFile());
+        try {
+            this.messages.load();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         this.getLogger().info("Finished loading config");
 
         this.getLogger().info("Loading player data..");
 
-        this.data = new MySQLConfig<PluginData>(PluginData.class, this.config.getParsed().database.host, this.config.getParsed().database.port, this.config.getParsed().database.name, this.config.getParsed().database.tableName, "data", this.config.getParsed().database.username, this.config.getParsed().database.password);
+        this.data = new MySQLConfig<PluginData>(PluginData.class, this.config.get().database.host, this.config.get().database.port, this.config.get().database.name, this.config.get().database.tableName, this.config.get().database.username, this.config.get().database.password);
+        try {
+            this.data.connect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         this.getLogger().info("Finished loading player data");
 
@@ -212,18 +217,18 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.getLogger().info("Starting Discord bot..");
 
-        this.bot = new DiscordBot(this.config.getParsed().discord.token, this.config.getParsed().discord.guildId, new GatewayIntent[] { GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT }, new CacheFlag[] {}, MemberCachePolicy.NONE, this.config.getParsed().discord.statusType, this.config.getParsed().discord.status);
+        this.bot = new DiscordBot(this.config.get().discord.token, this.config.get().discord.guildId, new GatewayIntent[] { GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT }, new CacheFlag[] {}, MemberCachePolicy.NONE, this.config.get().discord.statusType, this.config.get().discord.status);
         this.bot.addListener((GenericEvent rawevent) -> {
             if (rawevent instanceof MessageReceivedEvent event) {
                 if (event.getAuthor() != this.bot.getJDA().getSelfUser()) {
-                    if (event.getMessage().getChannel().getId().equals(this.config.getParsed().discord.channelId)) {
+                    if (event.getMessage().getChannel().getId().equals(this.config.get().discord.channelId)) {
                         for (ProxiedPlayer player : this.getProxy().getPlayers()) {
-                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(this.messages.getParsed().chat.discord.replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(this.messages.get().chat.discord.replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
                         }
-                    } else if (event.getMessage().getChannel().getId().equals(this.config.getParsed().discord.staffChannelId)) {
+                    } else if (event.getMessage().getChannel().getId().equals(this.config.get().discord.staffChannelId)) {
                         for (ProxiedPlayer player : this.getProxy().getPlayers()) {
                             if (player.hasPermission("evercraft.commands.staff.staffchat")) {
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(this.messages.getParsed().chat.staff.replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(this.messages.get().chat.staff.replace("{player}", event.getMessage().getMember().getEffectiveName()).replace("{message}", event.getMessage().getContentDisplay()))));
                             }
                         }
                     }
@@ -239,14 +244,27 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.getLogger().info("Closing config..");
 
-        this.config.close();
-        this.messages.close();
+        try {
+            this.config.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            this.messages.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         this.getLogger().info("Finished closing config..");
 
         this.getLogger().info("Closing player data..");
 
-        this.data.close();
+        try {
+            this.data.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         this.getLogger().info("Finished closing player data..");
 
@@ -297,11 +315,11 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         return BungeeMain.Instance;
     }
 
-    public FileConfig<BungeeConfig> getPluginConfig() {
+    public JsonConfig<BungeeConfig> getPluginConfig() {
         return this.config;
     }
 
-    public FileConfig<BungeeMessages> getPluginMessages() {
+    public JsonConfig<BungeeMessages> getPluginMessages() {
         return this.messages;
     }
 

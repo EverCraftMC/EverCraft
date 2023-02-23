@@ -19,7 +19,7 @@ public class LeaveCommand extends SpigotCommand {
         if (sender instanceof Player player) {
             SpigotMain.getInstance().getServer().dispatchCommand(player, "games leave");
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 

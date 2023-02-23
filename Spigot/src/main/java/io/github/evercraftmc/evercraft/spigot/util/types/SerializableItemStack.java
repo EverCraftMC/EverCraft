@@ -6,6 +6,9 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
+import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import net.kyori.adventure.text.Component;
 
@@ -54,13 +57,14 @@ public class SerializableItemStack {
 
     public ItemStack toBukkitItemStack() {
         ItemStack stack = new ItemStack(this.getType(), this.getAmount());
+        ItemMeta meta = stack.getItemMeta();
 
         if (this.getName() != null) {
-            stack.setDisplayName(this.getName());
+            meta.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(this.getName())));
         }
 
-        if (this.getDamage() != null) {
-            stack.setDamage(this.getDamage());
+        if (this.getDamage() != null && meta instanceof Damageable damageable) {
+            damageable.setDamage(this.getDamage());
         }
 
         if (this.getLore().size() > 0) {
@@ -70,33 +74,35 @@ public class SerializableItemStack {
                 loreComponents.add(ComponentFormatter.stringToComponent(line));
             }
 
-            stack.lore(loreComponents);
+            meta.lore(loreComponents);
         }
 
         for (SerializableEnchantment enchantment : this.getEnchantments()) {
-            stack.addUnsafeEnchantment(enchantment.getEnchantment(), enchantment.getLevel());
+            meta.addEnchant(enchantment.getEnchantment(), enchantment.getLevel(), true);
         }
 
         return stack;
     }
 
     public static SerializableItemStack fromBukkitItemStack(ItemStack stack) {
+        ItemMeta meta = stack.getItemMeta();
+
         List<String> lore = new ArrayList<String>();
 
-        if (stack.hasLore()) {
-            for (Component component : stack.lore()) {
+        if (meta.hasLore()) {
+            for (Component component : meta.lore()) {
                 lore.add(ComponentFormatter.componentToString(component));
             }
         }
 
         List<SerializableEnchantment> enchantments = new ArrayList<SerializableEnchantment>();
 
-        if (stack.hasEnchants()) {
-            for (Map.Entry<Enchantment, Integer> enchantment : stack.getEnchants().entrySet()) {
+        if (meta.hasEnchants()) {
+            for (Map.Entry<Enchantment, Integer> enchantment : meta.getEnchants().entrySet()) {
                 enchantments.add(SerializableEnchantment.fromBukkitEnchantment(enchantment.getKey(), enchantment.getValue()));
             }
         }
 
-        return new SerializableItemStack(stack.getType(), stack.hasDisplayName() ? ComponentFormatter.componentToString(stack.displayName()) : null, stack.getAmount(), stack.hasDamage() ? stack.getDamage() : null, lore, enchantments);
+        return new SerializableItemStack(stack.getType(), meta.hasDisplayName() ? ComponentFormatter.componentToString(meta.displayName()) : null, stack.getAmount(), meta instanceof Damageable damageable && damageable.hasDamage() ? damageable.getDamage() : null, lore, enchantments);
     }
 }

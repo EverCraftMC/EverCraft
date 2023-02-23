@@ -17,7 +17,7 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
         this.setAliases(aliases);
         this.setPermission(permission);
         if (permission != null) {
-            this.permissionMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noPerms.replace("{permission}", permission))));
+            this.permissionMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.noPerms.replace("{permission}", permission))));
         }
     }
 
@@ -35,7 +35,7 @@ public abstract class SpigotCommand extends Command implements PluginCommand {
         if (this.testPermissionSilent(sender)) {
             return true;
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noPerms.replace("{permission}", this.getPermission()))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.noPerms.replace("{permission}", this.getPermission()))));
 
             return false;
         }

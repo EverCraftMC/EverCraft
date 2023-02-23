@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee.commands.moderation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,36 +33,40 @@ public class TempBanCommand extends BungeeCommand {
             SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), args[0]);
 
             if (player != null) {
-                if (!BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.banned) {
+                if (!BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).ban.banned) {
                     Boolean confirm = (args.length == 3 && args[2].equalsIgnoreCase("--confirm"));
 
                     if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId()) && !confirm) {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.ban.cantBanSelf)));
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.ban.cantBanSelf)));
                     } else {
-                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.ban.broadcast.noReason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{time}", args[1]))));
+                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.ban.broadcast.noReason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{time}", args[1]))));
 
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.banned = true;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.reason = null;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.by = senderName;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.until = TimeUtil.parseFuture(args[1]).toString();
-                        BungeeMain.getInstance().getPluginData().save();
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).ban.banned = true;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).ban.reason = null;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).ban.by = senderName;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).ban.until = TimeUtil.parseFuture(args[1]).toString();
+                        try {
+                            BungeeMain.getInstance().getPluginData().save();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
                         ProxiedPlayer bungeeplayer = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
                         if (bungeeplayer != null) {
-                            bungeeplayer.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.ban.noReason.replace("{moderator}", senderName).replace("{time}", args[1]))));
+                            bungeeplayer.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.ban.noReason.replace("{moderator}", senderName).replace("{time}", args[1]))));
                         }
                     }
                 } else {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.ban.alreadyBanned.replace("{player}", player.getDisplayName()))));
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.ban.alreadyBanned.replace("{player}", player.getDisplayName()))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
             }
         } else if (args.length > 2) {
             SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), args[0]);
 
             if (player != null) {
-                if (!BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.banned) {
+                if (!BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).ban.banned) {
                     StringBuilder reason = new StringBuilder();
 
                     Boolean confirm = false;
@@ -75,29 +80,33 @@ public class TempBanCommand extends BungeeCommand {
                     }
 
                     if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId()) && !confirm) {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.ban.cantBanSelf)));
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.ban.cantBanSelf)));
                     } else {
-                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.ban.broadcast.reason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)).replace("{time}", args[1]))));
+                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.ban.broadcast.reason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)).replace("{time}", args[1]))));
 
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.banned = true;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.reason = reason.substring(0, reason.length() - 1);
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.by = senderName;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).ban.until = TimeUtil.parseFuture(args[1]).toString();
-                        BungeeMain.getInstance().getPluginData().save();
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).ban.banned = true;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).ban.reason = reason.substring(0, reason.length() - 1);
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).ban.by = senderName;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).ban.until = TimeUtil.parseFuture(args[1]).toString();
+                        try {
+                            BungeeMain.getInstance().getPluginData().save();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
                         ProxiedPlayer bungeeplayer = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
                         if (bungeeplayer != null) {
-                            bungeeplayer.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.ban.reason.replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)).replace("{time}", args[1]))));
+                            bungeeplayer.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.ban.reason.replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)).replace("{time}", args[1]))));
                         }
                     }
                 } else {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.ban.alreadyBanned.replace("{player}", player.getDisplayName()))));
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.ban.alreadyBanned.replace("{player}", player.getDisplayName()))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
         }
     }
 

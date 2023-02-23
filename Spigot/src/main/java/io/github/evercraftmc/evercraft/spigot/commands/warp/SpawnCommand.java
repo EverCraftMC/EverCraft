@@ -17,20 +17,20 @@ public class SpawnCommand extends SpigotCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
-            if (SpigotMain.getInstance().getWarps().getParsed().warps.containsKey("spawn")) {
-                player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get("spawn").toBukkitLocation());
+            if (SpigotMain.getInstance().getWarps().get().warps.containsKey("spawn")) {
+                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get("spawn").toBukkitLocation());
 
-                if (SpigotMain.getInstance().getPluginConfig().getParsed().warp.clearOnWarp) {
+                if (SpigotMain.getInstance().getPluginConfig().get().warp.clearOnWarp) {
                     player.getInventory().clear();
                     player.getActivePotionEffects().clear();
                 }
 
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.warped.replace("{warp}", "spawn"))));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().warp.warped.replace("{warp}", "spawn"))));
             } else {
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.notFound.replace("{warp}", "spawn"))));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().warp.notFound.replace("{warp}", "spawn"))));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 

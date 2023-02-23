@@ -32,17 +32,17 @@ public class SeenCommand extends BungeeCommand {
             if (player != null) {
                 ProxiedPlayer bungeeplayer = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
                 if (bungeeplayer != null) {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().lastSeen.online.replace("{player}", args[0]))));
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().lastSeen.online.replace("{player}", args[0]))));
                 } else {
-                    Instant lastOnline = Instant.ofEpochSecond(BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).lastOnline);
+                    Instant lastOnline = Instant.ofEpochSecond(BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).lastOnline);
 
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().lastSeen.lastSeen.replace("{player}", args[0]).replace("{lastSeen}", TimeUtil.getDifferenceString(Instant.now(), lastOnline)))));
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().lastSeen.lastSeen.replace("{player}", args[0]).replace("{lastSeen}", TimeUtil.getDifferenceString(Instant.now(), lastOnline)))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
         }
     }
 

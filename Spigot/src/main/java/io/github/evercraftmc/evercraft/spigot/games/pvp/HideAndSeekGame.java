@@ -38,9 +38,9 @@ public class HideAndSeekGame extends TeamedGame {
             }
 
             if (this.playerTeams.get(player).equalsIgnoreCase("hiders")) {
-                player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get(startWarpName).toBukkitLocation());
+                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(startWarpName).toBukkitLocation());
             } else if (this.playerTeams.get(player).equalsIgnoreCase("seekers")) {
-                player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get(startWarpName).toBukkitLocation());
+                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(startWarpName).toBukkitLocation());
 
                 new KitCommand("kit", null, Arrays.asList(), null).run(player, new String[] { seekerKitName, "true" });
             }

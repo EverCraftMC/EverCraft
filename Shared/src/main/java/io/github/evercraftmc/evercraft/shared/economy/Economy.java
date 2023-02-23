@@ -2,7 +2,7 @@ package io.github.evercraftmc.evercraft.shared.economy;
 
 import java.util.UUID;
 import io.github.evercraftmc.evercraft.shared.PluginData;
-import io.github.evercraftmc.evercraft.shared.config.Config;
+import io.github.kale_ko.ejcl.Config;
 
 public class Economy {
     private Config<PluginData> config;
@@ -12,8 +12,8 @@ public class Economy {
     }
 
     public Float getBalance(UUID uuid) {
-        if (this.config.getParsed().players.get(uuid.toString()).balance != null) {
-            return this.config.getParsed().players.get(uuid.toString()).balance;
+        if (this.config.get().players.get(uuid.toString()).balance != null) {
+            return this.config.get().players.get(uuid.toString()).balance;
         } else {
             this.setBalance(uuid, 0f);
 
@@ -22,7 +22,7 @@ public class Economy {
     }
 
     public void setBalance(UUID uuid, Float balance) {
-        config.getParsed().players.get(uuid.toString()).balance = balance;
+        config.get().players.get(uuid.toString()).balance = balance;
     }
 
     public void deposit(UUID uuid, Float balance) {

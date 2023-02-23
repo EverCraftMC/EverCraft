@@ -81,27 +81,27 @@ public abstract class Game implements Listener {
                     player.removePotionEffect(effect.getType());
                 }
 
-                player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get(warpName).toBukkitLocation());
+                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(warpName).toBukkitLocation());
 
                 this.players.add(player);
 
                 if (this.maxPlayers != Float.MAX_VALUE) {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.joined.replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.joined.replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
                 } else {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.joinedNoMax.replace("{game}", this.name).replace("{players}", this.players.size() + ""))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.joinedNoMax.replace("{game}", this.name).replace("{players}", this.players.size() + ""))));
                 }
 
                 for (Player player2 : this.players) {
                     if (player2 != player) {
                         if (this.maxPlayers != Float.MAX_VALUE) {
-                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.join.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
+                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.join.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
                         } else {
-                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.joinNoMax.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + ""))));
+                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.joinNoMax.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + ""))));
                         }
                     }
                 }
             } else {
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.full)));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.full)));
             }
         } else {
             throw new RuntimeException("Player is already in game");
@@ -114,20 +114,20 @@ public abstract class Game implements Listener {
 
             if (leaveReason != LeaveReason.GAMEOVER) {
                 if (leaveReason != LeaveReason.DISCONNECT) {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.left.replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.left.replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
                 }
 
                 for (Player player2 : this.players) {
                     if (this.maxPlayers != Float.MAX_VALUE) {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.leave.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.leave.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
                     } else {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.leaveNoMax.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + ""))));
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.leaveNoMax.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + ""))));
                     }
                 }
             }
 
             if (leaveReason == LeaveReason.COMMAND || leaveReason == LeaveReason.GAMEOVER) {
-                player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get("spawn").toBukkitLocation());
+                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get("spawn").toBukkitLocation());
             }
         } else {
             throw new RuntimeException("Player is not in game");

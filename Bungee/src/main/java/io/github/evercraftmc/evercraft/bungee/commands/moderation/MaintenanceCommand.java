@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee.commands.moderation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,40 +20,56 @@ public class MaintenanceCommand extends BungeeCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            if (BungeeMain.getInstance().getPluginData().getParsed().maintenance) {
-                BungeeMain.getInstance().getPluginData().getParsed().maintenance = false;
-                BungeeMain.getInstance().getPluginData().save();
+            if (BungeeMain.getInstance().getPluginData().get().maintenance) {
+                BungeeMain.getInstance().getPluginData().get().maintenance = false;
+                try {
+                    BungeeMain.getInstance().getPluginData().save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.maintenance.toggle.replace("{value}", "off"))));
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.maintenance.toggle.replace("{value}", "off"))));
             } else {
-                BungeeMain.getInstance().getPluginData().getParsed().maintenance = true;
-                BungeeMain.getInstance().getPluginData().save();
+                BungeeMain.getInstance().getPluginData().get().maintenance = true;
+                try {
+                    BungeeMain.getInstance().getPluginData().save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                     if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
-                        player2.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.maintenance.kick)));
+                        player2.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.maintenance.kick)));
                     }
                 }
 
-                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.maintenance.toggle.replace("{value}", "on"))));
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.maintenance.toggle.replace("{value}", "on"))));
             }
         } else {
             if (args[0].equalsIgnoreCase("on")) {
-                BungeeMain.getInstance().getPluginData().getParsed().maintenance = true;
-                BungeeMain.getInstance().getPluginData().save();
+                BungeeMain.getInstance().getPluginData().get().maintenance = true;
+                try {
+                    BungeeMain.getInstance().getPluginData().save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                     if (!player2.hasPermission("evercraft.commands.moderation.bypassMaintenance")) {
-                        player2.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.maintenance.kick)));
+                        player2.disconnect(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.maintenance.kick)));
                     }
                 }
 
-                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.maintenance.toggle.replace("{value}", "on"))));
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.maintenance.toggle.replace("{value}", "on"))));
             } else if (args[0].equalsIgnoreCase("off")) {
-                BungeeMain.getInstance().getPluginData().getParsed().maintenance = false;
-                BungeeMain.getInstance().getPluginData().save();
+                BungeeMain.getInstance().getPluginData().get().maintenance = false;
+                try {
+                    BungeeMain.getInstance().getPluginData().save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.maintenance.toggle.replace("{value}", "off"))));
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.maintenance.toggle.replace("{value}", "off"))));
             }
         }
     }

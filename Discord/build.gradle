@@ -8,6 +8,8 @@ version = project.discord_bot_version
 dependencies {
     dependency project(":Shared")
     dependency project(path: ":Shared", configuration: "dependency")
+
+    dependency "com.google.code.gson:gson:2.10.1"
 }
 
 jar {

@@ -25,8 +25,8 @@ public class JoinListener extends SpigotListener {
         out.writeUTF("GetServer");
         event.getPlayer().sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
 
-        if (SpigotMain.getInstance().getChests() != null && !SpigotMain.getInstance().getChests().getParsed().players.containsKey(event.getPlayer().getUniqueId().toString())) {
-            SpigotMain.getInstance().getChests().getParsed().players.put(event.getPlayer().getUniqueId().toString(), new SpigotChests.Player());
+        if (SpigotMain.getInstance().getChests() != null && !SpigotMain.getInstance().getChests().get().players.containsKey(event.getPlayer().getUniqueId().toString())) {
+            SpigotMain.getInstance().getChests().get().players.put(event.getPlayer().getUniqueId().toString(), new SpigotChests.Player());
         }
 
         event.joinMessage(Component.empty());
@@ -37,10 +37,10 @@ public class JoinListener extends SpigotListener {
 
     @EventHandler
     public void onPlayerSpawn(PlayerSpawnLocationEvent event) {
-        if (SpigotMain.getInstance().getPluginConfig().getParsed().warp.overrideSpawn) {
-            event.setSpawnLocation(SpigotMain.getInstance().getWarps().getParsed().warps.get("spawn").toBukkitLocation());
+        if (SpigotMain.getInstance().getPluginConfig().get().warp.overrideSpawn) {
+            event.setSpawnLocation(SpigotMain.getInstance().getWarps().get().warps.get("spawn").toBukkitLocation());
 
-            if (SpigotMain.getInstance().getPluginConfig().getParsed().warp.clearOnWarp) {
+            if (SpigotMain.getInstance().getPluginConfig().get().warp.clearOnWarp) {
                 event.getPlayer().getInventory().clear();
                 event.getPlayer().getActivePotionEffects().clear();
             }
@@ -49,10 +49,10 @@ public class JoinListener extends SpigotListener {
 
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        if (SpigotMain.getInstance().getPluginConfig().getParsed().warp.overrideSpawn) {
-            event.setRespawnLocation(SpigotMain.getInstance().getWarps().getParsed().warps.get("spawn").toBukkitLocation());
+        if (SpigotMain.getInstance().getPluginConfig().get().warp.overrideSpawn) {
+            event.setRespawnLocation(SpigotMain.getInstance().getWarps().get().warps.get("spawn").toBukkitLocation());
 
-            if (SpigotMain.getInstance().getPluginConfig().getParsed().warp.clearOnWarp) {
+            if (SpigotMain.getInstance().getPluginConfig().get().warp.clearOnWarp) {
                 event.getPlayer().getInventory().clear();
                 event.getPlayer().getActivePotionEffects().clear();
             }
@@ -70,7 +70,7 @@ public class JoinListener extends SpigotListener {
             event.setCancelled(true);
 
             for (Player player : SpigotMain.getInstance().getServer().getOnlinePlayers()) {
-                player.kick(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().restarting)), Cause.RESTART_COMMAND);
+                player.kick(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().restarting)), Cause.RESTART_COMMAND);
             }
 
             SpigotMain.getInstance().getServer().shutdown();
@@ -83,7 +83,7 @@ public class JoinListener extends SpigotListener {
             event.setCancelled(true);
 
             for (Player player : SpigotMain.getInstance().getServer().getOnlinePlayers()) {
-                player.kick(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().restarting)), Cause.RESTART_COMMAND);
+                player.kick(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().restarting)), Cause.RESTART_COMMAND);
             }
 
             SpigotMain.getInstance().getServer().shutdown();

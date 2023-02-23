@@ -13,7 +13,7 @@ public abstract class BungeeCommand extends Command implements PluginCommand, Ta
     protected BungeeCommand(String name, String description, List<String> aliases, String permission) {
         super(name, permission, aliases.toArray(new String[] {}));
         if (permission != null) {
-            this.setPermissionMessage(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.noPerms.replace("{permission}", permission)));
+            this.setPermissionMessage(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.noPerms.replace("{permission}", permission)));
         }
     }
 
@@ -22,7 +22,7 @@ public abstract class BungeeCommand extends Command implements PluginCommand, Ta
         if (this.hasPermission(sender)) {
             this.run(sender, args);
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.noPerms.replace("{permission}", this.getPermission()))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.noPerms.replace("{permission}", this.getPermission()))));
         }
     }
 

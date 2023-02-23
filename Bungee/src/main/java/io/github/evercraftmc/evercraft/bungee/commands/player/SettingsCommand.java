@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee.commands.player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,31 +24,43 @@ public class SettingsCommand extends BungeeCommand {
             if (args.length > 1) {
                 if (args[0].equalsIgnoreCase("messaging")) {
                     if (args[1].equalsIgnoreCase("everyone")) {
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.messaging = PluginData.Player.Settings.MessageSetting.EVERYONE;
-                        BungeeMain.getInstance().getPluginData().save();
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).settings.messaging = PluginData.Player.Settings.MessageSetting.EVERYONE;
+                        try {
+                            BungeeMain.getInstance().getPluginData().save();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().settings.replace("{setting}", "messaging").replace("{value}", "everyone"))));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().settings.replace("{setting}", "messaging").replace("{value}", "everyone"))));
                     } else if (args[1].equalsIgnoreCase("friends")) {
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.messaging = PluginData.Player.Settings.MessageSetting.FRIENDS;
-                        BungeeMain.getInstance().getPluginData().save();
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).settings.messaging = PluginData.Player.Settings.MessageSetting.FRIENDS;
+                        try {
+                            BungeeMain.getInstance().getPluginData().save();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().settings.replace("{setting}", "messaging").replace("{value}", "friends"))));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().settings.replace("{setting}", "messaging").replace("{value}", "friends"))));
                     } else if (args[1].equalsIgnoreCase("noone")) {
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.messaging = PluginData.Player.Settings.MessageSetting.NOONE;
-                        BungeeMain.getInstance().getPluginData().save();
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).settings.messaging = PluginData.Player.Settings.MessageSetting.NOONE;
+                        try {
+                            BungeeMain.getInstance().getPluginData().save();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().settings.replace("{setting}", "messaging").replace("{value}", "noone"))));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().settings.replace("{setting}", "messaging").replace("{value}", "noone"))));
                     } else {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
                     }
                 } else {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
                 }
             } else {
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 

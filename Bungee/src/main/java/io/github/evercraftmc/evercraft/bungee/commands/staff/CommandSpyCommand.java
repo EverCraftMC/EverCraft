@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee.commands.staff;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,32 +21,48 @@ public class CommandSpyCommand extends BungeeCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof ProxiedPlayer player) {
             if (args.length == 0) {
-                if (BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.commandspy) {
-                    BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.commandspy = false;
-                    BungeeMain.getInstance().getPluginData().save();
+                if (BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).settings.commandspy) {
+                    BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).settings.commandspy = false;
+                    try {
+                        BungeeMain.getInstance().getPluginData().save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().commandSpy.replace("{value}", "off"))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().commandSpy.replace("{value}", "off"))));
                 } else {
-                    BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.commandspy = true;
-                    BungeeMain.getInstance().getPluginData().save();
+                    BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).settings.commandspy = true;
+                    try {
+                        BungeeMain.getInstance().getPluginData().save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().commandSpy.replace("{value}", "on"))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().commandSpy.replace("{value}", "on"))));
                 }
             } else {
                 if (args[0].equalsIgnoreCase("on")) {
-                    BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.commandspy = true;
-                    BungeeMain.getInstance().getPluginData().save();
+                    BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).settings.commandspy = true;
+                    try {
+                        BungeeMain.getInstance().getPluginData().save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().commandSpy.replace("{value}", "on"))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().commandSpy.replace("{value}", "on"))));
                 } else if (args[0].equalsIgnoreCase("off")) {
-                    BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.commandspy = false;
-                    BungeeMain.getInstance().getPluginData().save();
+                    BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).settings.commandspy = false;
+                    try {
+                        BungeeMain.getInstance().getPluginData().save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().commandSpy.replace("{value}", "off"))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().commandSpy.replace("{value}", "off"))));
                 }
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 

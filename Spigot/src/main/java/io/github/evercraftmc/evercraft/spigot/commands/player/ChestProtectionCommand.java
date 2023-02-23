@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.commands.player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,44 +26,44 @@ public class ChestProtectionCommand extends SpigotCommand {
         if (sender instanceof Player player) {
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("disableAutoClaim")) {
-                    SpigotMain.getInstance().getChests().getParsed().players.get(player.getUniqueId().toString()).autoClaim = false;
+                    SpigotMain.getInstance().getChests().get().players.get(player.getUniqueId().toString()).autoClaim = false;
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().chestProtection.disabledAutoClaim)));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().chestProtection.disabledAutoClaim)));
                 } else if (args[0].equalsIgnoreCase("enableAutoClaim")) {
-                    SpigotMain.getInstance().getChests().getParsed().players.get(player.getUniqueId().toString()).autoClaim = true;
+                    SpigotMain.getInstance().getChests().get().players.get(player.getUniqueId().toString()).autoClaim = true;
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().chestProtection.enabledAutoClaim)));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().chestProtection.enabledAutoClaim)));
                 } else if (args[0].equalsIgnoreCase("addFriend")) {
                     if (args.length > 1) {
                         Player player2 = SpigotMain.getInstance().getServer().getPlayer(args[1]);
 
                         if (player2 != null) {
-                            if (!SpigotMain.getInstance().getChests().getParsed().players.get(player.getUniqueId().toString()).friends.contains(player2.getUniqueId().toString())) {
-                                SpigotMain.getInstance().getChests().getParsed().players.get(player.getUniqueId().toString()).friends.add(player2.getUniqueId().toString());
+                            if (!SpigotMain.getInstance().getChests().get().players.get(player.getUniqueId().toString()).friends.contains(player2.getUniqueId().toString())) {
+                                SpigotMain.getInstance().getChests().get().players.get(player.getUniqueId().toString()).friends.add(player2.getUniqueId().toString());
                             }
 
-                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().chestProtection.addedFriend.replace("{player}", args[1]))));
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().chestProtection.addedFriend.replace("{player}", args[1]))));
                         } else {
-                            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[1]))));
+                            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[1]))));
                         }
                     } else {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.invalidArgs)));
                     }
                 } else if (args[0].equalsIgnoreCase("removeFriend")) {
                     if (args.length > 1) {
                         Player player2 = SpigotMain.getInstance().getServer().getPlayer(args[1]);
 
                         if (player2 != null) {
-                            if (SpigotMain.getInstance().getChests().getParsed().players.get(player.getUniqueId().toString()).friends.contains(player2.getUniqueId().toString())) {
-                                SpigotMain.getInstance().getChests().getParsed().players.get(player.getUniqueId().toString()).friends.remove(player2.getUniqueId().toString());
+                            if (SpigotMain.getInstance().getChests().get().players.get(player.getUniqueId().toString()).friends.contains(player2.getUniqueId().toString())) {
+                                SpigotMain.getInstance().getChests().get().players.get(player.getUniqueId().toString()).friends.remove(player2.getUniqueId().toString());
                             }
 
-                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().chestProtection.removedFriend.replace("{player}", args[1]))));
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().chestProtection.removedFriend.replace("{player}", args[1]))));
                         } else {
-                            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[1]))));
+                            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[1]))));
                         }
                     } else {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.invalidArgs)));
                     }
                 } else {
                     Block block = player.getTargetBlock(Set.of(Material.AIR, Material.WATER, Material.LAVA), 8);
@@ -71,7 +72,7 @@ public class ChestProtectionCommand extends SpigotCommand {
                         Boolean protectable = false;
                         Boolean allowUse = false;
 
-                        for (String protectableSetting : SpigotMain.getInstance().getPluginConfig().getParsed().chestProtection.protectable) {
+                        for (String protectableSetting : SpigotMain.getInstance().getPluginConfig().get().chestProtection.protectable) {
                             if (protectableSetting.split(":")[0].equalsIgnoreCase(block.getType().toString().toLowerCase().replace("red__", "{color}__").replace("orange_", "{color}_").replace("yellow_", "{color}_").replace("lime_", "{color}_").replace("green_", "{color}_").replace("cyan_", "{color}_").replace("light_blue_", "{color}_").replace("blue_", "{color}_").replace("purple_", "{color}_").replace("magenta_", "{color}_").replace("pink_", "{color}_").replace("brown_", "{color}_").replace("white_", "{color}_").replace("light_gray_", "{color}_").replace("gray_", "{color}_").replace("black_", "{color}_"))) {
                                 protectable = true;
 
@@ -85,49 +86,57 @@ public class ChestProtectionCommand extends SpigotCommand {
                             }
                         }
 
-                        if (protectable && (!SpigotMain.getInstance().getChests().getParsed().blocks.containsKey(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()) || SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner.equals(player.getUniqueId().toString()))) {
-                            if (args[0].equalsIgnoreCase("protect") && SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner.equals(player.getUniqueId().toString())) {
-                                SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).isProtected = true;
+                        if (protectable && (!SpigotMain.getInstance().getChests().get().blocks.containsKey(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()) || SpigotMain.getInstance().getChests().get().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner.equals(player.getUniqueId().toString()))) {
+                            if (args[0].equalsIgnoreCase("protect") && SpigotMain.getInstance().getChests().get().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner.equals(player.getUniqueId().toString())) {
+                                SpigotMain.getInstance().getChests().get().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).isProtected = true;
 
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().chestProtection.wasProtected)));
-                            } else if (args[0].equalsIgnoreCase("unprotect") && SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner.equals(player.getUniqueId().toString())) {
-                                SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).isProtected = false;
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().chestProtection.wasProtected)));
+                            } else if (args[0].equalsIgnoreCase("unprotect") && SpigotMain.getInstance().getChests().get().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner.equals(player.getUniqueId().toString())) {
+                                SpigotMain.getInstance().getChests().get().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).isProtected = false;
 
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().chestProtection.unprotected)));
-                            } else if (args[0].equalsIgnoreCase("claim") && !SpigotMain.getInstance().getChests().getParsed().blocks.containsKey(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName())) {
-                                SpigotMain.getInstance().getChests().getParsed().blocks.put(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName(), new SpigotChests.Chest());
-                                SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).isProtected = true;
-                                SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner = player.getUniqueId().toString();
-                                SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).allowUse = allowUse;
-                                SpigotMain.getInstance().getChests().save();
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().chestProtection.unprotected)));
+                            } else if (args[0].equalsIgnoreCase("claim") && !SpigotMain.getInstance().getChests().get().blocks.containsKey(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName())) {
+                                SpigotMain.getInstance().getChests().get().blocks.put(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName(), new SpigotChests.Chest());
+                                SpigotMain.getInstance().getChests().get().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).isProtected = true;
+                                SpigotMain.getInstance().getChests().get().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner = player.getUniqueId().toString();
+                                SpigotMain.getInstance().getChests().get().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).allowUse = allowUse;
+                                try {
+                                    SpigotMain.getInstance().getChests().save();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
 
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().chestProtection.claimed)));
-                            } else if (args[0].equalsIgnoreCase("unclaim") && SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner.equals(player.getUniqueId().toString())) {
-                                SpigotMain.getInstance().getChests().getParsed().blocks.remove(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName());
-                                SpigotMain.getInstance().getChests().save();
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().chestProtection.claimed)));
+                            } else if (args[0].equalsIgnoreCase("unclaim") && SpigotMain.getInstance().getChests().get().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner.equals(player.getUniqueId().toString())) {
+                                SpigotMain.getInstance().getChests().get().blocks.remove(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName());
+                                try {
+                                    SpigotMain.getInstance().getChests().save();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
 
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().chestProtection.unclaimed)));
-                            } else if (args[0].equalsIgnoreCase("allowUse") && SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner.equals(player.getUniqueId().toString())) {
-                                SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).allowUse = true;
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().chestProtection.unclaimed)));
+                            } else if (args[0].equalsIgnoreCase("allowUse") && SpigotMain.getInstance().getChests().get().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner.equals(player.getUniqueId().toString())) {
+                                SpigotMain.getInstance().getChests().get().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).allowUse = true;
 
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().chestProtection.allowedUse)));
-                            } else if (args[0].equalsIgnoreCase("disallowUse") && SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner.equals(player.getUniqueId().toString())) {
-                                SpigotMain.getInstance().getChests().getParsed().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).allowUse = false;
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().chestProtection.allowedUse)));
+                            } else if (args[0].equalsIgnoreCase("disallowUse") && SpigotMain.getInstance().getChests().get().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).owner.equals(player.getUniqueId().toString())) {
+                                SpigotMain.getInstance().getChests().get().blocks.get(block.getX() + "," + block.getY() + "," + block.getZ() + "," + block.getWorld().getName()).allowUse = false;
 
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().chestProtection.disallowedUse)));
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().chestProtection.disallowedUse)));
                             }
                         } else {
-                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().chestProtection.notYours)));
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().chestProtection.notYours)));
                         }
                     } else {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().chestProtection.noBlock)));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().chestProtection.noBlock)));
                     }
                 }
             } else {
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 

@@ -6,9 +6,7 @@ archivesBaseName = "shared"
 version = project.project_version
 
 dependencies {
-    dependency "com.google.code.gson:gson:${project.gson_version}"
-
-    dependency "mysql:mysql-connector-java:${mysql_version}"
+    dependency "com.github.Kale-Ko:EJCL:${project.ejcl_version}"
 
     dependency "net.dv8tion:JDA:${project.jda_version}"
     dependency "org.slf4j:slf4j-simple:2.0.0"
