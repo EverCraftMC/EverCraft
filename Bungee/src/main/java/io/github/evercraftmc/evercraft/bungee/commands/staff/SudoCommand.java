@@ -88,46 +88,46 @@ public class SudoCommand extends BungeeCommand {
                     }
 
                     if (!args[0].equalsIgnoreCase("*")) {
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().sudo.command.replace("{command}", message.toString().trim()).replace("{player}", player.getDisplayName()))));
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().sudo.command.replace("{command}", message.toString().trim()).replace("{player}", player.getDisplayName()))));
                     } else {
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().sudo.command.replace("{command}", message.toString().trim()).replace("{player}", "*"))));
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().sudo.command.replace("{command}", message.toString().trim()).replace("{player}", "*"))));
                     }
                 } else {
                     if (args[0].equalsIgnoreCase("*")) {
                         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                             for (ProxiedPlayer player3 : BungeeMain.getInstance().getProxy().getPlayers()) {
                                 if (player3.getServer().getInfo().getName().equalsIgnoreCase(player2.getServer().getInfo().getName())) {
-                                    player3.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().chat.main.replace("{player}", player2.getDisplayName()).replace("{message}", message))));
+                                    player3.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().chat.main.replace("{player}", player2.getDisplayName()).replace("{message}", message))));
                                 } else {
-                                    player3.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().globalMessage.replace("{server}", player2.getServer().getInfo().getName()).replace("{message}", BungeeMain.getInstance().getPluginMessages().getParsed().chat.main.replace("{player}", player2.getDisplayName()).replace("{message}", message)))));
+                                    player3.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().globalMessage.replace("{server}", player2.getServer().getInfo().getName()).replace("{message}", BungeeMain.getInstance().getPluginMessages().get().chat.main.replace("{player}", player2.getDisplayName()).replace("{message}", message)))));
                                 }
                             }
 
-                            BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getParsed().discord.channelId).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getParsed().globalMessage.replace("{server}", player2.getServer().getInfo().getName()).replace("{message}", BungeeMain.getInstance().getPluginMessages().getParsed().chat.main.replace("{player}", player2.getDisplayName()).replace("{message}", message)))).queue();
+                            BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().get().discord.channelId).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().get().globalMessage.replace("{server}", player2.getServer().getInfo().getName()).replace("{message}", BungeeMain.getInstance().getPluginMessages().get().chat.main.replace("{player}", player2.getDisplayName()).replace("{message}", message)))).queue();
                         }
                     } else {
                         for (ProxiedPlayer player2 : BungeeMain.getInstance().getProxy().getPlayers()) {
                             if (player2.getServer().getInfo().getName().equalsIgnoreCase(player.getServer().getInfo().getName())) {
-                                player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().chat.main.replace("{player}", player.getDisplayName()).replace("{message}", message))));
+                                player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().chat.main.replace("{player}", player.getDisplayName()).replace("{message}", message))));
                             } else {
-                                player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().globalMessage.replace("{server}", player.getServer().getInfo().getName()).replace("{message}", BungeeMain.getInstance().getPluginMessages().getParsed().chat.main.replace("{player}", player.getDisplayName()).replace("{message}", message)))));
+                                player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().globalMessage.replace("{server}", player.getServer().getInfo().getName()).replace("{message}", BungeeMain.getInstance().getPluginMessages().get().chat.main.replace("{player}", player.getDisplayName()).replace("{message}", message)))));
                             }
                         }
 
-                        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getParsed().discord.channelId).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getParsed().globalMessage.replace("{server}", player.getServer().getInfo().getName()).replace("{message}", BungeeMain.getInstance().getPluginMessages().getParsed().chat.main.replace("{player}", player.getDisplayName()).replace("{message}", message)))).queue();
+                        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().get().discord.channelId).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().get().globalMessage.replace("{server}", player.getServer().getInfo().getName()).replace("{message}", BungeeMain.getInstance().getPluginMessages().get().chat.main.replace("{player}", player.getDisplayName()).replace("{message}", message)))).queue();
                     }
 
                     if (!args[0].equalsIgnoreCase("*")) {
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().sudo.message.replace("{message}", message.toString().trim()).replace("{player}", player.getDisplayName()))));
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().sudo.message.replace("{message}", message.toString().trim()).replace("{player}", player.getDisplayName()))));
                     } else {
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().sudo.message.replace("{message}", message.toString().trim()).replace("{player}", "*"))));
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().sudo.message.replace("{message}", message.toString().trim()).replace("{player}", "*"))));
                     }
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
         }
     }
 

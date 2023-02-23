@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee.commands.moderation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,29 +32,33 @@ public class PermMuteCommand extends BungeeCommand {
             SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), args[0]);
 
             if (player != null) {
-                if (!BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted) {
+                if (!BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.muted) {
                     if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId())) {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.cantMuteSelf)));
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.mute.cantMuteSelf)));
                     } else {
-                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.broadcast.noReason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{time}", "forever"))));
+                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.mute.broadcast.noReason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{time}", "forever"))));
 
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted = true;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.reason = null;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.by = senderName;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.until = "forever";
-                        BungeeMain.getInstance().getPluginData().save();
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.muted = true;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.reason = null;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.by = senderName;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.until = "forever";
+                        try {
+                            BungeeMain.getInstance().getPluginData().save();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 } else {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.alreadyMuted.replace("{player}", player.getDisplayName()))));
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.mute.alreadyMuted.replace("{player}", player.getDisplayName()))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
             }
         } else if (args.length > 1) {
             SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), args[0]);
 
             if (player != null) {
-                if (!BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted) {
+                if (!BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.muted) {
                     StringBuilder reason = new StringBuilder();
 
                     Boolean confirm = false;
@@ -67,24 +72,28 @@ public class PermMuteCommand extends BungeeCommand {
                     }
 
                     if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId()) && !confirm) {
-                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.cantMuteSelf)));
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.mute.cantMuteSelf)));
                     } else {
-                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.broadcast.reason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)).replace("{time}", "forever"))));
+                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.mute.broadcast.reason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)).replace("{time}", "forever"))));
 
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted = true;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.reason = reason.substring(0, reason.length() - 1);
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.by = senderName;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.until = "forever";
-                        BungeeMain.getInstance().getPluginData().save();
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.muted = true;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.reason = reason.substring(0, reason.length() - 1);
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.by = senderName;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.until = "forever";
+                        try {
+                            BungeeMain.getInstance().getPluginData().save();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 } else {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.alreadyMuted.replace("{player}", player.getDisplayName()))));
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.mute.alreadyMuted.replace("{player}", player.getDisplayName()))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
         }
     }
 

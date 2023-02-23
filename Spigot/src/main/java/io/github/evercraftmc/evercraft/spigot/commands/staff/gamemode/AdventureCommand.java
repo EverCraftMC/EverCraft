@@ -23,9 +23,9 @@ public class AdventureCommand extends SpigotCommand {
             if (sender instanceof Player player) {
                 player.setGameMode(GameMode.ADVENTURE);
 
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().gamemode.replace("{gamemode}", "adventure"))));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().gamemode.replace("{gamemode}", "adventure"))));
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.noConsole)));
             }
         } else if (args.length == 1) {
             Player player = SpigotMain.getInstance().getServer().getPlayer(args[0]);
@@ -33,12 +33,12 @@ public class AdventureCommand extends SpigotCommand {
             if (player != null) {
                 player.setGameMode(GameMode.ADVENTURE);
 
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().gamemodeOther.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{gamemode}", "adventure"))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().gamemodeOther.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{gamemode}", "adventure"))));
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.invalidArgs)));
         }
     }
 

@@ -58,7 +58,7 @@ public abstract class LimboCommand implements CommandExecutor, TabCompletor, Plu
         if (this.testPermissionSilent(sender)) {
             return true;
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LimboMain.getInstance().getPluginMessages().getParsed().error.noPerms.replace("{permission}", this.getPermission()))));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LimboMain.getInstance().getPluginMessages().get().error.noPerms.replace("{permission}", this.getPermission()))));
 
             return false;
         }

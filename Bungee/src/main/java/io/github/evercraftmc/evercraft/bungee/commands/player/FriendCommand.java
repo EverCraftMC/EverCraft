@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee.commands.player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,60 +32,68 @@ public class FriendCommand extends BungeeCommand {
                         if (player2 != null) {
                             Boolean hasInvite = false;
 
-                            for (PluginData.Player.FriendInvite friendInvite : BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friendInvites) {
+                            for (PluginData.Player.FriendInvite friendInvite : BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).friendInvites) {
                                 if (friendInvite.uuid.equals(player2.getUniqueId().toString()) && friendInvite.inbound == true) {
                                     hasInvite = true;
                                 }
                             }
 
                             if (hasInvite) {
-                                if (!BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friends.contains(player2.getUniqueId().toString())) {
-                                    for (PluginData.Player.FriendInvite friendInvite : new ArrayList<PluginData.Player.FriendInvite>(BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friendInvites)) {
+                                if (!BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).friends.contains(player2.getUniqueId().toString())) {
+                                    for (PluginData.Player.FriendInvite friendInvite : new ArrayList<PluginData.Player.FriendInvite>(BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).friendInvites)) {
                                         if (friendInvite.uuid.equals(player2.getUniqueId().toString())) {
-                                            BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites.remove(friendInvite);
+                                            BungeeMain.getInstance().getPluginData().get().players.get(player2.getUniqueId().toString()).friendInvites.remove(friendInvite);
                                         }
                                     }
 
-                                    for (PluginData.Player.FriendInvite friendInvite : new ArrayList<PluginData.Player.FriendInvite>(BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites)) {
+                                    for (PluginData.Player.FriendInvite friendInvite : new ArrayList<PluginData.Player.FriendInvite>(BungeeMain.getInstance().getPluginData().get().players.get(player2.getUniqueId().toString()).friendInvites)) {
                                         if (friendInvite.uuid.equals(player.getUniqueId().toString())) {
-                                            BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites.remove(friendInvite);
+                                            BungeeMain.getInstance().getPluginData().get().players.get(player2.getUniqueId().toString()).friendInvites.remove(friendInvite);
                                         }
                                     }
 
-                                    BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friends.add(player2.getUniqueId().toString());
-                                    BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friends.add(player.getUniqueId().toString());
-                                    BungeeMain.getInstance().getPluginData().save();
+                                    BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).friends.add(player2.getUniqueId().toString());
+                                    BungeeMain.getInstance().getPluginData().get().players.get(player2.getUniqueId().toString()).friends.add(player.getUniqueId().toString());
+                                    try {
+                                        BungeeMain.getInstance().getPluginData().save();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
 
-                                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.add.replace("{player}", player2.getDisplayName()))));
-                                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.added.replace("{player}", player.getDisplayName()))));
+                                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().friend.add.replace("{player}", player2.getDisplayName()))));
+                                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().friend.added.replace("{player}", player.getDisplayName()))));
                                 } else {
-                                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.alreadyFriends.replace("{player}", player2.getDisplayName()))));
+                                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().friend.alreadyFriends.replace("{player}", player2.getDisplayName()))));
                                 }
                             } else {
                                 Boolean alreadyInvited = false;
 
-                                for (PluginData.Player.FriendInvite friendInvite : BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friendInvites) {
+                                for (PluginData.Player.FriendInvite friendInvite : BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).friendInvites) {
                                     if (friendInvite.uuid.equals(player2.getUniqueId().toString()) && friendInvite.inbound == false) {
                                         alreadyInvited = true;
                                     }
                                 }
 
                                 if (!alreadyInvited) {
-                                    BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friendInvites.add(new PluginData.Player.FriendInvite(player2.getUniqueId().toString(), false));
-                                    BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites.add(new PluginData.Player.FriendInvite(player.getUniqueId().toString(), true));
-                                    BungeeMain.getInstance().getPluginData().save();
+                                    BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).friendInvites.add(new PluginData.Player.FriendInvite(player2.getUniqueId().toString(), false));
+                                    BungeeMain.getInstance().getPluginData().get().players.get(player2.getUniqueId().toString()).friendInvites.add(new PluginData.Player.FriendInvite(player.getUniqueId().toString(), true));
+                                    try {
+                                        BungeeMain.getInstance().getPluginData().save();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
 
-                                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.invite.replace("{player}", player2.getDisplayName()))));
-                                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.invited.replace("{player}", player.getDisplayName()))));
+                                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().friend.invite.replace("{player}", player2.getDisplayName()))));
+                                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().friend.invited.replace("{player}", player.getDisplayName()))));
                                 } else {
-                                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.alreadyInvited.replace("{player}", player2.getDisplayName()))));
+                                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().friend.alreadyInvited.replace("{player}", player2.getDisplayName()))));
                                 }
                             }
                         } else {
-                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
                         }
                     } else {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
                     }
                 } else if (args[0].equalsIgnoreCase("remove")) {
                     if (args.length > 1) {
@@ -93,73 +102,77 @@ public class FriendCommand extends BungeeCommand {
                         if (player2 != null) {
                             Boolean removed = false;
 
-                            for (PluginData.Player.FriendInvite friendInvite : new ArrayList<PluginData.Player.FriendInvite>(BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friendInvites)) {
+                            for (PluginData.Player.FriendInvite friendInvite : new ArrayList<PluginData.Player.FriendInvite>(BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).friendInvites)) {
                                 if (friendInvite.uuid.equals(player2.getUniqueId().toString())) {
-                                    BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites.remove(friendInvite);
+                                    BungeeMain.getInstance().getPluginData().get().players.get(player2.getUniqueId().toString()).friendInvites.remove(friendInvite);
 
                                     removed = true;
                                 }
                             }
 
-                            for (PluginData.Player.FriendInvite friendInvite : new ArrayList<PluginData.Player.FriendInvite>(BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites)) {
+                            for (PluginData.Player.FriendInvite friendInvite : new ArrayList<PluginData.Player.FriendInvite>(BungeeMain.getInstance().getPluginData().get().players.get(player2.getUniqueId().toString()).friendInvites)) {
                                 if (friendInvite.uuid.equals(player.getUniqueId().toString())) {
-                                    BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friendInvites.remove(friendInvite);
+                                    BungeeMain.getInstance().getPluginData().get().players.get(player2.getUniqueId().toString()).friendInvites.remove(friendInvite);
 
                                     removed = true;
                                 }
                             }
 
-                            if (BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friends.contains(player2.getUniqueId().toString())) {
-                                BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friends.remove(player2.getUniqueId().toString());
-                                BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friends.remove(player.getUniqueId().toString());
+                            if (BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).friends.contains(player2.getUniqueId().toString())) {
+                                BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).friends.remove(player2.getUniqueId().toString());
+                                BungeeMain.getInstance().getPluginData().get().players.get(player2.getUniqueId().toString()).friends.remove(player.getUniqueId().toString());
 
                                 removed = true;
                             }
 
                             if (removed) {
-                                BungeeMain.getInstance().getPluginData().save();
+                                try {
+                                    BungeeMain.getInstance().getPluginData().save();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
 
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.remove.replace("{player}", player2.getDisplayName()))));
-                                player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.removed.replace("{player}", player.getDisplayName()))));
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().friend.remove.replace("{player}", player2.getDisplayName()))));
+                                player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().friend.removed.replace("{player}", player.getDisplayName()))));
                             } else {
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.notFriends.replace("{player}", player2.getDisplayName()))));
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().friend.notFriends.replace("{player}", player2.getDisplayName()))));
                             }
                         } else {
-                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
                         }
                     } else {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
                     }
                 } else if (args[0].equalsIgnoreCase("list")) {
                     StringBuilder friends = new StringBuilder();
 
-                    for (String friend : BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friends) {
+                    for (String friend : BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).friends) {
                         SimplePlayer player2 = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), UUID.fromString(friend));
 
                         friends.append(player2.getDisplayName() + "\n&r&a");
                     }
 
-                    if (BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friendInvites.size() > 0) {
+                    if (BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).friendInvites.size() > 0) {
                         StringBuilder friendInvites = new StringBuilder();
 
-                        for (PluginData.Player.FriendInvite friend : BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).friendInvites) {
+                        for (PluginData.Player.FriendInvite friend : BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).friendInvites) {
                             SimplePlayer player2 = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), UUID.fromString(friend.uuid));
 
                             friendInvites.append((friend.inbound ? "&aInbound " : "&aOutbound ") + player2.getDisplayName() + "\n&r&a");
                         }
 
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.listInvites.replace("{friends}", friends.toString()).replace("{invites}", friendInvites.toString()))));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().friend.listInvites.replace("{friends}", friends.toString()).replace("{invites}", friendInvites.toString()))));
                     } else {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().friend.list.replace("{friends}", friends.toString()))));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().friend.list.replace("{friends}", friends.toString()))));
                     }
                 } else {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
                 }
             } else {
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 

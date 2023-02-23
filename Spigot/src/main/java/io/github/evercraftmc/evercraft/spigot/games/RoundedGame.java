@@ -27,7 +27,7 @@ public abstract class RoundedGame extends Game {
                     countdown--;
 
                     for (Player player : players) {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.countdown.replace("{time}", countdown + ""))));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.countdown.replace("{time}", countdown + ""))));
                     }
                 }
 
@@ -47,7 +47,7 @@ public abstract class RoundedGame extends Game {
         if (!this.started) {
             super.join(player);
         } else {
-            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.started)));
+            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.started)));
         }
     }
 
@@ -79,7 +79,7 @@ public abstract class RoundedGame extends Game {
             this.started = true;
 
             for (Player player : this.players) {
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.start)));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.start)));
             }
 
             this.tickTask = Bukkit.getScheduler().runTaskTimer(SpigotMain.getInstance(), new Runnable() {
@@ -97,7 +97,7 @@ public abstract class RoundedGame extends Game {
             this.started = false;
 
             for (Player player : new ArrayList<Player>(this.players)) {
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().games.stop)));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.stop)));
 
                 this.leave(player, LeaveReason.GAMEOVER);
             }

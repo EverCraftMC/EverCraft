@@ -46,7 +46,7 @@ public class BungeeCommandCommand extends LimboCommand {
                 }
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LimboMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(LimboMain.getInstance().getPluginMessages().get().error.invalidArgs)));
         }
     }
 

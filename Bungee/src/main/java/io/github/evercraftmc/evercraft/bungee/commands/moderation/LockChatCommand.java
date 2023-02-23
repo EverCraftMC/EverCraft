@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee.commands.moderation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,28 +19,44 @@ public class LockChatCommand extends BungeeCommand {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            if (BungeeMain.getInstance().getPluginData().getParsed().chatLock) {
-                BungeeMain.getInstance().getPluginData().getParsed().chatLock = false;
-                BungeeMain.getInstance().getPluginData().save();
+            if (BungeeMain.getInstance().getPluginData().get().chatLock) {
+                BungeeMain.getInstance().getPluginData().get().chatLock = false;
+                try {
+                    BungeeMain.getInstance().getPluginData().save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chatLock.toggle.replace("{value}", "off"))));
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.chatLock.toggle.replace("{value}", "off"))));
             } else {
-                BungeeMain.getInstance().getPluginData().getParsed().chatLock = true;
-                BungeeMain.getInstance().getPluginData().save();
+                BungeeMain.getInstance().getPluginData().get().chatLock = true;
+                try {
+                    BungeeMain.getInstance().getPluginData().save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chatLock.toggle.replace("{value}", "on"))));
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.chatLock.toggle.replace("{value}", "on"))));
             }
         } else {
             if (args[0].equalsIgnoreCase("on")) {
-                BungeeMain.getInstance().getPluginData().getParsed().chatLock = true;
-                BungeeMain.getInstance().getPluginData().save();
+                BungeeMain.getInstance().getPluginData().get().chatLock = true;
+                try {
+                    BungeeMain.getInstance().getPluginData().save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chatLock.toggle.replace("{value}", "on"))));
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.chatLock.toggle.replace("{value}", "on"))));
             } else if (args[0].equalsIgnoreCase("off")) {
-                BungeeMain.getInstance().getPluginData().getParsed().chatLock = false;
-                BungeeMain.getInstance().getPluginData().save();
+                BungeeMain.getInstance().getPluginData().get().chatLock = false;
+                try {
+                    BungeeMain.getInstance().getPluginData().save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chatLock.toggle.replace("{value}", "off"))));
+                BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.chatLock.toggle.replace("{value}", "off"))));
             }
         }
     }

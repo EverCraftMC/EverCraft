@@ -40,7 +40,7 @@ public class BungeeCommandCommand extends SpigotCommand {
                 player.sendPluginMessage(SpigotMain.getInstance(), "BungeeCord", out.toByteArray());
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.invalidArgs)));
         }
     }
 

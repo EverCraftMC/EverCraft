@@ -1,6 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,8 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import io.github.evercraftmc.evercraft.shared.Plugin;
 import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.PluginManager;
-import io.github.evercraftmc.evercraft.shared.config.FileConfig;
-import io.github.evercraftmc.evercraft.shared.config.MySQLConfig;
 import io.github.evercraftmc.evercraft.shared.economy.Economy;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
@@ -54,17 +52,19 @@ import io.github.evercraftmc.evercraft.spigot.listeners.ServerIdleListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.SpigotListener;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
+import io.github.kale_ko.ejcl.file.JsonConfig;
+import io.github.kale_ko.ejcl.mysql.MySQLConfig;
 
 public class SpigotMain extends JavaPlugin implements Plugin {
     private static SpigotMain Instance;
 
-    private FileConfig<SpigotConfig> config;
-    private FileConfig<SpigotMessages> messages;
+    private JsonConfig<SpigotConfig> config;
+    private JsonConfig<SpigotMessages> messages;
     private MySQLConfig<PluginData> data;
 
-    private FileConfig<SpigotWarps> warps;
-    private FileConfig<SpigotKits> kits;
-    private FileConfig<SpigotChests> chests;
+    private JsonConfig<SpigotWarps> warps;
+    private JsonConfig<SpigotKits> kits;
+    private JsonConfig<SpigotChests> chests;
 
     private Economy economy;
 
@@ -93,52 +93,57 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading config..");
 
-        this.config = new FileConfig<SpigotConfig>(SpigotConfig.class, this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
-        this.config.reload();
-
-        if (this.config.getParsed() != null) {
-            this.config.save();
+        this.config = new JsonConfig<SpigotConfig>(SpigotConfig.class, this.getDataFolder().toPath().resolve("config.json").toFile());
+        try {
+            this.config.load();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        this.serverName = this.config.getParsed().serverName;
+        this.serverName = this.config.get().serverName;
 
-        this.messages = new FileConfig<SpigotMessages>(SpigotMessages.class, this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
-        this.messages.reload();
-
-        if (this.messages.getParsed() != null) {
-            this.messages.save();
+        this.messages = new JsonConfig<SpigotMessages>(SpigotMessages.class, this.getDataFolder().toPath().resolve("messages.json").toFile());
+        try {
+            this.messages.load();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         this.getLogger().info("Finished loading config");
 
         this.getLogger().info("Loading player data..");
 
-        this.data = new MySQLConfig<PluginData>(PluginData.class, this.config.getParsed().database.host, this.config.getParsed().database.port, this.config.getParsed().database.name, this.config.getParsed().database.tableName, "data", this.config.getParsed().database.username, this.config.getParsed().database.password);
+        this.data = new MySQLConfig<PluginData>(PluginData.class, this.config.get().database.host, this.config.get().database.port, this.config.get().database.name, this.config.get().database.tableName, this.config.get().database.username, this.config.get().database.password);
+        try {
+            this.data.connect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         this.getLogger().info("Finished loading player data");
 
         this.getLogger().info("Loading other data..");
 
-        this.warps = new FileConfig<SpigotWarps>(SpigotWarps.class, this.getDataFolder().getAbsolutePath() + File.separator + "warps.json");
-        this.warps.reload();
-
-        if (this.warps.getParsed() != null) {
-            this.warps.save();
+        this.warps = new JsonConfig<SpigotWarps>(SpigotWarps.class, this.getDataFolder().toPath().resolve("warps.json").toFile());
+        try {
+            this.warps.load();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        this.kits = new FileConfig<SpigotKits>(SpigotKits.class, this.getDataFolder().getAbsolutePath() + File.separator + "kits.json");
-        this.kits.reload();
-
-        if (this.kits.getParsed() != null) {
-            this.kits.save();
+        this.kits = new JsonConfig<SpigotKits>(SpigotKits.class, this.getDataFolder().toPath().resolve("kits.json").toFile());
+        try {
+            this.kits.load();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        if (this.getPluginConfig().getParsed().chestProtection.enabled) {
-            this.chests = new FileConfig<SpigotChests>(SpigotChests.class, this.getDataFolder().getAbsolutePath() + File.separator + "chests.json");
-            this.chests.reload();
-
-            if (this.chests.getParsed() != null) {
-                this.chests.save();
+        if (this.getPluginConfig().get().chestProtection.enabled) {
+            this.chests = new JsonConfig<SpigotChests>(SpigotChests.class, this.getDataFolder().toPath().resolve("chests.json").toFile());
+            try {
+                this.chests.load();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         } else {
             this.chests = null;
@@ -167,11 +172,11 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.commands.add(new SetKitCommand("setkit", "Set a kit", Arrays.asList(), "evercraft.commands.kit.setkit").register());
         this.commands.add(new DelKitCommand("delkit", "Delete a kit", Arrays.asList(), "evercraft.commands.kit.delkit").register());
 
-        if (this.getPluginConfig().getParsed().passiveEnabled) {
+        if (this.getPluginConfig().get().passiveEnabled) {
             this.commands.add(new PassiveCommand("passive", "Toggle passive mode on/off", Arrays.asList("togglepassive", "pvp"), "evercraft.commands.player.passive").register());
         }
 
-        if (this.getPluginConfig().getParsed().chestProtection.enabled) {
+        if (this.getPluginConfig().get().chestProtection.enabled) {
             this.commands.add(new ChestProtectionCommand("chestprotection", "Manage you chest protections", Arrays.asList("cp", "chests"), "evercraft.commands.player.chestprotection").register());
         }
 
@@ -199,15 +204,15 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         this.listeners.add(new MessageListener().register());
         this.listeners.add(new JoinListener().register());
 
-        if (this.getPluginConfig().getParsed().chestProtection.enabled) {
+        if (this.getPluginConfig().get().chestProtection.enabled) {
             this.listeners.add(new ChestProtectionListener().register());
         }
 
-        if (this.getPluginConfig().getParsed().creativeProtectionEnabled) {
+        if (this.getPluginConfig().get().creativeProtectionEnabled) {
             this.listeners.add(new CreativeItemListener().register());
         }
 
-        if (this.getPluginConfig().getParsed().passiveEnabled) {
+        if (this.getPluginConfig().get().passiveEnabled) {
             this.listeners.add(new PvPListener().register());
         }
 
@@ -220,7 +225,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.registeredGames = new ArrayList<Game>();
 
-        if (this.config.getParsed().games.enabled) {
+        if (this.config.get().games.enabled) {
             this.commands.add(new GameCommand("game", "Join/leave a game", Arrays.asList("games"), "evercraft.commands.games.game").register());
             this.commands.add(new JoinCommand("join", "Join a game", Arrays.asList(), "evercraft.commands.games.game").register());
             this.commands.add(new LeaveCommand("leave", "Leave a game", Arrays.asList(), "evercraft.commands.games.game").register());
@@ -265,24 +270,50 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Closing config..");
 
-        this.config.close();
-        this.messages.close();
+        try {
+            this.config.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            this.messages.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         this.getLogger().info("Finished closing config..");
 
         this.getLogger().info("Closing player data..");
 
-        this.data.close();
+        try {
+            this.data.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         this.getLogger().info("Finished closing player data..");
 
         this.getLogger().info("Closing other data..");
 
-        this.warps.close();
-        this.kits.close();
+        try {
+            this.warps.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            this.kits.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if (this.chests != null) {
-            this.chests.close();
+            try {
+                this.chests.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         this.getLogger().info("Finished closing other data..");
@@ -337,11 +368,11 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         return SpigotMain.Instance;
     }
 
-    public FileConfig<SpigotConfig> getPluginConfig() {
+    public JsonConfig<SpigotConfig> getPluginConfig() {
         return this.config;
     }
 
-    public FileConfig<SpigotMessages> getPluginMessages() {
+    public JsonConfig<SpigotMessages> getPluginMessages() {
         return this.messages;
     }
 
@@ -349,15 +380,15 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         return this.data;
     }
 
-    public FileConfig<SpigotWarps> getWarps() {
+    public JsonConfig<SpigotWarps> getWarps() {
         return this.warps;
     }
 
-    public FileConfig<SpigotKits> getKits() {
+    public JsonConfig<SpigotKits> getKits() {
         return this.kits;
     }
 
-    public FileConfig<SpigotChests> getChests() {
+    public JsonConfig<SpigotChests> getChests() {
         return this.chests;
     }
 
@@ -388,6 +419,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
     public void setServerName(String value) {
         this.serverName = value;
 
-        this.config.getParsed().serverName = value;
+        this.config.get().serverName = value;
     }
 }

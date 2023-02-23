@@ -15,7 +15,7 @@ public class InfoCommand extends BungeeCommand {
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().info.get(this.getName()))));
+        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().info.get(this.getName()))));
     }
 
     @Override

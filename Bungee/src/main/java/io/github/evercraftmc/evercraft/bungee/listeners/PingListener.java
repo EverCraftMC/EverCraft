@@ -19,7 +19,7 @@ public class PingListener extends BungeeListener {
         ServerPing ping = event.getResponse();
 
         try {
-            if (!BungeeMain.getInstance().getPluginData().getCached().maintenance) {
+            if (!BungeeMain.getInstance().getPluginData().get().maintenance) {
                 if (event.getConnection().getVirtualHost() != null && BungeeMain.getInstance().serverMotds.containsKey(event.getConnection().getVirtualHost().getHostName().split("\\.")[0].toLowerCase())) {
                     ping.setDescriptionComponent(ComponentFormatter.flatenComponent(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().serverMotds.get(event.getConnection().getVirtualHost().getHostName().split("\\.")[0].toLowerCase())))));
                 } else {
@@ -33,7 +33,7 @@ public class PingListener extends BungeeListener {
                 Players players = new Players(BungeeMain.getInstance().serverMaxPlayers, BungeeMain.getInstance().getProxy().getOnlineCount(), sample.toArray(new PlayerInfo[] {}));
                 ping.setPlayers(players);
             } else {
-                ping.setDescriptionComponent(ComponentFormatter.flatenComponent(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().serverMotd.split("\n")[0] + "\n" + TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.maintenance.motd)))));
+                ping.setDescriptionComponent(ComponentFormatter.flatenComponent(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().serverMotd.split("\n")[0] + "\n" + TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.maintenance.motd)))));
 
                 Players players = new Players(BungeeMain.getInstance().serverMaxPlayers, 0, new PlayerInfo[] {});
                 ping.setPlayers(players);

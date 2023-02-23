@@ -20,23 +20,23 @@ public class WarpCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
-                if (SpigotMain.getInstance().getWarps().getParsed().warps.containsKey(args[0]) && !(args[0].startsWith("~") && (player.isOp() || player.hasPermission("evercraft.commands.warp.secretWarp")))) {
-                    player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get(args[0]).toBukkitLocation());
+                if (SpigotMain.getInstance().getWarps().get().warps.containsKey(args[0]) && !(args[0].startsWith("~") && (player.isOp() || player.hasPermission("evercraft.commands.warp.secretWarp")))) {
+                    player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(args[0]).toBukkitLocation());
 
-                    if (SpigotMain.getInstance().getPluginConfig().getParsed().warp.clearOnWarp) {
+                    if (SpigotMain.getInstance().getPluginConfig().get().warp.clearOnWarp) {
                         player.getInventory().clear();
                         player.getActivePotionEffects().clear();
                     }
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.warped.replace("{warp}", args[0]))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().warp.warped.replace("{warp}", args[0]))));
                 } else {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.notFound.replace("{warp}", args[0]))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().warp.notFound.replace("{warp}", args[0]))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 
@@ -47,7 +47,7 @@ public class WarpCommand extends SpigotCommand {
         if (args.length == 1) {
             List<String> warps = new ArrayList<String>();
 
-            for (String warp : SpigotMain.getInstance().getWarps().getParsed().warps.keySet()) {
+            for (String warp : SpigotMain.getInstance().getWarps().get().warps.keySet()) {
                 if (!(args[0].startsWith("~") && (sender.isOp() || sender.hasPermission("evercraft.commands.warp.secretWarp")))) {
                     warps.add(warp);
                 }

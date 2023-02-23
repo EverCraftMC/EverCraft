@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee.commands.player;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,9 +38,9 @@ public class MessageCommand extends BungeeCommand {
                         message.append(args[i] + " ");
                     }
 
-                    if (BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).settings.messaging != PluginData.Player.Settings.MessageSetting.EVERYONE && !(BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).settings.messaging == PluginData.Player.Settings.MessageSetting.FRIENDS && BungeeMain.getInstance().getPluginData().getParsed().players.get(player2.getUniqueId().toString()).friends.contains(player.getUniqueId().toString()))) {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().chat.cantDM)));
-                    } else if (!BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted) {
+                    if (BungeeMain.getInstance().getPluginData().get().players.get(player2.getUniqueId().toString()).settings.messaging != PluginData.Player.Settings.MessageSetting.EVERYONE && !(BungeeMain.getInstance().getPluginData().get().players.get(player2.getUniqueId().toString()).settings.messaging == PluginData.Player.Settings.MessageSetting.FRIENDS && BungeeMain.getInstance().getPluginData().get().players.get(player2.getUniqueId().toString()).friends.contains(player.getUniqueId().toString()))) {
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().chat.cantDM)));
+                    } else if (!BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.muted) {
                         if (ModerationUtil.isSuperInappropriateString(message.toString().trim())) {
                             BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(BungeeMain.getInstance().getProxy().getConsole(), "tempmute " + player.getName() + " 1h No");
                         } else if (ModerationUtil.isInappropriateString(message.toString().trim())) {
@@ -53,14 +54,14 @@ public class MessageCommand extends BungeeCommand {
 
                             if (MessageListener.warnings.get(player.getUniqueId()) >= 1 && MessageListener.warnings.get(player.getUniqueId()) <= 5) {
                                 for (ProxiedPlayer player3 : BungeeMain.getInstance().getProxy().getPlayers()) {
-                                    player3.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.chat.warning.replace("{player}", player.getDisplayName()))));
+                                    player3.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.chat.warning.replace("{player}", player.getDisplayName()))));
                                 }
                             } else if (MessageListener.warnings.get(player.getUniqueId()) > 5) {
                                 BungeeMain.getInstance().getProxy().getPluginManager().dispatchCommand(BungeeMain.getInstance().getProxy().getConsole(), "tempmute " + player.getName() + " " + (5 * (MessageListener.warnings.get(player.getUniqueId()) - 5)) + "m Inappropriate language");
                             }
                         } else {
-                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().chat.dm.replace("{player1}", "You").replace("{player2}", player2.getDisplayName()).replace("{message}", message.toString()))));
-                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().chat.dm.replace("{player1}", player.getDisplayName()).replace("{player2}", "You").replace("{message}", message.toString()))));
+                            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().chat.dm.replace("{player1}", "You").replace("{player2}", player2.getDisplayName()).replace("{message}", message.toString()))));
+                            player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().chat.dm.replace("{player1}", player.getDisplayName()).replace("{player2}", "You").replace("{message}", message.toString()))));
 
                             if (lastMessages.containsKey(player)) {
                                 lastMessages.remove(player);
@@ -73,32 +74,36 @@ public class MessageCommand extends BungeeCommand {
                             lastMessages.put(player2, player);
                         }
                     } else {
-                        String time = BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.until;
+                        String time = BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.until;
 
                         if (time.equalsIgnoreCase("forever") || Instant.parse(time).isAfter(Instant.now())) {
-                            if (BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.reason != null) {
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.reason.replace("{reason}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.reason).replace("{moderator}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.by).replace("{time}", time))));
+                            if (BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.reason != null) {
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.mute.reason.replace("{reason}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.reason).replace("{moderator}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.by).replace("{time}", time))));
                             } else {
-                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.mute.noReason.replace("{moderator}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.by).replace("{time}", time))));
+                                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.mute.noReason.replace("{moderator}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.by).replace("{time}", time))));
                             }
                         } else {
-                            BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted = false;
-                            BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.reason = null;
-                            BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.by = null;
-                            BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.until = null;
-                            BungeeMain.getInstance().getPluginData().save();
+                            BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.muted = false;
+                            BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.reason = null;
+                            BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.by = null;
+                            BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.until = null;
+                            try {
+                                BungeeMain.getInstance().getPluginData().save();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
 
                             run(sender, args);
                         }
                     }
                 } else {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 

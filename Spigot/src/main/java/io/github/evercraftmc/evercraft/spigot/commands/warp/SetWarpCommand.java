@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.commands.warp;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.command.CommandSender;
@@ -19,19 +20,23 @@ public class SetWarpCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
-                if (SpigotMain.getInstance().getWarps().getParsed().warps.containsKey(args[0])) {
-                    SpigotMain.getInstance().getWarps().getParsed().warps.remove(args[0]);
+                if (SpigotMain.getInstance().getWarps().get().warps.containsKey(args[0])) {
+                    SpigotMain.getInstance().getWarps().get().warps.remove(args[0]);
                 }
 
-                SpigotMain.getInstance().getWarps().getParsed().warps.put(args[0], SerializableLocation.fromBukkitLocation(player.getLocation()));
-                SpigotMain.getInstance().getWarps().save();
+                SpigotMain.getInstance().getWarps().get().warps.put(args[0], SerializableLocation.fromBukkitLocation(player.getLocation()));
+                try {
+                    SpigotMain.getInstance().getWarps().save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.setWarp.replace("{warp}", args[0]))));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().warp.setWarp.replace("{warp}", args[0]))));
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 

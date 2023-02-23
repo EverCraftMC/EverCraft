@@ -34,7 +34,7 @@ public class ScoreBoard implements Closable {
                 for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
                     if (player.getServer() != null) {
                         if (!scoreboardMap.containsKey(player)) {
-                            scoreboardMap.put(player, new ScoreboardObjective(player.getName(), ComponentFormatter.stringToJson(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getParsed().scoreboard.title)), ScoreboardObjective.HealthDisplay.INTEGER, (byte) 0));
+                            scoreboardMap.put(player, new ScoreboardObjective(player.getName(), ComponentFormatter.stringToJson(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().get().scoreboard.title)), ScoreboardObjective.HealthDisplay.INTEGER, (byte) 0));
                             linesMap.put(player, new HashMap<String, Integer>());
 
                             player.unsafe().sendPacket(scoreboardMap.get(player));
@@ -43,7 +43,7 @@ public class ScoreBoard implements Closable {
                             player.unsafe().sendPacket(display);
                         }
 
-                        List<String> lines = BungeeMain.getInstance().getPluginConfig().getParsed().scoreboard.lines;
+                        List<String> lines = BungeeMain.getInstance().getPluginConfig().get().scoreboard.lines;
 
                         for (int i = lines.size() - 1; i >= 0; i--) {
                             try {
@@ -73,7 +73,7 @@ public class ScoreBoard implements Closable {
                             }
                         }
 
-                        player.setTabHeader(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getParsed().tabList.header
+                        player.setTabHeader(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().get().tabList.header
                             .replace("{player}", player.getDisplayName())
                             .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
                             .replace("{ping}", player.getPing() + "")
@@ -81,7 +81,7 @@ public class ScoreBoard implements Closable {
                             .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
                             .replace("{proxyOnline}", BungeeMain.getInstance().getProxy().getOnlineCount() + "")
                             .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))),
-                        ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().getParsed().tabList.footer
+                        ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().get().tabList.footer
                             .replace("{player}", player.getDisplayName())
                             .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
                             .replace("{ping}", player.getPing() + "")

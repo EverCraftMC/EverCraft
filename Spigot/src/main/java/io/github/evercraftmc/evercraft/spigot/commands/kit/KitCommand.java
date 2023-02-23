@@ -23,7 +23,7 @@ public class KitCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
-                List<SerializableItemStack> serializableItems = SpigotMain.getInstance().getKits().getParsed().kits.get(args[0]);
+                List<SerializableItemStack> serializableItems = SpigotMain.getInstance().getKits().get().kits.get(args[0]);
                 if (serializableItems != null) {
                     List<ItemStack> items = new ArrayList<ItemStack>();
 
@@ -44,16 +44,16 @@ public class KitCommand extends SpigotCommand {
                     }
 
                     if (!(args.length >= 2 && args[1].equalsIgnoreCase("true"))) {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().kit.kit.replace("{kit}", args[0]))));
+                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().kit.kit.replace("{kit}", args[0]))));
                     }
                 } else {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().kit.notFound.replace("{kit}", args[0]))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().kit.notFound.replace("{kit}", args[0]))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 
@@ -62,7 +62,7 @@ public class KitCommand extends SpigotCommand {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 1) {
-            list = new ArrayList<String>(SpigotMain.getInstance().getKits().getParsed().kits.keySet());
+            list = new ArrayList<String>(SpigotMain.getInstance().getKits().get().kits.keySet());
         } else {
             return Arrays.asList();
         }

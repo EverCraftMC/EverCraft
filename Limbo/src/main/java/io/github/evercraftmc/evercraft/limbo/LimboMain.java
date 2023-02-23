@@ -1,6 +1,6 @@
 package io.github.evercraftmc.evercraft.limbo;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,16 +14,16 @@ import io.github.evercraftmc.evercraft.limbo.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.limbo.listeners.SpawnListener;
 import io.github.evercraftmc.evercraft.shared.Plugin;
 import io.github.evercraftmc.evercraft.shared.PluginManager;
-import io.github.evercraftmc.evercraft.shared.config.FileConfig;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
+import io.github.kale_ko.ejcl.file.JsonConfig;
 
 public class LimboMain extends LimboPlugin implements Plugin {
     private static LimboMain Instance;
 
     private Logger logger;
 
-    private FileConfig<LimboConfig> config;
-    private FileConfig<LimboMessages> messages;
+    private JsonConfig<LimboConfig> config;
+    private JsonConfig<LimboMessages> messages;
 
     private List<LimboCommand> commands;
     private List<LimboListener> listeners;
@@ -50,24 +50,24 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
         this.getLogger().info("Loading config..");
 
-        this.config = new FileConfig<LimboConfig>(LimboConfig.class, this.getDataFolder().getAbsolutePath() + File.separator + "config.json");
-        this.config.reload();
-
-        if (this.config.getParsed() != null) {
-            this.config.save();
+        this.config = new JsonConfig<LimboConfig>(LimboConfig.class, this.getDataFolder().toPath().resolve("config.json").toFile());
+        try {
+            this.config.load();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        this.serverName = this.config.getParsed().serverName;
+        this.serverName = this.config.get().serverName;
 
         this.getLogger().info("Finished loading config");
 
         this.getLogger().info("Loading messages..");
 
-        this.messages = new FileConfig<LimboMessages>(LimboMessages.class, this.getDataFolder().getAbsolutePath() + File.separator + "messages.json");
-        this.messages.reload();
-
-        if (this.messages.getParsed() != null) {
-            this.messages.save();
+        this.messages = new JsonConfig<LimboMessages>(LimboMessages.class, this.getDataFolder().toPath().resolve("messages.json").toFile());
+        try {
+            this.messages.load();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         this.getLogger().info("Finished loading messages");
@@ -105,8 +105,17 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
         this.getLogger().info("Closing config..");
 
-        this.config.close();
-        this.messages.close();
+        try {
+            this.config.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            this.messages.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         this.getLogger().info("Finished closing config..");
 
@@ -153,11 +162,11 @@ public class LimboMain extends LimboPlugin implements Plugin {
         return this.logger;
     }
 
-    public FileConfig<LimboConfig> getPluginConfig() {
+    public JsonConfig<LimboConfig> getPluginConfig() {
         return this.config;
     }
 
-    public FileConfig<LimboMessages> getPluginMessages() {
+    public JsonConfig<LimboMessages> getPluginMessages() {
         return this.messages;
     }
 
@@ -180,6 +189,6 @@ public class LimboMain extends LimboPlugin implements Plugin {
     public void setServerName(String value) {
         this.serverName = value;
 
-        this.config.getParsed().serverName = value;
+        this.config.get().serverName = value;
     }
 }

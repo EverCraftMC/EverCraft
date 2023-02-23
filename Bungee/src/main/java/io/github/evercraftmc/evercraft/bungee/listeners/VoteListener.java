@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee.listeners;
 
+import java.io.IOException;
 import com.vexsoftware.votifier.bungee.events.VotifierEvent;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
@@ -15,17 +16,25 @@ public class VoteListener extends BungeeListener {
         if (player != null) {
             VoteListener.process(player);
         } else {
-            BungeeMain.getInstance().getPluginData().getParsed().votes.get(event.getVote().getUsername()).toProcess = BungeeMain.getInstance().getPluginData().getParsed().votes.get(event.getVote().getUsername()).toProcess + 1;
-            BungeeMain.getInstance().getPluginData().save();
+            BungeeMain.getInstance().getPluginData().get().votes.get(event.getVote().getUsername()).toProcess = BungeeMain.getInstance().getPluginData().get().votes.get(event.getVote().getUsername()).toProcess + 1;
+            try {
+                BungeeMain.getInstance().getPluginData().save();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public static void process(ProxiedPlayer player) {
-        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().vote.replace("{player}", player.getDisplayName()))));
+        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().vote.replace("{player}", player.getDisplayName()))));
 
-        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().getParsed().discord.channelId).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().getParsed().vote.replace("{player}", player.getDisplayName()))).queue();
+        BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().get().discord.channelId).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().get().vote.replace("{player}", player.getDisplayName()))).queue();
 
-        BungeeMain.getInstance().getPluginData().getParsed().votes.get(player.getName()).total = BungeeMain.getInstance().getPluginData().getParsed().votes.get(player.getName()).total + 1;
-        BungeeMain.getInstance().getPluginData().save();
+        BungeeMain.getInstance().getPluginData().get().votes.get(player.getName()).total = BungeeMain.getInstance().getPluginData().get().votes.get(player.getName()).total + 1;
+        try {
+            BungeeMain.getInstance().getPluginData().save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

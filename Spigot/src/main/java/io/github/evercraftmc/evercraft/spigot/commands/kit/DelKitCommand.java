@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.commands.kit;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,15 +21,19 @@ public class DelKitCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
-                SpigotMain.getInstance().getKits().getParsed().kits.remove(args[0]);
-                SpigotMain.getInstance().getKits().save();
+                SpigotMain.getInstance().getKits().get().kits.remove(args[0]);
+                try {
+                    SpigotMain.getInstance().getKits().save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().kit.delKit.replace("{kit}", args[0]))));
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().kit.delKit.replace("{kit}", args[0]))));
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 
@@ -37,7 +42,7 @@ public class DelKitCommand extends SpigotCommand {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 1) {
-            list = new ArrayList<String>(SpigotMain.getInstance().getKits().getParsed().kits.keySet());
+            list = new ArrayList<String>(SpigotMain.getInstance().getKits().get().kits.keySet());
         } else {
             return Arrays.asList();
         }

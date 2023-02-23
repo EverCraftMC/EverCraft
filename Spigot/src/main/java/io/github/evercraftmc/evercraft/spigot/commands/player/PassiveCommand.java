@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.commands.player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,32 +21,48 @@ public class PassiveCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length == 0) {
-                if (SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive) {
-                    SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive = false;
-                    SpigotMain.getInstance().getPluginData().save();
+                if (SpigotMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).settings.passive) {
+                    SpigotMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).settings.passive = false;
+                    try {
+                        SpigotMain.getInstance().getPluginData().save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().passive.replace("{value}", "off"))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().passive.replace("{value}", "off"))));
                 } else {
-                    SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive = true;
-                    SpigotMain.getInstance().getPluginData().save();
+                    SpigotMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).settings.passive = true;
+                    try {
+                        SpigotMain.getInstance().getPluginData().save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().passive.replace("{value}", "on"))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().passive.replace("{value}", "on"))));
                 }
             } else {
                 if (args[0].equalsIgnoreCase("on")) {
-                    SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive = true;
-                    SpigotMain.getInstance().getPluginData().save();
+                    SpigotMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).settings.passive = true;
+                    try {
+                        SpigotMain.getInstance().getPluginData().save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().passive.replace("{value}", "on"))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().passive.replace("{value}", "on"))));
                 } else if (args[0].equalsIgnoreCase("off")) {
-                    SpigotMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).settings.passive = false;
-                    SpigotMain.getInstance().getPluginData().save();
+                    SpigotMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).settings.passive = false;
+                    try {
+                        SpigotMain.getInstance().getPluginData().save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().passive.replace("{value}", "off"))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().passive.replace("{value}", "off"))));
                 }
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 

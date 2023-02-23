@@ -7,14 +7,14 @@ archivesBaseName = "spigot"
 version = project.spigot_plugin_version
 
 repositories {
-    maven { url "https://repo.purpurmc.org/snapshots/" }
+    maven { url "https://papermc.io/repo/repository/maven-public/" }
 }
 
 dependencies {
     dependency project(":Shared")
     dependency project(path: ":Shared", configuration: "dependency")
 
-    paperweightDevelopmentBundle "org.purpurmc.purpur:dev-bundle:${project.purpur_version}"
+    paperweightDevelopmentBundle "io.papermc.paper:dev-bundle:${project.paper_version}"
 
     compileOnly "net.luckperms:api:${project.luckperms_version}"
 }

@@ -29,26 +29,26 @@ public class PlayerInfoCommand extends BungeeCommand {
                 ProxiedPlayer bungeePlayer = BungeeMain.getInstance().getProxy().getPlayer(args[0]);
 
                 if (bungeePlayer != null) {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().playerInfo.online
-                        .replace("{player}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).lastName)
-                        .replace("{uuid}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).uuid)
-                        .replace("{ip}", sender.hasPermission("evercraft.commands.staff.playerinfo.ip") ? BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).lastIP : "hidden")
-                        .replace("{nickname}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).nickname)
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().playerInfo.online
+                        .replace("{player}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).lastName)
+                        .replace("{uuid}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).uuid)
+                        .replace("{ip}", sender.hasPermission("evercraft.commands.staff.playerinfo.ip") ? BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).lastIP : "hidden")
+                        .replace("{nickname}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).nickname)
                         .replace("{ping}", bungeePlayer.getPing() + "ms")
                         .replace("{version}", ProtocolVersion.getProtocol(Via.getAPI().getPlayerVersion(player.getUniqueId())).getName())
                         .replace("{protocolVersion}", Via.getAPI().getPlayerVersion(player.getUniqueId()) + ""))));
                 } else {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().playerInfo.offline
-                        .replace("{player}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).lastName)
-                        .replace("{uuid}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).uuid)
-                        .replace("{ip}", sender.hasPermission("evercraft.commands.staff.playerinfo.ip") ? BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).lastIP : "hidden")
-                        .replace("{nickname}", BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).nickname))));
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().playerInfo.offline
+                        .replace("{player}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).lastName)
+                        .replace("{uuid}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).uuid)
+                        .replace("{ip}", sender.hasPermission("evercraft.commands.staff.playerinfo.ip") ? BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).lastIP : "hidden")
+                        .replace("{nickname}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).nickname))));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
         }
     }
 

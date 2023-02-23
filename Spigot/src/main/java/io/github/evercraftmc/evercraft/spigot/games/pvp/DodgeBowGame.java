@@ -44,9 +44,9 @@ public class DodgeBowGame extends TeamedGame {
             }
 
             if (this.playerTeams.get(player).equalsIgnoreCase("runners")) {
-                player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get(runnerWarpName).toBukkitLocation());
+                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(runnerWarpName).toBukkitLocation());
             } else if (this.playerTeams.get(player).equalsIgnoreCase("bowers")) {
-                player.teleport(SpigotMain.getInstance().getWarps().getParsed().warps.get(bowerWarpName).toBukkitLocation());
+                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(bowerWarpName).toBukkitLocation());
 
                 new KitCommand("kit", null, Arrays.asList(), null).run(player, new String[] { bowerKitName, "true" });
             }

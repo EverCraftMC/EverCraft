@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.commands.warp;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,19 +21,23 @@ public class DelWarpCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
-                if (SpigotMain.getInstance().getWarps().getParsed().warps.containsKey(args[0])) {
-                    SpigotMain.getInstance().getWarps().getParsed().warps.remove(args[0]);
-                    SpigotMain.getInstance().getWarps().save();
+                if (SpigotMain.getInstance().getWarps().get().warps.containsKey(args[0])) {
+                    SpigotMain.getInstance().getWarps().get().warps.remove(args[0]);
+                    try {
+                        SpigotMain.getInstance().getWarps().save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().warp.delWarp.replace("{warp}", args[0]))));
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().warp.delWarp.replace("{warp}", args[0]))));
                 } else {
-                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                    sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.invalidArgs)));
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.invalidArgs)));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().getParsed().error.noConsole)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().error.noConsole)));
         }
     }
 
@@ -41,7 +46,7 @@ public class DelWarpCommand extends SpigotCommand {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 1) {
-            list = new ArrayList<String>(SpigotMain.getInstance().getWarps().getParsed().warps.keySet());
+            list = new ArrayList<String>(SpigotMain.getInstance().getWarps().get().warps.keySet());
         } else {
             return Arrays.asList();
         }

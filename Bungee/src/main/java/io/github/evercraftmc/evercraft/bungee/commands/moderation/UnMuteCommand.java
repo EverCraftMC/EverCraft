@@ -1,5 +1,6 @@
 package io.github.evercraftmc.evercraft.bungee.commands.moderation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,53 +33,61 @@ public class UnMuteCommand extends BungeeCommand {
 
             if (player != null) {
                 if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId())) {
-                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.unmute.cantUnmuteSelf)));
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.unmute.cantUnmuteSelf)));
                 } else {
-                    if (BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted) {
-                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.unmute.broadcast.noReason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
+                    if (BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.muted) {
+                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.unmute.broadcast.noReason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName))));
 
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted = false;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.reason = null;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.by = null;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.until = null;
-                        BungeeMain.getInstance().getPluginData().save();
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.muted = false;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.reason = null;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.by = null;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.until = null;
+                        try {
+                            BungeeMain.getInstance().getPluginData().save();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     } else {
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.unmute.notMuted.replace("{player}", player.getDisplayName()))));
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.unmute.notMuted.replace("{player}", player.getDisplayName()))));
                     }
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
             }
         } else if (args.length > 1) {
             SimplePlayer player = BungeePlayerResolver.getPlayer(BungeeMain.getInstance().getPluginData(), args[0]);
 
             if (player != null) {
                 if (sender instanceof ProxiedPlayer player2 && player2.getUniqueId().equals(player.getUniqueId())) {
-                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.unmute.cantUnmuteSelf)));
+                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.unmute.cantUnmuteSelf)));
                 } else {
-                    if (BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted) {
+                    if (BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.muted) {
                         StringBuilder reason = new StringBuilder();
 
                         for (Integer i = 1; i < args.length; i++) {
                             reason.append(args[i] + " ");
                         }
 
-                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.unmute.broadcast.reason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
+                        BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.unmute.broadcast.reason.replace("{player}", player.getDisplayName()).replace("{moderator}", senderName).replace("{reason}", reason.substring(0, reason.length() - 1)))));
 
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.muted = false;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.reason = null;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.by = null;
-                        BungeeMain.getInstance().getPluginData().getParsed().players.get(player.getUniqueId().toString()).mute.until = null;
-                        BungeeMain.getInstance().getPluginData().save();
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.muted = false;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.reason = null;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.by = null;
+                        BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).mute.until = null;
+                        try {
+                            BungeeMain.getInstance().getPluginData().save();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     } else {
-                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().moderation.unmute.notMuted.replace("{player}", player.getDisplayName()))));
+                        sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().moderation.unmute.notMuted.replace("{player}", player.getDisplayName()))));
                     }
                 }
             } else {
-                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.playerNotFound.replace("{player}", args[0]))));
+                sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
             }
         } else {
-            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().getParsed().error.invalidArgs)));
+            sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.invalidArgs)));
         }
     }
 
