@@ -6,21 +6,24 @@ archivesBaseName = "discord"
 version = project.discord_bot_version
 
 dependencies {
-    dependency project(":Shared")
-    dependency project(path: ":Shared", configuration: "dependency")
+    implementation project(":Shared")
 
-    dependency "com.google.code.gson:gson:2.10.1"
+    implementation "com.github.Kale-Ko:EJCL:${project.ejcl_version}"
+
+    implementation "net.dv8tion:JDA:${project.jda_version}"
+    implementation "org.slf4j:slf4j-simple:2.0.0"
+
+    implementation "com.google.code.gson:gson:2.10.1"
 }
 
 jar {
     sourceCompatibility = JavaVersion.toVersion(project.java_version)
     targetCompatibility = JavaVersion.toVersion(project.java_version)
 
-    duplicatesStrategy = "exclude"
     archiveVersion = rootProject.version + "-" + project.version
 
-    from files(project.sourceSets.main.output)
-    from files(project.configurations.dependency.collect { it.isDirectory() ? it : zipTree(it) })
+    duplicatesStrategy = "exclude"
+    from(configurations.runtimeClasspath.collect { it.isDirectory() ? null : zipTree(it).matching { exclude "META-INF/**" } })
 
     manifest {
         attributes "Main-Class": "io.github.evercraftmc.evercraft.discord.BotMain"
