@@ -110,21 +110,6 @@ public class JoinListener extends BungeeListener {
 
         BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().get().discord.channelId).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().get().welcome.join.replace("{player}", event.getPlayer().getDisplayName()))).queue();
 
-        TabListUtil.removeFromList(event.getPlayer());
-        TabListUtil.addToList(event.getPlayer());
-
-        for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
-            if (player != event.getPlayer()) {
-                TabListUtil.removeFromList(player, event.getPlayer());
-
-                if (player.getServer() != null) {
-                    TabListUtil.addToList(player, event.getPlayer(), player.getServer().getInfo());
-                } else {
-                    TabListUtil.addToList(player, event.getPlayer());
-                }
-            }
-        }
-
         for (int i = BungeeMain.getInstance().getPluginData().get().votes.get(event.getPlayer().getName()).toProcess; i > 0; i--) {
             VoteListener.process(event.getPlayer());
         }
@@ -150,14 +135,12 @@ public class JoinListener extends BungeeListener {
         TabListUtil.addToList(event.getPlayer(), event.getServer().getInfo());
 
         for (ProxiedPlayer player : BungeeMain.getInstance().getProxy().getPlayers()) {
-            if (player != event.getPlayer()) {
-                TabListUtil.removeFromList(player, event.getPlayer());
+            TabListUtil.removeFromList(player, event.getPlayer());
 
-                if (player.getServer() != null) {
-                    TabListUtil.addToList(player, event.getPlayer(), player.getServer().getInfo());
-                } else {
-                    TabListUtil.addToList(player, event.getPlayer());
-                }
+            if (player.getServer() != null) {
+                TabListUtil.addToList(player, event.getPlayer(), player.getServer().getInfo());
+            } else {
+                TabListUtil.addToList(player, event.getPlayer());
             }
         }
     }
