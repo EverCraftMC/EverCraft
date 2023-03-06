@@ -116,7 +116,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.data = new MySQLConfig<PluginData>(PluginData.class, this.config.get().database.host, this.config.get().database.port, this.config.get().database.name, this.config.get().database.tableName, this.config.get().database.username, this.config.get().database.password);
         try {
-            this.data.connect();
+            this.data.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
