@@ -40,7 +40,7 @@ tasks.register("fatJar", Jar) {
     archiveClassifier = "fat"
 
     duplicatesStrategy = "exclude"
-    from(sourceSets.main.output)
+    from(zipTree(tasks.reobfJar.outputJar))
     from(configurations.runtimeClasspath.collect { it.isDirectory() ? null : zipTree(it) })
 }
 
