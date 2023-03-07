@@ -5,6 +5,10 @@ plugins {
 archivesBaseName = "shared"
 version = project.project_version
 
+repositories {
+	maven { url "https://jitpack.io" }
+}
+
 dependencies {
     implementation "com.github.Kale-Ko:EJCL:${project.ejcl_version}"
 
@@ -18,6 +22,20 @@ jar {
 
     archiveVersion = rootProject.version + "-" + project.version
 
+}
+
+tasks.register("fatJar", Jar) {
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+    archiveVersion = rootProject.version + "-" + project.version
+    archiveClassifier = "fat"
+
     duplicatesStrategy = "exclude"
-    from(configurations.runtimeClasspath.collect { it.isDirectory() ? null : zipTree(it).matching { exclude "META-INF/**" } })
+    from(sourceSets.main.output)
+    from(configurations.runtimeClasspath.collect { it.isDirectory() ? null : zipTree(it) })
+}
+
+build {
+    finalizedBy tasks.fatJar
 }

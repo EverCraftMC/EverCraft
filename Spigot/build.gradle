@@ -12,8 +12,7 @@ repositories {
 
 dependencies {
     implementation project(":Shared")
-
-    implementation "com.github.Kale-Ko:EJCL:${project.ejcl_version}"
+    implementation project(":Shared").tasks.fatJar.outputs.files
 
     paperweightDevelopmentBundle "io.papermc.paper:dev-bundle:${project.paper_version}"
 
@@ -31,9 +30,22 @@ jar {
     targetCompatibility = JavaVersion.toVersion(project.java_version)
 
     archiveVersion = rootProject.version + "-" + project.version
+}
+
+tasks.register("fatJar", Jar) {
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+    archiveVersion = rootProject.version + "-" + project.version
+    archiveClassifier = "fat"
 
     duplicatesStrategy = "exclude"
-    from(configurations.runtimeClasspath.collect { it.isDirectory() ? null : zipTree(it).matching { exclude "META-INF/**" } })
+    from(sourceSets.main.output)
+    from(configurations.runtimeClasspath.collect { it.isDirectory() ? null : zipTree(it) })
+}
+
+build {
+    finalizedBy tasks.fatJar
 }
 
 processResources {
