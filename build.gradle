@@ -53,11 +53,7 @@ tasks.register("upload") {
                     }
                 }
 
-                if (server.split(":")[1].equalsIgnoreCase("Spigot")) {
-                    Files.copy(project(":" + server.split(":")[1]).tasks.reobfJar.outputs.files[0].toPath(), Paths.get(path + server.split(":")[0] + server.split(":")[2] + "/EverCraft-" + project(":" + server.split(":")[1]).tasks.reobfJar.outputs.files[0].getName().replace("-dev", "")))
-                } else {
-                    Files.copy(project(":" + server.split(":")[1]).tasks.fatJar.outputs.files[0].toPath(), Paths.get(path + server.split(":")[0] + server.split(":")[2] + "/EverCraft-" + project(":" + server.split(":")[1]).tasks.fatJar.outputs.files[0].getName()))
-                }
+                Files.copy(project(":" + server.split(":")[1]).tasks.fatJar.outputs.files[0].toPath(), Paths.get(path + server.split(":")[0] + server.split(":")[2] + "/EverCraft-" + project(":" + server.split(":")[1]).tasks.fatJar.outputs.files[0].getName().replace("-fat", "")))
             }
         }
     }
