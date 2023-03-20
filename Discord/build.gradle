@@ -30,6 +30,10 @@ tasks.register("fatJar", Jar) {
     archiveVersion = rootProject.version + "-" + project.version
     archiveClassifier = "fat"
 
+    manifest {
+        attributes "Main-Class": "io.github.evercraftmc.evercraft.discord.BotMain"
+    }
+
     duplicatesStrategy = "exclude"
     from(sourceSets.main.output)
     from(configurations.runtimeClasspath.collect { it.isDirectory() ? null : zipTree(it) })
