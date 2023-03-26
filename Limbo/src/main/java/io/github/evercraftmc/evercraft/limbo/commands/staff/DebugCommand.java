@@ -11,6 +11,7 @@ import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.kale_ko.bjsl.BJSL;
 import io.github.kale_ko.bjsl.elements.ParsedElement;
+import io.github.kale_ko.ejcl.PathResolver;
 
 public class DebugCommand extends LimboCommand {
     public DebugCommand(String name, String description, List<String> aliases, String permission) {
@@ -28,23 +29,13 @@ public class DebugCommand extends LimboCommand {
             }
 
             if (json != null) {
-                String[] path = args[1].split("\\.");
-
-                for (String part : path) {
-                    if (json.isObject()) {
-                        json = json.asObject().get(part);
-                    } else if (json.isArray()) {
-                        json = json.asArray().get(Integer.parseInt(part));
-                    } else {
-                        break;
-                    }
-
-                    if (json == null || json.isPrimitive()) {
-                        break;
-                    }
+                String path = "";
+                for (Integer i = 1; i < args.length; i++) {
+                    path += args[i] + " ";
                 }
+                path = path.substring(0, path.length() - 1);
 
-                String string = BJSL.stringifyJson(json);
+                String string = BJSL.stringifyJson(PathResolver.resolve(json, path));
 
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.removeColors(args[1] + " in " + args[0] + " has the value of \n" + string + "")));
             } else {
@@ -62,7 +53,6 @@ public class DebugCommand extends LimboCommand {
         if (args.length == 1) {
             list.add("config");
             list.add("messages");
-            list.add("data");
         } else {
             return Arrays.asList();
         }

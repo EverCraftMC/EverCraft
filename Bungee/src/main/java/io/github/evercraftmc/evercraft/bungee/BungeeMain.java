@@ -49,7 +49,7 @@ import io.github.evercraftmc.evercraft.shared.discord.DiscordBot;
 import io.github.evercraftmc.evercraft.shared.economy.Economy;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
-import io.github.kale_ko.ejcl.file.JsonConfig;
+import io.github.kale_ko.ejcl.file.bjsl.JsonFileConfig;
 import io.github.kale_ko.ejcl.mysql.MySQLConfig;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -63,8 +63,8 @@ import net.md_5.bungee.api.plugin.Plugin;
 public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraft.shared.Plugin {
     private static BungeeMain Instance;
 
-    private JsonConfig<BungeeConfig> config;
-    private JsonConfig<BungeeMessages> messages;
+    private JsonFileConfig<BungeeConfig> config;
+    private JsonFileConfig<BungeeMessages> messages;
     private MySQLConfig<PluginData> data;
 
     private Economy economy;
@@ -96,14 +96,14 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.getLogger().info("Loading config..");
 
-        this.config = new JsonConfig<BungeeConfig>(BungeeConfig.class, this.getDataFolder().toPath().resolve("config.json").toFile());
+        this.config = new JsonFileConfig<BungeeConfig>(BungeeConfig.class, this.getDataFolder().toPath().resolve("config.json").toFile());
         try {
             this.config.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        this.messages = new JsonConfig<BungeeMessages>(BungeeMessages.class, this.getDataFolder().toPath().resolve("messages.json").toFile());
+        this.messages = new JsonFileConfig<BungeeMessages>(BungeeMessages.class, this.getDataFolder().toPath().resolve("messages.json").toFile());
         try {
             this.messages.load();
         } catch (IOException e) {
@@ -315,11 +315,11 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         return BungeeMain.Instance;
     }
 
-    public JsonConfig<BungeeConfig> getPluginConfig() {
+    public JsonFileConfig<BungeeConfig> getPluginConfig() {
         return this.config;
     }
 
-    public JsonConfig<BungeeMessages> getPluginMessages() {
+    public JsonFileConfig<BungeeMessages> getPluginMessages() {
         return this.messages;
     }
 

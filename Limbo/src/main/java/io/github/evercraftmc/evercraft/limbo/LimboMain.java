@@ -15,15 +15,15 @@ import io.github.evercraftmc.evercraft.limbo.listeners.SpawnListener;
 import io.github.evercraftmc.evercraft.shared.Plugin;
 import io.github.evercraftmc.evercraft.shared.PluginManager;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
-import io.github.kale_ko.ejcl.file.JsonConfig;
+import io.github.kale_ko.ejcl.file.bjsl.JsonFileConfig;
 
 public class LimboMain extends LimboPlugin implements Plugin {
     private static LimboMain Instance;
 
     private Logger logger;
 
-    private JsonConfig<LimboConfig> config;
-    private JsonConfig<LimboMessages> messages;
+    private JsonFileConfig<LimboConfig> config;
+    private JsonFileConfig<LimboMessages> messages;
 
     private List<LimboCommand> commands;
     private List<LimboListener> listeners;
@@ -50,7 +50,7 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
         this.getLogger().info("Loading config..");
 
-        this.config = new JsonConfig<LimboConfig>(LimboConfig.class, this.getDataFolder().toPath().resolve("config.json").toFile());
+        this.config = new JsonFileConfig<LimboConfig>(LimboConfig.class, this.getDataFolder().toPath().resolve("config.json").toFile());
         try {
             this.config.load();
         } catch (IOException e) {
@@ -63,7 +63,7 @@ public class LimboMain extends LimboPlugin implements Plugin {
 
         this.getLogger().info("Loading messages..");
 
-        this.messages = new JsonConfig<LimboMessages>(LimboMessages.class, this.getDataFolder().toPath().resolve("messages.json").toFile());
+        this.messages = new JsonFileConfig<LimboMessages>(LimboMessages.class, this.getDataFolder().toPath().resolve("messages.json").toFile());
         try {
             this.messages.load();
         } catch (IOException e) {
@@ -162,11 +162,11 @@ public class LimboMain extends LimboPlugin implements Plugin {
         return this.logger;
     }
 
-    public JsonConfig<LimboConfig> getPluginConfig() {
+    public JsonFileConfig<LimboConfig> getPluginConfig() {
         return this.config;
     }
 
-    public JsonConfig<LimboMessages> getPluginMessages() {
+    public JsonFileConfig<LimboMessages> getPluginMessages() {
         return this.messages;
     }
 
