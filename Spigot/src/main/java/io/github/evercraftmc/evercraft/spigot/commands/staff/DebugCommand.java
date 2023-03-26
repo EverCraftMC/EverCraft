@@ -3,16 +3,15 @@ package io.github.evercraftmc.evercraft.spigot.commands.staff;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import org.bukkit.command.CommandSender;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
-import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
 import io.github.kale_ko.bjsl.BJSL;
 import io.github.kale_ko.bjsl.elements.ParsedElement;
+import io.github.kale_ko.ejcl.PathResolver;
 
 public class DebugCommand extends SpigotCommand {
     public DebugCommand(String name, String description, List<String> aliases, String permission) {
@@ -38,34 +37,13 @@ public class DebugCommand extends SpigotCommand {
             }
 
             if (json != null) {
-                String[] path = args[1].split("\\.");
-
-                for (String part : path) {
-                    if (part.startsWith("{") && part.endsWith("}")) {
-                        UUID uuid = SpigotPlayerResolver.getUUIDFromName(SpigotMain.getInstance().getPluginData(), part.substring(1, part.length() - 1));
-                        if (uuid != null) {
-                            part = uuid.toString();
-                        } else {
-                            json = null;
-
-                            break;
-                        }
-                    }
-
-                    if (json.isObject()) {
-                        json = json.asObject().get(part);
-                    } else if (json.isArray()) {
-                        json = json.asArray().get(Integer.parseInt(part));
-                    } else {
-                        break;
-                    }
-
-                    if (json == null || json.isPrimitive()) {
-                        break;
-                    }
+                String path = "";
+                for (Integer i = 1; i < args.length; i++) {
+                    path += args[i] + " ";
                 }
+                path = path.substring(0, path.length() - 1);
 
-                String string = BJSL.stringifyJson(json);
+                String string = BJSL.stringifyJson(PathResolver.resolve(json, path));
 
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.removeColors(args[1] + " in " + args[0] + " has the value of \n" + string + "")));
             } else {
@@ -84,6 +62,9 @@ public class DebugCommand extends SpigotCommand {
             list.add("config");
             list.add("messages");
             list.add("data");
+            list.add("warps");
+            list.add("kits");
+            list.add("chests");
         } else {
             return Arrays.asList();
         }

@@ -52,19 +52,19 @@ import io.github.evercraftmc.evercraft.spigot.listeners.ServerIdleListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.SpigotListener;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
-import io.github.kale_ko.ejcl.file.JsonConfig;
+import io.github.kale_ko.ejcl.file.bjsl.JsonFileConfig;
 import io.github.kale_ko.ejcl.mysql.MySQLConfig;
 
 public class SpigotMain extends JavaPlugin implements Plugin {
     private static SpigotMain Instance;
 
-    private JsonConfig<SpigotConfig> config;
-    private JsonConfig<SpigotMessages> messages;
+    private JsonFileConfig<SpigotConfig> config;
+    private JsonFileConfig<SpigotMessages> messages;
     private MySQLConfig<PluginData> data;
 
-    private JsonConfig<SpigotWarps> warps;
-    private JsonConfig<SpigotKits> kits;
-    private JsonConfig<SpigotChests> chests;
+    private JsonFileConfig<SpigotWarps> warps;
+    private JsonFileConfig<SpigotKits> kits;
+    private JsonFileConfig<SpigotChests> chests;
 
     private Economy economy;
 
@@ -93,7 +93,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading config..");
 
-        this.config = new JsonConfig<SpigotConfig>(SpigotConfig.class, this.getDataFolder().toPath().resolve("config.json").toFile());
+        this.config = new JsonFileConfig<SpigotConfig>(SpigotConfig.class, this.getDataFolder().toPath().resolve("config.json").toFile());
         try {
             this.config.load();
         } catch (IOException e) {
@@ -102,7 +102,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.serverName = this.config.get().serverName;
 
-        this.messages = new JsonConfig<SpigotMessages>(SpigotMessages.class, this.getDataFolder().toPath().resolve("messages.json").toFile());
+        this.messages = new JsonFileConfig<SpigotMessages>(SpigotMessages.class, this.getDataFolder().toPath().resolve("messages.json").toFile());
         try {
             this.messages.load();
         } catch (IOException e) {
@@ -124,14 +124,14 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading other data..");
 
-        this.warps = new JsonConfig<SpigotWarps>(SpigotWarps.class, this.getDataFolder().toPath().resolve("warps.json").toFile());
+        this.warps = new JsonFileConfig<SpigotWarps>(SpigotWarps.class, this.getDataFolder().toPath().resolve("warps.json").toFile());
         try {
             this.warps.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        this.kits = new JsonConfig<SpigotKits>(SpigotKits.class, this.getDataFolder().toPath().resolve("kits.json").toFile());
+        this.kits = new JsonFileConfig<SpigotKits>(SpigotKits.class, this.getDataFolder().toPath().resolve("kits.json").toFile());
         try {
             this.kits.load();
         } catch (IOException e) {
@@ -139,7 +139,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         }
 
         if (this.getPluginConfig().get().chestProtection.enabled) {
-            this.chests = new JsonConfig<SpigotChests>(SpigotChests.class, this.getDataFolder().toPath().resolve("chests.json").toFile());
+            this.chests = new JsonFileConfig<SpigotChests>(SpigotChests.class, this.getDataFolder().toPath().resolve("chests.json").toFile());
             try {
                 this.chests.load();
             } catch (IOException e) {
@@ -368,11 +368,11 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         return SpigotMain.Instance;
     }
 
-    public JsonConfig<SpigotConfig> getPluginConfig() {
+    public JsonFileConfig<SpigotConfig> getPluginConfig() {
         return this.config;
     }
 
-    public JsonConfig<SpigotMessages> getPluginMessages() {
+    public JsonFileConfig<SpigotMessages> getPluginMessages() {
         return this.messages;
     }
 
@@ -380,15 +380,15 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         return this.data;
     }
 
-    public JsonConfig<SpigotWarps> getWarps() {
+    public JsonFileConfig<SpigotWarps> getWarps() {
         return this.warps;
     }
 
-    public JsonConfig<SpigotKits> getKits() {
+    public JsonFileConfig<SpigotKits> getKits() {
         return this.kits;
     }
 
-    public JsonConfig<SpigotChests> getChests() {
+    public JsonFileConfig<SpigotChests> getChests() {
         return this.chests;
     }
 

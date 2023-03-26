@@ -3,15 +3,14 @@ package io.github.evercraftmc.evercraft.bungee.commands.staff;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.commands.BungeeCommand;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
-import io.github.evercraftmc.evercraft.bungee.util.player.BungeePlayerResolver;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.kale_ko.bjsl.BJSL;
 import io.github.kale_ko.bjsl.elements.ParsedElement;
+import io.github.kale_ko.ejcl.PathResolver;
 import net.md_5.bungee.api.CommandSender;
 
 public class DebugCommand extends BungeeCommand {
@@ -32,34 +31,13 @@ public class DebugCommand extends BungeeCommand {
             }
 
             if (json != null) {
-                String[] path = args[1].split("\\.");
-
-                for (String part : path) {
-                    if (part.startsWith("{") && part.endsWith("}")) {
-                        UUID uuid = BungeePlayerResolver.getUUIDFromName(BungeeMain.getInstance().getPluginData(), part.substring(1, part.length() - 1));
-                        if (uuid != null) {
-                            part = uuid.toString();
-                        } else {
-                            json = null;
-
-                            break;
-                        }
-                    }
-
-                    if (json.isObject()) {
-                        json = json.asObject().get(part);
-                    } else if (json.isArray()) {
-                        json = json.asArray().get(Integer.parseInt(part));
-                    } else {
-                        break;
-                    }
-
-                    if (json == null || json.isPrimitive()) {
-                        break;
-                    }
+                String path = "";
+                for (Integer i = 1; i < args.length; i++) {
+                    path += args[i] + " ";
                 }
+                path = path.substring(0, path.length() - 1);
 
-                String string = BJSL.stringifyJson(json);
+                String string = BJSL.stringifyJson(PathResolver.resolve(json, path));
 
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.removeColors(args[1] + " in " + args[0] + " has the value of \n" + string + "")));
             } else {
