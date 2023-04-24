@@ -111,32 +111,32 @@ public class MessageListener extends SpigotListener implements PluginMessageList
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
         if (event.getCause() != TeleportCause.CHORUS_FRUIT && event.getCause() != TeleportCause.DISMOUNT && event.getCause() != TeleportCause.ENDER_PEARL && event.getCause() != TeleportCause.SPECTATE) {
-            if (BackCommand.lastTeleport.containsKey(event.getPlayer())) {
-                BackCommand.lastTeleport.remove(event.getPlayer());
+            if (BackCommand.lastTeleport.containsKey(event.getPlayer().getUniqueId())) {
+                BackCommand.lastTeleport.remove(event.getPlayer().getUniqueId());
             }
 
-            BackCommand.lastTeleport.put(event.getPlayer(), Instant.now().getEpochSecond());
+            BackCommand.lastTeleport.put(event.getPlayer().getUniqueId(), Instant.now().getEpochSecond());
 
-            if (BackCommand.lastLocations.containsKey(event.getPlayer())) {
-                BackCommand.lastLocations.remove(event.getPlayer());
+            if (BackCommand.lastLocations.containsKey(event.getPlayer().getUniqueId())) {
+                BackCommand.lastLocations.remove(event.getPlayer().getUniqueId());
             }
 
-            BackCommand.lastLocations.put(event.getPlayer(), event.getFrom());
+            BackCommand.lastLocations.put(event.getPlayer().getUniqueId(), event.getFrom());
         }
     }
 
     @EventHandler
     public void onTeleport(PlayerDeathEvent event) {
-        if (BackCommand.lastTeleport.containsKey(event.getPlayer())) {
-            BackCommand.lastTeleport.remove(event.getPlayer());
+        if (BackCommand.lastTeleport.containsKey(event.getPlayer().getUniqueId())) {
+            BackCommand.lastTeleport.remove(event.getPlayer().getUniqueId());
         }
 
-        BackCommand.lastTeleport.put(event.getPlayer(), Instant.now().getEpochSecond());
+        BackCommand.lastTeleport.put(event.getPlayer().getUniqueId(), Instant.now().getEpochSecond());
 
-        if (BackCommand.lastLocations.containsKey(event.getPlayer())) {
-            BackCommand.lastLocations.remove(event.getPlayer());
+        if (BackCommand.lastLocations.containsKey(event.getPlayer().getUniqueId())) {
+            BackCommand.lastLocations.remove(event.getPlayer().getUniqueId());
         }
 
-        BackCommand.lastLocations.put(event.getPlayer(), event.getPlayer().getLocation());
+        BackCommand.lastLocations.put(event.getPlayer().getUniqueId(), event.getPlayer().getLocation());
     }
 }
