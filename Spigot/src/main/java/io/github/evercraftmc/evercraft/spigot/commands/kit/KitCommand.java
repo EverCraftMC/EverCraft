@@ -15,7 +15,7 @@ import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter
 import io.github.evercraftmc.evercraft.spigot.util.types.SerializableItemStack;
 
 public class KitCommand extends SpigotCommand {
-    protected Boolean inner;
+    protected Boolean inner = false;
 
     public KitCommand(String name, String description, List<String> aliases, String permission) {
         super(name, description, aliases, permission);
