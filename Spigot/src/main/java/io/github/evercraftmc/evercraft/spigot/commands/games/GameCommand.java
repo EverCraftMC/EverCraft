@@ -89,7 +89,7 @@ public class GameCommand extends SpigotCommand {
                                                 if (teamedGame.getTeam(player) == null) {
                                                     teamedGame.joinTeam(player, args[2]);
                                                 } else {
-                                                    teamedGame.leaveTeam(player);
+                                                    teamedGame.leaveTeam(player, LeaveReason.COMMAND);
                                                     teamedGame.joinTeam(player, args[2]);
                                                 }
                                             }
@@ -123,7 +123,7 @@ public class GameCommand extends SpigotCommand {
                                     for (Game game : SpigotMain.getInstance().getRegisteredGames()) {
                                         if (game instanceof TeamedGame teamedGame) {
                                             if (teamedGame.isPlaying(player)) {
-                                                teamedGame.leaveTeam(player);
+                                                teamedGame.leaveTeam(player, LeaveReason.COMMAND);
                                             }
                                         }
                                     }

@@ -108,10 +108,8 @@ public abstract class Game implements Listener {
         if (this.players.contains(player)) {
             this.players.remove(player);
 
-            if (leaveReason != LeaveReason.GAMEOVER) {
-                if (leaveReason != LeaveReason.DISCONNECT) {
-                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.left.replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
-                }
+            if (leaveReason != LeaveReason.GAMEOVER && leaveReason != LeaveReason.DISCONNECT && leaveReason != LeaveReason.DEATH) {
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.left.replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
 
                 for (Player player2 : this.players) {
                     if (this.maxPlayers != Integer.MAX_VALUE) {
