@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
@@ -18,7 +19,7 @@ public class SpawnCommand extends SpigotCommand {
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (SpigotMain.getInstance().getWarps().get().warps.containsKey("spawn")) {
-                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get("spawn").toBukkitLocation());
+                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get("spawn").toBukkitLocation(), TeleportCause.COMMAND);
 
                 if (SpigotMain.getInstance().getPluginConfig().get().warp.clearOnWarp) {
                     player.getInventory().clear();
