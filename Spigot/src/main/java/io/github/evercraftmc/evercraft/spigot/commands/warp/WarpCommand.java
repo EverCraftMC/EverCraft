@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
@@ -29,7 +30,7 @@ public class WarpCommand extends SpigotCommand {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
                 if (SpigotMain.getInstance().getWarps().get().warps.containsKey(args[0]) && !(args[0].startsWith("~") && !(inner || player.isOp() || player.hasPermission("evercraft.commands.warp.secretWarp")))) {
-                    player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(args[0]).toBukkitLocation());
+                    player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(args[0]).toBukkitLocation(), inner ? TeleportCause.PLUGIN : TeleportCause.COMMAND);
 
                     if (SpigotMain.getInstance().getPluginConfig().get().warp.clearOnWarp) {
                         player.getInventory().clear();

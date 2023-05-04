@@ -144,7 +144,7 @@ public abstract class Game implements Listener {
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        if (event.getCause() == TeleportCause.COMMAND || event.getCause() == TeleportCause.SPECTATE) {
+        if (event.getCause() == TeleportCause.COMMAND || event.getCause() == TeleportCause.SPECTATE || event.getCause() == TeleportCause.UNKNOWN) {
             if (this.players.contains(event.getPlayer())) {
                 this.leave(event.getPlayer(), LeaveReason.TELEPORT);
             }

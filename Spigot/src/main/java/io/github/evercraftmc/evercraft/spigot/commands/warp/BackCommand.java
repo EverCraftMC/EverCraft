@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
@@ -27,7 +28,7 @@ public class BackCommand extends SpigotCommand {
         if (sender instanceof Player player) {
             if (lastTeleport.containsKey(player.getUniqueId()) && lastLocations.containsKey(player.getUniqueId())) {
                 if (Instant.now().getEpochSecond() - lastTeleport.get(player.getUniqueId()) < 180) {
-                    player.teleport(lastLocations.get(player.getUniqueId()));
+                    player.teleport(lastLocations.get(player.getUniqueId()), TeleportCause.COMMAND);
 
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().warp.warped.replace("{warp}", "back"))));
                 } else {

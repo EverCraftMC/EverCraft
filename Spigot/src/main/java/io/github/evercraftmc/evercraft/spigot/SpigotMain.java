@@ -253,7 +253,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
             // this.registeredGames.add(new KingOfTheHillGame("kingofthehill", "~kingofthehill", "~kingofthehill")); TODO
             this.registeredGames.add(new DodgeBowGame("dodgebow", "~dodgebow", 10, "~dodgebow-runner", "~dodgebow-bower", "~dodgebow-bower"));
 
-            this.registeredGames.add(new BoatRaceGame("boatrace", "~boatrace", "boatrace"));
+            this.registeredGames.add(new BoatRaceGame("boatrace", "~boatrace", "~boatrace"));
         }
 
         this.getLogger().info("Finished loading games");
