@@ -98,6 +98,12 @@ public class HideAndSeekGame extends TeamedGame {
 
             if (hiders > 0 && seekers > 0) {
                 this.start();
+            } else {
+                if (this.countdownTask != null) {
+                    this.countdownTask.cancel();
+                    this.countdownTask = null;
+                    this.countdown = -1;
+                }
             }
         }
     }

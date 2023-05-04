@@ -43,10 +43,8 @@ public abstract class Game implements Listener {
 
         SpigotMain.getInstance().getServer().getPluginManager().registerEvents(this, SpigotMain.getInstance());
 
-        this.tickTask = Bukkit.getScheduler().runTaskTimer(SpigotMain.getInstance(), new Runnable() {
-            public void run() {
-                tick();
-            }
+        this.tickTask = Bukkit.getScheduler().runTaskTimer(SpigotMain.getInstance(), () -> {
+            this.tick();
         }, 1, 1);
     }
 
