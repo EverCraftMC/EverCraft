@@ -15,23 +15,28 @@ import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter
 import io.github.evercraftmc.evercraft.spigot.util.types.SerializableItemStack;
 
 public class KitCommand extends SpigotCommand {
+    protected Boolean inner;
+
     public KitCommand(String name, String description, List<String> aliases, String permission) {
         super(name, description, aliases, permission);
+    }
+
+    public KitCommand(String name, String description, List<String> aliases, String permission, Boolean inner) {
+        super(name, description, aliases, permission);
+
+        this.inner = inner;
     }
 
     @Override
     public void run(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length >= 1) {
-                List<SerializableItemStack> serializableItems = SpigotMain.getInstance().getKits().get().kits.get(args[0]);
-                if (serializableItems != null) {
-                    List<ItemStack> items = new ArrayList<ItemStack>();
+                if (SpigotMain.getInstance().getKits().get().kits.containsKey(args[0]) && !(args[0].startsWith("~") && !(inner || player.isOp() || player.hasPermission("evercraft.commands.kit.secretKit")))) {
+                    List<SerializableItemStack> serializableItems = SpigotMain.getInstance().getKits().get().kits.get(args[0]);
 
-                    for (SerializableItemStack item : serializableItems) {
-                        items.add(item.toBukkitItemStack());
-                    }
+                    for (SerializableItemStack serializableItem : serializableItems) {
+                        ItemStack item = serializableItem.toBukkitItemStack();
 
-                    for (ItemStack item : items) {
                         if (item.getType().getEquipmentSlot() != null && item.getType().getEquipmentSlot() != EquipmentSlot.HAND && item.getType().getEquipmentSlot() != EquipmentSlot.OFF_HAND) {
                             if (player.getInventory().getItem(item.getType().getEquipmentSlot()) == null || player.getInventory().getItem(item.getType().getEquipmentSlot()).getType().isAir()) {
                                 player.getInventory().setItem(item.getType().getEquipmentSlot(), item);
@@ -43,7 +48,7 @@ public class KitCommand extends SpigotCommand {
                         }
                     }
 
-                    if (!(args.length >= 2 && args[1].equalsIgnoreCase("true"))) {
+                    if (!inner) {
                         player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().kit.kit.replace("{kit}", args[0]))));
                     }
                 } else {
@@ -62,7 +67,15 @@ public class KitCommand extends SpigotCommand {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 1) {
-            list = new ArrayList<String>(SpigotMain.getInstance().getKits().get().kits.keySet());
+            List<String> kits = new ArrayList<String>();
+
+            for (String kit : SpigotMain.getInstance().getKits().get().kits.keySet()) {
+                if (!(kit.startsWith("~") && !(sender.isOp() || sender.hasPermission("evercraft.commands.kit.secretKit")))) {
+                    kits.add(kit);
+                }
+            }
+
+            list = new ArrayList<String>(kits);
         } else {
             return Arrays.asList();
         }
