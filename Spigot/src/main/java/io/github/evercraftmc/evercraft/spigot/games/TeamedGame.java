@@ -29,7 +29,7 @@ public abstract class TeamedGame extends RoundedGame {
         super.leave(player, leaveReason);
 
         if (this.playerTeams.containsKey(player)) {
-            this.leaveTeam(player); // TODO Dont send message
+            this.leaveTeam(player, leaveReason); // TODO Dont send message
         }
     }
 
@@ -57,16 +57,18 @@ public abstract class TeamedGame extends RoundedGame {
         }
     }
 
-    public void leaveTeam(Player player) {
+    public void leaveTeam(Player player, LeaveReason leaveReason) {
         if (this.playerTeams.containsKey(player)) {
             String team = this.playerTeams.get(player);
             this.playerTeams.remove(player);
 
-            player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.leftTeam.replace("{team}", team))));
+            if (leaveReason != LeaveReason.GAMEOVER && leaveReason != LeaveReason.DISCONNECT && leaveReason != LeaveReason.DEATH) {
+                player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.leftTeam.replace("{team}", team))));
 
-            for (Player player2 : this.players) {
-                if (player2 != player) {
-                    player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.teamLeave.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{team}", team))));
+                for (Player player2 : this.players) {
+                    if (player2 != player) {
+                        player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.teamLeave.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{team}", team))));
+                    }
                 }
             }
         } else {
