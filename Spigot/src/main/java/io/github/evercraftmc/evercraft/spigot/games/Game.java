@@ -1,6 +1,7 @@
 package io.github.evercraftmc.evercraft.spigot.games;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -10,10 +11,10 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitTask;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
+import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 
 public abstract class Game implements Listener {
@@ -25,14 +26,14 @@ public abstract class Game implements Listener {
 
     protected String warpName;
 
-    protected Float minPlayers;
-    protected Float maxPlayers;
+    protected Integer minPlayers;
+    protected Integer maxPlayers;
 
     protected List<Player> players = new ArrayList<Player>();
 
     protected BukkitTask tickTask;
 
-    protected Game(String name, String warpName, Float minPlayers, Float maxPlayers) {
+    protected Game(String name, String warpName, Integer minPlayers, Integer maxPlayers) {
         this.name = name;
 
         this.warpName = warpName;
@@ -57,11 +58,11 @@ public abstract class Game implements Listener {
         return this.warpName;
     }
 
-    public Float getMinPlayers() {
+    public Integer getMinPlayers() {
         return this.minPlayers;
     }
 
-    public Float getMaxPlayers() {
+    public Integer getMaxPlayers() {
         return this.maxPlayers;
     }
 
@@ -76,16 +77,11 @@ public abstract class Game implements Listener {
     public void join(Player player) {
         if (!this.players.contains(player)) {
             if (this.players.size() < this.maxPlayers) {
-                player.getInventory().clear();
-                for (PotionEffect effect : player.getActivePotionEffects()) {
-                    player.removePotionEffect(effect.getType());
-                }
-
-                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(warpName).toBukkitLocation());
+                new WarpCommand("kit", null, Arrays.asList(), null, true).run(player, new String[] { warpName });
 
                 this.players.add(player);
 
-                if (this.maxPlayers != Float.MAX_VALUE) {
+                if (this.maxPlayers != Integer.MAX_VALUE) {
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.joined.replace("{game}", this.name).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
                 } else {
                     player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.joinedNoMax.replace("{game}", this.name).replace("{players}", this.players.size() + ""))));
@@ -93,7 +89,7 @@ public abstract class Game implements Listener {
 
                 for (Player player2 : this.players) {
                     if (player2 != player) {
-                        if (this.maxPlayers != Float.MAX_VALUE) {
+                        if (this.maxPlayers != Integer.MAX_VALUE) {
                             player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.join.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
                         } else {
                             player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.joinNoMax.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + ""))));
@@ -118,7 +114,7 @@ public abstract class Game implements Listener {
                 }
 
                 for (Player player2 : this.players) {
-                    if (this.maxPlayers != Float.MAX_VALUE) {
+                    if (this.maxPlayers != Integer.MAX_VALUE) {
                         player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.leave.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + "").replace("{max}", this.maxPlayers + ""))));
                     } else {
                         player2.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.leaveNoMax.replace("{player}", ComponentFormatter.componentToString(player.displayName())).replace("{players}", this.players.size() + ""))));
@@ -127,8 +123,7 @@ public abstract class Game implements Listener {
             }
 
             if (leaveReason == LeaveReason.COMMAND || leaveReason == LeaveReason.GAMEOVER) {
-                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get("spawn").toBukkitLocation());
-                player.getInventory().clear();
+                new WarpCommand("kit", null, Arrays.asList(), null, true).run(player, new String[] { "spawn" });
             }
         } else {
             throw new RuntimeException("Player is not in game");

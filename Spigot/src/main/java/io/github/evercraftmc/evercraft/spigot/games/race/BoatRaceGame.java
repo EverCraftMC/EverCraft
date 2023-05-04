@@ -1,6 +1,7 @@
 package io.github.evercraftmc.evercraft.spigot.games.race;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,13 +10,25 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPlaceEvent;
-import io.github.evercraftmc.evercraft.spigot.games.KittedGame;
+import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
+import io.github.evercraftmc.evercraft.spigot.games.Game;
 
-public class BoatRaceGame extends KittedGame {
+public class BoatRaceGame extends Game {
+    protected String kitName;
+
     protected Map<Player, List<Entity>> boats = new HashMap<Player, List<Entity>>();
 
     public BoatRaceGame(String name, String warpName, String kitName) {
-        super(name, warpName, kitName);
+        super(name, warpName, 0, Integer.MAX_VALUE);
+
+        this.kitName = kitName;
+    }
+
+    @Override
+    public void join(Player player) {
+        super.join(player);
+
+        new KitCommand("kit", null, Arrays.asList(), null, true).run(player, new String[] { kitName });
     }
 
     @Override
@@ -26,7 +39,6 @@ public class BoatRaceGame extends KittedGame {
             for (Entity entity : this.boats.get(player)) {
                 entity.remove();
             }
-
             this.boats.remove(player);
         }
     }

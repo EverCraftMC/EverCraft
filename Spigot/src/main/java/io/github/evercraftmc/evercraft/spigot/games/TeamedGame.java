@@ -14,7 +14,7 @@ public abstract class TeamedGame extends RoundedGame {
 
     protected Map<Player, String> playerTeams = new HashMap<Player, String>();
 
-    protected TeamedGame(String name, String warpName, Float minPlayers, Float maxPlayers, Integer countdownLength, List<String> teamsList) {
+    protected TeamedGame(String name, String warpName, Integer minPlayers, Integer maxPlayers, Integer countdownLength, List<String> teamsList) {
         super(name, warpName, minPlayers, maxPlayers, countdownLength);
 
         this.teamsList = teamsList;
@@ -29,7 +29,7 @@ public abstract class TeamedGame extends RoundedGame {
         super.leave(player, leaveReason);
 
         if (this.playerTeams.containsKey(player)) {
-            this.leaveTeam(player);
+            this.leaveTeam(player); // TODO Dont send message
         }
     }
 

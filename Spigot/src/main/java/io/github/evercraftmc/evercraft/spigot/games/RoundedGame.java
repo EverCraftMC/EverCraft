@@ -16,7 +16,7 @@ public abstract class RoundedGame extends Game {
 
     protected BukkitTask countdownTask;
 
-    protected RoundedGame(String name, String warpName, Float minPlayers, Float maxPlayers, Integer countdownLength) {
+    protected RoundedGame(String name, String warpName, Integer minPlayers, Integer maxPlayers, Integer countdownLength) {
         super(name, warpName, minPlayers, maxPlayers);
 
         this.countdownLength = countdownLength;

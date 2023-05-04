@@ -10,7 +10,7 @@ public class MazeGame extends Game {
     protected String finishWarpName;
 
     public MazeGame(String name, String warpName, String finishWarpName) {
-        super(name, warpName, 1f, Float.MAX_VALUE);
+        super(name, warpName, 0, Integer.MAX_VALUE);
 
         this.finishWarpName = finishWarpName;
     }
