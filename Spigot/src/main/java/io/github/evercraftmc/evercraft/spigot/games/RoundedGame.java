@@ -21,24 +21,6 @@ public abstract class RoundedGame extends Game {
 
         this.countdownLength = countdownLength;
 
-        this.countdownTask = Bukkit.getScheduler().runTaskTimer(SpigotMain.getInstance(), new Runnable() {
-            public void run() {
-                if (countdown >= 0) {
-                    countdown--;
-
-                    for (Player player : players) {
-                        player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.countdown.replace("{time}", countdown + ""))));
-                    }
-                }
-
-                if (countdown == 0) {
-                    countdownTask.cancel();
-
-                    startNoCountdown();
-                }
-            }
-        }, 20, 20);
-
         this.tickTask.cancel();
     }
 
@@ -58,15 +40,36 @@ public abstract class RoundedGame extends Game {
         if (this.players.size() < this.minPlayers) {
             if (this.started) {
                 this.stop();
-            } else if (this.countdown >= 0) {
+            } else if (this.countdownTask != null) {
                 this.countdownTask.cancel();
-
+                this.countdownTask = null;
                 this.countdown = -1;
             }
         }
     }
 
     public void start() {
+        this.countdownTask = Bukkit.getScheduler().runTaskTimer(SpigotMain.getInstance(), () -> {
+            if (countdown >= 0) {
+                countdown--;
+
+                for (Player player : players) {
+                    player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.countdown.replace("{time}", (countdown + 1) + ""))));
+                }
+            }
+
+            if (countdown == 0) {
+                countdownTask.cancel();
+                countdownTask = null;
+                countdown = -1;
+
+                countdownTask = Bukkit.getScheduler().runTaskLater(SpigotMain.getInstance(), () -> {
+                    countdownTask = null;
+
+                    startNoCountdown();
+                }, 20);
+            }
+        }, 0, 20);
         this.countdown = this.countdownLength;
     }
 
@@ -82,10 +85,8 @@ public abstract class RoundedGame extends Game {
                 player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.start)));
             }
 
-            this.tickTask = Bukkit.getScheduler().runTaskTimer(SpigotMain.getInstance(), new Runnable() {
-                public void run() {
-                    tick();
-                }
+            this.tickTask = Bukkit.getScheduler().runTaskTimer(SpigotMain.getInstance(), () -> {
+                this.tick();
             }, 1, 1);
         } else {
             throw new RuntimeException("Game is already started");
@@ -95,6 +96,8 @@ public abstract class RoundedGame extends Game {
     public void stop() {
         if (this.started) {
             this.started = false;
+
+            // TODO Winners
 
             for (Player player : new ArrayList<Player>(this.players)) {
                 player.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotMain.getInstance().getPluginMessages().get().games.stop)));
