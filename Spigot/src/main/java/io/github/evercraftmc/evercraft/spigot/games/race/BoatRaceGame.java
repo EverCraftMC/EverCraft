@@ -9,7 +9,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPlaceEvent;
-import io.github.evercraftmc.evercraft.spigot.games.pvp.KittedGame;
+import io.github.evercraftmc.evercraft.spigot.games.KittedGame;
 
 public class BoatRaceGame extends KittedGame {
     protected Map<Player, List<Entity>> boats = new HashMap<Player, List<Entity>>();

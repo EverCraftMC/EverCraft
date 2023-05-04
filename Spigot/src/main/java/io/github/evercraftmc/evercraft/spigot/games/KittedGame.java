@@ -1,9 +1,8 @@
-package io.github.evercraftmc.evercraft.spigot.games.pvp;
+package io.github.evercraftmc.evercraft.spigot.games;
 
 import java.util.Arrays;
 import org.bukkit.entity.Player;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
-import io.github.evercraftmc.evercraft.spigot.games.Game;
 
 public class KittedGame extends Game {
     protected String kitName;
@@ -22,6 +21,8 @@ public class KittedGame extends Game {
     public void join(Player player) {
         super.join(player);
 
-        new KitCommand("kit", null, Arrays.asList(), null).run(player, new String[] { kitName, "true" });
+        if (this.kitName != null) {
+            new KitCommand("kit", null, Arrays.asList(), null).run(player, new String[] { this.kitName, "true" });
+        }
     }
 }
