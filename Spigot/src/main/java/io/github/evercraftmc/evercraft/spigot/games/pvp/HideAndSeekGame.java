@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.scheduler.BukkitTask;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 import io.github.evercraftmc.evercraft.spigot.games.TeamedGame;
 
 public class HideAndSeekGame extends TeamedGame {
@@ -18,7 +19,7 @@ public class HideAndSeekGame extends TeamedGame {
     protected List<BukkitTask> teleportTasks = new ArrayList<BukkitTask>();
 
     public HideAndSeekGame(String name, String warpName, Integer countdownLength, String startWarpName, String seekerKitName) {
-        super(name, warpName, 1f, Float.MAX_VALUE, countdownLength, Arrays.asList("hiders", "seekers"));
+        super(name, warpName, 1, Integer.MAX_VALUE, countdownLength, Arrays.asList("hiders", "seekers"));
 
         this.startWarpName = startWarpName;
         this.seekerKitName = seekerKitName;
@@ -42,13 +43,15 @@ public class HideAndSeekGame extends TeamedGame {
             }
 
             if (this.playerTeams.get(player).equalsIgnoreCase("hiders")) {
-                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(startWarpName).toBukkitLocation());
+                new WarpCommand("kit", null, Arrays.asList(), null, true).run(player, new String[] { startWarpName });
+
+                // TODO Hide nametags
             } else if (this.playerTeams.get(player).equalsIgnoreCase("seekers")) {
                 this.teleportTasks.add(SpigotMain.getInstance().getServer().getScheduler().runTaskLater(SpigotMain.getInstance(), () -> {
                     if (this.players.contains(player)) {
-                        player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(startWarpName).toBukkitLocation());
+                        new WarpCommand("kit", null, Arrays.asList(), null, true).run(player, new String[] { startWarpName });
 
-                        new KitCommand("kit", null, Arrays.asList(), null).run(player, new String[] { seekerKitName, "true" });
+                        new KitCommand("kit", null, Arrays.asList(), null, true).run(player, new String[] { seekerKitName });
                     }
                 }, 60 * 20));
             }

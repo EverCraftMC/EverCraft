@@ -1,9 +1,12 @@
 package io.github.evercraftmc.evercraft.spigot.games.pvp;
 
 import java.util.Arrays;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
-import io.github.evercraftmc.evercraft.spigot.SpigotMain;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
+import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 import io.github.evercraftmc.evercraft.spigot.games.TeamedGame;
 
 public class DodgeBowGame extends TeamedGame {
@@ -13,7 +16,7 @@ public class DodgeBowGame extends TeamedGame {
     protected String bowerKitName;
 
     public DodgeBowGame(String name, String warpName, Integer countdownLength, String runnerWarpName, String bowerWarpName, String bowerKitName) {
-        super(name, warpName, 1f, Float.MAX_VALUE, countdownLength, Arrays.asList("runners", "bowers"));
+        super(name, warpName, 1, Integer.MAX_VALUE, countdownLength, Arrays.asList("runners", "bowers"));
 
         this.runnerWarpName = runnerWarpName;
         this.bowerWarpName = bowerWarpName;
@@ -43,11 +46,11 @@ public class DodgeBowGame extends TeamedGame {
             }
 
             if (this.playerTeams.get(player).equalsIgnoreCase("runners")) {
-                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(runnerWarpName).toBukkitLocation());
+                new WarpCommand("kit", null, Arrays.asList(), null, true).run(player, new String[] { runnerWarpName });
             } else if (this.playerTeams.get(player).equalsIgnoreCase("bowers")) {
-                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(bowerWarpName).toBukkitLocation());
+                new WarpCommand("kit", null, Arrays.asList(), null, true).run(player, new String[] { bowerWarpName });
 
-                new KitCommand("kit", null, Arrays.asList(), null).run(player, new String[] { bowerKitName, "true" });
+                new KitCommand("kit", null, Arrays.asList(), null, true).run(player, new String[] { bowerKitName });
             }
         }
     }
@@ -92,6 +95,15 @@ public class DodgeBowGame extends TeamedGame {
 
             if (runners > 0 && bowers > 0) {
                 this.start();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerAttack(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player player && event.getDamager() instanceof Arrow arrow && arrow.getShooter() instanceof Player player2) {
+            if (this.playerTeams.containsKey(player2) && this.getTeam(player2).equalsIgnoreCase("bowers")) {
+                event.setDamage(Integer.MAX_VALUE);
             }
         }
     }

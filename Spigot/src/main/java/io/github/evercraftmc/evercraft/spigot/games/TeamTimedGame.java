@@ -1,12 +1,14 @@
 package io.github.evercraftmc.evercraft.spigot.games;
 
-public abstract class TimedGame extends RoundedGame {
+import java.util.List;
+
+public abstract class TeamTimedGame extends TeamedGame {
     protected Float timeLimit;
 
     protected Float currentTime = 0f;
 
-    protected TimedGame(String name, String warpName, Integer minPlayers, Integer maxPlayers, Integer countdownLength, Float timeLimit) {
-        super(name, warpName, minPlayers, maxPlayers, countdownLength);
+    protected TeamTimedGame(String name, String warpName, Integer minPlayers, Integer maxPlayers, Integer countdownLength, List<String> teamsList, Float timeLimit) {
+        super(name, warpName, minPlayers, maxPlayers, countdownLength, teamsList);
 
         this.timeLimit = timeLimit;
     }

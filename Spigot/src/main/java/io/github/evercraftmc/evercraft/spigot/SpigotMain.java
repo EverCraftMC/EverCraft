@@ -243,10 +243,10 @@ public class SpigotMain extends JavaPlugin implements Plugin {
             this.registeredGames.add(new HideAndSeekGame("hideandseek-ice", "~hideandseek-ice", 15, "~hideandseek-ice-start", "~hideandseek"));
             this.registeredGames.add(new HideAndSeekGame("hideandseek-nether", "~hideandseek-nether", 15, "~hideandseek-nether-start", "~hideandseek"));
 
-            this.registeredGames.add(new SpleefGame("spleef-1", "~spleef-1", "~spleef", Material.WATER));
-            this.registeredGames.add(new SpleefGame("spleef-3", "~spleef-3", "~spleef", Material.WATER));
-            this.registeredGames.add(new TntRunGame("tntrun-1", "~tntrun-1", Material.LAVA));
-            this.registeredGames.add(new TntRunGame("tntrun-3", "~tntrun-3", Material.LAVA));
+            this.registeredGames.add(new SpleefGame("spleef-1", "~spleef-1", 15, "~spleef", Material.WATER));
+            this.registeredGames.add(new SpleefGame("spleef-3", "~spleef-3", 15, "~spleef", Material.WATER));
+            this.registeredGames.add(new TntRunGame("tntrun-1", "~tntrun-1", 15, Material.LAVA));
+            this.registeredGames.add(new TntRunGame("tntrun-3", "~tntrun-3", 15, Material.LAVA));
 
             this.registeredGames.add(new SumoGame("sumo-nether", "~sumo-nether", "~sumo", Material.STRUCTURE_VOID, 6));
             this.registeredGames.add(new SumoGame("sumo-end", "~sumo-end", "~sumo", Material.STRUCTURE_VOID, 9));
