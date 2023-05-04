@@ -1,7 +1,6 @@
 package io.github.evercraftmc.evercraft.spigot.games.pvp;
 
 import java.util.Arrays;
-import java.util.List;
 import org.bukkit.entity.Player;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
@@ -13,8 +12,8 @@ public class DodgeBowGame extends TeamedGame {
 
     protected String bowerKitName;
 
-    public DodgeBowGame(String name, String warpName, Integer countdownLength, List<String> teamsList, String runnerWarpName, String bowerWarpName, String bowerKitName) {
-        super(name, warpName, 1f, Float.MAX_VALUE, countdownLength, teamsList);
+    public DodgeBowGame(String name, String warpName, Integer countdownLength, String runnerWarpName, String bowerWarpName, String bowerKitName) {
+        super(name, warpName, 1f, Float.MAX_VALUE, countdownLength, Arrays.asList("runners", "bowers"));
 
         this.runnerWarpName = runnerWarpName;
         this.bowerWarpName = bowerWarpName;

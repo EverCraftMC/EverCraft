@@ -1,22 +1,26 @@
 package io.github.evercraftmc.evercraft.spigot.games.pvp;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.scheduler.BukkitTask;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.kit.KitCommand;
 import io.github.evercraftmc.evercraft.spigot.games.TeamedGame;
 
 public class HideAndSeekGame extends TeamedGame {
     protected String startWarpName;
-
     protected String seekerKitName;
 
-    public HideAndSeekGame(String name, String warpName, Integer countdownLength, List<String> teamsList, String startWarpName, String seekerKitName) {
-        super(name, warpName, 1f, Float.MAX_VALUE, countdownLength, teamsList);
+    protected List<BukkitTask> teleportTasks = new ArrayList<BukkitTask>();
+
+    public HideAndSeekGame(String name, String warpName, Integer countdownLength, String startWarpName, String seekerKitName) {
+        super(name, warpName, 1f, Float.MAX_VALUE, countdownLength, Arrays.asList("hiders", "seekers"));
 
         this.startWarpName = startWarpName;
-
         this.seekerKitName = seekerKitName;
     }
 
@@ -40,9 +44,13 @@ public class HideAndSeekGame extends TeamedGame {
             if (this.playerTeams.get(player).equalsIgnoreCase("hiders")) {
                 player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(startWarpName).toBukkitLocation());
             } else if (this.playerTeams.get(player).equalsIgnoreCase("seekers")) {
-                player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(startWarpName).toBukkitLocation());
+                this.teleportTasks.add(SpigotMain.getInstance().getServer().getScheduler().runTaskLater(SpigotMain.getInstance(), () -> {
+                    if (this.players.contains(player)) {
+                        player.teleport(SpigotMain.getInstance().getWarps().get().warps.get(startWarpName).toBukkitLocation());
 
-                new KitCommand("kit", null, Arrays.asList(), null).run(player, new String[] { seekerKitName, "true" });
+                        new KitCommand("kit", null, Arrays.asList(), null).run(player, new String[] { seekerKitName, "true" });
+                    }
+                }, 60 * 20));
             }
         }
     }
@@ -87,6 +95,22 @@ public class HideAndSeekGame extends TeamedGame {
 
             if (hiders > 0 && seekers > 0) {
                 this.start();
+            }
+        }
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+
+        this.teleportTasks.clear();
+    }
+
+    @EventHandler
+    public void onPlayerAttack(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player player && event.getDamager() instanceof Player player2) {
+            if (this.playerTeams.containsKey(player2) && this.getTeam(player2).equalsIgnoreCase("seekers")) {
+                event.setDamage(Integer.MAX_VALUE);
             }
         }
     }

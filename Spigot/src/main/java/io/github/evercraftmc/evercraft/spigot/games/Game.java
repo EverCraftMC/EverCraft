@@ -128,6 +128,7 @@ public abstract class Game implements Listener {
 
             if (leaveReason == LeaveReason.COMMAND || leaveReason == LeaveReason.GAMEOVER) {
                 player.teleport(SpigotMain.getInstance().getWarps().get().warps.get("spawn").toBukkitLocation());
+                player.getInventory().clear();
             }
         } else {
             throw new RuntimeException("Player is not in game");

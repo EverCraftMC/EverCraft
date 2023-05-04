@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import io.github.evercraftmc.evercraft.shared.Plugin;
@@ -40,9 +41,11 @@ import io.github.evercraftmc.evercraft.spigot.commands.warp.WarpCommand;
 import io.github.evercraftmc.evercraft.spigot.games.Game;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.DodgeBowGame;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.HideAndSeekGame;
-import io.github.evercraftmc.evercraft.spigot.games.pvp.KittedGame;
+import io.github.evercraftmc.evercraft.spigot.games.pvp.PvpGame;
+import io.github.evercraftmc.evercraft.spigot.games.pvp.SumoGame;
 import io.github.evercraftmc.evercraft.spigot.games.race.BoatRaceGame;
-import io.github.evercraftmc.evercraft.spigot.games.race.MazeGame;
+import io.github.evercraftmc.evercraft.spigot.games.spleef.SpleefGame;
+import io.github.evercraftmc.evercraft.spigot.games.spleef.TntRunGame;
 import io.github.evercraftmc.evercraft.spigot.listeners.ChestProtectionListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.CreativeItemListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.JoinListener;
@@ -230,20 +233,25 @@ public class SpigotMain extends JavaPlugin implements Plugin {
             this.commands.add(new JoinCommand("join", "Join a game", Arrays.asList(), "evercraft.commands.games.game").register());
             this.commands.add(new LeaveCommand("leave", "Leave a game", Arrays.asList(), "evercraft.commands.games.game").register());
 
-            this.registeredGames.add(new KittedGame("plainspvp", "~plainspvp", "pvp"));
-            this.registeredGames.add(new KittedGame("endpvp", "~endpvp", "end"));
-            this.registeredGames.add(new KittedGame("crystalpvp", "~crystalpvp", "crystal"));
-            this.registeredGames.add(new KittedGame("ventpvp", "~ventpvp", "vents"));
+            this.registeredGames.add(new PvpGame("pvp-plains", "~pvp-plains", "~pvp-plains"));
+            this.registeredGames.add(new PvpGame("pvp-end", "~pvp-end", "~pvp-end"));
+            this.registeredGames.add(new PvpGame("pvp-vent", "~pvp-vent", "~pvp-vent"));
+            this.registeredGames.add(new PvpGame("pvp-crystal", "~pvp-crystal", "~pvp-crystal"));
 
-            this.registeredGames.add(new KittedGame("sumo", "~sumo", "sumo"));
+            this.registeredGames.add(new HideAndSeekGame("hideandseek-desert", "~hideandseek-desert", 15, "~hideandseek-desert-start", "~hideandseek"));
+            this.registeredGames.add(new HideAndSeekGame("hideandseek-cave", "~hideandseek-cave", 15, "~hideandseek-cave-start", "~hideandseek"));
+            this.registeredGames.add(new HideAndSeekGame("hideandseek-ice", "~hideandseek-ice", 15, "~hideandseek-ice-start", "~hideandseek"));
+            this.registeredGames.add(new HideAndSeekGame("hideandseek-nether", "~hideandseek-nether", 15, "~hideandseek-nether-start", "~hideandseek"));
 
-            this.registeredGames.add(new HideAndSeekGame("deserthideandseek", "~deserthideandseek", 15, Arrays.asList("hiders", "seekers"), "~deserthideandseek-start", "hideandseek"));
-            this.registeredGames.add(new HideAndSeekGame("cavehideandseek", "~cavehideandseek", 15, Arrays.asList("hiders", "seekers"), "~cavehideandseek-start", "hideandseek"));
+            this.registeredGames.add(new SpleefGame("spleef-1", "~spleef-1", "~spleef", Material.WATER));
+            this.registeredGames.add(new SpleefGame("spleef-3", "~spleef-3", "~spleef", Material.WATER));
+            this.registeredGames.add(new TntRunGame("tntrun-1", "~tntrun-1", Material.LAVA));
+            this.registeredGames.add(new TntRunGame("tntrun-3", "~tntrun-3", Material.LAVA));
 
-            this.registeredGames.add(new DodgeBowGame("dodgebow", "~dodgebow", 15, Arrays.asList("runners", "bowers"), "~dodgebow-runners", "~dodgebow-bowers", "dodgebow"));
-
-            this.registeredGames.add(new MazeGame("hedgemaze", "~maze", "~maze-finish"));
-            this.registeredGames.add(new MazeGame("puzzlemaze", "~puzzlemaze", "~puzzlemaze-finish"));
+            this.registeredGames.add(new SumoGame("sumo-nether", "~sumo-nether", "~sumo", Material.STRUCTURE_VOID, 6));
+            this.registeredGames.add(new SumoGame("sumo-end", "~sumo-end", "~sumo", Material.STRUCTURE_VOID, 9));
+            // this.registeredGames.add(new KingOfTheHillGame("kingofthehill", "~kingofthehill", "~kingofthehill"));
+            this.registeredGames.add(new DodgeBowGame("dodgebow", "~dodgebow", 15, "~dodgebow-runner", "~dodgebow-bower", "~dodgebow-bower"));
 
             this.registeredGames.add(new BoatRaceGame("boatrace", "~boatrace", "boatrace"));
         }
@@ -400,7 +408,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         return this.commands;
     }
 
-    public List<SpigotListener> getListeneres() {
+    public List<SpigotListener> getListeners() {
         return this.listeners;
     }
 
