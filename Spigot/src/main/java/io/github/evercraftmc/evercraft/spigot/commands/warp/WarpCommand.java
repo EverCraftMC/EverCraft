@@ -12,7 +12,7 @@ import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
 
 public class WarpCommand extends SpigotCommand {
-    protected Boolean inner;
+    protected Boolean inner = false;
 
     public WarpCommand(String name, String description, List<String> aliases, String permission) {
         super(name, description, aliases, permission);
