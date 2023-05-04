@@ -105,6 +105,12 @@ public abstract class RoundedGame extends Game {
                 this.leave(player, LeaveReason.GAMEOVER);
             }
 
+            if (this.countdownTask != null) {
+                this.countdownTask.cancel();
+                this.countdownTask = null;
+                this.countdown = -1;
+            }
+
             this.tickTask.cancel();
         } else {
             throw new RuntimeException("Game is not started");
