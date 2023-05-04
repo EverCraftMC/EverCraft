@@ -67,7 +67,7 @@ public class SerializableItemStack {
             damageable.setDamage(this.getDamage());
         }
 
-        if (this.getLore().size() > 0) {
+        if (this.getLore() != null && this.getLore().size() > 0) {
             List<Component> loreComponents = new ArrayList<Component>();
 
             for (String line : this.getLore()) {
@@ -77,9 +77,13 @@ public class SerializableItemStack {
             meta.lore(loreComponents);
         }
 
-        for (SerializableEnchantment enchantment : this.getEnchantments()) {
-            meta.addEnchant(enchantment.getEnchantment(), enchantment.getLevel(), true);
+        if (this.getEnchantments() != null) {
+            for (SerializableEnchantment enchantment : this.getEnchantments()) {
+                meta.addEnchant(enchantment.getEnchantment(), enchantment.getLevel(), true);
+            }
         }
+
+        stack.setItemMeta(meta);
 
         return stack;
     }
