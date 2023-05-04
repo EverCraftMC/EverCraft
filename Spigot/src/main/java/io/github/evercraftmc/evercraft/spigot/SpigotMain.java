@@ -238,18 +238,18 @@ public class SpigotMain extends JavaPlugin implements Plugin {
             this.registeredGames.add(new PvpGame("pvp-vent", "~pvp-vent", "~pvp-vent"));
             this.registeredGames.add(new PvpGame("pvp-crystal", "~pvp-crystal", "~pvp-crystal"));
 
-            this.registeredGames.add(new HideAndSeekGame("hideandseek-desert", "~hideandseek-desert", 10, "~hideandseek-desert-start", "~hideandseek"));
-            this.registeredGames.add(new HideAndSeekGame("hideandseek-cave", "~hideandseek-cave", 10, "~hideandseek-cave-start", "~hideandseek"));
-            this.registeredGames.add(new HideAndSeekGame("hideandseek-ice", "~hideandseek-ice", 10, "~hideandseek-ice-start", "~hideandseek"));
-            this.registeredGames.add(new HideAndSeekGame("hideandseek-nether", "~hideandseek-nether", 10, "~hideandseek-nether-start", "~hideandseek"));
+            this.registeredGames.add(new HideAndSeekGame("hideandseek-desert", "~hideandseek-desert", 15, "~hideandseek-desert-start", "~hideandseek"));
+            this.registeredGames.add(new HideAndSeekGame("hideandseek-cave", "~hideandseek-cave", 15, "~hideandseek-cave-start", "~hideandseek"));
+            this.registeredGames.add(new HideAndSeekGame("hideandseek-ice", "~hideandseek-ice", 15, "~hideandseek-ice-start", "~hideandseek"));
+            this.registeredGames.add(new HideAndSeekGame("hideandseek-nether", "~hideandseek-nether", 15, "~hideandseek-nether-start", "~hideandseek"));
 
-            this.registeredGames.add(new SpleefGame("spleef-1", "~spleef-1", 10, "~spleef", Material.LAVA));
-            this.registeredGames.add(new SpleefGame("spleef-3", "~spleef-3", 10, "~spleef", Material.LAVA));
-            this.registeredGames.add(new TntRunGame("tntrun-1", "~tntrun-1", 10, Material.WATER));
-            this.registeredGames.add(new TntRunGame("tntrun-3", "~tntrun-3", 10, Material.WATER));
+            this.registeredGames.add(new SpleefGame("spleef-1", "~spleef-1", 20, "~spleef", Material.LAVA));
+            this.registeredGames.add(new SpleefGame("spleef-3", "~spleef-3", 20, "~spleef", Material.LAVA));
+            this.registeredGames.add(new TntRunGame("tntrun-1", "~tntrun-1", 20, Material.WATER));
+            this.registeredGames.add(new TntRunGame("tntrun-3", "~tntrun-3", 20, Material.WATER));
 
             this.registeredGames.add(new SumoGame("sumo-nether", "~sumo-nether", "~sumo", Material.STRUCTURE_VOID, 6));
-            this.registeredGames.add(new SumoGame("sumo-end", "~sumo-end", "~sumo", Material.STRUCTURE_VOID, 9));
+            this.registeredGames.add(new SumoGame("sumo-end", "~sumo-end", "~sumo", Material.STRUCTURE_VOID, 8));
             // this.registeredGames.add(new KingOfTheHillGame("kingofthehill", "~kingofthehill", "~kingofthehill")); TODO
             this.registeredGames.add(new DodgeBowGame("dodgebow", "~dodgebow", 10, "~dodgebow-runner", "~dodgebow-bower", "~dodgebow-bower"));
 
