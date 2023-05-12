@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation project(":Core")
+    compileOnly project(":Core")
 }
 
 jar {
