@@ -1,0 +1,4 @@
+name: Global
+version: ${plugin_version}
+
+entry: io.github.evercraftmc.global.GlobalModule

@@ -1,0 +1,41 @@
+plugins {
+    id "java"
+}
+
+archivesBaseName = "core"
+version = project.core_version
+
+repositories {
+    maven { url "https://jitpack.io" }
+    maven { url "https://papermc.io/repo/repository/maven-public/" }
+}
+
+dependencies {
+    implementation "com.github.Kale-Ko:EJCL:${project.ejcl_version}"
+
+    compileOnly "io.github.waterfallmc:waterfall-api:${project.waterfall_version}"
+    compileOnly "io.papermc.paper:paper-api:${project.paper_version}"
+}
+
+jar {
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+    archiveVersion = rootProject.version + "-" + project.version
+}
+
+tasks.register("fatJar", Jar) {
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+    archiveVersion = rootProject.version + "-" + project.version
+    archiveClassifier = "fat"
+
+    duplicatesStrategy = "exclude"
+    from(sourceSets.main.output)
+    from(configurations.runtimeClasspath.collect { it.isDirectory() ? null : zipTree(it) })
+}
+
+build {
+    finalizedBy tasks.fatJar
+}

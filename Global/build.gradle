@@ -1,0 +1,37 @@
+plugins {
+    id "java"
+}
+
+archivesBaseName = "global"
+version = project.global_version
+
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    implementation project(":Core")
+}
+
+jar {
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+    archiveVersion = rootProject.version + "-" + project.version
+}
+
+tasks.register("fatJar", Jar) {
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+
+    archiveVersion = rootProject.version + "-" + project.version
+    archiveClassifier = "fat"
+
+    duplicatesStrategy = "exclude"
+    from(sourceSets.main.output)
+    from(configurations.runtimeClasspath.collect { it.isDirectory() ? null : zipTree(it) })
+}
+
+build {
+    finalizedBy tasks.fatJar
+}

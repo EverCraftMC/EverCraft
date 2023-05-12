@@ -1,16 +1,5 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        maven { url "https://repo.papermc.io/repository/maven-public/" }
-    }
-}
+rootProject.name = 'EverCraft2'
 
-rootProject.name = 'EverCraft'
+include 'Core'
 
-include 'Shared'
-
-include 'Bungee'
-include 'Spigot'
-include 'Limbo'
-
-include 'Discord'
+include 'Global'
