@@ -1,13 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package io.github.evercraftmc.core.api.events.player;
 
 import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 
-public abstract class PlayerEvent
-extends ECEvent {
+public abstract class PlayerEvent extends ECEvent {
     protected ECPlayer player;
 
     public PlayerEvent(ECPlayer player) {
@@ -18,4 +14,3 @@ extends ECEvent {
         return this.player;
     }
 }
-

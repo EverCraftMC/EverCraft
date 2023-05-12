@@ -1,16 +1,15 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package io.github.evercraftmc.core.api;
 
 public class ECModuleInfo {
     protected String name;
     protected String version;
+
     protected String entry;
 
     public ECModuleInfo(String name, String version, String entry) {
         this.name = name;
         this.version = version;
+
         this.entry = entry;
     }
 
@@ -26,4 +25,3 @@ public class ECModuleInfo {
         return this.entry;
     }
 }
-

@@ -1,15 +1,10 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package io.github.evercraftmc.core.api.server;
 
-import io.github.evercraftmc.core.ECPlugin;
-import io.github.evercraftmc.core.api.server.ECCommandManager;
-import io.github.evercraftmc.core.api.server.ECEventManager;
-import io.github.evercraftmc.core.api.server.player.ECPlayer;
-import io.github.evercraftmc.core.impl.ECEnvironment;
 import java.util.Collection;
 import java.util.UUID;
+import io.github.evercraftmc.core.ECPlugin;
+import io.github.evercraftmc.core.api.server.player.ECPlayer;
+import io.github.evercraftmc.core.impl.ECEnvironment;
 
 public interface ECServer {
     public ECPlugin getPlugin();
@@ -20,15 +15,15 @@ public interface ECServer {
 
     public Collection<ECPlayer> getPlayers();
 
-    public ECPlayer getPlayer(UUID var1);
+    public ECPlayer getPlayer(UUID uuid);
 
-    public ECPlayer getPlayer(String var1);
+    public ECPlayer getPlayer(String name);
 
     public Collection<ECPlayer> getOnlinePlayers();
 
-    public ECPlayer getOnlinePlayer(UUID var1);
+    public ECPlayer getOnlinePlayer(UUID uuid);
 
-    public ECPlayer getOnlinePlayer(String var1);
+    public ECPlayer getOnlinePlayer(String name);
 
     public ECPlayer getConsole();
 
@@ -36,4 +31,3 @@ public interface ECServer {
 
     public ECEventManager getEventManager();
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package io.github.evercraftmc.core.api.server.player;
 
 import java.util.UUID;
@@ -12,8 +9,7 @@ public interface ECPlayer {
 
     public String getDisplayName();
 
-    public void setDisplayName(String var1);
+    public void setDisplayName(String displayName);
 
-    public void sendMessage(String var1);
+    public void sendMessage(String message);
 }
-

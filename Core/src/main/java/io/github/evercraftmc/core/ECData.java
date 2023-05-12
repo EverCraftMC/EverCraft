@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package io.github.evercraftmc.core;
 
 import java.util.HashMap;
@@ -13,7 +10,7 @@ public class ECData {
     public static class Player {
         public UUID uuid;
         public String name;
+
         public String displayName;
     }
 }
-

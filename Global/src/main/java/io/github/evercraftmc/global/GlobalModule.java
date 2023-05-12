@@ -1,20 +1,12 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  io.github.evercraftmc.core.ECPlugin
- *  io.github.evercraftmc.core.api.ECModule
- *  io.github.evercraftmc.core.api.ECModuleInfo
- */
 package io.github.evercraftmc.global;
 
 import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.ECModule;
 import io.github.evercraftmc.core.api.ECModuleInfo;
 
-public class GlobalModule
-implements ECModule {
+public class GlobalModule implements ECModule {
     protected ECModuleInfo info;
+
     protected ECPlugin plugin;
 
     public String getName() {
@@ -38,9 +30,10 @@ implements ECModule {
     }
 
     public void load() {
+        // TODO
     }
 
     public void unload() {
+        // TODO
     }
 }
-

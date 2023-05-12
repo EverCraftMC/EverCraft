@@ -1,5 +1,5 @@
-rootProject.name = 'EverCraft2'
+rootProject.name = "EverCraft2"
 
-include 'Core'
+include "Core"
 
-include 'Global'
+include "Global"

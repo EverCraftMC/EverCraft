@@ -1,30 +1,69 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.md_5.bungee.api.connection.ProxiedPlayer
- *  org.bukkit.command.Command
- *  org.bukkit.command.CommandSender
- *  org.bukkit.entity.Player
- */
 package io.github.evercraftmc.core.impl.spigot.server;
 
-import io.github.evercraftmc.core.api.commands.ECCommand;
-import io.github.evercraftmc.core.api.server.ECCommandManager;
-import io.github.evercraftmc.core.impl.spigot.server.ECSpigotServer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import io.github.evercraftmc.core.api.commands.ECCommand;
+import io.github.evercraftmc.core.api.server.ECCommandManager;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class ECSpigotCommandManager
-implements ECCommandManager {
+public class ECSpigotCommandManager implements ECCommandManager {
+    protected class CommandInter extends Command {
+        protected ECCommand command;
+
+        public CommandInter(ECCommand command) {
+            super(command.getName());
+
+            this.setName(command.getName().toLowerCase());
+            this.setDescription(command.getDescription());
+            this.setAliases(CommandInter.lower(command.getAlias()));
+            this.setPermission(command.getPermission().toLowerCase());
+
+            this.command = command;
+        }
+
+        public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+            if (sender instanceof Player spigotPlayer) {
+                if (sender.hasPermission(this.getPermission())) {
+                    this.command.run(ECSpigotCommandManager.this.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args);
+                }
+            } else {
+                this.command.run(ECSpigotCommandManager.this.server.getConsole(), args);
+            }
+
+            return true;
+        }
+
+        public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
+            if (sender instanceof ProxiedPlayer spigotPlayer) {
+                if (sender.hasPermission(this.getPermission())) {
+                    return this.command.tabComplete(ECSpigotCommandManager.this.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args);
+                } else {
+                    return Arrays.asList(new String[0]);
+                }
+            } else {
+                return this.command.tabComplete(ECSpigotCommandManager.this.server.getConsole(), args);
+            }
+        }
+
+        private static List<String> lower(List<String> uAliases) {
+            ArrayList<String> aliases = new ArrayList<String>();
+
+            for (String alias : uAliases) {
+                aliases.add(alias.toLowerCase());
+            }
+
+            return aliases;
+        }
+    }
+
     protected ECSpigotServer server;
+
     protected Map<String, ECCommand> commands = new HashMap<String, ECCommand>();
     protected Map<String, CommandInter> interCommands = new HashMap<String, CommandInter>();
 
@@ -45,24 +84,31 @@ implements ECCommandManager {
     public ECCommand register(ECCommand command) {
         if (!this.commands.containsKey(command.getName().toLowerCase())) {
             CommandInter interCommand = new CommandInter(command);
+
             this.commands.put(command.getName().toLowerCase(), command);
             this.interCommands.put(command.getName().toLowerCase(), interCommand);
-            this.server.getHandle().getCommandMap().register("evercraft", (Command)interCommand);
+
+            this.server.getHandle().getCommandMap().register("evercraft", interCommand);
             this.interCommands.get(command.getName().toLowerCase()).register(this.server.getHandle().getCommandMap());
+
             return command;
+        } else {
+            throw new RuntimeException("Command /" + command.getName() + " is already registered");
         }
-        throw new RuntimeException("Command /" + command.getName() + " is already registered");
     }
 
     @Override
     public ECCommand unregister(ECCommand command) {
         if (this.commands.containsKey(command.getName().toLowerCase())) {
             this.interCommands.get(command.getName().toLowerCase()).unregister(this.server.getHandle().getCommandMap());
+
             this.commands.remove(command.getName().toLowerCase());
             this.interCommands.remove(command.getName().toLowerCase());
+
             return command;
+        } else {
+            throw new RuntimeException("Command /" + command.getName() + " is not registered");
         }
-        throw new RuntimeException("Command /" + command.getName() + " is not registered");
     }
 
     @Override
@@ -71,50 +117,4 @@ implements ECCommandManager {
             this.unregister(command);
         }
     }
-
-    protected class CommandInter
-    extends Command {
-        protected ECCommand command;
-
-        public CommandInter(ECCommand command) {
-            super(command.getName());
-            this.setName(command.getName().toLowerCase());
-            this.setDescription(command.getDescription());
-            this.setAliases(CommandInter.lower(command.getAlias()));
-            this.setPermission(command.getPermission().toLowerCase());
-            this.command = command;
-        }
-
-        public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-            if (sender instanceof Player) {
-                Player spigotPlayer = (Player)sender;
-                if (sender.hasPermission(this.getPermission())) {
-                    this.command.run(ECSpigotCommandManager.this.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args);
-                }
-            } else {
-                this.command.run(ECSpigotCommandManager.this.server.getConsole(), args);
-            }
-            return true;
-        }
-
-        public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-            if (sender instanceof ProxiedPlayer) {
-                ProxiedPlayer spigotPlayer = (ProxiedPlayer)sender;
-                if (sender.hasPermission(this.getPermission())) {
-                    return this.command.tabComplete(ECSpigotCommandManager.this.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args);
-                }
-                return Arrays.asList(new String[0]);
-            }
-            return this.command.tabComplete(ECSpigotCommandManager.this.server.getConsole(), args);
-        }
-
-        private static List<String> lower(List<String> uAliases) {
-            ArrayList<String> aliases = new ArrayList<String>();
-            for (String alias : uAliases) {
-                aliases.add(alias.toLowerCase());
-            }
-            return aliases;
-        }
-    }
 }
-
