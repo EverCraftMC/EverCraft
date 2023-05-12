@@ -2,7 +2,7 @@ main: io.github.evercraftmc.core.impl.bungee.ECBungeePluginLoader
 
 name: EverCraft-Core
 description: EverCraft-Core
-version: 1.0.0
+version: ${version}
 
 author: Kale Ko
 website: https://github.com/EverCraftMC

@@ -35,3 +35,11 @@ tasks.register("fatJar", Jar) {
 build {
     finalizedBy tasks.fatJar
 }
+
+processResources {
+	inputs.property "version", project.version
+
+    filesMatching("evercraft.yml") {
+        expand "version": project.version
+    }
+}
