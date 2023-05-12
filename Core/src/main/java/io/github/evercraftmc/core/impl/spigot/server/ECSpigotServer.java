@@ -10,6 +10,7 @@ import io.github.evercraftmc.core.ECData;
 import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.server.ECCommandManager;
 import io.github.evercraftmc.core.api.server.ECEventManager;
+import io.github.evercraftmc.core.api.server.ECScheduler;
 import io.github.evercraftmc.core.api.server.ECServer;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
@@ -23,6 +24,8 @@ public class ECSpigotServer implements ECServer {
     protected ECSpigotCommandManager commandManager;
     protected ECSpigotEventManager eventManager;
 
+    protected ECSpigotScheduler scheduler;
+
     public ECSpigotServer(ECPlugin plugin, Server handle) {
         this.plugin = plugin;
 
@@ -30,6 +33,8 @@ public class ECSpigotServer implements ECServer {
 
         this.commandManager = new ECSpigotCommandManager(this);
         this.eventManager = new ECSpigotEventManager(this);
+
+        this.scheduler = new ECSpigotScheduler(this);
     }
 
     @Override
@@ -141,5 +146,10 @@ public class ECSpigotServer implements ECServer {
     @Override
     public ECEventManager getEventManager() {
         return this.eventManager;
+    }
+
+    @Override
+    public ECScheduler getScheduler() {
+        return this.scheduler;
     }
 }

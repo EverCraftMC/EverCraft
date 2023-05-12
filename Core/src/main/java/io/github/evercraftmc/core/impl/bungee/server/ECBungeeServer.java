@@ -8,6 +8,7 @@ import io.github.evercraftmc.core.ECData;
 import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.server.ECCommandManager;
 import io.github.evercraftmc.core.api.server.ECEventManager;
+import io.github.evercraftmc.core.api.server.ECScheduler;
 import io.github.evercraftmc.core.api.server.ECServer;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
@@ -24,6 +25,8 @@ public class ECBungeeServer implements ECServer {
     protected ECBungeeCommandManager commandManager;
     protected ECBungeeEventManager eventManager;
 
+    protected ECBungeeScheduler scheduler;
+
     public ECBungeeServer(ECPlugin plugin, ProxyServer handle) {
         this.plugin = plugin;
 
@@ -31,6 +34,8 @@ public class ECBungeeServer implements ECServer {
 
         this.commandManager = new ECBungeeCommandManager(this);
         this.eventManager = new ECBungeeEventManager(this);
+
+        this.scheduler = new ECBungeeScheduler(this);
     }
 
     @Override
@@ -142,5 +147,10 @@ public class ECBungeeServer implements ECServer {
     @Override
     public ECEventManager getEventManager() {
         return this.eventManager;
+    }
+
+    @Override
+    public ECScheduler getScheduler() {
+        return this.scheduler;
     }
 }

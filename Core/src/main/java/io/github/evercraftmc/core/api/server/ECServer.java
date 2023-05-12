@@ -30,4 +30,6 @@ public interface ECServer {
     public ECCommandManager getCommandManager();
 
     public ECEventManager getEventManager();
+
+    public ECScheduler getScheduler();
 }
