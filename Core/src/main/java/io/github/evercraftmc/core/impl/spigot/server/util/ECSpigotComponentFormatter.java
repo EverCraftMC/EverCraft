@@ -71,7 +71,7 @@ public class ECSpigotComponentFormatter {
             }
 
             TextComponent child = Component.text(text);
-            child.style(style);
+            child = child.style(style);
             component = component.append(child);
         }
 
