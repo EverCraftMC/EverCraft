@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 import io.github.evercraftmc.core.ECData;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
+import io.github.evercraftmc.core.impl.spigot.server.util.ECSpigotComponentFormatter;
 
 public class ECSpigotPlayer implements ECPlayer {
     protected Player handle;
@@ -51,9 +52,9 @@ public class ECSpigotPlayer implements ECPlayer {
         this.displayName = displayName;
 
         if (this.handle != null) {
-            this.handle.setCustomName(this.displayName);
-            this.handle.setDisplayName(this.displayName);
-            this.handle.setPlayerListName(this.displayName);
+            this.handle.customName(ECSpigotComponentFormatter.stringToComponent(this.displayName));
+            this.handle.displayName(ECSpigotComponentFormatter.stringToComponent(this.displayName));
+            this.handle.playerListName(ECSpigotComponentFormatter.stringToComponent(this.displayName));
         }
     }
 
@@ -64,6 +65,6 @@ public class ECSpigotPlayer implements ECPlayer {
 
     @Override
     public void sendMessage(String message) {
-        this.handle.sendMessage(message);
+        this.handle.sendMessage(ECSpigotComponentFormatter.stringToComponent(message));
     }
 }

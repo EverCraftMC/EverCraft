@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 import java.util.UUID;
 import io.github.evercraftmc.core.ECData;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
+import io.github.evercraftmc.core.impl.bungee.server.util.ECBungeeComponentFormatter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class ECBungeePlayer implements ECPlayer {
@@ -67,6 +68,6 @@ public class ECBungeePlayer implements ECPlayer {
 
     @Override
     public void sendMessage(String message) {
-        this.handle.sendMessage(message);
+        this.handle.sendMessage(ECBungeeComponentFormatter.stringToComponent(message));
     }
 }

@@ -18,12 +18,12 @@ public class ECSpigotCommandManager implements ECCommandManager {
 
         protected ECCommand command;
 
-        public CommandInter(ECCommand command) {
-            super(command.getName());
+        public CommandInter(ECCommand command, boolean distinguishServer) {
+            super((distinguishServer ? "s" : "") + command.getName());
 
-            this.setName(command.getName().toLowerCase());
+            this.setName((distinguishServer ? "s" : "") + command.getName().toLowerCase());
             this.setDescription(command.getDescription());
-            this.setAliases(CommandInter.lower(command.getAlias()));
+            this.setAliases(CommandInter.alias(command.getAlias(), distinguishServer));
             this.setPermission(command.getPermission().toLowerCase());
 
             this.command = command;
@@ -46,18 +46,18 @@ public class ECSpigotCommandManager implements ECCommandManager {
                 if (sender.hasPermission(this.getPermission())) {
                     return this.command.tabComplete(parent.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args);
                 } else {
-                    return Arrays.asList(new String[0]);
+                    return Arrays.asList();
                 }
             } else {
                 return this.command.tabComplete(parent.server.getConsole(), args);
             }
         }
 
-        private static List<String> lower(List<String> uAliases) {
+        private static List<String> alias(List<String> uAliases, boolean distinguishServer) {
             ArrayList<String> aliases = new ArrayList<String>();
 
             for (String alias : uAliases) {
-                aliases.add(alias.toLowerCase());
+                aliases.add((distinguishServer ? "s" : "") + alias.toLowerCase());
             }
 
             return aliases;
@@ -84,14 +84,24 @@ public class ECSpigotCommandManager implements ECCommandManager {
 
     @Override
     public ECCommand register(ECCommand command) {
-        if (!this.commands.containsKey(command.getName().toLowerCase())) {
-            CommandInter interCommand = new CommandInter(command);
+        return this.register(command, false);
+    }
 
-            this.commands.put(command.getName().toLowerCase(), command);
-            this.interCommands.put(command.getName().toLowerCase(), interCommand);
+    @Override
+    public ECCommand register(ECCommand command, boolean distinguishServer) {
+        String name = command.getName();
+        if (distinguishServer) {
+            name = "s" + name;
+        }
+
+        if (!this.commands.containsKey(name)) {
+            CommandInter interCommand = new CommandInter(command, distinguishServer);
+
+            this.commands.put(name, command);
+            this.interCommands.put(name, interCommand);
 
             this.server.getHandle().getCommandMap().register("evercraft", interCommand);
-            this.interCommands.get(command.getName().toLowerCase()).register(this.server.getHandle().getCommandMap());
+            this.interCommands.get(name).register(this.server.getHandle().getCommandMap());
 
             return command;
         } else {
@@ -106,6 +116,13 @@ public class ECSpigotCommandManager implements ECCommandManager {
 
             this.commands.remove(command.getName().toLowerCase());
             this.interCommands.remove(command.getName().toLowerCase());
+
+            return command;
+        } else if (this.commands.containsKey("s" + command.getName().toLowerCase())) {
+            this.interCommands.get("s" + command.getName().toLowerCase()).unregister(this.server.getHandle().getCommandMap());
+
+            this.commands.remove("s" + command.getName().toLowerCase());
+            this.interCommands.remove("s" + command.getName().toLowerCase());
 
             return command;
         } else {
