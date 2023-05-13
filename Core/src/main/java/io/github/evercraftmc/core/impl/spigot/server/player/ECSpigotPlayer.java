@@ -1,5 +1,6 @@
 package io.github.evercraftmc.core.impl.spigot.server.player;
 
+import java.net.InetAddress;
 import java.util.UUID;
 import org.bukkit.entity.Player;
 import io.github.evercraftmc.core.ECData;
@@ -54,6 +55,11 @@ public class ECSpigotPlayer implements ECPlayer {
             this.handle.setDisplayName(this.displayName);
             this.handle.setPlayerListName(this.displayName);
         }
+    }
+
+    @Override
+    public InetAddress getAddress() {
+        return this.handle.getAddress().getAddress();
     }
 
     @Override

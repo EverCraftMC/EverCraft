@@ -130,9 +130,7 @@ public class ECSpigotServer implements ECServer {
 
     @Override
     public ECPlayer getConsole() {
-        ECData.Player console = new ECData.Player();
-        console.uuid = UUID.fromString("00000000-0000-0000-0000-000000000000");
-        console.name = "Console";
+        ECData.Player console = new ECData.Player(UUID.fromString("00000000-0000-0000-0000-000000000000"), "Console");
         console.displayName = "&lConsole";
 
         return new ECSpigotPlayer(console);

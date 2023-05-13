@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import io.github.evercraftmc.core.ECData;
 import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.api.events.ECHandler;
@@ -15,6 +16,7 @@ import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeePlayer;
+import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -24,17 +26,23 @@ import net.md_5.bungee.event.EventHandler;
 @SuppressWarnings("unchecked")
 public class ECBungeeEventManager implements ECEventManager {
     protected class BungeeListeners implements Listener {
+        protected final ECBungeeEventManager parent = ECBungeeEventManager.this;
+
+        @EventHandler
+        public void onPlayerConnect(LoginEvent event) {
+            if (!parent.server.getPlugin().getData().players.containsKey(event.getLoginResult().getId())) {
+                parent.server.getPlugin().getData().players.put(event.getLoginResult().getId(), new ECData.Player(UUID.fromString(event.getLoginResult().getId()), event.getLoginResult().getName()));
+            }
+        }
+
         @EventHandler
         public void onPlayerJoin(PostLoginEvent event) {
-            if (!ECBungeeEventManager.this.server.getPlugin().getData().players.containsKey(event.getPlayer().getUniqueId().toString())) {
-                ECBungeeEventManager.this.server.getPlugin().getData().players.put(event.getPlayer().getUniqueId().toString(), new ECData.Player());
-            }
-            ECBungeeEventManager.this.emit(new PlayerJoinEvent(new ECBungeePlayer(ECBungeeEventManager.this.server.getPlugin().getData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
+            parent.emit(new PlayerJoinEvent(new ECBungeePlayer(parent.server.getPlugin().getData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
         }
 
         @EventHandler
         public void onPlayerLeave(PlayerDisconnectEvent event) {
-            ECBungeeEventManager.this.emit(new PlayerLeaveEvent(new ECBungeePlayer(ECBungeeEventManager.this.server.getPlugin().getData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
+            parent.emit(new PlayerLeaveEvent(new ECBungeePlayer(parent.server.getPlugin().getData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
         }
     }
 

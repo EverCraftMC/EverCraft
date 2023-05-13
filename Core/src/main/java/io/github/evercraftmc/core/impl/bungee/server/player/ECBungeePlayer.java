@@ -1,5 +1,7 @@
 package io.github.evercraftmc.core.impl.bungee.server.player;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.UUID;
 import io.github.evercraftmc.core.ECData;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
@@ -51,6 +53,15 @@ public class ECBungeePlayer implements ECPlayer {
 
         if (this.handle != null) {
             this.handle.setDisplayName(this.displayName);
+        }
+    }
+
+    @Override
+    public InetAddress getAddress() {
+        if (this.handle.getSocketAddress() instanceof InetSocketAddress address) {
+            return address.getAddress();
+        } else {
+            return null;
         }
     }
 

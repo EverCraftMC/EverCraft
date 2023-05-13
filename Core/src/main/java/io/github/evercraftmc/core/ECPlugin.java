@@ -11,6 +11,9 @@ import java.util.zip.ZipEntry;
 import org.slf4j.Logger;
 import io.github.evercraftmc.core.api.ECModule;
 import io.github.evercraftmc.core.api.ECModuleInfo;
+import io.github.evercraftmc.core.api.events.ECHandler;
+import io.github.evercraftmc.core.api.events.ECListener;
+import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.server.ECServer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
 import io.github.kale_ko.bjsl.BJSL;
@@ -185,6 +188,21 @@ public class ECPlugin {
 
     public void setServer(ECServer server) {
         this.server = server;
+
+        this.server.getEventManager().register(new ECListener() {
+            protected final ECPlugin parent = ECPlugin.this;
+
+            @ECHandler
+            public void onPlayerJoin(PlayerJoinEvent event) {
+                parent.getData().players.get(event.getPlayer().getUuid().toString()).uuid = event.getPlayer().getUuid();
+                parent.getData().players.get(event.getPlayer().getUuid().toString()).name = event.getPlayer().getName();
+
+                parent.getData().players.get(event.getPlayer().getUuid().toString()).displayName = event.getPlayer().getDisplayName();
+                event.getPlayer().setDisplayName(event.getPlayer().getDisplayName());
+
+                parent.getData().players.get(event.getPlayer().getUuid().toString()).lastIp = event.getPlayer().getAddress();
+            }
+        });
     }
 
     public ECData getData() {

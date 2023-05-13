@@ -1,16 +1,40 @@
 package io.github.evercraftmc.core;
 
+import java.net.InetAddress;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class ECData {
-    public Map<String, Player> players = new HashMap<String, Player>();
-
     public static class Player {
+        // Core
         public UUID uuid;
         public String name;
 
         public String displayName;
+
+        public InetAddress lastIp = null;
+
+        // Global
+        public Instant firstJoin = null;
+        public Instant lastJoin = null;
+        public long playTime = 0;
+
+        // Voting
+        public int totalVotes = 0;
+        public int processingVotes = 0;
+
+        public Player(UUID uuid, String name) {
+            this.uuid = uuid;
+            this.name = name;
+
+            this.displayName = name;
+        }
     }
+
+    public Map<String, Player> players = new HashMap<String, Player>();
+
+    // Moderation
+    public boolean maintenance = false;
 }

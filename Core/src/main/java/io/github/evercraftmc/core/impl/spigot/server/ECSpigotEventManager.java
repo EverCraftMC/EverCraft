@@ -10,6 +10,7 @@ import java.util.Map;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,17 +25,23 @@ import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotPlayer;
 @SuppressWarnings("unchecked")
 public class ECSpigotEventManager implements ECEventManager {
     protected class SpigotListeners implements Listener {
+        protected final ECSpigotEventManager parent = ECSpigotEventManager.this;
+
+        @EventHandler
+        public void onPlayerJoin(PlayerLoginEvent event) {
+            if (!parent.server.getPlugin().getData().players.containsKey(event.getPlayer().getUniqueId().toString())) {
+                parent.server.getPlugin().getData().players.put(event.getPlayer().getUniqueId().toString(), new ECData.Player(event.getPlayer().getUniqueId(), event.getPlayer().getName()));
+            }
+        }
+
         @EventHandler
         public void onPlayerJoin(PlayerJoinEvent event) {
-            if (!ECSpigotEventManager.this.server.getPlugin().getData().players.containsKey(event.getPlayer().getUniqueId().toString())) {
-                ECSpigotEventManager.this.server.getPlugin().getData().players.put(event.getPlayer().getUniqueId().toString(), new ECData.Player());
-            }
-            ECSpigotEventManager.this.emit(new io.github.evercraftmc.core.api.events.player.PlayerJoinEvent(new ECSpigotPlayer(ECSpigotEventManager.this.server.getPlugin().getData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
+            parent.emit(new io.github.evercraftmc.core.api.events.player.PlayerJoinEvent(new ECSpigotPlayer(parent.server.getPlugin().getData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
         }
 
         @EventHandler
         public void onPlayerLeave(PlayerQuitEvent event) {
-            ECSpigotEventManager.this.emit(new PlayerLeaveEvent(new ECSpigotPlayer(ECSpigotEventManager.this.server.getPlugin().getData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
+            parent.emit(new PlayerLeaveEvent(new ECSpigotPlayer(parent.server.getPlugin().getData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
         }
     }
 

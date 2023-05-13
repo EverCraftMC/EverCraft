@@ -14,6 +14,8 @@ import net.md_5.bungee.api.plugin.TabExecutor;
 
 public class ECBungeeCommandManager implements ECCommandManager {
     protected class CommandInter extends Command implements TabExecutor {
+        protected final ECBungeeCommandManager parent = ECBungeeCommandManager.this;
+
         protected ECCommand command;
 
         public CommandInter(ECCommand command) {
@@ -24,17 +26,17 @@ public class ECBungeeCommandManager implements ECCommandManager {
 
         public void execute(CommandSender sender, String[] args) {
             if (sender instanceof ProxiedPlayer bungeePlayer) {
-                this.command.run(ECBungeeCommandManager.this.server.getOnlinePlayer(bungeePlayer.getUniqueId()), args);
+                this.command.run(parent.server.getOnlinePlayer(bungeePlayer.getUniqueId()), args);
             } else {
-                this.command.run(ECBungeeCommandManager.this.server.getConsole(), args);
+                this.command.run(parent.server.getConsole(), args);
             }
         }
 
         public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
             if (sender instanceof ProxiedPlayer bungeePlayer) {
-                return this.command.tabComplete(ECBungeeCommandManager.this.server.getOnlinePlayer(bungeePlayer.getUniqueId()), args);
+                return this.command.tabComplete(parent.server.getOnlinePlayer(bungeePlayer.getUniqueId()), args);
             } else {
-                return this.command.tabComplete(ECBungeeCommandManager.this.server.getConsole(), args);
+                return this.command.tabComplete(parent.server.getConsole(), args);
             }
         }
 

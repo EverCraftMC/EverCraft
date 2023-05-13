@@ -14,6 +14,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class ECSpigotCommandManager implements ECCommandManager {
     protected class CommandInter extends Command {
+        protected final ECSpigotCommandManager parent = ECSpigotCommandManager.this;
+
         protected ECCommand command;
 
         public CommandInter(ECCommand command) {
@@ -30,10 +32,10 @@ public class ECSpigotCommandManager implements ECCommandManager {
         public boolean execute(CommandSender sender, String commandLabel, String[] args) {
             if (sender instanceof Player spigotPlayer) {
                 if (sender.hasPermission(this.getPermission())) {
-                    this.command.run(ECSpigotCommandManager.this.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args);
+                    this.command.run(parent.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args);
                 }
             } else {
-                this.command.run(ECSpigotCommandManager.this.server.getConsole(), args);
+                this.command.run(parent.server.getConsole(), args);
             }
 
             return true;
@@ -42,12 +44,12 @@ public class ECSpigotCommandManager implements ECCommandManager {
         public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
             if (sender instanceof ProxiedPlayer spigotPlayer) {
                 if (sender.hasPermission(this.getPermission())) {
-                    return this.command.tabComplete(ECSpigotCommandManager.this.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args);
+                    return this.command.tabComplete(parent.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args);
                 } else {
                     return Arrays.asList(new String[0]);
                 }
             } else {
-                return this.command.tabComplete(ECSpigotCommandManager.this.server.getConsole(), args);
+                return this.command.tabComplete(parent.server.getConsole(), args);
             }
         }
 
