@@ -128,9 +128,9 @@ public class ECPlugin {
                         }
 
                         if (module != null) {
-                            ECPluginManager.registerModule(module);
-
                             this.logger.info("Enabling module " + module.getInfo().getName() + " v" + module.getInfo().getVersion());
+
+                            ECPluginManager.registerModule(module);
 
                             module.load();
                         } else {

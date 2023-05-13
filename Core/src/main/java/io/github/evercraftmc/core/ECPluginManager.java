@@ -44,7 +44,7 @@ public class ECPluginManager {
     }
 
     public static void unregisterModule(ECModule module) {
-        if (!ECPluginManager.modules.containsKey(module.getClass())) {
+        if (ECPluginManager.modules.containsKey(module.getClass())) {
             ECPluginManager.modules.remove(module.getClass());
         } else {
             throw new RuntimeException("Module \"" + module.getClass().getSimpleName() + "\" is not registered");
