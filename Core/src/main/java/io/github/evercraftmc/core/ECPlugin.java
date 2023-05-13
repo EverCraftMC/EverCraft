@@ -64,7 +64,7 @@ public class ECPlugin {
             mySqlDetails.load(true);
 
             this.data = new MySQLConfig<ECData>(ECData.class, ((MySQLDetails) mySqlDetails.get()).host, ((MySQLDetails) mySqlDetails.get()).port, ((MySQLDetails) mySqlDetails.get()).database, "evercraft2", ((MySQLDetails) mySqlDetails.get()).username, ((MySQLDetails) mySqlDetails.get()).password);
-            this.data.load();
+            this.data.load(false);
         } catch (Exception e) {
             this.data = null;
 

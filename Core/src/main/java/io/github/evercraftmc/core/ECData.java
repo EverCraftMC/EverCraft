@@ -21,10 +21,6 @@ public class ECData {
         public Instant lastJoin = null;
         public long playTime = 0;
 
-        // Voting
-        public int totalVotes = 0;
-        public int processingVotes = 0;
-
         public Player(UUID uuid, String name) {
             this.uuid = uuid;
             this.name = name;
