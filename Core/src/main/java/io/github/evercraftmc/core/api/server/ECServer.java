@@ -27,6 +27,12 @@ public interface ECServer {
 
     public ECPlayer getConsole();
 
+    public default void broadcastMessage(String message) {
+        for (ECPlayer player : this.getOnlinePlayers()) {
+            player.sendMessage(message);
+        }
+    }
+
     public ECCommandManager getCommandManager();
 
     public ECEventManager getEventManager();
