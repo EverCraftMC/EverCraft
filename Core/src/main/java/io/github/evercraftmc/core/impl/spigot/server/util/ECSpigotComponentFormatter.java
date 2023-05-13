@@ -11,12 +11,16 @@ public class ECSpigotComponentFormatter {
     protected static final String ALL_CODES = "0123456789AaBbCcDdEeFfKkLlMmNnOoRr";
 
     public static TextComponent stringToComponent(String string) {
-        String[] parts = string.split(String.valueOf(COLOR_CHAR));
+        String[] parts = (COLOR_CHAR + "r" + string).split(String.valueOf(COLOR_CHAR));
 
         TextComponent component = Component.empty();
         Style style = Style.empty();
 
         for (String part : parts) {
+            if (part.length() == 0) {
+                continue;
+            }
+
             String text = part.substring(1);
             char code = Character.toLowerCase(part.charAt(0));
 
@@ -68,7 +72,7 @@ public class ECSpigotComponentFormatter {
 
             TextComponent child = Component.text(text);
             child.style(style);
-            component.append(child);
+            component = component.append(child);
         }
 
         return component;

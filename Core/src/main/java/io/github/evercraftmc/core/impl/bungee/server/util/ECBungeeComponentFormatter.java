@@ -9,18 +9,22 @@ public class ECBungeeComponentFormatter {
     protected static final String ALL_CODES = "0123456789AaBbCcDdEeFfKkLlMmNnOoRr";
 
     public static TextComponent stringToComponent(String string) {
-        String[] parts = string.split(String.valueOf(COLOR_CHAR));
+        String[] parts = (COLOR_CHAR + "r" + string).split(String.valueOf(COLOR_CHAR));
 
         TextComponent component = new TextComponent();
         TextComponent format = new TextComponent();
         format.retain(FormatRetention.NONE);
 
         for (String part : parts) {
+            if (part.length() == 0) {
+                continue;
+            }
+
             String text = part.substring(1);
             char code = Character.toLowerCase(part.charAt(0));
 
             if (code == 'r') {
-                format.setReset(true);
+                format = new TextComponent();
             } else if (code == '0') {
                 format.setColor(ChatColor.BLACK);
             } else if (code == '1') {
