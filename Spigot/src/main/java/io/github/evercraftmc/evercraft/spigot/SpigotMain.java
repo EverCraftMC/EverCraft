@@ -44,6 +44,7 @@ import io.github.evercraftmc.evercraft.spigot.games.pvp.HideAndSeekGame;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.PvpGame;
 import io.github.evercraftmc.evercraft.spigot.games.pvp.SumoGame;
 import io.github.evercraftmc.evercraft.spigot.games.race.BoatRaceGame;
+import io.github.evercraftmc.evercraft.spigot.games.race.MazeGame;
 import io.github.evercraftmc.evercraft.spigot.games.spleef.SpleefGame;
 import io.github.evercraftmc.evercraft.spigot.games.spleef.TntRunGame;
 import io.github.evercraftmc.evercraft.spigot.listeners.ChestProtectionListener;
@@ -253,7 +254,10 @@ public class SpigotMain extends JavaPlugin implements Plugin {
             // this.registeredGames.add(new KingOfTheHillGame("kingofthehill", "~kingofthehill", "~kingofthehill")); TODO
             this.registeredGames.add(new DodgeBowGame("dodgebow", "~dodgebow", 10, "~dodgebow-runner", "~dodgebow-bower", "~dodgebow-bower"));
 
+            this.registeredGames.add(new MazeGame("escaperoom", "~escaperoom", "~escaperoom-finish"));
+            this.registeredGames.add(new MazeGame("redlightgreenlight", "~redlightgreenlight", "~redlightgreenlight-finish")); // TODO
             this.registeredGames.add(new BoatRaceGame("boatrace", "~boatrace", "~boatrace"));
+            this.registeredGames.add(new MazeGame("parkour", "~parkour", "parkour-finish"));
         }
 
         this.getLogger().info("Finished loading games");
