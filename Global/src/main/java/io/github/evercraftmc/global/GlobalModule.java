@@ -1,18 +1,27 @@
 package io.github.evercraftmc.global;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.ECModule;
 import io.github.evercraftmc.core.api.ECModuleInfo;
+import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.events.ECHandler;
 import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
+import io.github.evercraftmc.core.impl.ECEnvironment;
+import io.github.evercraftmc.global.commands.NickCommand;
+import io.github.evercraftmc.global.commands.PrefixCommand;
 
 public class GlobalModule implements ECModule {
     protected ECModuleInfo info;
 
     protected ECPlugin plugin;
+
+    protected List<ECCommand> commands = new ArrayList<ECCommand>();
+    protected List<ECListener> listeners = new ArrayList<ECListener>();
 
     public String getName() {
         return this.getInfo().getName();
@@ -35,28 +44,41 @@ public class GlobalModule implements ECModule {
     }
 
     public void load() {
-        this.plugin.getServer().getEventManager().register(new ECListener() {
-            protected final GlobalModule parent = GlobalModule.this;
+        this.commands.add(this.plugin.getServer().getCommandManager().register(new NickCommand(this)));
+        this.commands.add(this.plugin.getServer().getCommandManager().register(new PrefixCommand(this)));
 
-            @ECHandler
-            public void onPlayerJoin(PlayerJoinEvent event) {
-                if (parent.getPlugin().getData().players.get(event.getPlayer().getUuid().toString()).firstJoin == null) {
-                    parent.getPlugin().getData().players.get(event.getPlayer().getUuid().toString()).firstJoin = Instant.now();
+        if (this.plugin.getEnvironment() == ECEnvironment.BUNGEE) {
+            this.listeners.add(this.plugin.getServer().getEventManager().register(new ECListener() {
+                protected final GlobalModule parent = GlobalModule.this;
 
-                    // TODO Welcome message
+                @ECHandler
+                public void onPlayerJoin(PlayerJoinEvent event) {
+                    if (parent.getPlugin().getData().players.get(event.getPlayer().getUuid().toString()).firstJoin == null) {
+                        parent.getPlugin().getData().players.get(event.getPlayer().getUuid().toString()).firstJoin = Instant.now();
+
+                        // TODO Welcome message
+                    }
+
+                    parent.getPlugin().getData().players.get(event.getPlayer().getUuid().toString()).lastJoin = Instant.now();
+
+                    parent.getPlugin().getData().players.get(event.getPlayer().getUuid().toString()).lastIp = event.getPlayer().getAddress();
                 }
 
-                parent.getPlugin().getData().players.get(event.getPlayer().getUuid().toString()).lastJoin = Instant.now();
-            }
-
-            @ECHandler
-            public void onPlayerLeave(PlayerLeaveEvent event) {
-                parent.getPlugin().getData().players.get(event.getPlayer().getUuid().toString()).lastJoin = Instant.now();
-            }
-        });
+                @ECHandler
+                public void onPlayerLeave(PlayerLeaveEvent event) {
+                    parent.getPlugin().getData().players.get(event.getPlayer().getUuid().toString()).lastJoin = Instant.now();
+                }
+            }));
+        }
     }
 
     public void unload() {
-        // TODO
+        for (ECCommand command : this.commands) {
+            this.plugin.getServer().getCommandManager().unregister(command);
+        }
+
+        for (ECListener listener : this.listeners) {
+            this.plugin.getServer().getEventManager().unregister(listener);
+        }
     }
 }
