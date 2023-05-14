@@ -16,6 +16,7 @@ import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.server.ECServer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
+import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.kale_ko.bjsl.BJSL;
 import io.github.kale_ko.bjsl.parsers.YamlParser;
 import io.github.kale_ko.ejcl.file.bjsl.YamlFileConfig;
@@ -197,10 +198,11 @@ public class ECPlugin {
                 parent.getData().players.get(event.getPlayer().getUuid().toString()).uuid = event.getPlayer().getUuid();
                 parent.getData().players.get(event.getPlayer().getUuid().toString()).name = event.getPlayer().getName();
 
-                parent.getData().players.get(event.getPlayer().getUuid().toString()).displayName = event.getPlayer().getDisplayName();
-                event.getPlayer().setDisplayName(event.getPlayer().getDisplayName());
+                if (parent.getData().players.get(event.getPlayer().getUuid().toString()).displayName == null) {
+                    parent.getData().players.get(event.getPlayer().getUuid().toString()).displayName = event.getPlayer().getName();
+                }
 
-                parent.getData().players.get(event.getPlayer().getUuid().toString()).lastIp = event.getPlayer().getAddress();
+                event.getPlayer().setDisplayName(ECTextFormatter.translateColors((parent.getData().players.get(event.getPlayer().getUuid().toString()).prefix != null ? parent.getData().players.get(event.getPlayer().getUuid().toString()).prefix + " " : "") + parent.getData().players.get(event.getPlayer().getUuid().toString()).displayName));
             }
         });
     }

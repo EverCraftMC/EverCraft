@@ -12,8 +12,8 @@ import io.github.evercraftmc.core.api.server.ECScheduler;
 import io.github.evercraftmc.core.api.server.ECServer;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
+import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeeConsole;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeePlayer;
-import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotPlayer;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -131,10 +131,7 @@ public class ECBungeeServer implements ECServer {
 
     @Override
     public ECPlayer getConsole() {
-        ECData.Player console = new ECData.Player(UUID.fromString("00000000-0000-0000-0000-000000000000"), "Console");
-        console.displayName = "&lConsole";
-
-        return new ECSpigotPlayer(console);
+        return new ECBungeeConsole(this.handle.getConsole());
     }
 
     @Override

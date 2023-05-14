@@ -12,11 +12,12 @@ public class ECData {
         public UUID uuid;
         public String name;
 
-        public String displayName;
-
-        public InetAddress lastIp = null;
+        public String displayName = null;
+        public String prefix = null;
 
         // Global
+        public InetAddress lastIp = null;
+
         public Instant firstJoin = null;
         public Instant lastJoin = null;
         public long playTime = 0;

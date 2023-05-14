@@ -14,13 +14,9 @@ public class ECBungeePlayer implements ECPlayer {
     protected UUID uuid;
     protected String name;
 
-    protected String displayName;
-
     public ECBungeePlayer(ECData.Player data) {
         this.uuid = data.uuid;
         this.name = data.name;
-
-        this.displayName = data.displayName;
     }
 
     public ECBungeePlayer(ECData.Player data, ProxiedPlayer handle) {
@@ -45,16 +41,12 @@ public class ECBungeePlayer implements ECPlayer {
 
     @Override
     public String getDisplayName() {
-        return this.displayName;
+        return this.handle.getDisplayName();
     }
 
     @Override
     public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-
-        if (this.handle != null) {
-            this.handle.setDisplayName(this.displayName);
-        }
+        this.handle.setDisplayName(displayName);
     }
 
     @Override

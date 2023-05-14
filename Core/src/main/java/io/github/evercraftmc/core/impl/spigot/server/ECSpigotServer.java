@@ -14,6 +14,7 @@ import io.github.evercraftmc.core.api.server.ECScheduler;
 import io.github.evercraftmc.core.api.server.ECServer;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
+import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotConsole;
 import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotPlayer;
 
 public class ECSpigotServer implements ECServer {
@@ -130,10 +131,7 @@ public class ECSpigotServer implements ECServer {
 
     @Override
     public ECPlayer getConsole() {
-        ECData.Player console = new ECData.Player(UUID.fromString("00000000-0000-0000-0000-000000000000"), "Console");
-        console.displayName = "&lConsole";
-
-        return new ECSpigotPlayer(console);
+        return new ECSpigotConsole(this.handle.getConsoleSender());
     }
 
     @Override

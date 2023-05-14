@@ -13,13 +13,9 @@ public class ECSpigotPlayer implements ECPlayer {
     protected UUID uuid;
     protected String name;
 
-    protected String displayName;
-
     public ECSpigotPlayer(ECData.Player data) {
         this.uuid = data.uuid;
         this.name = data.name;
-
-        this.displayName = data.displayName;
     }
 
     public ECSpigotPlayer(ECData.Player data, Player handle) {
@@ -44,18 +40,14 @@ public class ECSpigotPlayer implements ECPlayer {
 
     @Override
     public String getDisplayName() {
-        return this.displayName;
+        return ECSpigotComponentFormatter.componentToString(this.handle.displayName());
     }
 
     @Override
     public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-
-        if (this.handle != null) {
-            this.handle.customName(ECSpigotComponentFormatter.stringToComponent(this.displayName));
-            this.handle.displayName(ECSpigotComponentFormatter.stringToComponent(this.displayName));
-            this.handle.playerListName(ECSpigotComponentFormatter.stringToComponent(this.displayName));
-        }
+        this.handle.customName(ECSpigotComponentFormatter.stringToComponent(displayName));
+        this.handle.displayName(ECSpigotComponentFormatter.stringToComponent(displayName));
+        this.handle.playerListName(ECSpigotComponentFormatter.stringToComponent(displayName));
     }
 
     @Override
