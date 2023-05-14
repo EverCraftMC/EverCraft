@@ -1,6 +1,7 @@
 package io.github.evercraftmc.core.impl.bungee.server.util;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -8,7 +9,7 @@ public class ECBungeeComponentFormatter {
     protected static final char COLOR_CHAR = '§';
     protected static final String ALL_CODES = "0123456789AaBbCcDdEeFfKkLlMmNnOoRr";
 
-    public static TextComponent stringToComponent(String string) {
+    public static BaseComponent stringToComponent(String string) {
         String[] parts = (COLOR_CHAR + "r" + string).split(String.valueOf(COLOR_CHAR));
 
         TextComponent component = new TextComponent();
@@ -77,7 +78,7 @@ public class ECBungeeComponentFormatter {
         return component;
     }
 
-    public static String componentToString(TextComponent component) {
+    public static String componentToString(BaseComponent component) {
         StringBuilder string = new StringBuilder();
 
         // TODO

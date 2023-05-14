@@ -10,7 +10,7 @@ public class ECSpigotComponentFormatter {
     protected static final char COLOR_CHAR = '§';
     protected static final String ALL_CODES = "0123456789AaBbCcDdEeFfKkLlMmNnOoRr";
 
-    public static TextComponent stringToComponent(String string) {
+    public static Component stringToComponent(String string) {
         String[] parts = (COLOR_CHAR + "r" + string).split(String.valueOf(COLOR_CHAR));
 
         TextComponent component = Component.empty();
@@ -78,7 +78,7 @@ public class ECSpigotComponentFormatter {
         return component;
     }
 
-    public static String componentToString(TextComponent component) {
+    public static String componentToString(Component component) {
         StringBuilder string = new StringBuilder();
 
         // TODO
