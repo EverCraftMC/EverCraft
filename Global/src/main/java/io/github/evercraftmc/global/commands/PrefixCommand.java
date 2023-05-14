@@ -48,7 +48,7 @@ public class PrefixCommand implements ECCommand {
                         } else {
                             this.parent.getPlugin().getData().players.get(player.getUuid().toString()).prefix = ECTextFormatter.translateColors(args[0]);
 
-                            player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set your prefix to " + args[0] + "&r&a."));
+                            player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set your prefix to &r" + args[0] + "&r&a."));
                         }
                     } else {
                         player.sendMessage(ECTextFormatter.translateColors("&cThat prefix is too long."));
@@ -61,6 +61,8 @@ public class PrefixCommand implements ECCommand {
 
                 player.sendMessage(ECTextFormatter.translateColors("&aYour prefix has been reset."));
             }
+
+            player.setDisplayName(ECTextFormatter.translateColors((parent.getPlugin().getData().players.get(player.getUuid().toString()).prefix != null ? parent.getPlugin().getData().players.get(player.getUuid().toString()).prefix + " " : "") + parent.getPlugin().getData().players.get(player.getUuid().toString()).displayName));
         } else {
             player.sendMessage(ECTextFormatter.translateColors("&cYou cant do that from the console."));
         }

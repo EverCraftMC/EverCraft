@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.server.ECCommandManager;
+import io.github.evercraftmc.core.impl.bungee.server.util.ECBungeeComponentFormatter;
+import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
@@ -29,6 +31,8 @@ public class ECBungeeCommandManager implements ECCommandManager {
             if (sender instanceof ProxiedPlayer bungeePlayer) {
                 if (sender.hasPermission(this.getPermission())) {
                     this.command.run(parent.server.getOnlinePlayer(bungeePlayer.getUniqueId()), args);
+                } else {
+                    sender.sendMessage(ECBungeeComponentFormatter.stringToComponent(ECTextFormatter.translateColors("&cYou do not have permission to run that command")));
                 }
             } else {
                 this.command.run(parent.server.getConsole(), args);

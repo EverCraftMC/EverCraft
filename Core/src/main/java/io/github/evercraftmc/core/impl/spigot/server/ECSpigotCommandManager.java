@@ -10,7 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.server.ECCommandManager;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import io.github.evercraftmc.core.impl.spigot.server.util.ECSpigotComponentFormatter;
+import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 
 public class ECSpigotCommandManager implements ECCommandManager {
     protected class CommandInter extends Command {
@@ -33,6 +34,8 @@ public class ECSpigotCommandManager implements ECCommandManager {
             if (sender instanceof Player spigotPlayer) {
                 if (sender.hasPermission(this.getPermission())) {
                     this.command.run(parent.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args);
+                } else {
+                    sender.sendMessage(ECSpigotComponentFormatter.stringToComponent(ECTextFormatter.translateColors("&cYou do not have permission to run that command")));
                 }
             } else {
                 this.command.run(parent.server.getConsole(), args);
@@ -42,7 +45,7 @@ public class ECSpigotCommandManager implements ECCommandManager {
         }
 
         public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-            if (sender instanceof ProxiedPlayer spigotPlayer) {
+            if (sender instanceof Player spigotPlayer) {
                 if (sender.hasPermission(this.getPermission())) {
                     return this.command.tabComplete(parent.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args);
                 } else {
