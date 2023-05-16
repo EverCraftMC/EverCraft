@@ -22,6 +22,10 @@ public class ECData {
         public Instant lastJoin = null;
         public long playTime = 0;
 
+        public Player() {
+            this(null, null);
+        }
+
         public Player(UUID uuid, String name) {
             this.uuid = uuid;
             this.name = name;
