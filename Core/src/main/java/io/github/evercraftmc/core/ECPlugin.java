@@ -26,16 +26,14 @@ import io.github.kale_ko.ejcl.file.bjsl.YamlFileConfig;
 import io.github.kale_ko.ejcl.mysql.MySQLConfig;
 
 public class ECPlugin {
-    private class MessagingDetails {
+    private static class MessagingDetails {
         public String host = "127.0.0.1";
         public int port = 3000;
-
-        public boolean useSSL = true;
 
         public String id = System.getProperty("serverName");
     }
 
-    private class MySQLDetails {
+    private static class MySQLDetails {
         public String host;
         public int port;
 
@@ -84,7 +82,7 @@ public class ECPlugin {
             YamlFileConfig<MessagingDetails> messagingDetails = new YamlFileConfig<MessagingDetails>(MessagingDetails.class, dataDirectory.toPath().resolve("messaging.yml").toFile(), new YamlParser.Builder().build());
             messagingDetails.load(true);
 
-            this.messager = new ECMessager(this, new InetSocketAddress(messagingDetails.get().host, messagingDetails.get().port), messagingDetails.get().useSSL, messagingDetails.get().id);
+            this.messager = new ECMessager(this, new InetSocketAddress(messagingDetails.get().host, messagingDetails.get().port), messagingDetails.get().id);
             this.messager.connect();
 
             this.logger.info("Connected to Messaging server");
