@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
@@ -28,12 +27,12 @@ import io.github.kale_ko.ejcl.mysql.MySQLConfig;
 
 public class ECPlugin {
     private class MessagingDetails {
-        public InetAddress host;
-        public int port;
+        public String host = "127.0.0.1";
+        public int port = 3000;
 
         public boolean useSSL = true;
 
-        public String id;
+        public String id = System.getProperty("serverName");
     }
 
     private class MySQLDetails {

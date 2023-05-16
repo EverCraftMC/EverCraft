@@ -1,6 +1,5 @@
 package io.github.evercraftmc.messaging;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
 import io.github.kale_ko.bjsl.parsers.YamlParser;
@@ -8,8 +7,8 @@ import io.github.kale_ko.ejcl.file.bjsl.YamlFileConfig;
 
 public class ECMessagingMain {
     private class MessagingDetails {
-        public InetAddress host;
-        public int port;
+        public String host = "127.0.0.1";
+        public int port = 3000;
 
         public boolean useSSL = true;
     }
