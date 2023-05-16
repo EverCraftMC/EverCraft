@@ -19,6 +19,7 @@ import io.github.evercraftmc.core.impl.ECEnvironment;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.kale_ko.bjsl.BJSL;
 import io.github.kale_ko.bjsl.parsers.YamlParser;
+import io.github.kale_ko.bjsl.processor.ObjectProcessor;
 import io.github.kale_ko.ejcl.file.bjsl.YamlFileConfig;
 import io.github.kale_ko.ejcl.mysql.MySQLConfig;
 
@@ -64,7 +65,7 @@ public class ECPlugin {
             YamlFileConfig<MySQLDetails> mySqlDetails = new YamlFileConfig<MySQLDetails>(MySQLDetails.class, dataDirectory.toPath().resolve("mysql.yml").toFile(), new YamlParser.Builder().build());
             mySqlDetails.load(true);
 
-            this.data = new MySQLConfig<ECData>(ECData.class, ((MySQLDetails) mySqlDetails.get()).host, ((MySQLDetails) mySqlDetails.get()).port, ((MySQLDetails) mySqlDetails.get()).database, "evercraft2", ((MySQLDetails) mySqlDetails.get()).username, ((MySQLDetails) mySqlDetails.get()).password);
+            this.data = new MySQLConfig<ECData>(ECData.class, ((MySQLDetails) mySqlDetails.get()).host, ((MySQLDetails) mySqlDetails.get()).port, ((MySQLDetails) mySqlDetails.get()).database, "evercraft2", ((MySQLDetails) mySqlDetails.get()).username, ((MySQLDetails) mySqlDetails.get()).password, new ObjectProcessor.Builder().setIgnoreNulls(true).setIgnoreEmptyObjects(true).setIgnoreDefaults(true).build());
             this.data.load(false);
         } catch (Exception e) {
             this.data = null;
