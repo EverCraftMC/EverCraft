@@ -6,6 +6,10 @@ public class ECModuleInfo {
 
     protected String entry;
 
+    public ECModuleInfo() {
+        this(null, null, null);
+    }
+
     public ECModuleInfo(String name, String version, String entry) {
         this.name = name;
         this.version = version;
