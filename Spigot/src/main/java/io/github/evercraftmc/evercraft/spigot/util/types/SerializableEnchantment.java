@@ -7,6 +7,10 @@ public class SerializableEnchantment {
     private String enchantment;
     private Integer level;
 
+    public SerializableEnchantment() {
+        this(null, 1);
+    }
+
     public SerializableEnchantment(Enchantment enchantment, Integer level) {
         this.enchantment = enchantment.getKey().getKey().toUpperCase();
         this.level = level;
