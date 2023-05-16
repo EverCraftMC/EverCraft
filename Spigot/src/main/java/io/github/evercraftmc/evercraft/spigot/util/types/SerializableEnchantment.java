@@ -8,7 +8,8 @@ public class SerializableEnchantment {
     private Integer level;
 
     public SerializableEnchantment() {
-        this(null, 1);
+        this.enchantment = null;
+        this.level = 1;
     }
 
     public SerializableEnchantment(Enchantment enchantment, Integer level) {

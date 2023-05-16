@@ -29,7 +29,7 @@ public abstract class TeamedGame extends RoundedGame {
         super.leave(player, leaveReason);
 
         if (this.playerTeams.containsKey(player)) {
-            this.leaveTeam(player, leaveReason); // TODO Dont send message
+            this.leaveTeam(player, LeaveReason.GAMEOVER);
         }
     }
 

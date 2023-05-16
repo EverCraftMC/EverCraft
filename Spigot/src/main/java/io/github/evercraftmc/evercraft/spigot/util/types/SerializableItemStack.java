@@ -1,6 +1,7 @@
 package io.github.evercraftmc.evercraft.spigot.util.types;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.Material;
@@ -22,7 +23,7 @@ public class SerializableItemStack {
     private List<SerializableEnchantment> enchantments;
 
     public SerializableItemStack() {
-        this(Material.STONE, null, 1, 0, null, null);
+        this(Material.STONE, null, 1, 0, Arrays.asList(), Arrays.asList());
     }
 
     public SerializableItemStack(Material type, String name, Integer amount, Integer damage, List<String> lore, List<SerializableEnchantment> enchantments) {
