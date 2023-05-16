@@ -13,9 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.net.ServerSocketFactory;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
 
 public class ECMessagingServer {
     protected InetSocketAddress address;
+    protected boolean useSSL;
 
     protected Thread socketThread;
     protected ServerSocket socket = null;
@@ -27,8 +31,9 @@ public class ECMessagingServer {
 
     protected final Object WRITE_LOCK = new Object();
 
-    public ECMessagingServer(InetSocketAddress address) {
+    public ECMessagingServer(InetSocketAddress address, boolean useSSL) {
         this.address = address;
+        this.useSSL = useSSL;
     }
 
     public void start() {
@@ -38,7 +43,12 @@ public class ECMessagingServer {
 
         this.socketThread = new Thread(() -> {
             try {
-                this.socket = new ServerSocket(this.address.getPort(), -1, this.address.getAddress());
+                if (this.useSSL) {
+                    this.socket = SSLServerSocketFactory.getDefault().createServerSocket(this.address.getPort(), -1, this.address.getAddress());
+                    ((SSLServerSocket) this.socket).setEnabledProtocols(new String[] { "TLSv1.1", "TLSv1.2", "TLSv1.3" });
+                } else {
+                    this.socket = ServerSocketFactory.getDefault().createServerSocket(this.address.getPort(), -1, this.address.getAddress());
+                }
 
                 while (this.open) {
                     Socket connection = this.socket.accept();
