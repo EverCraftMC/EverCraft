@@ -28,10 +28,6 @@ subprojects {
     }
 }
 
-build {
-    project(":Core").getTasksByName("jar", false)
-}
-
 import java.nio.file.Files
 import java.nio.file.Paths
 

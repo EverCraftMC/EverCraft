@@ -20,15 +20,12 @@ dependencies {
 jar {
     sourceCompatibility = JavaVersion.toVersion(project.java_version)
     targetCompatibility = JavaVersion.toVersion(project.java_version)
-
-    archiveVersion = rootProject.version + "-" + project.version
 }
 
 tasks.register("fatJar", Jar) {
     sourceCompatibility = JavaVersion.toVersion(project.java_version)
     targetCompatibility = JavaVersion.toVersion(project.java_version)
 
-    archiveVersion = rootProject.version + "-" + project.version
     archiveClassifier = "fat"
 
     duplicatesStrategy = "exclude"
