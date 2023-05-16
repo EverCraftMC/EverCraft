@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.server.ECServer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
+import io.github.evercraftmc.core.messaging.ECMessager;
 import io.github.kale_ko.bjsl.BJSL;
 import io.github.kale_ko.bjsl.parsers.YamlParser;
 import io.github.kale_ko.bjsl.processor.ObjectProcessor;
@@ -24,6 +27,15 @@ import io.github.kale_ko.ejcl.file.bjsl.YamlFileConfig;
 import io.github.kale_ko.ejcl.mysql.MySQLConfig;
 
 public class ECPlugin {
+    private class MessagingDetails {
+        public InetAddress host;
+        public int port;
+
+        public boolean useSSL = true;
+
+        public String id;
+    }
+
     private class MySQLDetails {
         public String host;
         public int port;
@@ -46,6 +58,8 @@ public class ECPlugin {
 
     protected ECServer server;
 
+    protected ECMessager messager;
+
     protected MySQLConfig<ECData> data;
 
     public ECPlugin(Object handle, File pluginFile, File dataDirectory, ECEnvironment environment, Logger logger, ClassLoader classLoader) {
@@ -60,22 +74,42 @@ public class ECPlugin {
         this.classLoader = classLoader;
 
         ECPluginManager.registerPlugin(this);
+    }
+
+    public void load() {
+        ECPluginManager.registerPlugin(this);
+
+        try {
+            this.logger.info("Connecting to Messaging server..");
+
+            YamlFileConfig<MessagingDetails> messagingDetails = new YamlFileConfig<MessagingDetails>(MessagingDetails.class, dataDirectory.toPath().resolve("messaging.yml").toFile(), new YamlParser.Builder().build());
+            messagingDetails.load(true);
+
+            this.messager = new ECMessager(this, new InetSocketAddress(messagingDetails.get().host, messagingDetails.get().port), messagingDetails.get().useSSL, messagingDetails.get().id);
+            this.messager.connect();
+
+            this.logger.info("Connected to Messaging server");
+        } catch (Exception e) {
+            this.logger.error("Failed connecting to Messaging server", e);
+        }
 
         try {
             YamlFileConfig<MySQLDetails> mySqlDetails = new YamlFileConfig<MySQLDetails>(MySQLDetails.class, dataDirectory.toPath().resolve("mysql.yml").toFile(), new YamlParser.Builder().build());
             mySqlDetails.load(true);
 
+            this.logger.info("Connecting to MySQL server..");
+
             this.data = new MySQLConfig<ECData>(ECData.class, ((MySQLDetails) mySqlDetails.get()).host, ((MySQLDetails) mySqlDetails.get()).port, ((MySQLDetails) mySqlDetails.get()).database, "evercraft2", ((MySQLDetails) mySqlDetails.get()).username, ((MySQLDetails) mySqlDetails.get()).password, new ObjectProcessor.Builder().setIgnoreNulls(true).setIgnoreEmptyObjects(true).setIgnoreDefaults(true).build());
+            this.data.connect();
+
+            this.logger.info("Loading plugin data..");
+
             this.data.load(false);
+
+            this.logger.info("Loaded plugin data");
         } catch (Exception e) {
-            this.data = null;
-
-            this.logger.error("Failed to load player data", e);
+            this.logger.error("Failed loading plugin data", e);
         }
-    }
-
-    public void load() {
-        ECPluginManager.registerPlugin(this);
 
         File modulesDirectory = this.getDataDirectory().toPath().resolve("modules").toFile();
         if (!modulesDirectory.exists()) {
@@ -130,11 +164,17 @@ public class ECPlugin {
                         }
 
                         if (module != null) {
-                            this.logger.info("Enabling module " + module.getInfo().getName() + " v" + module.getInfo().getVersion());
+                            this.logger.info("Enabling module " + module.getInfo().getName() + " v" + module.getInfo().getVersion() + "..");
 
                             ECPluginManager.registerModule(module);
 
-                            module.load();
+                            try {
+                                module.load();
+
+                                this.logger.info("Enabled module " + module.getInfo().getName());
+                            } catch (Exception e) {
+                                this.logger.error("Error loading module \"" + file.getName() + "\"", e);
+                            }
                         } else {
                             this.logger.error("Error loading module \"" + file.getName() + "\"\n  Entry class has no 0 args constructor");
                         }
