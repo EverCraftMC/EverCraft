@@ -21,8 +21,8 @@ public class ECBungeeCommandManager implements ECCommandManager {
 
         protected ECCommand command;
 
-        public CommandInter(ECCommand command, boolean distinguishServer) {
-            super((distinguishServer ? "b" : "") + command.getName().toLowerCase(), command.getPermission(), CommandInter.alias(command.getAlias(), distinguishServer).toArray(new String[] {}));
+        public CommandInter(ECCommand command, boolean addPrefix, boolean distinguishServer) {
+            super((distinguishServer ? "b" : "") + command.getName().toLowerCase(), command.getPermission(), CommandInter.alias(command.getName(), command.getAlias(), addPrefix, distinguishServer).toArray(new String[] {}));
 
             this.command = command;
         }
@@ -51,11 +51,18 @@ public class ECBungeeCommandManager implements ECCommandManager {
             }
         }
 
-        private static List<String> alias(List<String> uAliases, boolean distinguishServer) {
+        private static List<String> alias(String uName, List<String> uAliases, boolean addPrefix, boolean distinguishServer) {
             ArrayList<String> aliases = new ArrayList<String>();
+
+            if (addPrefix) {
+                aliases.add("evercraft:" + (distinguishServer ? "b" : "") + uName.toLowerCase());
+            }
 
             for (String alias : uAliases) {
                 aliases.add((distinguishServer ? "b" : "") + alias.toLowerCase());
+                if (addPrefix) {
+                    aliases.add("evercraft:" + (distinguishServer ? "b" : "") + alias.toLowerCase());
+                }
             }
 
             return aliases;
@@ -82,18 +89,18 @@ public class ECBungeeCommandManager implements ECCommandManager {
 
     @Override
     public ECCommand register(ECCommand command) {
-        return this.register(command, true);
+        return this.register(command, true, true);
     }
 
     @Override
-    public ECCommand register(ECCommand command, boolean distinguishServer) {
+    public ECCommand register(ECCommand command, boolean addPrefix, boolean distinguishServer) {
         String name = command.getName();
         if (distinguishServer) {
             name = "b" + name;
         }
 
         if (!this.commands.containsKey(name)) {
-            CommandInter interCommand = new CommandInter(command, distinguishServer);
+            CommandInter interCommand = new CommandInter(command, addPrefix, distinguishServer);
 
             this.commands.put(name, command);
             this.interCommands.put(name, interCommand);

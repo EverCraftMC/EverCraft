@@ -19,12 +19,12 @@ public class ECSpigotCommandManager implements ECCommandManager {
 
         protected ECCommand command;
 
-        public CommandInter(ECCommand command, boolean distinguishServer) {
+        public CommandInter(ECCommand command, boolean addPrefix, boolean distinguishServer) {
             super((distinguishServer ? "s" : "") + command.getName());
 
             this.setName((distinguishServer ? "s" : "") + command.getName().toLowerCase());
             this.setDescription(command.getDescription());
-            this.setAliases(CommandInter.alias(command.getAlias(), distinguishServer));
+            this.setAliases(CommandInter.alias(command.getName(), command.getAlias(), addPrefix, distinguishServer));
             this.setPermission(command.getPermission().toLowerCase());
 
             this.command = command;
@@ -56,11 +56,18 @@ public class ECSpigotCommandManager implements ECCommandManager {
             }
         }
 
-        private static List<String> alias(List<String> uAliases, boolean distinguishServer) {
+        private static List<String> alias(String uName, List<String> uAliases, boolean addPrefix, boolean distinguishServer) {
             ArrayList<String> aliases = new ArrayList<String>();
+
+            if (addPrefix) {
+                aliases.add("evercraft:" + (distinguishServer ? "b" : "") + uName.toLowerCase());
+            }
 
             for (String alias : uAliases) {
                 aliases.add((distinguishServer ? "s" : "") + alias.toLowerCase());
+                if (addPrefix) {
+                    aliases.add("evercraft:" + (distinguishServer ? "b" : "") + alias.toLowerCase());
+                }
             }
 
             return aliases;
@@ -87,18 +94,18 @@ public class ECSpigotCommandManager implements ECCommandManager {
 
     @Override
     public ECCommand register(ECCommand command) {
-        return this.register(command, false);
+        return this.register(command, true, false);
     }
 
     @Override
-    public ECCommand register(ECCommand command, boolean distinguishServer) {
+    public ECCommand register(ECCommand command, boolean addPrefix, boolean distinguishServer) {
         String name = command.getName();
         if (distinguishServer) {
             name = "s" + name;
         }
 
         if (!this.commands.containsKey(name)) {
-            CommandInter interCommand = new CommandInter(command, distinguishServer);
+            CommandInter interCommand = new CommandInter(command, addPrefix, distinguishServer);
 
             this.commands.put(name, command);
             this.interCommands.put(name, interCommand);

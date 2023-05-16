@@ -46,7 +46,7 @@ public class PrefixCommand implements ECCommand {
 
                             player.sendMessage(ECTextFormatter.translateColors("&aYour prefix has been reset."));
                         } else {
-                            this.parent.getPlugin().getData().players.get(player.getUuid().toString()).prefix = ECTextFormatter.translateColors(args[0]);
+                            this.parent.getPlugin().getData().players.get(player.getUuid().toString()).prefix = args[0];
 
                             player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set your prefix to &r" + args[0] + "&r&a."));
                         }

@@ -7,7 +7,7 @@ public interface ECCommandManager {
 
     public ECCommand register(ECCommand command);
 
-    public ECCommand register(ECCommand command, boolean distinguishServer);
+    public ECCommand register(ECCommand command, boolean addPrefix, boolean distinguishServer);
 
     public ECCommand unregister(ECCommand command);
 

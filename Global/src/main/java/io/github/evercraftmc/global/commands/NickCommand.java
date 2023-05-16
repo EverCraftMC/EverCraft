@@ -46,7 +46,7 @@ public class NickCommand implements ECCommand {
 
                             player.sendMessage(ECTextFormatter.translateColors("&aYour nickname has been reset."));
                         } else {
-                            this.parent.getPlugin().getData().players.get(player.getUuid().toString()).displayName = ECTextFormatter.translateColors(args[0]);
+                            this.parent.getPlugin().getData().players.get(player.getUuid().toString()).displayName = args[0];
 
                             player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set your nickname to &r" + args[0] + "&r&a."));
                         }
