@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +86,10 @@ public class ECMessagingServer {
                             e.printStackTrace();
                         }
                     });
+                }
+            } catch (SocketException e) {
+                if (!e.getMessage().equalsIgnoreCase("Socket closed")) {
+                    e.printStackTrace();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -4,6 +4,8 @@ import java.net.InetSocketAddress;
 import java.nio.file.Path;
 import io.github.kale_ko.bjsl.parsers.YamlParser;
 import io.github.kale_ko.ejcl.file.bjsl.YamlFileConfig;
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
 
 public class ECMessagingMain {
     private static class MessagingDetails {
@@ -13,11 +15,26 @@ public class ECMessagingMain {
 
     public static void main(String[] args) {
         try {
+            System.out.println("Loading config");
+
             YamlFileConfig<MessagingDetails> messagingDetails = new YamlFileConfig<MessagingDetails>(MessagingDetails.class, Path.of("messaging.yml").toFile(), new YamlParser.Builder().build());
             messagingDetails.load(true);
 
+            System.out.println("Starting Messaging server");
+
             ECMessagingServer server = new ECMessagingServer(new InetSocketAddress(messagingDetails.get().host, messagingDetails.get().port));
             server.start();
+
+            Signal diagSignal = new Signal("INT");
+            SignalHandler diagHandler = new SignalHandler() {
+                @Override
+                public void handle(Signal signal) {
+                    System.out.println("Shutting down");
+
+                    server.stop();
+                }
+            };
+            Signal.handle(diagSignal, diagHandler);
         } catch (Exception e) {
             e.printStackTrace();
         }
