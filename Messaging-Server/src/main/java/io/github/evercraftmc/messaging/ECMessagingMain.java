@@ -25,8 +25,8 @@ public class ECMessagingMain {
             ECMessagingServer server = new ECMessagingServer(new InetSocketAddress(messagingDetails.get().host, messagingDetails.get().port));
             server.start();
 
-            Signal diagSignal = new Signal("INT");
-            SignalHandler diagHandler = new SignalHandler() {
+            Signal[] signals = new Signal[] { new Signal("TERM"), new Signal("INT"), new Signal("ABRT") };
+            SignalHandler sigHandler = new SignalHandler() {
                 @Override
                 public void handle(Signal signal) {
                     System.out.println("Shutting down");
@@ -34,7 +34,9 @@ public class ECMessagingMain {
                     server.stop();
                 }
             };
-            Signal.handle(diagSignal, diagHandler);
+            for (Signal signal : signals) {
+                Signal.handle(signal, sigHandler);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
