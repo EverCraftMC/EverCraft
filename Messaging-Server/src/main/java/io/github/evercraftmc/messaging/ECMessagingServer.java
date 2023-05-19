@@ -17,6 +17,38 @@ import java.util.concurrent.Executors;
 import javax.net.ServerSocketFactory;
 
 public class ECMessagingServer {
+    protected class Connection {
+        protected Socket socket;
+
+        protected DataInputStream inputStream;
+        protected DataOutputStream outputStream;
+
+        public Connection(Socket socket) throws IOException {
+            this.socket = socket;
+
+            this.inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+            this.outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+        }
+
+        public Socket getSocket() {
+            return this.socket;
+        }
+
+        public DataInputStream getInputStream() {
+            return this.inputStream;
+        }
+
+        public DataOutputStream getOutputStream() {
+            return this.outputStream;
+        }
+
+        public void close() throws IOException {
+            this.socket.shutdownInput();
+            this.socket.shutdownOutput();
+            this.socket.close();
+        }
+    }
+
     protected InetSocketAddress address;
 
     protected Thread socketThread;
@@ -25,7 +57,7 @@ public class ECMessagingServer {
 
     protected ExecutorService executor = null;
 
-    protected List<Socket> connections = new ArrayList<Socket>();
+    protected List<Connection> connections = new ArrayList<Connection>();
 
     protected final Object WRITE_LOCK = new Object();
 
@@ -43,43 +75,45 @@ public class ECMessagingServer {
                 this.socket = ServerSocketFactory.getDefault().createServerSocket(this.address.getPort(), -1, this.address.getAddress());
 
                 while (this.open) {
-                    Socket connection = this.socket.accept();
+                    Socket socket = this.socket.accept();
 
-                    connection.setTcpNoDelay(true);
-                    connection.setKeepAlive(true);
-                    connection.setSoTimeout(1000);
+                    socket.setTcpNoDelay(true);
+                    socket.setKeepAlive(true);
+                    socket.setSoTimeout(5000);
 
+                    Connection connection;
                     synchronized (WRITE_LOCK) {
+                        connection = new Connection(socket);
+
                         connections.add(connection);
                     }
 
                     this.executor.submit(() -> {
                         try {
-                            DataInputStream inputStream = new DataInputStream(new BufferedInputStream(connection.getInputStream()));
-
                             while (this.open) {
                                 try {
-                                    String id = inputStream.readUTF();
+                                    String id = connection.getInputStream().readUTF();
 
-                                    int size = inputStream.readInt();
+                                    int size = connection.getInputStream().readInt();
                                     byte[] buf = new byte[size];
-                                    inputStream.read(buf, 0, size);
+                                    connection.getInputStream().read(buf, 0, size);
 
                                     synchronized (WRITE_LOCK) {
-                                        for (Socket connection2 : this.connections) {
-                                            if (connection == connection2) {
-                                                continue;
-                                            }
+                                        for (Connection connection2 : this.connections) {
+                                            connection2.getOutputStream().writeUTF(id);
 
-                                            DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(connection2.getOutputStream()));
+                                            connection2.getOutputStream().writeInt(size);
+                                            connection2.getOutputStream().write(buf, 0, size);
 
-                                            outputStream.writeUTF(id);
-
-                                            outputStream.writeInt(size);
-                                            outputStream.write(buf, 0, size);
+                                            connection.getOutputStream().flush();
                                         }
                                     }
                                 } catch (SocketTimeoutException e) {
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+
+                                    connection.close();
+                                    break;
                                 }
                             }
                         } catch (Exception e) {
