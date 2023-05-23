@@ -8,6 +8,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import javax.net.SocketFactory;
 import io.github.evercraftmc.core.ECPlugin;
 
@@ -17,6 +19,8 @@ public class ECMessager {
     protected InetSocketAddress address;
 
     protected String id;
+
+    protected List<ECMessageListener> listeners = new ArrayList<ECMessageListener>();
 
     protected Thread connectionThread;
     protected Socket connection;
@@ -46,6 +50,10 @@ public class ECMessager {
 
                 while (this.connection.isConnected()) {
                     ECMessage message = readMessage();
+
+                    for (ECMessageListener listener : this.listeners) {
+                        listener.onMessage(message);
+                    }
                 }
 
                 this.connection.shutdownInput();
@@ -56,6 +64,22 @@ public class ECMessager {
             }
         }, "ECMessager");
         this.connectionThread.start();
+    }
+
+    public void addListener(ECMessageListener listener) {
+        this.listeners.add(listener);
+    }
+
+    public void removeListener(ECMessageListener listener) {
+        this.listeners.remove(listener);
+    }
+
+    public void send(ECMessage message) {
+        try {
+            this.writeMessage(message);
+        } catch (IOException e) {
+            parent.getLogger().error("Error sending message", e);
+        }
     }
 
     protected ECMessage readMessage() throws IOException {
