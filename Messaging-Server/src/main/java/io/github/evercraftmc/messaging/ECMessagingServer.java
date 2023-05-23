@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -90,7 +91,7 @@ public class ECMessagingServer {
 
                     this.executor.submit(() -> {
                         try {
-                            while (this.open) {
+                            while (this.open && !connection.socket.isClosed() && connection.socket.isConnected()) {
                                 try {
                                     String id = connection.getInputStream().readUTF();
 
@@ -109,6 +110,9 @@ public class ECMessagingServer {
                                         }
                                     }
                                 } catch (SocketTimeoutException e) {
+                                } catch (EOFException e) {
+                                    connection.close();
+                                    break;
                                 } catch (IOException e) {
                                     e.printStackTrace();
 
