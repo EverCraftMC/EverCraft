@@ -74,8 +74,9 @@ public class ECMessager {
         this.listeners.remove(listener);
     }
 
-    public void send(ECMessage message) {
+    public void send(byte[] data) {
         try {
+            ECMessage message = new ECMessage(this.id, data);
             this.writeMessage(message);
         } catch (IOException e) {
             parent.getLogger().error("Error sending message", e);
