@@ -80,7 +80,7 @@ public class ECMessagingServer {
 
                     socket.setTcpNoDelay(true);
                     socket.setKeepAlive(true);
-                    socket.setSoTimeout(5000);
+                    socket.setSoTimeout(3000);
 
                     Connection connection;
                     synchronized (WRITE_LOCK) {

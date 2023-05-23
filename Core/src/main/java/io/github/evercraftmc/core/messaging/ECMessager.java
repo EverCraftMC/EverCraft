@@ -5,9 +5,11 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.net.SocketFactory;
@@ -48,11 +50,22 @@ public class ECMessager {
                 writeMessage(new ECMessage(this.id, helloMessageData.toByteArray()));
                 helloMessage.close();
 
-                while (this.connection.isConnected()) {
-                    ECMessage message = readMessage();
+                while (!this.connection.isClosed() && this.connection.isConnected()) {
+                    try {
+                        ECMessage message = readMessage();
 
-                    for (ECMessageListener listener : this.listeners) {
-                        listener.onMessage(message);
+                        for (ECMessageListener listener : this.listeners) {
+                            listener.onMessage(message);
+                        }
+                    } catch (SocketTimeoutException e) {
+                    } catch (EOFException e) {
+                        parent.getLogger().warn("[Messager] Got disconnected from server");
+
+                        break;
+                    } catch (IOException e) {
+                        parent.getLogger().error("[Messager] Error reading message", e);
+
+                        break;
                     }
                 }
 
@@ -60,7 +73,7 @@ public class ECMessager {
                 this.connection.shutdownOutput();
                 this.connection.close();
             } catch (Exception e) {
-                parent.getLogger().error("Error in messager", e);
+                parent.getLogger().error("[Messager] Error", e);
             }
         }, "ECMessager");
         this.connectionThread.start();
@@ -79,7 +92,7 @@ public class ECMessager {
             ECMessage message = new ECMessage(this.id, data);
             this.writeMessage(message);
         } catch (IOException e) {
-            parent.getLogger().error("Error sending message", e);
+            parent.getLogger().error("[Messager] Error writing message", e);
         }
     }
 
