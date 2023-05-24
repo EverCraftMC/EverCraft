@@ -246,7 +246,7 @@ public class ECPlugin {
 
                 parent.saveData();
 
-                event.getPlayer().setDisplayName(ECTextFormatter.translateColors((parent.getData().players.get(event.getPlayer().getUuid().toString()).prefix != null ? parent.getData().players.get(event.getPlayer().getUuid().toString()).prefix + " " : "") + parent.getData().players.get(event.getPlayer().getUuid().toString()).displayName));
+                event.getPlayer().setDisplayName(ECTextFormatter.translateColors((parent.getData().players.get(event.getPlayer().getUuid().toString()).prefix != null ? parent.getData().players.get(event.getPlayer().getUuid().toString()).prefix + "&r " : "&r") + parent.getData().players.get(event.getPlayer().getUuid().toString()).displayName + "&r"));
             }
         });
     }

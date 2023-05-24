@@ -10,10 +10,9 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.net.SocketFactory;
 import io.github.evercraftmc.core.ECPlugin;
+import io.github.evercraftmc.core.api.events.messaging.MessageEvent;
 
 public class ECMessager {
     protected final ECPlugin parent;
@@ -21,8 +20,6 @@ public class ECMessager {
     protected InetSocketAddress address;
 
     protected String id;
-
-    protected List<ECMessageListener> listeners = new ArrayList<ECMessageListener>();
 
     protected Thread connectionThread;
     protected Socket connection;
@@ -54,9 +51,7 @@ public class ECMessager {
                     try {
                         ECMessage message = readMessage();
 
-                        for (ECMessageListener listener : this.listeners) {
-                            listener.onMessage(message);
-                        }
+                        this.parent.getServer().getEventManager().emit(new MessageEvent(this, message));
                     } catch (SocketTimeoutException e) {
                     } catch (EOFException e) {
                         parent.getLogger().warn("[Messager] Got disconnected from server");
@@ -77,14 +72,6 @@ public class ECMessager {
             }
         }, "ECMessager");
         this.connectionThread.start();
-    }
-
-    public void addListener(ECMessageListener listener) {
-        this.listeners.add(listener);
-    }
-
-    public void removeListener(ECMessageListener listener) {
-        this.listeners.remove(listener);
     }
 
     public void send(byte[] data) {
