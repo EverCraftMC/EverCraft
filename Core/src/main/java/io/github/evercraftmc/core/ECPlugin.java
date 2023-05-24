@@ -23,7 +23,7 @@ import io.github.kale_ko.bjsl.BJSL;
 import io.github.kale_ko.bjsl.parsers.YamlParser;
 import io.github.kale_ko.bjsl.processor.ObjectProcessor;
 import io.github.kale_ko.ejcl.file.bjsl.YamlFileConfig;
-import io.github.kale_ko.ejcl.mysql.MySQLConfig;
+import io.github.kale_ko.ejcl.mysql.StructuredMySQLConfig;
 
 public class ECPlugin {
     private static class MessagingDetails {
@@ -57,7 +57,7 @@ public class ECPlugin {
 
     protected ECMessager messager;
 
-    protected MySQLConfig<ECData> data;
+    protected StructuredMySQLConfig<ECData> data;
 
     public ECPlugin(Object handle, File pluginFile, File dataDirectory, ECEnvironment environment, Logger logger, ClassLoader classLoader) {
         this.handle = handle;
@@ -96,12 +96,20 @@ public class ECPlugin {
 
             this.logger.info("Connecting to MySQL server..");
 
-            this.data = new MySQLConfig<ECData>(ECData.class, ((MySQLDetails) mySqlDetails.get()).host, ((MySQLDetails) mySqlDetails.get()).port, ((MySQLDetails) mySqlDetails.get()).database, "evercraft2", ((MySQLDetails) mySqlDetails.get()).username, ((MySQLDetails) mySqlDetails.get()).password, new ObjectProcessor.Builder().setIgnoreNulls(true).setIgnoreEmptyObjects(true).setIgnoreDefaults(true).build());
+            this.data = new StructuredMySQLConfig<ECData>(ECData.class, mySqlDetails.get().host, mySqlDetails.get().port, mySqlDetails.get().database, "evercraft2", mySqlDetails.get().username, mySqlDetails.get().password, new ObjectProcessor.Builder().setIgnoreNulls(true).setIgnoreEmptyObjects(true).setIgnoreDefaults(true).build());
             this.data.connect();
 
             this.logger.info("Loading plugin data..");
 
             this.data.load(false);
+
+            this.server.getScheduler().runTaskRepeatAsync(() -> {
+                try {
+                    this.data.load(false);
+                } catch (IOException e) {
+                    this.logger.error("Error loading data", e);
+                }
+            }, 120 * 20, 120 * 20);
 
             this.logger.info("Loaded plugin data");
         } catch (Exception e) {
@@ -247,10 +255,6 @@ public class ECPlugin {
 
     public ECData getData() {
         return this.data.get();
-    }
-
-    public Object getData(String path) {
-        return this.data.get(path);
     }
 
     public void loadData() {
