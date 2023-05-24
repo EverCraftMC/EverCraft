@@ -43,10 +43,12 @@ public class NickCommand implements ECCommand {
                     if (ECTextFormatter.stripColors(args[0]).length() <= 16 && args[0].length() <= 32) {
                         if (args[0].equalsIgnoreCase("reset")) {
                             this.parent.getPlugin().getData().players.get(player.getUuid().toString()).displayName = player.getName();
+                            this.parent.getPlugin().saveData();
 
                             player.sendMessage(ECTextFormatter.translateColors("&aYour nickname has been reset."));
                         } else {
                             this.parent.getPlugin().getData().players.get(player.getUuid().toString()).displayName = args[0];
+                            this.parent.getPlugin().saveData();
 
                             player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set your nickname to &r" + args[0] + "&r&a."));
                         }
@@ -58,11 +60,12 @@ public class NickCommand implements ECCommand {
                 }
             } else {
                 this.parent.getPlugin().getData().players.get(player.getUuid().toString()).displayName = player.getName();
+                this.parent.getPlugin().saveData();
 
                 player.sendMessage(ECTextFormatter.translateColors("&aYour nickname has been reset."));
             }
 
-            player.setDisplayName(ECTextFormatter.translateColors((parent.getPlugin().getData().players.get(player.getUuid().toString()).prefix != null ? parent.getPlugin().getData().players.get(player.getUuid().toString()).prefix + " " : "") + parent.getPlugin().getData().players.get(player.getUuid().toString()).displayName));
+            player.setDisplayName(ECTextFormatter.translateColors((parent.getPlugin().getData().players.get(player.getUuid().toString()).prefix != null ? parent.getPlugin().getData().players.get(player.getUuid().toString()).prefix + "&r " : "&r") + parent.getPlugin().getData().players.get(player.getUuid().toString()).displayName + "&r"));
         } else {
             player.sendMessage(ECTextFormatter.translateColors("&cYou cant do that from the console."));
         }

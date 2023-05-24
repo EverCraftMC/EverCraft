@@ -62,6 +62,8 @@ public class GlobalModule implements ECModule {
                     parent.getPlugin().getData().players.get(event.getPlayer().getUuid().toString()).lastJoin = Instant.now();
 
                     parent.getPlugin().getData().players.get(event.getPlayer().getUuid().toString()).lastIp = event.getPlayer().getAddress();
+
+                    parent.getPlugin().saveData();
                 }
 
                 @ECHandler

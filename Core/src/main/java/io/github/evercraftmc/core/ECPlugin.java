@@ -104,11 +104,7 @@ public class ECPlugin {
             this.data.load(false);
 
             this.server.getScheduler().runTaskRepeatAsync(() -> {
-                try {
-                    this.data.load(false);
-                } catch (IOException e) {
-                    this.logger.error("Error loading data", e);
-                }
+                this.loadData();
             }, 120 * 20, 120 * 20);
 
             this.logger.info("Loaded plugin data");
@@ -248,6 +244,8 @@ public class ECPlugin {
                     parent.getData().players.get(event.getPlayer().getUuid().toString()).displayName = event.getPlayer().getName();
                 }
 
+                parent.saveData();
+
                 event.getPlayer().setDisplayName(ECTextFormatter.translateColors((parent.getData().players.get(event.getPlayer().getUuid().toString()).prefix != null ? parent.getData().players.get(event.getPlayer().getUuid().toString()).prefix + " " : "") + parent.getData().players.get(event.getPlayer().getUuid().toString()).displayName));
             }
         });
@@ -266,10 +264,12 @@ public class ECPlugin {
     }
 
     public void saveData() {
-        try {
-            this.data.save();
-        } catch (IOException e) {
-            this.logger.error("Failed to save player data", e);
-        }
+        this.server.getScheduler().runTaskAsync(() -> {
+            try {
+                this.data.save();
+            } catch (IOException e) {
+                this.logger.error("Failed to save player data", e);
+            }
+        });
     }
 }
