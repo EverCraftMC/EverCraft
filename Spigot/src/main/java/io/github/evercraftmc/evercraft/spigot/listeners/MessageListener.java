@@ -17,11 +17,9 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import io.github.evercraftmc.evercraft.shared.util.StringUtils;
-import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.SpigotMain;
 import io.github.evercraftmc.evercraft.spigot.commands.warp.BackCommand;
 import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
-import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 
@@ -96,10 +94,6 @@ public class MessageListener extends SpigotListener implements PluginMessageList
                 String command = in.readUTF();
 
                 SpigotMain.getInstance().getServer().dispatchCommand(player, command);
-            } else if (subChannel.equals("updateName")) {
-                Player player = SpigotMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
-
-                player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotPlayerResolver.getDisplayName(SpigotMain.getInstance().getPluginData(), player.getUniqueId()))));
             } else if (subChannel.equals("playSound")) {
                 Player player = SpigotMain.getInstance().getServer().getPlayer(UUID.fromString(in.readUTF()));
 

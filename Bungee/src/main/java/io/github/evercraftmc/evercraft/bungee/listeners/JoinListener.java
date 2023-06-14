@@ -7,7 +7,6 @@ import io.github.evercraftmc.evercraft.bungee.BungeeMain;
 import io.github.evercraftmc.evercraft.bungee.scoreboard.ScoreBoard;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
 import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
-import io.github.evercraftmc.evercraft.bungee.util.player.BungeePlayerResolver;
 import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -85,20 +84,6 @@ public class JoinListener extends BungeeListener {
         BungeeMain.getInstance().getPluginData().get().players.get(event.getPlayer().getUniqueId().toString()).uuid = event.getPlayer().getUniqueId().toString();
         BungeeMain.getInstance().getPluginData().get().players.get(event.getPlayer().getUniqueId().toString()).lastName = event.getPlayer().getName();
         BungeeMain.getInstance().getPluginData().get().players.get(event.getPlayer().getUniqueId().toString()).lastIP = ((InetSocketAddress) event.getPlayer().getSocketAddress()).getHostString();
-
-        if (BungeeMain.getInstance().getPluginData().get().players.get(event.getPlayer().getUniqueId().toString()).nickname == null) {
-            BungeeMain.getInstance().getPluginData().get().players.get(event.getPlayer().getUniqueId().toString()).nickname = event.getPlayer().getName();
-        }
-
-        event.getPlayer().setDisplayName(TextFormatter.translateColors(BungeePlayerResolver.getDisplayName(BungeeMain.getInstance().getPluginData(), event.getPlayer().getUniqueId())));
-
-        if (!BungeeMain.getInstance().getPluginData().get().players.get(event.getPlayer().getUniqueId().toString()).joinedBefore) {
-            BungeeMain.getInstance().getPluginData().get().players.get(event.getPlayer().getUniqueId().toString()).joinedBefore = true;
-
-            BungeeMain.getInstance().getProxy().broadcast(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().welcome.firstJoin.replace("{player}", event.getPlayer().getDisplayName()))));
-
-            BungeeMain.getInstance().getDiscordBot().getGuild().getTextChannelById(BungeeMain.getInstance().getPluginConfig().get().discord.channelId).sendMessage(TextFormatter.discordFormat(BungeeMain.getInstance().getPluginMessages().get().welcome.firstJoin.replace("{player}", event.getPlayer().getDisplayName()))).queue();
-        }
 
         try {
             BungeeMain.getInstance().getPluginData().save();

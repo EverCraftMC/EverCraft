@@ -5,14 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import io.github.evercraftmc.evercraft.shared.Plugin;
 import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.PluginManager;
-import io.github.evercraftmc.evercraft.shared.economy.Economy;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
-import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.evercraftmc.evercraft.spigot.commands.SpigotCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.games.GameCommand;
 import io.github.evercraftmc.evercraft.spigot.commands.games.JoinCommand;
@@ -54,23 +51,19 @@ import io.github.evercraftmc.evercraft.spigot.listeners.MessageListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.PvPListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.ServerIdleListener;
 import io.github.evercraftmc.evercraft.spigot.listeners.SpigotListener;
-import io.github.evercraftmc.evercraft.spigot.util.formatting.ComponentFormatter;
-import io.github.evercraftmc.evercraft.spigot.util.player.SpigotPlayerResolver;
 import io.github.kale_ko.ejcl.file.bjsl.JsonFileConfig;
-import io.github.kale_ko.ejcl.mysql.MySQLConfig;
+import io.github.kale_ko.ejcl.mysql.StructuredMySQLConfig;
 
 public class SpigotMain extends JavaPlugin implements Plugin {
     private static SpigotMain Instance;
 
     private JsonFileConfig<SpigotConfig> config;
     private JsonFileConfig<SpigotMessages> messages;
-    private MySQLConfig<PluginData> data;
+    private StructuredMySQLConfig<PluginData> data;
 
     private JsonFileConfig<SpigotWarps> warps;
     private JsonFileConfig<SpigotKits> kits;
     private JsonFileConfig<SpigotChests> chests;
-
-    private Economy economy;
 
     private List<SpigotCommand> commands;
     private List<SpigotListener> listeners;
@@ -117,7 +110,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.getLogger().info("Loading player data..");
 
-        this.data = new MySQLConfig<PluginData>(PluginData.class, this.config.get().database.host, this.config.get().database.port, this.config.get().database.name, this.config.get().database.tableName, this.config.get().database.username, this.config.get().database.password);
+        this.data = new StructuredMySQLConfig<PluginData>(PluginData.class, this.config.get().database.host, this.config.get().database.port, this.config.get().database.name, this.config.get().database.tableName, this.config.get().database.username, this.config.get().database.password);
         try {
             this.data.load();
         } catch (IOException e) {
@@ -154,12 +147,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         }
 
         this.getLogger().info("Finished loading other data..");
-
-        this.getLogger().info("Loading economy..");
-
-        this.economy = new Economy(this.data);
-
-        this.getLogger().info("Finished loading economy");
 
         this.getLogger().info("Loading commands..");
 
@@ -266,11 +253,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
         this.assets = new ArrayList<Closable>();
 
-        for (Player player : this.getServer().getOnlinePlayers()) {
-            player.displayName(ComponentFormatter.stringToComponent(TextFormatter.translateColors(SpigotPlayerResolver.getDisplayName(data, player.getUniqueId()))));
-            player.playerListName(player.displayName());
-        }
-
         this.getLogger().info("Finished loading other assets..");
 
         this.getLogger().info("Finished loading plugin");
@@ -355,11 +337,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
             asset.close();
         }
 
-        for (Player player : this.getServer().getOnlinePlayers()) {
-            player.displayName(ComponentFormatter.stringToComponent(player.getName()));
-            player.playerListName(player.displayName());
-        }
-
         this.getLogger().info("Finished closing assets..");
 
         this.getLogger().info("Finished disabling plugin");
@@ -388,7 +365,7 @@ public class SpigotMain extends JavaPlugin implements Plugin {
         return this.messages;
     }
 
-    public MySQLConfig<PluginData> getPluginData() {
+    public StructuredMySQLConfig<PluginData> getPluginData() {
         return this.data;
     }
 
@@ -402,10 +379,6 @@ public class SpigotMain extends JavaPlugin implements Plugin {
 
     public JsonFileConfig<SpigotChests> getChests() {
         return this.chests;
-    }
-
-    public Economy getEconomy() {
-        return this.economy;
     }
 
     public List<SpigotCommand> getCommands() {

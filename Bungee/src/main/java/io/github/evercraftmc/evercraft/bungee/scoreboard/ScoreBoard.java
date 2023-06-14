@@ -49,7 +49,6 @@ public class ScoreBoard implements Closable {
                             try {
                                 String line = TextFormatter.translateColors(lines.get(i)
                                     .replace("{player}", player.getDisplayName())
-                                    .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
                                     .replace("{ping}", player.getPing() + "")
                                     .replace("{server}", StringUtils.toTtitleCase(player.getServer().getInfo().getName()))
                                     .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
@@ -75,7 +74,6 @@ public class ScoreBoard implements Closable {
 
                         player.setTabHeader(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().get().tabList.header
                             .replace("{player}", player.getDisplayName())
-                            .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
                             .replace("{ping}", player.getPing() + "")
                             .replace("{server}", player.getServer().getInfo().getName())
                             .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")
@@ -83,7 +81,6 @@ public class ScoreBoard implements Closable {
                             .replace("{proxyMax}", BungeeMain.getInstance().getProxy().getConfigurationAdapter().getListeners().iterator().next().getMaxPlayers() + ""))),
                         ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginConfig().get().tabList.footer
                             .replace("{player}", player.getDisplayName())
-                            .replace("{balance}", BungeeMain.getInstance().getEconomy().getBalance(player.getUniqueId()) + "")
                             .replace("{ping}", player.getPing() + "")
                             .replace("{server}", player.getServer().getInfo().getName())
                             .replace("{serverOnline}", player.getServer().getInfo().getPlayers().size() + "")

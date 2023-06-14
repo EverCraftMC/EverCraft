@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import io.github.evercraftmc.evercraft.bungee.commands.BungeeCommand;
-import io.github.evercraftmc.evercraft.bungee.commands.economy.BalanceCommand;
-import io.github.evercraftmc.evercraft.bungee.commands.economy.EconomyCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.info.InfoCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.KickCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.LockChatCommand;
@@ -19,12 +17,9 @@ import io.github.evercraftmc.evercraft.bungee.commands.moderation.TempBanCommand
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.TempMuteCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.UnBanCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.moderation.UnMuteCommand;
-import io.github.evercraftmc.evercraft.bungee.commands.player.FriendCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.MessageCommand;
-import io.github.evercraftmc.evercraft.bungee.commands.player.NickNameCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.ReplyCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SeenCommand;
-import io.github.evercraftmc.evercraft.bungee.commands.player.SettingsCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.player.SpigotCommandCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.CommandSpyCommand;
 import io.github.evercraftmc.evercraft.bungee.commands.staff.DebugCommand;
@@ -41,16 +36,13 @@ import io.github.evercraftmc.evercraft.bungee.listeners.PingListener;
 import io.github.evercraftmc.evercraft.bungee.listeners.VoteListener;
 import io.github.evercraftmc.evercraft.bungee.scoreboard.ScoreBoard;
 import io.github.evercraftmc.evercraft.bungee.util.formatting.ComponentFormatter;
-import io.github.evercraftmc.evercraft.bungee.util.network.TabListUtil;
-import io.github.evercraftmc.evercraft.bungee.util.player.BungeePlayerResolver;
 import io.github.evercraftmc.evercraft.shared.PluginData;
 import io.github.evercraftmc.evercraft.shared.PluginManager;
 import io.github.evercraftmc.evercraft.shared.discord.DiscordBot;
-import io.github.evercraftmc.evercraft.shared.economy.Economy;
 import io.github.evercraftmc.evercraft.shared.util.Closable;
 import io.github.evercraftmc.evercraft.shared.util.formatting.TextFormatter;
 import io.github.kale_ko.ejcl.file.bjsl.JsonFileConfig;
-import io.github.kale_ko.ejcl.mysql.MySQLConfig;
+import io.github.kale_ko.ejcl.mysql.StructuredMySQLConfig;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -65,9 +57,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
     private JsonFileConfig<BungeeConfig> config;
     private JsonFileConfig<BungeeMessages> messages;
-    private MySQLConfig<PluginData> data;
-
-    private Economy economy;
+    private StructuredMySQLConfig<PluginData> data;
 
     private DiscordBot bot;
 
@@ -114,7 +104,7 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
 
         this.getLogger().info("Loading player data..");
 
-        this.data = new MySQLConfig<PluginData>(PluginData.class, this.config.get().database.host, this.config.get().database.port, this.config.get().database.name, this.config.get().database.tableName, this.config.get().database.username, this.config.get().database.password);
+        this.data = new StructuredMySQLConfig<PluginData>(PluginData.class, this.config.get().database.host, this.config.get().database.port, this.config.get().database.name, this.config.get().database.tableName, this.config.get().database.username, this.config.get().database.password);
         try {
             this.data.load();
         } catch (IOException e) {
@@ -122,12 +112,6 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         }
 
         this.getLogger().info("Finished loading player data");
-
-        this.getLogger().info("Loading economy..");
-
-        this.economy = new Economy(this.data);
-
-        this.getLogger().info("Finished loading economy");
 
         this.getLogger().info("Loading commands..");
 
@@ -139,18 +123,10 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.commands.add(new InfoCommand("vote", "Get the server vote link", Arrays.asList(), "evercraft.commands.info.vote").register());
         this.commands.add(new InfoCommand("staff", "Get the server staff", Arrays.asList(), "evercraft.commands.info.staff").register());
 
-        this.commands.add(new NickNameCommand("nickname", "Change your nickname", Arrays.asList("nick"), "evercraft.commands.player.nickname").register());
-
         this.commands.add(new SeenCommand("lastSeen", "Check when someone was last online", Arrays.asList("seen"), "evercraft.commands.player.seen").register());
 
         this.commands.add(new MessageCommand("message", "Message someone", Arrays.asList("msg", "tell"), "evercraft.commands.player.message").register());
         this.commands.add(new ReplyCommand("reply", "Reply to someone", Arrays.asList("r"), "evercraft.commands.player.message").register());
-
-        this.commands.add(new BalanceCommand("balance", "Check your balance", Arrays.asList("bal"), "evercraft.commands.economy.balance").register());
-        this.commands.add(new EconomyCommand("economy", "Modify someones balance", Arrays.asList("eco"), "evercraft.commands.economy.economy").register());
-
-        this.commands.add(new FriendCommand("friend", "Manage your friends", Arrays.asList("friends", "f"), "evercraft.commands.player.friend").register());
-        this.commands.add(new SettingsCommand("settings", "Manage your settings", Arrays.asList("setting", "set", "s"), "evercraft.commands.player.settings").register());
 
         this.commands.add(new HubCommand("hub", "Go to the hub", Arrays.asList("lobby"), "evercraft.commands.warp.hub").register());
 
@@ -204,11 +180,6 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         this.serverMotd = this.getProxy().getConfigurationAdapter().getListeners().iterator().next().getMotd();
         for (ServerInfo server : this.getProxy().getServersCopy().values()) {
             this.serverMotds.put(server.getName().toLowerCase(), server.getMotd());
-        }
-
-        for (ProxiedPlayer player : this.getProxy().getPlayers()) {
-            player.setDisplayName(TextFormatter.translateColors(BungeePlayerResolver.getDisplayName(data, player.getUniqueId())));
-            TabListUtil.updatePlayerName(player);
         }
 
         this.getLogger().info("Finished loading other assets..");
@@ -290,11 +261,6 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
             asset.close();
         }
 
-        for (ProxiedPlayer player : this.getProxy().getPlayers()) {
-            player.setDisplayName(player.getName());
-            TabListUtil.updatePlayerName(player);
-        }
-
         this.getLogger().info("Finished closing assets..");
 
         this.getLogger().info("Finished disabling plugin");
@@ -323,12 +289,8 @@ public class BungeeMain extends Plugin implements io.github.evercraftmc.evercraf
         return this.messages;
     }
 
-    public MySQLConfig<PluginData> getPluginData() {
+    public StructuredMySQLConfig<PluginData> getPluginData() {
         return this.data;
-    }
-
-    public Economy getEconomy() {
-        return this.economy;
     }
 
     public List<BungeeCommand> getCommands() {

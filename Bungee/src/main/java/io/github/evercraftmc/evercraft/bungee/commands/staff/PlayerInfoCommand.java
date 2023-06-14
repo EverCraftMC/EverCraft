@@ -33,7 +33,6 @@ public class PlayerInfoCommand extends BungeeCommand {
                         .replace("{player}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).lastName)
                         .replace("{uuid}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).uuid)
                         .replace("{ip}", sender.hasPermission("evercraft.commands.staff.playerinfo.ip") ? BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).lastIP : "hidden")
-                        .replace("{nickname}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).nickname)
                         .replace("{ping}", bungeePlayer.getPing() + "ms")
                         .replace("{version}", ProtocolVersion.getProtocol(Via.getAPI().getPlayerVersion(player.getUniqueId())).getName())
                         .replace("{protocolVersion}", Via.getAPI().getPlayerVersion(player.getUniqueId()) + ""))));
@@ -41,8 +40,7 @@ public class PlayerInfoCommand extends BungeeCommand {
                     sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().playerInfo.offline
                         .replace("{player}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).lastName)
                         .replace("{uuid}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).uuid)
-                        .replace("{ip}", sender.hasPermission("evercraft.commands.staff.playerinfo.ip") ? BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).lastIP : "hidden")
-                        .replace("{nickname}", BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).nickname))));
+                        .replace("{ip}", sender.hasPermission("evercraft.commands.staff.playerinfo.ip") ? BungeeMain.getInstance().getPluginData().get().players.get(player.getUniqueId().toString()).lastIP : "hidden"))));
                 }
             } else {
                 sender.sendMessage(ComponentFormatter.stringToComponent(TextFormatter.translateColors(BungeeMain.getInstance().getPluginMessages().get().error.playerNotFound.replace("{player}", args[0]))));
