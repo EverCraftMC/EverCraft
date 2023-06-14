@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ECData {
+public class ECPlayerData {
     public static class Player {
         // Core
         public UUID uuid;
@@ -35,7 +35,4 @@ public class ECData {
     }
 
     public Map<String, Player> players = new HashMap<String, Player>();
-
-    // Moderation
-    public boolean maintenance = false;
 }

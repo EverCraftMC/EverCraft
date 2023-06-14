@@ -1,6 +1,5 @@
 package io.github.evercraftmc.core.impl.bungee.server;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -8,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import io.github.evercraftmc.core.ECData;
+import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.api.events.ECHandler;
 import io.github.evercraftmc.core.api.events.ECListener;
@@ -32,19 +31,19 @@ public class ECBungeeEventManager implements ECEventManager {
         public void onPlayerConnect(LoginEvent event) {
             String uuid = event.getLoginResult().getId();
             uuid = uuid.substring(0, 8) + "-" + uuid.substring(8, 12) + "-" + uuid.substring(12, 16) + "-" + uuid.substring(16, 20) + "-" + uuid.substring(20, 32);
-            if (!parent.server.getPlugin().getData().players.containsKey(uuid)) {
-                parent.server.getPlugin().getData().players.put(uuid, new ECData.Player(UUID.fromString(uuid), event.getLoginResult().getName()));
+            if (!parent.server.getPlugin().getPlayerData().players.containsKey(uuid)) {
+                parent.server.getPlugin().getPlayerData().players.put(uuid, new ECPlayerData.Player(UUID.fromString(uuid), event.getLoginResult().getName()));
             }
         }
 
         @EventHandler
         public void onPlayerJoin(PostLoginEvent event) {
-            parent.emit(new PlayerJoinEvent(new ECBungeePlayer(parent.server.getPlugin().getData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
+            parent.emit(new PlayerJoinEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
         }
 
         @EventHandler
         public void onPlayerLeave(PlayerDisconnectEvent event) {
-            parent.emit(new PlayerLeaveEvent(new ECBungeePlayer(parent.server.getPlugin().getData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
+            parent.emit(new PlayerLeaveEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
         }
     }
 
@@ -69,7 +68,7 @@ public class ECBungeeEventManager implements ECEventManager {
                 try {
                     entry.getValue().setAccessible(true);
                     entry.getValue().invoke(entry.getKey(), event);
-                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                } catch (Exception e) {
                     this.server.getPlugin().getLogger().error("Failed to emit event", (Throwable) e);
                 }
             }

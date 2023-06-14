@@ -3,7 +3,7 @@ package io.github.evercraftmc.core.impl.bungee.server.player;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.UUID;
-import io.github.evercraftmc.core.ECData;
+import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.bungee.server.util.ECBungeeComponentFormatter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -14,12 +14,12 @@ public class ECBungeePlayer implements ECPlayer {
     protected UUID uuid;
     protected String name;
 
-    public ECBungeePlayer(ECData.Player data) {
+    public ECBungeePlayer(ECPlayerData.Player data) {
         this.uuid = data.uuid;
         this.name = data.name;
     }
 
-    public ECBungeePlayer(ECData.Player data, ProxiedPlayer handle) {
+    public ECBungeePlayer(ECPlayerData.Player data, ProxiedPlayer handle) {
         this(data);
 
         this.handle = handle;

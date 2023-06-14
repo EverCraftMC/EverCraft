@@ -1,7 +1,5 @@
 package io.github.evercraftmc.messaging;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
@@ -27,8 +25,8 @@ public class ECMessagingServer {
         public Connection(Socket socket) throws IOException {
             this.socket = socket;
 
-            this.inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-            this.outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+            this.inputStream = new DataInputStream(socket.getInputStream());
+            this.outputStream = new DataOutputStream(socket.getOutputStream());
         }
 
         public Socket getSocket() {
@@ -93,7 +91,8 @@ public class ECMessagingServer {
                         try {
                             while (this.open && !connection.socket.isClosed() && connection.socket.isConnected()) {
                                 try {
-                                    String id = connection.getInputStream().readUTF();
+                                    String sender = connection.getInputStream().readUTF();
+                                    String recipient = connection.getInputStream().readUTF();
 
                                     int size = connection.getInputStream().readInt();
                                     byte[] buf = new byte[size];
@@ -101,12 +100,15 @@ public class ECMessagingServer {
 
                                     synchronized (WRITE_LOCK) {
                                         for (Connection connection2 : this.connections) {
-                                            connection2.getOutputStream().writeUTF(id);
+                                            if (connection == connection2) {
+                                                continue;
+                                            }
+
+                                            connection2.getOutputStream().writeUTF(sender);
+                                            connection2.getOutputStream().writeUTF(recipient);
 
                                             connection2.getOutputStream().writeInt(size);
                                             connection2.getOutputStream().write(buf, 0, size);
-
-                                            connection.getOutputStream().flush();
                                         }
                                     }
                                 } catch (SocketTimeoutException e) {

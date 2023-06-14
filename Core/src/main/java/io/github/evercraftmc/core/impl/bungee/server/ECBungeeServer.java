@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
-import io.github.evercraftmc.core.ECData;
+import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.server.ECCommandManager;
 import io.github.evercraftmc.core.api.server.ECEventManager;
@@ -32,8 +32,8 @@ public class ECBungeeServer implements ECServer {
 
         this.handle = handle;
 
-        this.commandManager = new ECBungeeCommandManager(this);
         this.eventManager = new ECBungeeEventManager(this);
+        this.commandManager = new ECBungeeCommandManager(this);
 
         this.scheduler = new ECBungeeScheduler(this);
     }
@@ -61,7 +61,7 @@ public class ECBungeeServer implements ECServer {
     public Collection<ECPlayer> getPlayers() {
         ArrayList<ECBungeePlayer> players = new ArrayList<ECBungeePlayer>();
 
-        for (ECData.Player player : this.plugin.getData().players.values()) {
+        for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
             players.add(new ECBungeePlayer(player));
         }
 
@@ -70,8 +70,8 @@ public class ECBungeeServer implements ECServer {
 
     @Override
     public ECPlayer getPlayer(UUID uuid) {
-        if (this.plugin.getData().players.containsKey(uuid.toString())) {
-            return new ECBungeePlayer(this.plugin.getData().players.get(uuid.toString()));
+        if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
+            return new ECBungeePlayer(this.plugin.getPlayerData().players.get(uuid.toString()));
         } else {
             return null;
         }
@@ -79,7 +79,7 @@ public class ECBungeeServer implements ECServer {
 
     @Override
     public ECPlayer getPlayer(String name) {
-        for (ECData.Player player : this.plugin.getData().players.values()) {
+        for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
             if (player.name.equalsIgnoreCase(name)) {
                 return new ECBungeePlayer(player);
             }
@@ -93,8 +93,8 @@ public class ECBungeeServer implements ECServer {
         ArrayList<ECBungeePlayer> players = new ArrayList<ECBungeePlayer>();
 
         for (ProxiedPlayer bungeePlayer : this.handle.getPlayers()) {
-            if (this.plugin.getData().players.containsKey(bungeePlayer.getUniqueId().toString())) {
-                players.add(new ECBungeePlayer(this.plugin.getData().players.get(bungeePlayer.getUniqueId().toString()), bungeePlayer));
+            if (this.plugin.getPlayerData().players.containsKey(bungeePlayer.getUniqueId().toString())) {
+                players.add(new ECBungeePlayer(this.plugin.getPlayerData().players.get(bungeePlayer.getUniqueId().toString()), bungeePlayer));
             }
         }
 
@@ -104,8 +104,8 @@ public class ECBungeeServer implements ECServer {
     @Override
     public ECPlayer getOnlinePlayer(UUID uuid) {
         if (this.handle.getPlayer(uuid) != null) {
-            if (this.plugin.getData().players.containsKey(uuid.toString())) {
-                return new ECBungeePlayer(this.plugin.getData().players.get(uuid.toString()), this.handle.getPlayer(uuid));
+            if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
+                return new ECBungeePlayer(this.plugin.getPlayerData().players.get(uuid.toString()), this.handle.getPlayer(uuid));
             } else {
                 return null;
             }
@@ -117,7 +117,7 @@ public class ECBungeeServer implements ECServer {
     @Override
     public ECPlayer getOnlinePlayer(String name) {
         if (this.handle.getPlayer(name) != null) {
-            for (ECData.Player player : this.plugin.getData().players.values()) {
+            for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
                 if (player.name.equalsIgnoreCase(name)) {
                     return new ECBungeePlayer(player, this.handle.getPlayer(name));
                 }

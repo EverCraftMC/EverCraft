@@ -3,7 +3,7 @@ package io.github.evercraftmc.core.impl.spigot.server.player;
 import java.net.InetAddress;
 import java.util.UUID;
 import org.bukkit.entity.Player;
-import io.github.evercraftmc.core.ECData;
+import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.spigot.server.util.ECSpigotComponentFormatter;
 
@@ -13,12 +13,12 @@ public class ECSpigotPlayer implements ECPlayer {
     protected UUID uuid;
     protected String name;
 
-    public ECSpigotPlayer(ECData.Player data) {
+    public ECSpigotPlayer(ECPlayerData.Player data) {
         this.uuid = data.uuid;
         this.name = data.name;
     }
 
-    public ECSpigotPlayer(ECData.Player data, Player handle) {
+    public ECSpigotPlayer(ECPlayerData.Player data, Player handle) {
         this(data);
 
         this.handle = handle;

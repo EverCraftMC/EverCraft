@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
+import java.util.UUID;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ public class ECPlugin {
         public String host = "127.0.0.1";
         public int port = 3000;
 
-        public String id = System.getProperty("serverName");
+        public UUID id = UUID.fromString(System.getProperty("serverID"));
     }
 
     private static class MySQLDetails {
@@ -57,7 +58,7 @@ public class ECPlugin {
 
     protected ECMessager messager;
 
-    protected StructuredMySQLConfig<ECData> data;
+    protected StructuredMySQLConfig<ECPlayerData> data;
 
     public ECPlugin(Object handle, File pluginFile, File dataDirectory, ECEnvironment environment, Logger logger, ClassLoader classLoader) {
         this.handle = handle;
@@ -96,7 +97,7 @@ public class ECPlugin {
 
             this.logger.info("Connecting to MySQL server..");
 
-            this.data = new StructuredMySQLConfig<ECData>(ECData.class, mySqlDetails.get().host, mySqlDetails.get().port, mySqlDetails.get().database, "evercraft2", mySqlDetails.get().username, mySqlDetails.get().password, new ObjectProcessor.Builder().setIgnoreNulls(true).setIgnoreEmptyObjects(true).setIgnoreDefaults(true).build());
+            this.data = new StructuredMySQLConfig<ECPlayerData>(ECPlayerData.class, mySqlDetails.get().host, mySqlDetails.get().port, mySqlDetails.get().database, "evercraft2", mySqlDetails.get().username, mySqlDetails.get().password, new ObjectProcessor.Builder().setIgnoreNulls(true).setIgnoreEmptyObjects(true).setIgnoreDefaults(true).build());
             this.data.connect();
 
             this.logger.info("Loading plugin data..");
@@ -237,21 +238,25 @@ public class ECPlugin {
 
             @ECHandler
             public void onPlayerJoin(PlayerJoinEvent event) {
-                parent.getData().players.get(event.getPlayer().getUuid().toString()).uuid = event.getPlayer().getUuid();
-                parent.getData().players.get(event.getPlayer().getUuid().toString()).name = event.getPlayer().getName();
+                parent.getPlayerData().players.get(event.getPlayer().getUuid().toString()).uuid = event.getPlayer().getUuid();
+                parent.getPlayerData().players.get(event.getPlayer().getUuid().toString()).name = event.getPlayer().getName();
 
-                if (parent.getData().players.get(event.getPlayer().getUuid().toString()).displayName == null) {
-                    parent.getData().players.get(event.getPlayer().getUuid().toString()).displayName = event.getPlayer().getName();
+                if (parent.getPlayerData().players.get(event.getPlayer().getUuid().toString()).displayName == null) {
+                    parent.getPlayerData().players.get(event.getPlayer().getUuid().toString()).displayName = event.getPlayer().getName();
                 }
 
                 parent.saveData();
 
-                event.getPlayer().setDisplayName(ECTextFormatter.translateColors((parent.getData().players.get(event.getPlayer().getUuid().toString()).prefix != null ? parent.getData().players.get(event.getPlayer().getUuid().toString()).prefix + "&r " : "&r") + parent.getData().players.get(event.getPlayer().getUuid().toString()).displayName + "&r"));
+                event.getPlayer().setDisplayName(ECTextFormatter.translateColors((parent.getPlayerData().players.get(event.getPlayer().getUuid().toString()).prefix != null ? parent.getPlayerData().players.get(event.getPlayer().getUuid().toString()).prefix + "&r " : "&r") + parent.getPlayerData().players.get(event.getPlayer().getUuid().toString()).displayName + "&r"));
             }
         });
     }
 
-    public ECData getData() {
+    public ECMessager getMessager() {
+        return this.messager;
+    }
+
+    public ECPlayerData getPlayerData() {
         return this.data.get();
     }
 

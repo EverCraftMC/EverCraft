@@ -1,34 +1,37 @@
 package io.github.evercraftmc.core.messaging;
 
 public class ECMessage {
-    protected String sender;
+    protected ECSender sender;
+    protected ECRecipient recipient;
 
-    protected int size;
     protected byte[] data;
+    protected int size;
 
-    public ECMessage(String sender, byte[] data) {
-        this.sender = sender;
-
-        this.size = data.length;
-        this.data = data;
+    public ECMessage(ECSender sender, ECRecipient recipient, byte[] data) {
+        this(sender, recipient, data, data.length);
     }
 
-    public ECMessage(String sender, int size, byte[] data) {
+    public ECMessage(ECSender sender, ECRecipient recipient, byte[] data, int size) {
         this.sender = sender;
+        this.recipient = recipient;
 
+        this.data = data;
         this.size = size;
-        this.data = data;
     }
 
-    public String getSender() {
+    public ECSender getSender() {
         return this.sender;
     }
 
-    public int getSize() {
-        return this.size;
+    public ECRecipient getRecipient() {
+        return this.recipient;
     }
 
     public byte[] getData() {
         return this.data;
+    }
+
+    public int getSize() {
+        return this.size;
     }
 }

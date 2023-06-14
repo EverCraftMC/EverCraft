@@ -1,7 +1,5 @@
 package io.github.evercraftmc.core.messaging;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -10,6 +8,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.UUID;
 import javax.net.SocketFactory;
 import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.events.messaging.MessageEvent;
@@ -19,15 +18,18 @@ public class ECMessager {
 
     protected InetSocketAddress address;
 
-    protected String id;
+    protected UUID id;
 
     protected Thread connectionThread;
     protected Socket connection;
 
+    protected DataInputStream inputStream;
+    protected DataOutputStream outputStream;
+
     protected final Object READ_LOCK = new Object();
     protected final Object WRITE_LOCK = new Object();
 
-    public ECMessager(ECPlugin parent, InetSocketAddress address, String id) {
+    public ECMessager(ECPlugin parent, InetSocketAddress address, UUID id) {
         this.parent = parent;
 
         this.address = address;
@@ -40,11 +42,14 @@ public class ECMessager {
             try {
                 this.connection = SocketFactory.getDefault().createSocket(this.address.getAddress(), this.address.getPort());
 
+                this.inputStream = new DataInputStream(this.connection.getInputStream());
+                this.outputStream = new DataOutputStream(this.connection.getOutputStream());
+
                 ByteArrayOutputStream helloMessageData = new ByteArrayOutputStream();
                 DataOutputStream helloMessage = new DataOutputStream(helloMessageData);
                 helloMessage.writeInt(ECMessageType.HELLO.getCode());
-                helloMessage.writeUTF(this.id);
-                writeMessage(new ECMessage(this.id, helloMessageData.toByteArray()));
+                helloMessage.writeUTF(this.id.toString());
+                writeMessage(new ECMessage(ECSender.fromServer(this.id), ECRecipient.fromAll(), helloMessageData.toByteArray()));
                 helloMessage.close();
 
                 while (!this.connection.isClosed() && this.connection.isConnected()) {
@@ -54,7 +59,7 @@ public class ECMessager {
                         this.parent.getServer().getEventManager().emit(new MessageEvent(this, message));
                     } catch (SocketTimeoutException e) {
                     } catch (EOFException e) {
-                        parent.getLogger().warn("[Messager] Got disconnected from server");
+                        parent.getLogger().warn("[Messager] Got disconnected from server", e);
 
                         break;
                     } catch (IOException e) {
@@ -74,9 +79,13 @@ public class ECMessager {
         this.connectionThread.start();
     }
 
-    public void send(byte[] data) {
+    public void send(ECRecipient recipient, byte[] data) {
+        this.send(recipient, data, data.length);
+    }
+
+    public void send(ECRecipient recipient, byte[] data, int size) {
         try {
-            ECMessage message = new ECMessage(this.id, data);
+            ECMessage message = new ECMessage(ECSender.fromServer(this.id), recipient, data, size);
             this.writeMessage(message);
         } catch (IOException e) {
             parent.getLogger().error("[Messager] Error writing message", e);
@@ -85,26 +94,24 @@ public class ECMessager {
 
     protected ECMessage readMessage() throws IOException {
         synchronized (READ_LOCK) {
-            DataInputStream inputStream = new DataInputStream(new BufferedInputStream(this.connection.getInputStream()));
+            String sender = this.inputStream.readUTF();
+            String recipient = this.inputStream.readUTF();
 
-            String sender = inputStream.readUTF();
-
-            int size = inputStream.readInt();
+            int size = this.inputStream.readInt();
             byte[] data = new byte[size];
-            inputStream.read(data, 0, size);
+            this.inputStream.read(data, 0, size);
 
-            return new ECMessage(sender, size, data);
+            return new ECMessage(ECSender.parse(sender), ECRecipient.parse(recipient), data, size);
         }
     }
 
     protected void writeMessage(ECMessage message) throws IOException {
         synchronized (WRITE_LOCK) {
-            DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(this.connection.getOutputStream()));
+            this.outputStream.writeUTF(message.getSender().toString());
+            this.outputStream.writeUTF(message.getRecipient().toString());
 
-            outputStream.writeUTF(message.getSender());
-
-            outputStream.writeInt(message.getSize());
-            outputStream.write(message.getData(), 0, message.getSize());
+            this.outputStream.writeInt(message.getSize());
+            this.outputStream.write(message.getData(), 0, message.getSize());
         }
     }
 }

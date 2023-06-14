@@ -36,37 +36,43 @@ public class NickCommand implements ECCommand {
     }
 
     @Override
-    public void run(ECPlayer player, String[] args) {
+    public void run(ECPlayer player, String[] args, boolean sendFeedback) {
         if (!(player instanceof ECConsole)) {
             if (args.length > 0) {
                 if (args.length == 1) {
                     if (ECTextFormatter.stripColors(args[0]).length() <= 16 && args[0].length() <= 32) {
                         if (args[0].equalsIgnoreCase("reset")) {
-                            this.parent.getPlugin().getData().players.get(player.getUuid().toString()).displayName = player.getName();
+                            this.parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).displayName = player.getName();
                             this.parent.getPlugin().saveData();
 
-                            player.sendMessage(ECTextFormatter.translateColors("&aYour nickname has been reset."));
+                            if (sendFeedback) {
+                                player.sendMessage(ECTextFormatter.translateColors("&aYour nickname has been reset."));
+                            }
                         } else {
-                            this.parent.getPlugin().getData().players.get(player.getUuid().toString()).displayName = args[0];
+                            this.parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).displayName = args[0];
                             this.parent.getPlugin().saveData();
 
-                            player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set your nickname to &r" + args[0] + "&r&a."));
+                            if (sendFeedback) {
+                                player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set your nickname to &r" + args[0] + "&r&a."));
+                            }
                         }
-                    } else {
+                    } else if (sendFeedback) {
                         player.sendMessage(ECTextFormatter.translateColors("&cThat nickname is too long."));
                     }
-                } else {
+                } else if (sendFeedback) {
                     player.sendMessage(ECTextFormatter.translateColors("&cYour nickname cant contain spaces."));
                 }
             } else {
-                this.parent.getPlugin().getData().players.get(player.getUuid().toString()).displayName = player.getName();
+                this.parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).displayName = player.getName();
                 this.parent.getPlugin().saveData();
 
-                player.sendMessage(ECTextFormatter.translateColors("&aYour nickname has been reset."));
+                if (sendFeedback) {
+                    player.sendMessage(ECTextFormatter.translateColors("&aYour nickname has been reset."));
+                }
             }
 
-            player.setDisplayName(ECTextFormatter.translateColors((parent.getPlugin().getData().players.get(player.getUuid().toString()).prefix != null ? parent.getPlugin().getData().players.get(player.getUuid().toString()).prefix + "&r " : "&r") + parent.getPlugin().getData().players.get(player.getUuid().toString()).displayName + "&r"));
-        } else {
+            player.setDisplayName(ECTextFormatter.translateColors((parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).prefix != null ? parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).prefix + "&r " : "&r") + parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).displayName + "&r"));
+        } else if (sendFeedback) {
             player.sendMessage(ECTextFormatter.translateColors("&cYou cant do that from the console."));
         }
     }

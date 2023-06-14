@@ -1,6 +1,5 @@
 package io.github.evercraftmc.core.impl.spigot.server;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import io.github.evercraftmc.core.ECData;
+import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.api.events.ECHandler;
 import io.github.evercraftmc.core.api.events.ECListener;
@@ -29,19 +28,19 @@ public class ECSpigotEventManager implements ECEventManager {
 
         @EventHandler
         public void onPlayerJoin(PlayerLoginEvent event) {
-            if (!parent.server.getPlugin().getData().players.containsKey(event.getPlayer().getUniqueId().toString())) {
-                parent.server.getPlugin().getData().players.put(event.getPlayer().getUniqueId().toString(), new ECData.Player(event.getPlayer().getUniqueId(), event.getPlayer().getName()));
+            if (!parent.server.getPlugin().getPlayerData().players.containsKey(event.getPlayer().getUniqueId().toString())) {
+                parent.server.getPlugin().getPlayerData().players.put(event.getPlayer().getUniqueId().toString(), new ECPlayerData.Player(event.getPlayer().getUniqueId(), event.getPlayer().getName()));
             }
         }
 
         @EventHandler
         public void onPlayerJoin(PlayerJoinEvent event) {
-            parent.emit(new io.github.evercraftmc.core.api.events.player.PlayerJoinEvent(new ECSpigotPlayer(parent.server.getPlugin().getData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
+            parent.emit(new io.github.evercraftmc.core.api.events.player.PlayerJoinEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
         }
 
         @EventHandler
         public void onPlayerLeave(PlayerQuitEvent event) {
-            parent.emit(new PlayerLeaveEvent(new ECSpigotPlayer(parent.server.getPlugin().getData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
+            parent.emit(new PlayerLeaveEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
         }
     }
 
@@ -66,7 +65,7 @@ public class ECSpigotEventManager implements ECEventManager {
                 try {
                     entry.getValue().setAccessible(true);
                     entry.getValue().invoke(entry.getKey(), event);
-                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                } catch (Exception e) {
                     this.server.getPlugin().getLogger().error("Failed to emit event", (Throwable) e);
                 }
             }

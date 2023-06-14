@@ -1,5 +1,8 @@
 package io.github.evercraftmc.core.impl.bungee.server;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,8 +10,11 @@ import java.util.List;
 import java.util.Map;
 import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.server.ECCommandManager;
+import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import io.github.evercraftmc.core.impl.bungee.server.util.ECBungeeComponentFormatter;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
+import io.github.evercraftmc.core.messaging.ECMessageType;
+import io.github.evercraftmc.core.messaging.ECRecipient;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
@@ -20,25 +26,44 @@ public class ECBungeeCommandManager implements ECCommandManager {
         protected final ECBungeeCommandManager parent = ECBungeeCommandManager.this;
 
         protected ECCommand command;
+        protected boolean forwardToOther;
 
-        public CommandInter(ECCommand command, boolean addPrefix, boolean distinguishServer) {
-            super((distinguishServer ? "b" : "") + command.getName().toLowerCase(), command.getPermission(), CommandInter.alias(command.getName(), command.getAlias(), addPrefix, distinguishServer).toArray(new String[] {}));
+        public CommandInter(ECCommand command, boolean distinguishServer, boolean forwardToOther) {
+            super((distinguishServer ? "b" : "") + command.getName().toLowerCase(), command.getPermission(), CommandInter.alias(command.getName(), command.getAlias(), distinguishServer).toArray(new String[] {}));
 
             this.command = command;
+            this.forwardToOther = forwardToOther;
         }
 
+        @Override
         public void execute(CommandSender sender, String[] args) {
             if (sender instanceof ProxiedPlayer bungeePlayer) {
                 if (sender.hasPermission(this.getPermission())) {
-                    this.command.run(parent.server.getOnlinePlayer(bungeePlayer.getUniqueId()), args);
+                    this.command.run(parent.server.getOnlinePlayer(bungeePlayer.getUniqueId()), args, true);
+
+                    if (this.forwardToOther) {
+                        try {
+                            ByteArrayOutputStream commandMessageData = new ByteArrayOutputStream();
+                            DataOutputStream commandMessage = new DataOutputStream(commandMessageData);
+                            commandMessage.writeInt(ECMessageType.GLOBAL_COMMAND.getCode());
+                            commandMessage.writeUTF(bungeePlayer.getUniqueId().toString());
+                            commandMessage.writeUTF(this.getName());
+                            commandMessage.close();
+
+                            parent.server.getPlugin().getMessager().send(ECRecipient.fromEnvironmentType(ECEnvironmentType.BACKEND), commandMessageData.toByteArray());
+                        } catch (IOException e) {
+                            parent.server.getPlugin().getLogger().error("[Messager] Failed to send message", e);
+                        }
+                    }
                 } else {
                     sender.sendMessage(ECBungeeComponentFormatter.stringToComponent(ECTextFormatter.translateColors("&cYou do not have permission to run that command")));
                 }
             } else {
-                this.command.run(parent.server.getConsole(), args);
+                this.command.run(parent.server.getConsole(), args, true);
             }
         }
 
+        @Override
         public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
             if (sender instanceof ProxiedPlayer bungeePlayer) {
                 if (sender.hasPermission(this.getPermission())) {
@@ -51,18 +76,14 @@ public class ECBungeeCommandManager implements ECCommandManager {
             }
         }
 
-        private static List<String> alias(String uName, List<String> uAliases, boolean addPrefix, boolean distinguishServer) {
+        private static List<String> alias(String uName, List<String> uAliases, boolean distinguishServer) {
             ArrayList<String> aliases = new ArrayList<String>();
 
-            if (addPrefix) {
-                aliases.add("evercraft:" + (distinguishServer ? "b" : "") + uName.toLowerCase());
-            }
+            aliases.add("evercraft:" + (distinguishServer ? "b" : "") + uName.toLowerCase());
 
             for (String alias : uAliases) {
                 aliases.add((distinguishServer ? "b" : "") + alias.toLowerCase());
-                if (addPrefix) {
-                    aliases.add("evercraft:" + (distinguishServer ? "b" : "") + alias.toLowerCase());
-                }
+                aliases.add("evercraft:" + (distinguishServer ? "b" : "") + alias.toLowerCase());
             }
 
             return aliases;
@@ -89,18 +110,23 @@ public class ECBungeeCommandManager implements ECCommandManager {
 
     @Override
     public ECCommand register(ECCommand command) {
-        return this.register(command, true, true);
+        return this.register(command, false);
     }
 
     @Override
-    public ECCommand register(ECCommand command, boolean addPrefix, boolean distinguishServer) {
+    public ECCommand register(ECCommand command, boolean distinguishServer) {
+        return this.register(command, distinguishServer, !distinguishServer);
+    }
+
+    @Override
+    public ECCommand register(ECCommand command, boolean distinguishServer, boolean forwardToOther) {
         String name = command.getName();
         if (distinguishServer) {
             name = "b" + name;
         }
 
         if (!this.commands.containsKey(name)) {
-            CommandInter interCommand = new CommandInter(command, addPrefix, distinguishServer);
+            CommandInter interCommand = new CommandInter(command, distinguishServer, forwardToOther);
 
             this.commands.put(name, command);
             this.interCommands.put(name, interCommand);

@@ -12,7 +12,7 @@ public interface ECCommand {
 
     public String getPermission();
 
-    public void run(ECPlayer player, String[] args);
+    public void run(ECPlayer player, String[] args, boolean sendFeedback);
 
     public List<String> tabComplete(ECPlayer player, String[] args);
 }
