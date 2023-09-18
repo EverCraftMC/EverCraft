@@ -81,10 +81,22 @@ public class ECPlugin {
         ECPluginManager.registerPlugin(this);
 
         try {
+            if (!Files.exists(this.getDataDirectory().toPath())) {
+                Files.createDirectories(this.getDataDirectory().toPath());
+            }
+        } catch (Exception e) {
+            this.logger.error("Failed to create data dir", e);
+        }
+
+        try {
             this.logger.info("Connecting to Messaging server..");
 
             YamlFileConfig<MessagingDetails> messagingDetails = new YamlFileConfig<>(MessagingDetails.class, dataDirectory.toPath().resolve("messaging.yml").toFile(), new YamlParser.Builder().build());
             messagingDetails.load(true);
+            if (messagingDetails.get().id == null) {
+                messagingDetails.get().id = UUID.randomUUID();
+                messagingDetails.save();
+            }
 
             this.messager = new ECMessager(this, new InetSocketAddress(messagingDetails.get().host, messagingDetails.get().port), messagingDetails.get().id);
             this.messager.connect();
@@ -100,7 +112,7 @@ public class ECPlugin {
 
             this.logger.info("Connecting to MySQL server..");
 
-            this.data = new StructuredMySQLConfig<>(ECPlayerData.class, mySqlDetails.get().host, mySqlDetails.get().port, mySqlDetails.get().database, "evercraft2", mySqlDetails.get().username, mySqlDetails.get().password, new ObjectProcessor.Builder().setIgnoreNulls(true).setIgnoreEmptyObjects(true).setIgnoreDefaults(true).build());
+            this.data = new StructuredMySQLConfig<>(ECPlayerData.class, mySqlDetails.get().host, mySqlDetails.get().port, mySqlDetails.get().database, "evercraft", mySqlDetails.get().username, mySqlDetails.get().password, new ObjectProcessor.Builder().setIgnoreNulls(true).setIgnoreEmptyObjects(true).setIgnoreDefaults(true).build());
             this.data.connect();
 
             this.logger.info("Loading plugin data..");
