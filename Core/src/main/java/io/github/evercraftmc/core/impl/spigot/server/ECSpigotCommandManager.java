@@ -128,7 +128,7 @@ public class ECSpigotCommandManager implements ECCommandManager {
                                 args.add(commandMessage.readUTF());
                             }
 
-                            ECPlayer player = parent.server.getPlayer(uuid);
+                            ECPlayer player = parent.server.getOnlinePlayer(uuid);
 
                             parent.server.getCommandManager().get(command).run(player, args.toArray(new String[] { }), false);
                         }
