@@ -2,12 +2,15 @@ plugins {
     id "java"
 }
 
-archivesBaseName = "core"
 version = project.core_version
 
 repositories {
-    maven { url "https://jitpack.io" }
-    maven { url "https://papermc.io/repo/repository/maven-public/" }
+    maven {
+        url "https://jitpack.io"
+    }
+    maven {
+        url "https://papermc.io/repo/repository/maven-public/"
+    }
 }
 
 dependencies {
@@ -17,20 +20,14 @@ dependencies {
     compileOnly "io.papermc.paper:paper-api:${project.paper_version}"
 }
 
-jar {
-    sourceCompatibility = JavaVersion.toVersion(project.java_version)
-    targetCompatibility = JavaVersion.toVersion(project.java_version)
-}
-
 tasks.register("fatJar", Jar) {
-    sourceCompatibility = JavaVersion.toVersion(project.java_version)
-    targetCompatibility = JavaVersion.toVersion(project.java_version)
-
     archiveClassifier = "fat"
 
-    duplicatesStrategy = "exclude"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(sourceSets.main.output)
-    from(configurations.runtimeClasspath.collect { it.isDirectory() ? null : zipTree(it) })
+    from(configurations.runtimeClasspath.collect {
+        it.isDirectory() ? null : zipTree(it)
+    })
 }
 
 build {
@@ -38,7 +35,7 @@ build {
 }
 
 processResources {
-	inputs.property "version", project.version
+    inputs.property "version", project.version
 
     filesMatching(["bungee.yml", "plugin.yml", "limbo.yml"]) {
         expand "version": project.version

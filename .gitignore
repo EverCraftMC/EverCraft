@@ -1,8 +1,9 @@
-build
-bin
+build/
+bin/
 
-.vscode
-.classpath
-.project
-.settings
-.gradle
+.vscode/
+.idea/
+.classpath/
+.project/
+.settings/
+.gradle/

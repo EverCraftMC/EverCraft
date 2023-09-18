@@ -2,31 +2,26 @@ plugins {
     id "java"
 }
 
-archivesBaseName = "global"
 version = project.global_version
 
 repositories {
-    maven { url "https://jitpack.io" }
+    maven {
+        url "https://jitpack.io"
+    }
 }
 
 dependencies {
     compileOnly project(":Core")
 }
 
-jar {
-    sourceCompatibility = JavaVersion.toVersion(project.java_version)
-    targetCompatibility = JavaVersion.toVersion(project.java_version)
-}
-
 tasks.register("fatJar", Jar) {
-    sourceCompatibility = JavaVersion.toVersion(project.java_version)
-    targetCompatibility = JavaVersion.toVersion(project.java_version)
-
     archiveClassifier = "fat"
 
-    duplicatesStrategy = "exclude"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(sourceSets.main.output)
-    from(configurations.runtimeClasspath.collect { it.isDirectory() ? null : zipTree(it) })
+    from(configurations.runtimeClasspath.collect {
+        it.isDirectory() ? null : zipTree(it)
+    })
 }
 
 build {
@@ -34,7 +29,7 @@ build {
 }
 
 processResources {
-	inputs.property "version", project.version
+    inputs.property "version", project.version
 
     filesMatching("evercraft.yml") {
         expand "version": project.version

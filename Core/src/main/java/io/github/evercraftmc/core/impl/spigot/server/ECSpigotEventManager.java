@@ -1,18 +1,5 @@
 package io.github.evercraftmc.core.impl.spigot.server;
 
-import java.lang.reflect.Method;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.api.events.ECHandler;
@@ -20,6 +7,14 @@ import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
 import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotPlayer;
+import java.lang.reflect.Method;
+import java.util.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.Plugin;
 
 @SuppressWarnings("unchecked")
 public class ECSpigotEventManager implements ECEventManager {
@@ -51,7 +46,7 @@ public class ECSpigotEventManager implements ECEventManager {
     public ECSpigotEventManager(ECSpigotServer server) {
         this.server = server;
 
-        this.server.getHandle().getPluginManager().registerEvents((Listener) new SpigotListeners(), (Plugin) ((JavaPlugin) this.server.getPlugin().getHandle()));
+        this.server.getHandle().getPluginManager().registerEvents(new SpigotListeners(), (Plugin) this.server.getPlugin().getHandle());
     }
 
     public ECSpigotServer getServer() {
@@ -60,13 +55,13 @@ public class ECSpigotEventManager implements ECEventManager {
 
     @Override
     public void emit(ECEvent event) {
-        if (this.listeners.containsKey((Class<? extends ECEvent>) event.getClass())) {
-            for (Map.Entry<ECListener, Method> entry : this.listeners.get((Class<? extends ECEvent>) event.getClass())) {
+        if (this.listeners.containsKey(event.getClass())) {
+            for (Map.Entry<ECListener, Method> entry : this.listeners.get(event.getClass())) {
                 try {
                     entry.getValue().setAccessible(true);
                     entry.getValue().invoke(entry.getKey(), event);
                 } catch (Exception e) {
-                    this.server.getPlugin().getLogger().error("Failed to emit event", (Throwable) e);
+                    this.server.getPlugin().getLogger().error("Failed to emit event", e);
                 }
             }
         }

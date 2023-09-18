@@ -4,9 +4,9 @@ public enum ECMessageType {
     HELLO(1),
     GLOBAL_COMMAND(2);
 
-    private int code;
+    private final int code;
 
-    private ECMessageType(int code) {
+    ECMessageType(int code) {
         this.code = code;
     }
 

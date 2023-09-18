@@ -1,10 +1,10 @@
 package io.github.evercraftmc.core;
 
+import io.github.evercraftmc.core.api.ECModule;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import io.github.evercraftmc.core.api.ECModule;
 
 public class ECPluginManager {
     protected static ECPlugin plugin;

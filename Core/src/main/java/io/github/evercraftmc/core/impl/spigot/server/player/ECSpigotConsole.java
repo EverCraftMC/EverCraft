@@ -1,8 +1,8 @@
 package io.github.evercraftmc.core.impl.spigot.server.player;
 
-import org.bukkit.command.CommandSender;
 import io.github.evercraftmc.core.api.server.player.ECConsole;
 import io.github.evercraftmc.core.impl.spigot.server.util.ECSpigotComponentFormatter;
+import org.bukkit.command.CommandSender;
 
 public class ECSpigotConsole implements ECConsole {
     protected CommandSender handle;

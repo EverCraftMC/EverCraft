@@ -1,13 +1,14 @@
 package io.github.evercraftmc.core.messaging;
 
-import java.util.UUID;
 import io.github.evercraftmc.core.api.server.ECServer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
 import io.github.evercraftmc.core.impl.ECEnvironmentType;
+import java.util.UUID;
 
 public abstract class ECRecipient {
     public static class All extends ECRecipient {
-        public All() {}
+        public All() {
+        }
 
         @Override
         public String toString() {
@@ -70,11 +71,7 @@ public abstract class ECRecipient {
             return true;
         }
 
-        if (this instanceof ECRecipient.EnvironmentType && this.toString().equalsIgnoreCase(server.getEnvironment().getType().toString())) {
-            return true;
-        }
-
-        return false;
+        return this instanceof EnvironmentType && this.toString().equalsIgnoreCase(server.getEnvironment().getType().toString());
     }
 
     public static ECRecipient parse(String string) {

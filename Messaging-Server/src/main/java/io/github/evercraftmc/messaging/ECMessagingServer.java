@@ -4,11 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -16,7 +12,7 @@ import java.util.concurrent.Executors;
 import javax.net.ServerSocketFactory;
 
 public class ECMessagingServer {
-    protected class Connection {
+    protected static class Connection {
         protected Socket socket;
 
         protected DataInputStream inputStream;
@@ -56,7 +52,7 @@ public class ECMessagingServer {
 
     protected ExecutorService executor = null;
 
-    protected List<Connection> connections = new ArrayList<Connection>();
+    protected List<Connection> connections = new ArrayList<>();
 
     protected final Object WRITE_LOCK = new Object();
 
@@ -83,7 +79,6 @@ public class ECMessagingServer {
                     Connection connection;
                     synchronized (WRITE_LOCK) {
                         connection = new Connection(socket);
-
                         connections.add(connection);
                     }
 
@@ -96,7 +91,10 @@ public class ECMessagingServer {
 
                                     int size = connection.getInputStream().readInt();
                                     byte[] buf = new byte[size];
-                                    connection.getInputStream().read(buf, 0, size);
+                                    int read = connection.getInputStream().read(buf, 0, size);
+                                    if (read != size) {
+                                        connection.close();
+                                    }
 
                                     synchronized (WRITE_LOCK) {
                                         for (Connection connection2 : this.connections) {
@@ -111,7 +109,7 @@ public class ECMessagingServer {
                                             connection2.getOutputStream().write(buf, 0, size);
                                         }
                                     }
-                                } catch (SocketTimeoutException e) {
+                                } catch (SocketTimeoutException ignored) {
                                 } catch (EOFException e) {
                                     connection.close();
                                     break;

@@ -3,17 +3,17 @@ package io.github.evercraftmc.core.api;
 import io.github.evercraftmc.core.ECPlugin;
 
 public interface ECModule {
-    public String getName();
+    String getName();
 
-    public ECModuleInfo getInfo();
+    ECModuleInfo getInfo();
 
-    public void setInfo(ECModuleInfo info);
+    void setInfo(ECModuleInfo info);
 
-    public ECPlugin getPlugin();
+    ECPlugin getPlugin();
 
-    public void setPlugin(ECPlugin plugin);
+    void setPlugin(ECPlugin plugin);
 
-    public void load();
+    void load();
 
-    public void unload();
+    void unload();
 }

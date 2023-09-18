@@ -2,35 +2,30 @@ plugins {
     id "java"
 }
 
-archivesBaseName = "messaging"
 version = project.messaging_version
 
 repositories {
-    maven { url "https://jitpack.io" }
+    maven {
+        url "https://jitpack.io"
+    }
 }
 
 dependencies {
     implementation "com.github.Kale-Ko:EJCL:${project.ejcl_version}"
 }
 
-jar {
-    sourceCompatibility = JavaVersion.toVersion(project.java_version)
-    targetCompatibility = JavaVersion.toVersion(project.java_version)
-}
-
 tasks.register("fatJar", Jar) {
-    sourceCompatibility = JavaVersion.toVersion(project.java_version)
-    targetCompatibility = JavaVersion.toVersion(project.java_version)
-
     archiveClassifier = "fat"
 
     manifest {
         attributes "Main-Class": "io.github.evercraftmc.messaging.ECMessagingMain"
     }
 
-    duplicatesStrategy = "exclude"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(sourceSets.main.output)
-    from(configurations.runtimeClasspath.collect { it.isDirectory() ? null : zipTree(it) })
+    from(configurations.runtimeClasspath.collect {
+        it.isDirectory() ? null : zipTree(it)
+    })
 }
 
 build {

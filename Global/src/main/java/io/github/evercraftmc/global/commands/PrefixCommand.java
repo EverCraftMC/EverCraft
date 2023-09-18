@@ -1,12 +1,11 @@
 package io.github.evercraftmc.global.commands;
 
-import java.util.Arrays;
-import java.util.List;
 import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.server.player.ECConsole;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.global.GlobalModule;
+import java.util.List;
 
 public class PrefixCommand implements ECCommand {
     protected final GlobalModule parent;
@@ -27,7 +26,7 @@ public class PrefixCommand implements ECCommand {
 
     @Override
     public List<String> getAlias() {
-        return Arrays.asList("setPrefix");
+        return List.of("setPrefix");
     }
 
     @Override
@@ -80,9 +79,9 @@ public class PrefixCommand implements ECCommand {
     @Override
     public List<String> tabComplete(ECPlayer player, String[] args) {
         if (args.length == 1) {
-            return Arrays.asList("reset");
+            return List.of("reset");
         } else {
-            return Arrays.asList();
+            return List.of();
         }
     }
 }

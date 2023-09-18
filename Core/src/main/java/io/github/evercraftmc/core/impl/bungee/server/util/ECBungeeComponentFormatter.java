@@ -79,10 +79,9 @@ public class ECBungeeComponentFormatter {
     }
 
     public static String componentToString(BaseComponent component) {
-        StringBuilder string = new StringBuilder();
 
         // TODO
 
-        return string.toString();
+        return "";
     }
 }

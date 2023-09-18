@@ -1,13 +1,5 @@
 package io.github.evercraftmc.core.impl.bungee.server;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.server.ECCommandManager;
 import io.github.evercraftmc.core.impl.ECEnvironmentType;
@@ -15,6 +7,13 @@ import io.github.evercraftmc.core.impl.bungee.server.util.ECBungeeComponentForma
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.core.messaging.ECMessageType;
 import io.github.evercraftmc.core.messaging.ECRecipient;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
@@ -29,7 +28,7 @@ public class ECBungeeCommandManager implements ECCommandManager {
         protected boolean forwardToOther;
 
         public CommandInter(ECCommand command, boolean distinguishServer, boolean forwardToOther) {
-            super((distinguishServer ? "b" : "") + command.getName().toLowerCase(), command.getPermission(), CommandInter.alias(command.getName(), command.getAlias(), distinguishServer).toArray(new String[] {}));
+            super((distinguishServer ? "b" : "") + command.getName().toLowerCase(), command.getPermission(), CommandInter.alias(command.getName(), command.getAlias(), distinguishServer).toArray(new String[] { }));
 
             this.command = command;
             this.forwardToOther = forwardToOther;
@@ -69,7 +68,7 @@ public class ECBungeeCommandManager implements ECCommandManager {
                 if (sender.hasPermission(this.getPermission())) {
                     return this.command.tabComplete(parent.server.getOnlinePlayer(bungeePlayer.getUniqueId()), args);
                 } else {
-                    return Arrays.asList();
+                    return List.of();
                 }
             } else {
                 return this.command.tabComplete(parent.server.getConsole(), args);
@@ -131,7 +130,7 @@ public class ECBungeeCommandManager implements ECCommandManager {
             this.commands.put(name, command);
             this.interCommands.put(name, interCommand);
 
-            this.server.getHandle().getPluginManager().registerCommand((Plugin) this.server.getPlugin().getHandle(), (Command) interCommand);
+            this.server.getHandle().getPluginManager().registerCommand((Plugin) this.server.getPlugin().getHandle(), interCommand);
 
             return command;
         } else {
@@ -142,14 +141,14 @@ public class ECBungeeCommandManager implements ECCommandManager {
     @Override
     public ECCommand unregister(ECCommand command) {
         if (this.commands.containsKey(command.getName().toLowerCase())) {
-            this.server.getHandle().getPluginManager().unregisterCommand((Command) this.interCommands.get(command.getName().toLowerCase()));
+            this.server.getHandle().getPluginManager().unregisterCommand(this.interCommands.get(command.getName().toLowerCase()));
 
             this.commands.remove(command.getName().toLowerCase());
             this.interCommands.remove(command.getName().toLowerCase());
 
             return command;
         } else if (this.commands.containsKey("b" + command.getName().toLowerCase())) {
-            this.server.getHandle().getPluginManager().unregisterCommand((Command) this.interCommands.get("b" + command.getName().toLowerCase()));
+            this.server.getHandle().getPluginManager().unregisterCommand(this.interCommands.get("b" + command.getName().toLowerCase()));
 
             this.commands.remove("b" + command.getName().toLowerCase());
             this.interCommands.remove("b" + command.getName().toLowerCase());

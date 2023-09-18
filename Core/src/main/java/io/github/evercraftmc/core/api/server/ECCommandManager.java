@@ -3,15 +3,15 @@ package io.github.evercraftmc.core.api.server;
 import io.github.evercraftmc.core.api.commands.ECCommand;
 
 public interface ECCommandManager {
-    public ECCommand get(String name);
+    ECCommand get(String name);
 
-    public ECCommand register(ECCommand command);
+    ECCommand register(ECCommand command);
 
-    public ECCommand register(ECCommand command, boolean distinguishServer);
+    ECCommand register(ECCommand command, boolean distinguishServer);
 
-    public ECCommand register(ECCommand command, boolean distinguishServer, boolean forwardToOther);
+    ECCommand register(ECCommand command, boolean distinguishServer, boolean forwardToOther);
 
-    public ECCommand unregister(ECCommand command);
+    ECCommand unregister(ECCommand command);
 
-    public void unregisterAll();
+    void unregisterAll();
 }

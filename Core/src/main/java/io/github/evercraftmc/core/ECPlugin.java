@@ -1,16 +1,5 @@
 package io.github.evercraftmc.core;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.net.InetSocketAddress;
-import java.util.UUID;
-import java.util.jar.JarInputStream;
-import java.util.zip.ZipEntry;
-import org.slf4j.Logger;
 import io.github.evercraftmc.core.api.ECModule;
 import io.github.evercraftmc.core.api.ECModuleInfo;
 import io.github.evercraftmc.core.api.events.ECHandler;
@@ -25,6 +14,17 @@ import io.github.kale_ko.bjsl.parsers.YamlParser;
 import io.github.kale_ko.bjsl.processor.ObjectProcessor;
 import io.github.kale_ko.ejcl.file.bjsl.YamlFileConfig;
 import io.github.kale_ko.ejcl.mysql.StructuredMySQLConfig;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.InetSocketAddress;
+import java.util.UUID;
+import java.util.jar.JarInputStream;
+import java.util.zip.ZipEntry;
+import org.slf4j.Logger;
 
 public class ECPlugin {
     private static class MessagingDetails {
@@ -234,7 +234,7 @@ public class ECPlugin {
         this.server = server;
 
         this.server.getEventManager().register(new ECListener() {
-            protected final ECPlugin parent = ECPlugin.this;
+            private final ECPlugin parent = ECPlugin.this;
 
             @ECHandler
             public void onPlayerJoin(PlayerJoinEvent event) {

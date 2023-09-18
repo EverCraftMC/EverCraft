@@ -1,7 +1,7 @@
 package io.github.evercraftmc.core.messaging;
 
-import java.util.UUID;
 import io.github.evercraftmc.core.api.server.ECServer;
+import java.util.UUID;
 
 public abstract class ECSender {
     public static class Server extends ECSender {
@@ -21,11 +21,7 @@ public abstract class ECSender {
     public abstract String toString();
 
     public boolean matches(ECServer server) {
-        if (this instanceof ECSender.Server && this.toString().equalsIgnoreCase(server.getPlugin().getMessager().id.toString())) {
-            return true;
-        }
-
-        return false;
+        return this instanceof Server && this.toString().equalsIgnoreCase(server.getPlugin().getMessager().id.toString());
     }
 
     public static ECSender parse(String string) {

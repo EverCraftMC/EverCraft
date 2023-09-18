@@ -1,8 +1,5 @@
 package io.github.evercraftmc.global;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.ECModule;
 import io.github.evercraftmc.core.api.ECModuleInfo;
@@ -14,14 +11,17 @@ import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
 import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import io.github.evercraftmc.global.commands.NickCommand;
 import io.github.evercraftmc.global.commands.PrefixCommand;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GlobalModule implements ECModule {
     protected ECModuleInfo info;
 
     protected ECPlugin plugin;
 
-    protected List<ECCommand> commands = new ArrayList<ECCommand>();
-    protected List<ECListener> listeners = new ArrayList<ECListener>();
+    protected List<ECCommand> commands = new ArrayList<>();
+    protected List<ECListener> listeners = new ArrayList<>();
 
     public String getName() {
         return this.getInfo().getName();
@@ -49,7 +49,7 @@ public class GlobalModule implements ECModule {
 
         if (this.plugin.getEnvironment().getType() == ECEnvironmentType.PROXY) {
             this.listeners.add(this.plugin.getServer().getEventManager().register(new ECListener() {
-                protected final GlobalModule parent = GlobalModule.this;
+                private final GlobalModule parent = GlobalModule.this;
 
                 @ECHandler
                 public void onPlayerJoin(PlayerJoinEvent event) {

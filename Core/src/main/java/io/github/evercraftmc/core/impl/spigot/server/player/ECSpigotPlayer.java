@@ -1,11 +1,11 @@
 package io.github.evercraftmc.core.impl.spigot.server.player;
 
-import java.net.InetAddress;
-import java.util.UUID;
-import org.bukkit.entity.Player;
 import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.spigot.server.util.ECSpigotComponentFormatter;
+import java.net.InetAddress;
+import java.util.UUID;
+import org.bukkit.entity.Player;
 
 public class ECSpigotPlayer implements ECPlayer {
     protected Player handle;

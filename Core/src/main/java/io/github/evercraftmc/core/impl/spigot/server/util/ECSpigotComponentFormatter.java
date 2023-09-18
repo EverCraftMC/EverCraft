@@ -79,10 +79,9 @@ public class ECSpigotComponentFormatter {
     }
 
     public static String componentToString(Component component) {
-        StringBuilder string = new StringBuilder();
 
         // TODO
 
-        return string.toString();
+        return "";
     }
 }

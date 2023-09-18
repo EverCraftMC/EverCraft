@@ -1,8 +1,8 @@
 package io.github.evercraftmc.core.impl.spigot.server;
 
+import io.github.evercraftmc.core.api.server.ECScheduler;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
-import io.github.evercraftmc.core.api.server.ECScheduler;
 
 public class ECSpigotScheduler implements ECScheduler {
     public static class ECSpigotTask implements ECTask {

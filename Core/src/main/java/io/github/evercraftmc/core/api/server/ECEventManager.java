@@ -4,11 +4,11 @@ import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.api.events.ECListener;
 
 public interface ECEventManager {
-    public void emit(ECEvent event);
+    void emit(ECEvent event);
 
-    public ECListener register(ECListener listener);
+    ECListener register(ECListener listener);
 
-    public ECListener unregister(ECListener listener);
+    ECListener unregister(ECListener listener);
 
-    public void unregisterAll();
+    void unregisterAll();
 }

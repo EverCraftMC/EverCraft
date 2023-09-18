@@ -1,4 +1,4 @@
-rootProject.name = "EverCraft2"
+rootProject.name = "EverCraft"
 
 include "Core"
 include "Messaging-Server"

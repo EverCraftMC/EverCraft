@@ -4,9 +4,9 @@ public enum ECEnvironment {
     BUNGEE(ECEnvironmentType.PROXY),
     SPIGOT(ECEnvironmentType.BACKEND);
 
-    private ECEnvironmentType type;
+    private final ECEnvironmentType type;
 
-    private ECEnvironment(ECEnvironmentType type) {
+    ECEnvironment(ECEnvironmentType type) {
         this.type = type;
     }
 

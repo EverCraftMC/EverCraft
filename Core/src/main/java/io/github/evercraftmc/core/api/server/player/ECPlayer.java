@@ -4,15 +4,15 @@ import java.net.InetAddress;
 import java.util.UUID;
 
 public interface ECPlayer {
-    public UUID getUuid();
+    UUID getUuid();
 
-    public String getName();
+    String getName();
 
-    public String getDisplayName();
+    String getDisplayName();
 
-    public void setDisplayName(String displayName);
+    void setDisplayName(String displayName);
 
-    public InetAddress getAddress();
+    InetAddress getAddress();
 
-    public void sendMessage(String message);
+    void sendMessage(String message);
 }

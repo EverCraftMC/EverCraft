@@ -1,11 +1,5 @@
 package io.github.evercraftmc.core.impl.spigot.server;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.UUID;
-import org.bukkit.Server;
-import org.bukkit.entity.Player;
 import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.server.ECCommandManager;
@@ -16,6 +10,12 @@ import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
 import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotConsole;
 import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotPlayer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.UUID;
+import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
 public class ECSpigotServer implements ECServer {
     protected ECPlugin plugin;

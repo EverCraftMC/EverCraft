@@ -2,12 +2,8 @@ plugins {
     id "java"
 }
 
-sourceCompatibility = JavaVersion.toVersion(project.java_version)
-targetCompatibility = JavaVersion.toVersion(project.java_version)
-
-archivesBaseName = "evercraft"
-group = "io.github.evercraftmc"
-version = "1.0.0"
+project.group = "io.github.evercraftmc"
+project.version = project.core_version
 
 repositories {
     mavenCentral()
@@ -20,19 +16,23 @@ subprojects {
         mavenCentral()
     }
 
-    tasks.withType(JavaCompile) {
-        sourceCompatibility = JavaVersion.toVersion(project.java_version)
-        targetCompatibility = JavaVersion.toVersion(project.java_version)
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(project.java_version)
+        }
+    }
 
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = "UTF-8"
     }
 }
 
-import java.nio.file.Files
 import java.nio.file.Paths
 
 tasks.register("upload") {
-    dependsOn subprojects.collect { it.tasks.build }
+    dependsOn subprojects.collect {
+        it.tasks.build
+    }
 
     doLast {
         def path = System.getenv("EVERCRAFT_PATH")
@@ -43,7 +43,7 @@ tasks.register("upload") {
 
             if ((System.getProperty("type") == null || System.getProperty("type").equalsIgnoreCase(server.split(":")[1])) && findProject(":" + server.split(":")[1]) != null) {
                 exec {
-                    commandLine "rsync", "-q", project(":" + server.split(":")[1]).tasks.fatJar.outputs.files[0].toPath(), Paths.get(path + server.split(":")[0] + server.split(":")[2] + "/EverCraft2-" + server.split(":")[1] + ".jar")
+                    commandLine "rsync", "-q", project(":" + server.split(":")[1]).tasks.fatJar.outputs.files[0].toPath(), Paths.get(path + server.split(":")[0] + server.split(":")[2] + "/EverCraft-" + server.split(":")[1] + ".jar")
                 }
             }
         }

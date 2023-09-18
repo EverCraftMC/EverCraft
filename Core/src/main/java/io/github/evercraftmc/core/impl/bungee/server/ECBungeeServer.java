@@ -1,9 +1,5 @@
 package io.github.evercraftmc.core.impl.bungee.server;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.UUID;
 import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.server.ECCommandManager;
@@ -14,6 +10,10 @@ import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeeConsole;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeePlayer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.UUID;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 

@@ -1,7 +1,7 @@
 package io.github.evercraftmc.core.impl.bungee.server;
 
-import java.util.concurrent.TimeUnit;
 import io.github.evercraftmc.core.api.server.ECScheduler;
+import java.util.concurrent.TimeUnit;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 
@@ -49,7 +49,7 @@ public class ECBungeeScheduler implements ECScheduler {
 
     @Override
     public ECTask runTaskLaterAsync(Runnable task, int ticks) {
-        return new ECBungeeTask(this.server.getHandle().getScheduler().schedule((Plugin) this.server.getPlugin().getHandle(), task, ticks * 50, TimeUnit.MILLISECONDS));
+        return new ECBungeeTask(this.server.getHandle().getScheduler().schedule((Plugin) this.server.getPlugin().getHandle(), task, ticks * 50L, TimeUnit.MILLISECONDS));
     }
 
     @Override
@@ -59,6 +59,6 @@ public class ECBungeeScheduler implements ECScheduler {
 
     @Override
     public ECTask runTaskRepeatAsync(Runnable task, int delay, int ticks) {
-        return new ECBungeeTask(this.server.getHandle().getScheduler().schedule((Plugin) this.server.getPlugin().getHandle(), task, delay * 50, ticks * 50, TimeUnit.MILLISECONDS));
+        return new ECBungeeTask(this.server.getHandle().getScheduler().schedule((Plugin) this.server.getPlugin().getHandle(), task, delay * 50L, ticks * 50L, TimeUnit.MILLISECONDS));
     }
 }

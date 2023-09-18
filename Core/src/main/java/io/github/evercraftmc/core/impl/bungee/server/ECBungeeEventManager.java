@@ -1,12 +1,5 @@
 package io.github.evercraftmc.core.impl.bungee.server;
 
-import java.lang.reflect.Method;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.api.events.ECHandler;
@@ -15,6 +8,8 @@ import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeePlayer;
+import java.lang.reflect.Method;
+import java.util.*;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -54,7 +49,7 @@ public class ECBungeeEventManager implements ECEventManager {
     public ECBungeeEventManager(ECBungeeServer server) {
         this.server = server;
 
-        this.server.getHandle().getPluginManager().registerListener((Plugin) this.server.getPlugin().getHandle(), (Listener) new BungeeListeners());
+        this.server.getHandle().getPluginManager().registerListener((Plugin) this.server.getPlugin().getHandle(), new BungeeListeners());
     }
 
     public ECBungeeServer getServer() {
@@ -63,13 +58,13 @@ public class ECBungeeEventManager implements ECEventManager {
 
     @Override
     public void emit(ECEvent event) {
-        if (this.listeners.containsKey((Class<? extends ECEvent>) event.getClass())) {
-            for (Map.Entry<ECListener, Method> entry : this.listeners.get((Class<? extends ECEvent>) event.getClass())) {
+        if (this.listeners.containsKey(event.getClass())) {
+            for (Map.Entry<ECListener, Method> entry : this.listeners.get(event.getClass())) {
                 try {
                     entry.getValue().setAccessible(true);
                     entry.getValue().invoke(entry.getKey(), event);
                 } catch (Exception e) {
-                    this.server.getPlugin().getLogger().error("Failed to emit event", (Throwable) e);
+                    this.server.getPlugin().getLogger().error("Failed to emit event", e);
                 }
             }
         }

@@ -1,16 +1,5 @@
 package io.github.evercraftmc.core.impl.spigot.server;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.events.ECHandler;
 import io.github.evercraftmc.core.api.events.ECListener;
@@ -22,6 +11,16 @@ import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.core.messaging.ECMessage;
 import io.github.evercraftmc.core.messaging.ECMessageType;
 import io.github.evercraftmc.core.messaging.ECRecipient;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class ECSpigotCommandManager implements ECCommandManager {
     protected class CommandInter extends Command {
@@ -78,7 +77,7 @@ public class ECSpigotCommandManager implements ECCommandManager {
                 if (sender.hasPermission(this.getPermission())) {
                     return this.command.tabComplete(parent.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args);
                 } else {
-                    return Arrays.asList();
+                    return List.of();
                 }
             } else {
                 return this.command.tabComplete(parent.server.getConsole(), args);
@@ -108,14 +107,14 @@ public class ECSpigotCommandManager implements ECCommandManager {
         this.server = server;
 
         this.server.getEventManager().register(new ECListener() {
-            protected final ECSpigotCommandManager parent = ECSpigotCommandManager.this;
+            private final ECSpigotCommandManager parent = ECSpigotCommandManager.this;
 
             @ECHandler
             public void onMessage(MessageEvent event) {
                 ECMessage message = event.getMessage();
 
                 if (!message.getSender().matches(parent.server) && message.getRecipient().matches(parent.server)) {
-                    
+
                 }
             }
         });
