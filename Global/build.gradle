@@ -12,6 +12,8 @@ repositories {
 
 dependencies {
     compileOnly project(":Core")
+
+    implementation "com.github.Kale-Ko:EJCL:${project.ejcl_version}"
 }
 
 tasks.register("fatJar", Jar) {

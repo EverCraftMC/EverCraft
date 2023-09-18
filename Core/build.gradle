@@ -16,8 +16,8 @@ repositories {
 dependencies {
     implementation "com.github.Kale-Ko:EJCL:${project.ejcl_version}"
 
-    compileOnly "io.github.waterfallmc:waterfall-api:${project.waterfall_version}"
     compileOnly "io.papermc.paper:paper-api:${project.paper_version}"
+    compileOnly "io.github.waterfallmc:waterfall-api:${project.waterfall_version}"
 }
 
 tasks.register("fatJar", Jar) {
