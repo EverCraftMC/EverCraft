@@ -21,8 +21,11 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.UUID;
 import java.util.jar.JarInputStream;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import org.slf4j.Logger;
 
@@ -80,7 +83,7 @@ public class ECPlugin {
         try {
             this.logger.info("Connecting to Messaging server..");
 
-            YamlFileConfig<MessagingDetails> messagingDetails = new YamlFileConfig<MessagingDetails>(MessagingDetails.class, dataDirectory.toPath().resolve("messaging.yml").toFile(), new YamlParser.Builder().build());
+            YamlFileConfig<MessagingDetails> messagingDetails = new YamlFileConfig<>(MessagingDetails.class, dataDirectory.toPath().resolve("messaging.yml").toFile(), new YamlParser.Builder().build());
             messagingDetails.load(true);
 
             this.messager = new ECMessager(this, new InetSocketAddress(messagingDetails.get().host, messagingDetails.get().port), messagingDetails.get().id);
@@ -92,44 +95,48 @@ public class ECPlugin {
         }
 
         try {
-            YamlFileConfig<MySQLDetails> mySqlDetails = new YamlFileConfig<MySQLDetails>(MySQLDetails.class, dataDirectory.toPath().resolve("mysql.yml").toFile(), new YamlParser.Builder().build());
+            YamlFileConfig<MySQLDetails> mySqlDetails = new YamlFileConfig<>(MySQLDetails.class, dataDirectory.toPath().resolve("mysql.yml").toFile(), new YamlParser.Builder().build());
             mySqlDetails.load(true);
 
             this.logger.info("Connecting to MySQL server..");
 
-            this.data = new StructuredMySQLConfig<ECPlayerData>(ECPlayerData.class, mySqlDetails.get().host, mySqlDetails.get().port, mySqlDetails.get().database, "evercraft2", mySqlDetails.get().username, mySqlDetails.get().password, new ObjectProcessor.Builder().setIgnoreNulls(true).setIgnoreEmptyObjects(true).setIgnoreDefaults(true).build());
+            this.data = new StructuredMySQLConfig<>(ECPlayerData.class, mySqlDetails.get().host, mySqlDetails.get().port, mySqlDetails.get().database, "evercraft2", mySqlDetails.get().username, mySqlDetails.get().password, new ObjectProcessor.Builder().setIgnoreNulls(true).setIgnoreEmptyObjects(true).setIgnoreDefaults(true).build());
             this.data.connect();
 
             this.logger.info("Loading plugin data..");
 
             this.data.load(false);
 
-            this.server.getScheduler().runTaskRepeatAsync(() -> {
-                this.loadData();
-            }, 120 * 20, 120 * 20);
+            this.server.getScheduler().runTaskRepeatAsync(this::loadData, 120 * 20, 120 * 20);
 
             this.logger.info("Loaded plugin data");
         } catch (Exception e) {
             this.logger.error("Failed loading plugin data", e);
         }
 
-        File modulesDirectory = this.getDataDirectory().toPath().resolve("modules").toFile();
-        if (!modulesDirectory.exists()) {
-            modulesDirectory.mkdirs();
-        }
-
-        for (File file : modulesDirectory.listFiles()) {
-            if (file.getName().toLowerCase().endsWith(".jar")) {
-                this.loadModule(file);
+        try {
+            Path modulesDirectory = this.getDataDirectory().toPath().resolve("modules");
+            if (!Files.exists(modulesDirectory)) {
+                Files.createDirectories(modulesDirectory);
             }
+
+            try (Stream<Path> files = Files.list(modulesDirectory)) {
+                for (Path file : files.toList()) {
+                    if (file.getFileName().toString().toLowerCase().endsWith(".jar")) {
+                        this.loadModule(file);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            this.logger.error("Failed loading modules", e);
         }
     }
 
-    protected void loadModule(File file) {
+    protected void loadModule(Path file) {
         try {
             ECModuleInfo moduleInfo = null;
 
-            JarInputStream jar = new JarInputStream(new BufferedInputStream(new FileInputStream(file)));
+            JarInputStream jar = new JarInputStream(new BufferedInputStream(new FileInputStream(file.toFile())));
             ZipEntry entry;
             while ((entry = jar.getNextEntry()) != null) {
                 if (entry.getName().equalsIgnoreCase("evercraft.yml")) {
@@ -147,7 +154,7 @@ public class ECPlugin {
 
             if (moduleInfo != null) {
                 try {
-                    ECModuleClassLoader moduleClassLoader = new ECModuleClassLoader(this.classLoader, file);
+                    ECModuleClassLoader moduleClassLoader = new ECModuleClassLoader(this.classLoader, file.toFile());
                     Class<?> moduleClass = moduleClassLoader.loadClass(moduleInfo.getEntry());
 
                     if (ECModule.class.isAssignableFrom(moduleClass)) {
@@ -160,7 +167,7 @@ public class ECPlugin {
                                     module.setInfo(moduleInfo);
 
                                     break;
-                                } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException exception) {
+                                } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException ignored) {
                                 }
                             }
                         }
@@ -175,22 +182,22 @@ public class ECPlugin {
 
                                 this.logger.info("Enabled module " + module.getInfo().getName());
                             } catch (Exception e) {
-                                this.logger.error("Error loading module \"" + file.getName() + "\"", e);
+                                this.logger.error("Error loading module \"" + file.getFileName() + "\"", e);
                             }
                         } else {
-                            this.logger.error("Error loading module \"" + file.getName() + "\"\n  Entry class has no 0 args constructor");
+                            this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Entry class has no 0 args constructor");
                         }
                     } else {
-                        this.logger.error("Error loading module \"" + file.getName() + "\"\n  Entry class does not implement ECModule");
+                        this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Entry class does not implement ECModule");
                     }
                 } catch (ClassNotFoundException e) {
-                    this.logger.error("Error loading module \"" + file.getName() + "\"\n  Entry class could not be found (\"" + moduleInfo.getEntry() + "\")");
+                    this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Entry class could not be found (\"" + moduleInfo.getEntry() + "\")");
                 }
             } else {
-                this.logger.error("Error loading module \"" + file.getName() + "\"\n  Jar does not contain a module file (evercraft.yml)");
+                this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Jar does not contain a module file (evercraft.yml)");
             }
         } catch (IOException e) {
-            this.logger.error("Error loading module \"" + file.getName() + "\"", e);
+            this.logger.error("Error loading module \"" + file.getFileName() + "\"", e);
         }
     }
 

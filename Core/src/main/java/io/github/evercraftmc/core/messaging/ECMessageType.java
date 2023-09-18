@@ -1,16 +1,10 @@
 package io.github.evercraftmc.core.messaging;
 
-public enum ECMessageType {
-    HELLO(1),
-    GLOBAL_COMMAND(2);
+public class ECMessageType {
+    public static final int HELLO = 1;
 
-    private final int code;
+    public static final int GLOBAL_COMMAND = 2;
 
-    ECMessageType(int code) {
-        this.code = code;
-    }
-
-    public int getCode() {
-        return this.code;
+    private ECMessageType() {
     }
 }

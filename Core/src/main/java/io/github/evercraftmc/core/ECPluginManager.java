@@ -9,7 +9,10 @@ import java.util.Map;
 public class ECPluginManager {
     protected static ECPlugin plugin;
 
-    protected static Map<Class<? extends ECModule>, ECModule> modules = new HashMap<Class<? extends ECModule>, ECModule>();
+    protected static Map<Class<? extends ECModule>, ECModule> modules = new HashMap<>();
+
+    private ECPluginManager() {
+    }
 
     public static ECPlugin getPlugin() {
         return ECPluginManager.plugin;

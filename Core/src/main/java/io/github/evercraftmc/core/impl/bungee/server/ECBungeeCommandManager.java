@@ -1,19 +1,19 @@
 package io.github.evercraftmc.core.impl.bungee.server;
 
 import io.github.evercraftmc.core.api.commands.ECCommand;
+import io.github.evercraftmc.core.api.events.ECHandler;
+import io.github.evercraftmc.core.api.events.ECListener;
+import io.github.evercraftmc.core.api.events.messaging.MessageEvent;
 import io.github.evercraftmc.core.api.server.ECCommandManager;
+import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import io.github.evercraftmc.core.impl.bungee.server.util.ECBungeeComponentFormatter;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
+import io.github.evercraftmc.core.messaging.ECMessage;
 import io.github.evercraftmc.core.messaging.ECMessageType;
 import io.github.evercraftmc.core.messaging.ECRecipient;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
@@ -44,9 +44,13 @@ public class ECBungeeCommandManager implements ECCommandManager {
                         try {
                             ByteArrayOutputStream commandMessageData = new ByteArrayOutputStream();
                             DataOutputStream commandMessage = new DataOutputStream(commandMessageData);
-                            commandMessage.writeInt(ECMessageType.GLOBAL_COMMAND.getCode());
+                            commandMessage.writeInt(ECMessageType.GLOBAL_COMMAND);
                             commandMessage.writeUTF(bungeePlayer.getUniqueId().toString());
                             commandMessage.writeUTF(this.getName());
+                            commandMessage.writeInt(args.length);
+                            for (String arg : args) {
+                                commandMessage.writeUTF(arg);
+                            }
                             commandMessage.close();
 
                             parent.server.getPlugin().getMessager().send(ECRecipient.fromEnvironmentType(ECEnvironmentType.BACKEND), commandMessageData.toByteArray());
@@ -76,7 +80,7 @@ public class ECBungeeCommandManager implements ECCommandManager {
         }
 
         private static List<String> alias(String uName, List<String> uAliases, boolean distinguishServer) {
-            ArrayList<String> aliases = new ArrayList<String>();
+            ArrayList<String> aliases = new ArrayList<>();
 
             aliases.add("evercraft:" + (distinguishServer ? "b" : "") + uName.toLowerCase());
 
@@ -91,11 +95,46 @@ public class ECBungeeCommandManager implements ECCommandManager {
 
     protected ECBungeeServer server;
 
-    protected Map<String, ECCommand> commands = new HashMap<String, ECCommand>();
-    protected Map<String, CommandInter> interCommands = new HashMap<String, CommandInter>();
+    protected Map<String, ECCommand> commands = new HashMap<>();
+    protected Map<String, CommandInter> interCommands = new HashMap<>();
 
     public ECBungeeCommandManager(ECBungeeServer server) {
         this.server = server;
+
+        this.server.getEventManager().register(new ECListener() {
+            private final ECBungeeCommandManager parent = ECBungeeCommandManager.this;
+
+            @ECHandler
+            public void onMessage(MessageEvent event) {
+                ECMessage message = event.getMessage();
+
+                if (!message.getSender().matches(parent.server) && message.getRecipient().matches(parent.server)) {
+                    try {
+                        ByteArrayInputStream commandMessageData = new ByteArrayInputStream(message.getData());
+                        DataInputStream commandMessage = new DataInputStream(commandMessageData);
+
+                        int type = commandMessage.readInt();
+                        if (type == ECMessageType.GLOBAL_COMMAND) {
+                            UUID uuid = UUID.fromString(commandMessage.readUTF());
+                            String command = commandMessage.readUTF();
+                            List<String> args = new ArrayList<>();
+                            int argC = commandMessage.readInt();
+                            for (int i = 0; i < argC; i++) {
+                                args.add(commandMessage.readUTF());
+                            }
+
+                            ECPlayer player = parent.server.getPlayer(uuid);
+
+                            parent.server.getCommandManager().get(command).run(player, args.toArray(new String[] { }), false);
+                        }
+
+                        commandMessage.close();
+                    } catch (IOException e) {
+                        parent.server.getPlugin().getLogger().error("[Messager] Failed to read message", e);
+                    }
+                }
+            }
+        });
     }
 
     public ECBungeeServer getServer() {
@@ -119,16 +158,11 @@ public class ECBungeeCommandManager implements ECCommandManager {
 
     @Override
     public ECCommand register(ECCommand command, boolean distinguishServer, boolean forwardToOther) {
-        String name = command.getName();
-        if (distinguishServer) {
-            name = "b" + name;
-        }
-
-        if (!this.commands.containsKey(name)) {
+        if (!this.commands.containsKey(command.getName().toLowerCase())) {
             CommandInter interCommand = new CommandInter(command, distinguishServer, forwardToOther);
 
-            this.commands.put(name, command);
-            this.interCommands.put(name, interCommand);
+            this.commands.put(command.getName().toLowerCase(), command);
+            this.interCommands.put(command.getName().toLowerCase(), interCommand);
 
             this.server.getHandle().getPluginManager().registerCommand((Plugin) this.server.getPlugin().getHandle(), interCommand);
 
@@ -145,13 +179,6 @@ public class ECBungeeCommandManager implements ECCommandManager {
 
             this.commands.remove(command.getName().toLowerCase());
             this.interCommands.remove(command.getName().toLowerCase());
-
-            return command;
-        } else if (this.commands.containsKey("b" + command.getName().toLowerCase())) {
-            this.server.getHandle().getPluginManager().unregisterCommand(this.interCommands.get("b" + command.getName().toLowerCase()));
-
-            this.commands.remove("b" + command.getName().toLowerCase());
-            this.interCommands.remove("b" + command.getName().toLowerCase());
 
             return command;
         } else {

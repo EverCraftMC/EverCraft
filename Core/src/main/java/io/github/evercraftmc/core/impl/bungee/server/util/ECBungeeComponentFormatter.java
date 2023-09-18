@@ -9,6 +9,9 @@ public class ECBungeeComponentFormatter {
     protected static final char COLOR_CHAR = '§';
     protected static final String ALL_CODES = "0123456789AaBbCcDdEeFfKkLlMmNnOoRr";
 
+    private ECBungeeComponentFormatter() {
+    }
+
     public static BaseComponent stringToComponent(String string) {
         String[] parts = (COLOR_CHAR + "r" + string).split(String.valueOf(COLOR_CHAR));
 
@@ -17,7 +20,7 @@ public class ECBungeeComponentFormatter {
         format.retain(FormatRetention.NONE);
 
         for (String part : parts) {
-            if (part.length() == 0) {
+            if (part.isEmpty()) {
                 continue;
             }
 
@@ -79,7 +82,6 @@ public class ECBungeeComponentFormatter {
     }
 
     public static String componentToString(BaseComponent component) {
-
         // TODO
 
         return "";

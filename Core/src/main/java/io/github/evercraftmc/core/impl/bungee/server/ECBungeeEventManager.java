@@ -44,7 +44,7 @@ public class ECBungeeEventManager implements ECEventManager {
 
     protected ECBungeeServer server;
 
-    protected Map<Class<? extends ECEvent>, List<Map.Entry<ECListener, Method>>> listeners = new HashMap<Class<? extends ECEvent>, List<Map.Entry<ECListener, Method>>>();
+    protected Map<Class<? extends ECEvent>, List<Map.Entry<ECListener, Method>>> listeners = new HashMap<>();
 
     public ECBungeeEventManager(ECBungeeServer server) {
         this.server = server;
@@ -75,9 +75,9 @@ public class ECBungeeEventManager implements ECEventManager {
         for (Method method : listener.getClass().getDeclaredMethods()) {
             if (method.getParameterCount() == 1 && ECEvent.class.isAssignableFrom(method.getParameterTypes()[0]) && method.getDeclaredAnnotationsByType(ECHandler.class) != null) {
                 if (!this.listeners.containsKey((Class<? extends ECEvent>) method.getParameterTypes()[0])) {
-                    this.listeners.put((Class<? extends ECEvent>) method.getParameterTypes()[0], new ArrayList<Map.Entry<ECListener, Method>>());
+                    this.listeners.put((Class<? extends ECEvent>) method.getParameterTypes()[0], new ArrayList<>());
                 }
-                this.listeners.get((Class<? extends ECEvent>) method.getParameterTypes()[0]).add(new AbstractMap.SimpleEntry<ECListener, Method>(listener, method));
+                this.listeners.get((Class<? extends ECEvent>) method.getParameterTypes()[0]).add(new AbstractMap.SimpleEntry<>(listener, method));
             }
         }
 
@@ -88,7 +88,7 @@ public class ECBungeeEventManager implements ECEventManager {
     public ECListener unregister(ECListener listener) {
         for (Method method : listener.getClass().getDeclaredMethods()) {
             if (method.getParameterCount() == 1 && ECEvent.class.isAssignableFrom(method.getParameterTypes()[0]) && method.getDeclaredAnnotationsByType(ECHandler.class) != null && this.listeners.containsKey((Class<? extends ECEvent>) method.getParameterTypes()[0])) {
-                this.listeners.get((Class<? extends ECEvent>) method.getParameterTypes()[0]).remove(new AbstractMap.SimpleEntry<ECListener, Method>(listener, method));
+                this.listeners.get((Class<? extends ECEvent>) method.getParameterTypes()[0]).remove(new AbstractMap.SimpleEntry<>(listener, method));
             }
         }
 

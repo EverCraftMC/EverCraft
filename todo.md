@@ -1,13 +1,8 @@
 # Todo
 
-## Api
-
-- Messaging system
-
 ## Both
 
 - Global chat
-- Command passing
 - Staff chat
 - Moderation (kick/ban/mute)
 - Commandspy

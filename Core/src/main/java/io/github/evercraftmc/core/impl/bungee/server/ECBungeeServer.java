@@ -59,7 +59,7 @@ public class ECBungeeServer implements ECServer {
 
     @Override
     public Collection<ECPlayer> getPlayers() {
-        ArrayList<ECBungeePlayer> players = new ArrayList<ECBungeePlayer>();
+        ArrayList<ECBungeePlayer> players = new ArrayList<>();
 
         for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
             players.add(new ECBungeePlayer(player));
@@ -90,7 +90,7 @@ public class ECBungeeServer implements ECServer {
 
     @Override
     public Collection<ECPlayer> getOnlinePlayers() {
-        ArrayList<ECBungeePlayer> players = new ArrayList<ECBungeePlayer>();
+        ArrayList<ECBungeePlayer> players = new ArrayList<>();
 
         for (ProxiedPlayer bungeePlayer : this.handle.getPlayers()) {
             if (this.plugin.getPlayerData().players.containsKey(bungeePlayer.getUniqueId().toString())) {

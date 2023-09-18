@@ -59,7 +59,7 @@ public class ECSpigotServer implements ECServer {
 
     @Override
     public Collection<ECPlayer> getPlayers() {
-        ArrayList<ECSpigotPlayer> players = new ArrayList<ECSpigotPlayer>();
+        ArrayList<ECSpigotPlayer> players = new ArrayList<>();
 
         for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
             players.add(new ECSpigotPlayer(player));
@@ -90,7 +90,7 @@ public class ECSpigotServer implements ECServer {
 
     @Override
     public Collection<ECPlayer> getOnlinePlayers() {
-        ArrayList<ECSpigotPlayer> players = new ArrayList<ECSpigotPlayer>();
+        ArrayList<ECSpigotPlayer> players = new ArrayList<>();
 
         for (Player spigotPlayer : this.handle.getOnlinePlayers()) {
             if (this.plugin.getPlayerData().players.containsKey(spigotPlayer.getUniqueId().toString())) {

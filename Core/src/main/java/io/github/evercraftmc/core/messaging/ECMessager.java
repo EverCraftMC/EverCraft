@@ -33,7 +33,7 @@ public class ECMessager {
         this.id = id;
     }
 
-    public void connect() throws IOException {
+    public void connect() {
         this.connectionThread = new Thread(() -> {
             try {
                 this.connection = SocketFactory.getDefault().createSocket(this.address.getAddress(), this.address.getPort());
@@ -43,7 +43,7 @@ public class ECMessager {
 
                 ByteArrayOutputStream helloMessageData = new ByteArrayOutputStream();
                 DataOutputStream helloMessage = new DataOutputStream(helloMessageData);
-                helloMessage.writeInt(ECMessageType.HELLO.getCode());
+                helloMessage.writeInt(ECMessageType.HELLO);
                 helloMessage.writeUTF(this.id.toString());
                 writeMessage(new ECMessage(ECSender.fromServer(this.id), ECRecipient.fromAll(), helloMessageData.toByteArray()));
                 helloMessage.close();
@@ -53,13 +53,13 @@ public class ECMessager {
                         ECMessage message = readMessage();
 
                         this.parent.getServer().getEventManager().emit(new MessageEvent(this, message));
-                    } catch (SocketTimeoutException e) {
+                    } catch (SocketTimeoutException ignored) {
                     } catch (EOFException e) {
-                        parent.getLogger().warn("[Messager] Got disconnected from server", e);
+                        parent.getLogger().error("[Messager] Error reading message", e);
 
                         break;
                     } catch (IOException e) {
-                        parent.getLogger().error("[Messager] Error reading message", e);
+                        parent.getLogger().warn("[Messager] Got disconnected from server", e);
 
                         break;
                     }
@@ -95,7 +95,10 @@ public class ECMessager {
 
             int size = this.inputStream.readInt();
             byte[] data = new byte[size];
-            this.inputStream.read(data, 0, size);
+            int read = this.inputStream.read(data, 0, size);
+            if (read != size) {
+                parent.getLogger().error("[Messager] Error reading message");
+            }
 
             return new ECMessage(ECSender.parse(sender), ECRecipient.parse(recipient), data, size);
         }

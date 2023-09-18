@@ -7,6 +7,9 @@ public class ECTextFormatter {
     protected static final String ALL_CODES = "0123456789AaBbCcDdEeFfKkLlMmNnOoRr";
     protected static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)[" + COLOR_CHAR + "&][0-9A-FK-OR]");
 
+    private ECTextFormatter() {
+    }
+
     public static String translateColors(String input) {
         char[] inputBytes = input.toCharArray();
 

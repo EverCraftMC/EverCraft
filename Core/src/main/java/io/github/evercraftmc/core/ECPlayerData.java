@@ -12,7 +12,7 @@ public class ECPlayerData {
         public UUID uuid;
         public String name;
 
-        public String displayName = null;
+        public String displayName;
         public String prefix = null;
 
         // Global
@@ -22,7 +22,7 @@ public class ECPlayerData {
         public Instant lastJoin = null;
         public long playTime = 0;
 
-        public Player() {
+        private Player() {
             this(null, null);
         }
 
@@ -34,5 +34,5 @@ public class ECPlayerData {
         }
     }
 
-    public Map<String, Player> players = new HashMap<String, Player>();
+    public Map<String, Player> players = new HashMap<>();
 }
