@@ -99,21 +99,31 @@ public class ECMessagingServer {
                                                 continue;
                                             }
 
-                                            connection2.getOutputStream().writeUTF(sender);
-                                            connection2.getOutputStream().writeUTF(recipient);
+                                            try {
+                                                connection2.getOutputStream().writeUTF(sender);
+                                                connection2.getOutputStream().writeUTF(recipient);
 
-                                            connection2.getOutputStream().writeInt(size);
-                                            connection2.getOutputStream().write(buf, 0, size);
+                                                connection2.getOutputStream().writeInt(size);
+                                                connection2.getOutputStream().write(buf, 0, size);
+                                            } catch (IOException e) {
+                                                connection2.close();
+                                                connections.remove(connection2);
+                                            }
                                         }
                                     }
                                 } catch (SocketTimeoutException ignored) {
                                 } catch (EOFException e) {
                                     connection.close();
-                                    break;
+                                    synchronized (WRITE_LOCK) {
+                                        connections.remove(connection);
+                                    }
                                 } catch (IOException e) {
                                     e.printStackTrace();
+
                                     connection.close();
-                                    break;
+                                    synchronized (WRITE_LOCK) {
+                                        connections.remove(connection);
+                                    }
                                 }
                             }
                         } catch (Exception e) {

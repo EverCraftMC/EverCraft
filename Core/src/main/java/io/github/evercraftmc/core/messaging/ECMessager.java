@@ -71,6 +71,10 @@ public class ECMessager {
                     this.connection.shutdownInput();
                     this.connection.shutdownOutput();
                     this.connection.close();
+
+                    if (this.open) {
+                        parent.getLogger().warn("[Messager] Reconnecting");
+                    }
                 }
             } catch (Exception e) {
                 parent.getLogger().error("[Messager] Error", e);
