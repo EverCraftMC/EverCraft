@@ -16,6 +16,8 @@ public class ECMessager {
 
     protected UUID id;
 
+    protected boolean open;
+
     protected Thread connectionThread;
     protected Socket connection;
 
@@ -34,45 +36,51 @@ public class ECMessager {
     }
 
     public void connect() {
+        this.open = true;
+
         this.connectionThread = new Thread(() -> {
             try {
-                this.connection = SocketFactory.getDefault().createSocket(this.address.getAddress(), this.address.getPort());
+                while (this.open) {
+                    this.connection = SocketFactory.getDefault().createSocket(this.address.getAddress(), this.address.getPort());
 
-                this.inputStream = new DataInputStream(this.connection.getInputStream());
-                this.outputStream = new DataOutputStream(this.connection.getOutputStream());
+                    this.inputStream = new DataInputStream(this.connection.getInputStream());
+                    this.outputStream = new DataOutputStream(this.connection.getOutputStream());
 
-                ByteArrayOutputStream helloMessageData = new ByteArrayOutputStream();
-                DataOutputStream helloMessage = new DataOutputStream(helloMessageData);
-                helloMessage.writeInt(ECMessageType.HELLO);
-                helloMessage.writeUTF(this.id.toString());
-                writeMessage(new ECMessage(ECSender.fromServer(this.id), ECRecipient.fromAll(), helloMessageData.toByteArray()));
-                helloMessage.close();
+                    ByteArrayOutputStream helloMessageData = new ByteArrayOutputStream();
+                    DataOutputStream helloMessage = new DataOutputStream(helloMessageData);
+                    helloMessage.writeInt(ECMessageType.HELLO);
+                    helloMessage.writeUTF(this.id.toString());
+                    writeMessage(new ECMessage(ECSender.fromServer(this.id), ECRecipient.fromAll(), helloMessageData.toByteArray()));
+                    helloMessage.close();
 
-                while (!this.connection.isClosed() && this.connection.isConnected()) {
-                    try {
-                        ECMessage message = readMessage();
+                    while (this.open && !this.connection.isClosed() && this.connection.isConnected()) {
+                        try {
+                            ECMessage message = readMessage();
 
-                        this.parent.getServer().getEventManager().emit(new MessageEvent(this, message));
-                    } catch (SocketTimeoutException ignored) {
-                    } catch (EOFException e) {
-                        parent.getLogger().error("[Messager] Error reading message", e);
+                            this.parent.getServer().getEventManager().emit(new MessageEvent(this, message));
+                        } catch (SocketTimeoutException ignored) {
+                        } catch (EOFException e) {
+                            break;
+                        } catch (IOException e) {
+                            parent.getLogger().error("[Messager] Error reading message", e);
 
-                        break;
-                    } catch (IOException e) {
-                        parent.getLogger().warn("[Messager] Got disconnected from server", e);
-
-                        break;
+                            break;
+                        }
                     }
-                }
 
-                this.connection.shutdownInput();
-                this.connection.shutdownOutput();
-                this.connection.close();
+                    this.connection.shutdownInput();
+                    this.connection.shutdownOutput();
+                    this.connection.close();
+                }
             } catch (Exception e) {
                 parent.getLogger().error("[Messager] Error", e);
             }
         }, "ECMessager");
         this.connectionThread.start();
+    }
+
+    public void close() {
+        this.open = false;
     }
 
     public void send(ECRecipient recipient, byte[] data) {

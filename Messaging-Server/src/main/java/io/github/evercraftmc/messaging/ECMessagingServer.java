@@ -112,7 +112,6 @@ public class ECMessagingServer {
                                     break;
                                 } catch (IOException e) {
                                     e.printStackTrace();
-
                                     connection.close();
                                     break;
                                 }

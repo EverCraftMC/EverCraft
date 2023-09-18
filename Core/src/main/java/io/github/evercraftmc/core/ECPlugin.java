@@ -222,6 +222,10 @@ public class ECPlugin {
             ECPluginManager.unregisterModule(module);
         }
 
+        if (this.messager != null) {
+            this.messager.close();
+        }
+
         ECPluginManager.unregisterPlugin();
     }
 

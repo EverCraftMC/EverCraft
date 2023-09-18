@@ -25,15 +25,12 @@ public class ECMessagingMain {
             ECMessagingServer server = new ECMessagingServer(new InetSocketAddress(messagingDetails.get().host, messagingDetails.get().port));
             server.start();
 
-            messagingDetails.close();
-
             Signal[] signals = new Signal[] { new Signal("TERM"), new Signal("INT"), new Signal("ABRT") };
             SignalHandler sigHandler = signal -> {
                 System.out.println("Shutting down");
 
                 server.stop();
             };
-
             for (Signal signal : signals) {
                 Signal.handle(signal, sigHandler);
             }
