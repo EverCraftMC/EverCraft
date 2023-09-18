@@ -91,10 +91,7 @@ public class ECMessagingServer {
 
                                     int size = connection.getInputStream().readInt();
                                     byte[] buf = new byte[size];
-                                    int read = connection.getInputStream().read(buf, 0, size);
-                                    if (read != size) {
-                                        connection.close();
-                                    }
+                                    connection.getInputStream().read(buf, 0, size);
 
                                     synchronized (WRITE_LOCK) {
                                         for (Connection connection2 : this.connections) {

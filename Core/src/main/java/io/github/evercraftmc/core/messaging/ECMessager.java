@@ -95,10 +95,7 @@ public class ECMessager {
 
             int size = this.inputStream.readInt();
             byte[] data = new byte[size];
-            int read = this.inputStream.read(data, 0, size);
-            if (read != size) {
-                parent.getLogger().error("[Messager] Error reading message");
-            }
+            this.inputStream.read(data, 0, size);
 
             return new ECMessage(ECSender.parse(sender), ECRecipient.parse(recipient), data, size);
         }
