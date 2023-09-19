@@ -5,7 +5,6 @@ import io.github.evercraftmc.core.api.server.player.ECConsole;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.global.GlobalModule;
-import java.util.Arrays;
 import java.util.List;
 
 public class NickCommand implements ECCommand {
@@ -27,7 +26,7 @@ public class NickCommand implements ECCommand {
 
     @Override
     public List<String> getAlias() {
-        return Arrays.asList("nick", "setNickname", "setNick");
+        return List.of("nick", "setNickname", "setNick");
     }
 
     @Override

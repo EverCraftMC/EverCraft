@@ -292,12 +292,10 @@ public class ECPlugin {
     }
 
     public void saveData() {
-        this.server.getScheduler().runTaskAsync(() -> {
-            try {
-                this.data.save();
-            } catch (IOException e) {
-                this.logger.error("Failed to save player data", e);
-            }
-        });
+        try {
+            this.data.save();
+        } catch (IOException e) {
+            this.logger.error("Failed to save player data", e);
+        }
     }
 }
