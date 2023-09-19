@@ -18,37 +18,45 @@ public class ECPluginManager {
         return ECPluginManager.plugin;
     }
 
-    public static void registerPlugin(ECPlugin plugin) {
+    public static ECPlugin registerPlugin(ECPlugin plugin) {
         ECPluginManager.plugin = plugin;
+        return plugin;
     }
 
-    public static void unregisterPlugin() {
+    public static ECPlugin unregisterPlugin() {
+        ECPlugin oldPlugin = ECPluginManager.plugin;
         ECPluginManager.plugin = null;
+        return oldPlugin;
     }
 
     public static Collection<ECModule> getModules() {
         return Collections.unmodifiableCollection(ECPluginManager.modules.values());
     }
 
-    public static ECModule getModule(Class<? extends ECModule> clazz) {
+    @SuppressWarnings("unchecked")
+    public static <T extends ECModule> T getModule(Class<T> clazz) {
         if (ECPluginManager.modules.containsKey(clazz)) {
-            return ECPluginManager.modules.get(clazz);
+            return (T) ECPluginManager.modules.get(clazz);
         } else {
             throw new RuntimeException("Module \"" + clazz.getSimpleName() + "\" is not registered");
         }
     }
 
-    public static void registerModule(ECModule module) {
+    public static <T extends ECModule> T registerModule(T module) {
         if (!ECPluginManager.modules.containsKey(module.getClass())) {
             ECPluginManager.modules.put(module.getClass(), module);
+
+            return module;
         } else {
             throw new RuntimeException("Module \"" + module.getClass().getSimpleName() + "\" is not registered");
         }
     }
 
-    public static void unregisterModule(ECModule module) {
+    public static <T extends ECModule> T unregisterModule(T module) {
         if (ECPluginManager.modules.containsKey(module.getClass())) {
             ECPluginManager.modules.remove(module.getClass());
+
+            return module;
         } else {
             throw new RuntimeException("Module \"" + module.getClass().getSimpleName() + "\" is not registered");
         }
