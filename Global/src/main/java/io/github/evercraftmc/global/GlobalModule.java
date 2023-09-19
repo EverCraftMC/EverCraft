@@ -4,14 +4,10 @@ import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.ECModule;
 import io.github.evercraftmc.core.api.ECModuleInfo;
 import io.github.evercraftmc.core.api.commands.ECCommand;
-import io.github.evercraftmc.core.api.events.ECHandler;
 import io.github.evercraftmc.core.api.events.ECListener;
-import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
-import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
-import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import io.github.evercraftmc.global.commands.NickCommand;
 import io.github.evercraftmc.global.commands.PrefixCommand;
-import java.time.Instant;
+import io.github.evercraftmc.global.listeners.JoinListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,31 +43,7 @@ public class GlobalModule implements ECModule {
         this.commands.add(this.plugin.getServer().getCommandManager().register(new NickCommand(this), false));
         this.commands.add(this.plugin.getServer().getCommandManager().register(new PrefixCommand(this), false));
 
-        if (this.plugin.getEnvironment().getType() == ECEnvironmentType.PROXY) {
-            this.listeners.add(this.plugin.getServer().getEventManager().register(new ECListener() {
-                private final GlobalModule parent = GlobalModule.this;
-
-                @ECHandler
-                public void onPlayerJoin(PlayerJoinEvent event) {
-                    if (parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).firstJoin == null) {
-                        parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).firstJoin = Instant.now();
-
-                        // TODO Welcome message
-                    }
-
-                    parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).lastJoin = Instant.now();
-
-                    parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).lastIp = event.getPlayer().getAddress();
-
-                    parent.getPlugin().saveData();
-                }
-
-                @ECHandler
-                public void onPlayerLeave(PlayerLeaveEvent event) {
-                    parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).lastJoin = Instant.now();
-                }
-            }));
-        }
+        this.listeners.add(this.plugin.getServer().getEventManager().register(new JoinListener()));
     }
 
     public void unload() {

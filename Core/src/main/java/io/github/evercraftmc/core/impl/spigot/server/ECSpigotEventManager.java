@@ -4,11 +4,12 @@ import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.api.events.ECHandler;
 import io.github.evercraftmc.core.api.events.ECListener;
-import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
 import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotPlayer;
+import io.github.evercraftmc.core.impl.spigot.server.util.ECSpigotComponentFormatter;
 import java.lang.reflect.Method;
 import java.util.*;
+import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -30,12 +31,26 @@ public class ECSpigotEventManager implements ECEventManager {
 
         @EventHandler
         public void onPlayerJoin(PlayerJoinEvent event) {
-            parent.emit(new io.github.evercraftmc.core.api.events.player.PlayerJoinEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
+            io.github.evercraftmc.core.api.events.player.PlayerJoinEvent newEvent = new io.github.evercraftmc.core.api.events.player.PlayerJoinEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), ECSpigotComponentFormatter.componentToString(event.joinMessage()));
+            parent.emit(newEvent);
+
+            event.joinMessage(Component.empty());
+            if (newEvent.isCancelled()) {
+                event.getPlayer().kick(ECSpigotComponentFormatter.stringToComponent(newEvent.getCancelReason()));
+            } else if (!newEvent.getJoinMessage().isEmpty()) {
+                parent.server.broadcastMessage(newEvent.getJoinMessage());
+            }
         }
 
         @EventHandler
         public void onPlayerLeave(PlayerQuitEvent event) {
-            parent.emit(new PlayerLeaveEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
+            io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent newEvent = new io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), ECSpigotComponentFormatter.componentToString(event.quitMessage()));
+            parent.emit(newEvent);
+
+            event.quitMessage(Component.empty());
+            if (!newEvent.getLeaveMessage().isEmpty()) {
+                parent.server.broadcastMessage(newEvent.getLeaveMessage());
+            }
         }
     }
 

@@ -8,6 +8,7 @@ import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeePlayer;
+import io.github.evercraftmc.core.impl.bungee.server.util.ECBungeeComponentFormatter;
 import java.lang.reflect.Method;
 import java.util.*;
 import net.md_5.bungee.api.event.LoginEvent;
@@ -33,12 +34,24 @@ public class ECBungeeEventManager implements ECEventManager {
 
         @EventHandler
         public void onPlayerJoin(PostLoginEvent event) {
-            parent.emit(new PlayerJoinEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
+            PlayerJoinEvent newEvent = new PlayerJoinEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), "");
+            parent.emit(newEvent);
+
+            if (newEvent.isCancelled()) {
+                event.getPlayer().disconnect(ECBungeeComponentFormatter.stringToComponent(newEvent.getCancelReason()));
+            } else if (!newEvent.getJoinMessage().isEmpty()) {
+                parent.server.broadcastMessage(newEvent.getJoinMessage());
+            }
         }
 
         @EventHandler
         public void onPlayerLeave(PlayerDisconnectEvent event) {
-            parent.emit(new PlayerLeaveEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer())));
+            PlayerLeaveEvent newEvent = new PlayerLeaveEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), "");
+            parent.emit(newEvent);
+
+            if (!newEvent.getLeaveMessage().isEmpty()) {
+                parent.server.broadcastMessage(newEvent.getLeaveMessage());
+            }
         }
     }
 
