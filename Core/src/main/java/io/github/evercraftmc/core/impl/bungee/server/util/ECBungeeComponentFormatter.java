@@ -82,8 +82,70 @@ public class ECBungeeComponentFormatter {
     }
 
     public static String componentToString(BaseComponent component) {
-        // TODO
+        StringBuilder string = new StringBuilder();
 
-        return "";
+        if (component.isReset()) {
+            string.append(COLOR_CHAR).append("r");
+        } else {
+            if (component.getColor() == ChatColor.BLACK) {
+                string.append(COLOR_CHAR).append('0');
+            } else if (component.getColor() == ChatColor.DARK_BLUE) {
+                string.append(COLOR_CHAR).append('1');
+            } else if (component.getColor() == ChatColor.DARK_GREEN) {
+                string.append(COLOR_CHAR).append('2');
+            } else if (component.getColor() == ChatColor.DARK_AQUA) {
+                string.append(COLOR_CHAR).append('3');
+            } else if (component.getColor() == ChatColor.DARK_RED) {
+                string.append(COLOR_CHAR).append('4');
+            } else if (component.getColor() == ChatColor.DARK_PURPLE) {
+                string.append(COLOR_CHAR).append('5');
+            } else if (component.getColor() == ChatColor.GOLD) {
+                string.append(COLOR_CHAR).append('6');
+            } else if (component.getColor() == ChatColor.GRAY) {
+                string.append(COLOR_CHAR).append('7');
+            } else if (component.getColor() == ChatColor.DARK_GRAY) {
+                string.append(COLOR_CHAR).append('8');
+            } else if (component.getColor() == ChatColor.BLUE) {
+                string.append(COLOR_CHAR).append('9');
+            } else if (component.getColor() == ChatColor.GREEN) {
+                string.append(COLOR_CHAR).append('a');
+            } else if (component.getColor() == ChatColor.AQUA) {
+                string.append(COLOR_CHAR).append('b');
+            } else if (component.getColor() == ChatColor.RED) {
+                string.append(COLOR_CHAR).append('c');
+            } else if (component.getColor() == ChatColor.LIGHT_PURPLE) {
+                string.append(COLOR_CHAR).append('d');
+            } else if (component.getColor() == ChatColor.YELLOW) {
+                string.append(COLOR_CHAR).append('e');
+            } else if (component.getColor() == ChatColor.WHITE) {
+                string.append(COLOR_CHAR).append('f');
+            }
+
+            if (component.isBold()) {
+                string.append(COLOR_CHAR).append('l');
+            }
+            if (component.isStrikethrough()) {
+                string.append(COLOR_CHAR).append('m');
+            }
+            if (component.isUnderlined()) {
+                string.append(COLOR_CHAR).append('n');
+            }
+            if (component.isItalic()) {
+                string.append(COLOR_CHAR).append('o');
+            }
+            if (component.isObfuscated()) {
+                string.append(COLOR_CHAR).append('k');
+            }
+        }
+
+        if (component instanceof net.kyori.adventure.text.TextComponent textComponent) {
+            string.append(textComponent.content());
+        }
+
+        for (BaseComponent child : component.getExtra()) {
+            string.append(componentToString(child));
+        }
+
+        return string.toString();
     }
 }
