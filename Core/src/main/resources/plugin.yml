@@ -1,11 +1,11 @@
 main: io.github.evercraftmc.core.impl.spigot.ECSpigotPluginLoader
 
-name: EverCraft-Core
-description: EverCraft-Core
-version: ${version}
+name: "EverCraft-Core"
+description: "EverCraft-Core"
+version: "${version}"
 
-author: Kale Ko
-website: https://github.com/EverCraftMC
+authors: [ "Kale-Ko" ]
+website: "https://github.com/EverCraftMC/EverCraft"
 
 api-version: "1.20"
 load: STARTUP

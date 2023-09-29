@@ -1,4 +1,4 @@
-name: Global
-version: ${version}
-
 entry: io.github.evercraftmc.global.GlobalModule
+
+name: "Global"
+version: "${version}"
