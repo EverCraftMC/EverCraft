@@ -4,6 +4,7 @@ import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.api.events.ECHandler;
 import io.github.evercraftmc.core.api.events.ECListener;
+import io.github.evercraftmc.core.api.events.player.PlayerChatEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
@@ -11,6 +12,7 @@ import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeePlayer;
 import io.github.evercraftmc.core.impl.bungee.server.util.ECBungeeComponentFormatter;
 import java.lang.reflect.Method;
 import java.util.*;
+import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -51,6 +53,22 @@ public class ECBungeeEventManager implements ECEventManager {
 
             if (!newEvent.getLeaveMessage().isEmpty()) {
                 parent.server.broadcastMessage(newEvent.getLeaveMessage());
+            }
+        }
+
+        @EventHandler
+        public void onPlayerLeave(ChatEvent event) {
+            ECBungeePlayer player = parent.server.getOnlinePlayer(event.getSender());
+
+            PlayerChatEvent newEvent = new PlayerChatEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), event.getMessage());
+            parent.emit(newEvent);
+
+            event.setCancelled(true);
+
+            if (newEvent.isCancelled()) {
+                player.sendMessage(newEvent.getCancelReason());
+            } else if (!newEvent.getMessage().isEmpty()) {
+                parent.server.broadcastMessage(newEvent.getMessage());
             }
         }
     }

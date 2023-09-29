@@ -4,9 +4,11 @@ import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.api.events.ECHandler;
 import io.github.evercraftmc.core.api.events.ECListener;
+import io.github.evercraftmc.core.api.events.player.PlayerChatEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
 import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotPlayer;
 import io.github.evercraftmc.core.impl.spigot.server.util.ECSpigotComponentFormatter;
+import io.papermc.paper.event.player.AsyncChatEvent;
 import java.lang.reflect.Method;
 import java.util.*;
 import net.kyori.adventure.text.Component;
@@ -50,6 +52,22 @@ public class ECSpigotEventManager implements ECEventManager {
             event.quitMessage(Component.empty());
             if (!newEvent.getLeaveMessage().isEmpty()) {
                 parent.server.broadcastMessage(newEvent.getLeaveMessage());
+            }
+        }
+
+        @EventHandler
+        public void onPlayerLeave(AsyncChatEvent event) {
+            ECSpigotPlayer player = parent.server.getOnlinePlayer(event.getPlayer().getUniqueId());
+
+            PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), ECSpigotComponentFormatter.componentToString(event.message()));
+            parent.emit(newEvent);
+
+            event.setCancelled(true);
+
+            if (newEvent.isCancelled()) {
+                player.sendMessage(newEvent.getCancelReason());
+            } else if (!newEvent.getMessage().isEmpty()) {
+                parent.server.broadcastMessage(newEvent.getMessage());
             }
         }
     }
