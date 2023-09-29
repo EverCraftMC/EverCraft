@@ -59,20 +59,28 @@ public class ECSpigotEventManager implements ECEventManager {
 
         @EventHandler
         public void onPlayerChat(AsyncChatEvent event) {
-            ECSpigotPlayer player = parent.server.getOnlinePlayer(event.getPlayer().getUniqueId());
+            String message = ECSpigotComponentFormatter.componentToString(event.message());
+            if (message.isEmpty()) {
+                event.setCancelled(true);
+                return;
+            }
 
-            PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), ECSpigotComponentFormatter.componentToString(event.message()));
-            parent.emit(newEvent);
+            if (message.charAt(0) != '/') {
+                ECSpigotPlayer player = parent.server.getOnlinePlayer(event.getPlayer().getUniqueId());
 
-            event.message(Component.empty());
-            event.setCancelled(true);
+                PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), message);
+                parent.emit(newEvent);
 
-            if (newEvent.isCancelled()) {
-                if (!newEvent.getCancelReason().isEmpty()) {
-                    player.sendMessage(newEvent.getCancelReason());
+                event.message(Component.empty());
+                event.setCancelled(true);
+
+                if (newEvent.isCancelled()) {
+                    if (!newEvent.getCancelReason().isEmpty()) {
+                        player.sendMessage(newEvent.getCancelReason());
+                    }
+                } else if (!newEvent.getMessage().isEmpty()) {
+                    parent.server.broadcastMessage(newEvent.getMessage());
                 }
-            } else if (!newEvent.getMessage().isEmpty()) {
-                parent.server.broadcastMessage(newEvent.getMessage());
             }
         }
     }

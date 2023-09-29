@@ -58,19 +58,27 @@ public class ECBungeeEventManager implements ECEventManager {
 
         @EventHandler
         public void onPlayerChat(ChatEvent event) {
-            ECBungeePlayer player = parent.server.getOnlinePlayer(event.getSender());
+            String message = event.getMessage();
+            if (message.isEmpty()) {
+                event.setCancelled(true);
+                return;
+            }
 
-            PlayerChatEvent newEvent = new PlayerChatEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), event.getMessage());
-            parent.emit(newEvent);
+            if (message.charAt(0) != '/') {
+                ECBungeePlayer player = parent.server.getOnlinePlayer(event.getSender());
 
-            event.setCancelled(true);
+                PlayerChatEvent newEvent = new PlayerChatEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), message);
+                parent.emit(newEvent);
 
-            if (newEvent.isCancelled()) {
-                if (!newEvent.getCancelReason().isEmpty()) {
-                    player.sendMessage(newEvent.getCancelReason());
+                event.setCancelled(true);
+
+                if (newEvent.isCancelled()) {
+                    if (!newEvent.getCancelReason().isEmpty()) {
+                        player.sendMessage(newEvent.getCancelReason());
+                    }
+                } else if (!newEvent.getMessage().isEmpty()) {
+                    parent.server.broadcastMessage(newEvent.getMessage());
                 }
-            } else if (!newEvent.getMessage().isEmpty()) {
-                parent.server.broadcastMessage(newEvent.getMessage());
             }
         }
     }
