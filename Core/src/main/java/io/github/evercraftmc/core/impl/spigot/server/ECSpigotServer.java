@@ -2,11 +2,7 @@ package io.github.evercraftmc.core.impl.spigot.server;
 
 import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.ECPlugin;
-import io.github.evercraftmc.core.api.server.ECCommandManager;
-import io.github.evercraftmc.core.api.server.ECEventManager;
-import io.github.evercraftmc.core.api.server.ECScheduler;
 import io.github.evercraftmc.core.api.server.ECServer;
-import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
 import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotConsole;
 import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotPlayer;
@@ -58,7 +54,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public Collection<ECPlayer> getPlayers() {
+    public Collection<ECSpigotPlayer> getPlayers() {
         ArrayList<ECSpigotPlayer> players = new ArrayList<>();
 
         for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
@@ -69,7 +65,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public ECPlayer getPlayer(UUID uuid) {
+    public ECSpigotPlayer getPlayer(UUID uuid) {
         if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
             return new ECSpigotPlayer(this.plugin.getPlayerData().players.get(uuid.toString()));
         } else {
@@ -78,7 +74,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public ECPlayer getPlayer(String name) {
+    public ECSpigotPlayer getPlayer(String name) {
         for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
             if (player.name.equalsIgnoreCase(name)) {
                 return new ECSpigotPlayer(player);
@@ -89,7 +85,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public Collection<ECPlayer> getOnlinePlayers() {
+    public Collection<ECSpigotPlayer> getOnlinePlayers() {
         ArrayList<ECSpigotPlayer> players = new ArrayList<>();
 
         for (Player spigotPlayer : this.handle.getOnlinePlayers()) {
@@ -102,7 +98,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public ECPlayer getOnlinePlayer(UUID uuid) {
+    public ECSpigotPlayer getOnlinePlayer(UUID uuid) {
         if (this.handle.getPlayer(uuid) != null) {
             if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
                 return new ECSpigotPlayer(this.plugin.getPlayerData().players.get(uuid.toString()), this.handle.getPlayer(uuid));
@@ -115,7 +111,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public ECPlayer getOnlinePlayer(String name) {
+    public ECSpigotPlayer getOnlinePlayer(String name) {
         if (this.handle.getPlayer(name) != null) {
             for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
                 if (player.name.equalsIgnoreCase(name)) {
@@ -130,22 +126,22 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public ECPlayer getConsole() {
+    public ECSpigotConsole getConsole() {
         return new ECSpigotConsole(this.handle.getConsoleSender());
     }
 
     @Override
-    public ECCommandManager getCommandManager() {
+    public ECSpigotCommandManager getCommandManager() {
         return this.commandManager;
     }
 
     @Override
-    public ECEventManager getEventManager() {
+    public ECSpigotEventManager getEventManager() {
         return this.eventManager;
     }
 
     @Override
-    public ECScheduler getScheduler() {
+    public ECSpigotScheduler getScheduler() {
         return this.scheduler;
     }
 }

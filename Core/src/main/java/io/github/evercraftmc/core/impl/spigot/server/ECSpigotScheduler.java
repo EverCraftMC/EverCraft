@@ -32,32 +32,32 @@ public class ECSpigotScheduler implements ECScheduler {
     }
 
     @Override
-    public ECTask runTask(Runnable task) {
+    public ECSpigotTask runTask(Runnable task) {
         return new ECSpigotTask(this.server.getHandle().getScheduler().runTask((JavaPlugin) this.server.getPlugin().getHandle(), task));
     }
 
     @Override
-    public ECTask runTaskAsync(Runnable task) {
+    public ECSpigotTask runTaskAsync(Runnable task) {
         return new ECSpigotTask(this.server.getHandle().getScheduler().runTaskAsynchronously((JavaPlugin) this.server.getPlugin().getHandle(), task));
     }
 
     @Override
-    public ECTask runTaskLater(Runnable task, int ticks) {
+    public ECSpigotTask runTaskLater(Runnable task, int ticks) {
         return new ECSpigotTask(this.server.getHandle().getScheduler().runTaskLater((JavaPlugin) this.server.getPlugin().getHandle(), task, ticks));
     }
 
     @Override
-    public ECTask runTaskLaterAsync(Runnable task, int ticks) {
+    public ECSpigotTask runTaskLaterAsync(Runnable task, int ticks) {
         return new ECSpigotTask(this.server.getHandle().getScheduler().runTaskLaterAsynchronously((JavaPlugin) this.server.getPlugin().getHandle(), task, ticks));
     }
 
     @Override
-    public ECTask runTaskRepeat(Runnable task, int delay, int ticks) {
+    public ECSpigotTask runTaskRepeat(Runnable task, int delay, int ticks) {
         return new ECSpigotTask(this.server.getHandle().getScheduler().runTaskTimer((JavaPlugin) this.server.getPlugin().getHandle(), task, delay, ticks));
     }
 
     @Override
-    public ECTask runTaskRepeatAsync(Runnable task, int delay, int ticks) {
+    public ECSpigotTask runTaskRepeatAsync(Runnable task, int delay, int ticks) {
         return new ECSpigotTask(this.server.getHandle().getScheduler().runTaskTimerAsynchronously((JavaPlugin) this.server.getPlugin().getHandle(), task, delay, ticks));
     }
 }

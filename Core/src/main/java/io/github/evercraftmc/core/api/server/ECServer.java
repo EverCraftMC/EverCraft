@@ -1,6 +1,7 @@
 package io.github.evercraftmc.core.api.server;
 
 import io.github.evercraftmc.core.ECPlugin;
+import io.github.evercraftmc.core.api.server.player.ECConsole;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
 import java.util.Collection;
@@ -13,19 +14,19 @@ public interface ECServer {
 
     ECEnvironment getEnvironment();
 
-    Collection<ECPlayer> getPlayers();
+    Collection<? extends ECPlayer> getPlayers();
 
     ECPlayer getPlayer(UUID uuid);
 
     ECPlayer getPlayer(String name);
 
-    Collection<ECPlayer> getOnlinePlayers();
+    Collection<? extends ECPlayer> getOnlinePlayers();
 
     ECPlayer getOnlinePlayer(UUID uuid);
 
     ECPlayer getOnlinePlayer(String name);
 
-    ECPlayer getConsole();
+    ECConsole getConsole();
 
     default void broadcastMessage(String message) {
         for (ECPlayer player : this.getOnlinePlayers()) {

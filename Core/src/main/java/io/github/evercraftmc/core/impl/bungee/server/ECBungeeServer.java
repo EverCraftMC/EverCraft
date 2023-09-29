@@ -2,11 +2,7 @@ package io.github.evercraftmc.core.impl.bungee.server;
 
 import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.ECPlugin;
-import io.github.evercraftmc.core.api.server.ECCommandManager;
-import io.github.evercraftmc.core.api.server.ECEventManager;
-import io.github.evercraftmc.core.api.server.ECScheduler;
 import io.github.evercraftmc.core.api.server.ECServer;
-import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeeConsole;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeePlayer;
@@ -15,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.Connection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class ECBungeeServer implements ECServer {
@@ -58,7 +55,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public Collection<ECPlayer> getPlayers() {
+    public Collection<ECBungeePlayer> getPlayers() {
         ArrayList<ECBungeePlayer> players = new ArrayList<>();
 
         for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
@@ -69,7 +66,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public ECPlayer getPlayer(UUID uuid) {
+    public ECBungeePlayer getPlayer(UUID uuid) {
         if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
             return new ECBungeePlayer(this.plugin.getPlayerData().players.get(uuid.toString()));
         } else {
@@ -78,7 +75,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public ECPlayer getPlayer(String name) {
+    public ECBungeePlayer getPlayer(String name) {
         for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
             if (player.name.equalsIgnoreCase(name)) {
                 return new ECBungeePlayer(player);
@@ -89,7 +86,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public Collection<ECPlayer> getOnlinePlayers() {
+    public Collection<ECBungeePlayer> getOnlinePlayers() {
         ArrayList<ECBungeePlayer> players = new ArrayList<>();
 
         for (ProxiedPlayer bungeePlayer : this.handle.getPlayers()) {
@@ -102,7 +99,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public ECPlayer getOnlinePlayer(UUID uuid) {
+    public ECBungeePlayer getOnlinePlayer(UUID uuid) {
         if (this.handle.getPlayer(uuid) != null) {
             if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
                 return new ECBungeePlayer(this.plugin.getPlayerData().players.get(uuid.toString()), this.handle.getPlayer(uuid));
@@ -115,7 +112,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public ECPlayer getOnlinePlayer(String name) {
+    public ECBungeePlayer getOnlinePlayer(String name) {
         if (this.handle.getPlayer(name) != null) {
             for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
                 if (player.name.equalsIgnoreCase(name)) {
@@ -129,23 +126,39 @@ public class ECBungeeServer implements ECServer {
         }
     }
 
+    public ECBungeePlayer getOnlinePlayer(Connection connection) {
+        for (ProxiedPlayer bungeePlayer : this.handle.getPlayers()) {
+            if (bungeePlayer.getPendingConnection().equals(connection)) {
+                for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
+                    if (player.uuid.equals(bungeePlayer.getUniqueId())) {
+                        return new ECBungeePlayer(player, bungeePlayer);
+                    }
+                }
+
+                return null;
+            }
+        }
+
+        return null;
+    }
+
     @Override
-    public ECPlayer getConsole() {
+    public ECBungeeConsole getConsole() {
         return new ECBungeeConsole(this.handle.getConsole());
     }
 
     @Override
-    public ECCommandManager getCommandManager() {
+    public ECBungeeCommandManager getCommandManager() {
         return this.commandManager;
     }
 
     @Override
-    public ECEventManager getEventManager() {
+    public ECBungeeEventManager getEventManager() {
         return this.eventManager;
     }
 
     @Override
-    public ECScheduler getScheduler() {
+    public ECBungeeScheduler getScheduler() {
         return this.scheduler;
     }
 }

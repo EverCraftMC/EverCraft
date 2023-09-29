@@ -33,32 +33,32 @@ public class ECBungeeScheduler implements ECScheduler {
     }
 
     @Override
-    public ECTask runTask(Runnable task) {
+    public ECBungeeTask runTask(Runnable task) {
         return this.runTaskLater(task, 0);
     }
 
     @Override
-    public ECTask runTaskAsync(Runnable task) {
+    public ECBungeeTask runTaskAsync(Runnable task) {
         return new ECBungeeTask(this.server.getHandle().getScheduler().runAsync((Plugin) this.server.getPlugin().getHandle(), task));
     }
 
     @Override
-    public ECTask runTaskLater(Runnable task, int ticks) {
+    public ECBungeeTask runTaskLater(Runnable task, int ticks) {
         return this.runTaskLaterAsync(task, ticks);
     }
 
     @Override
-    public ECTask runTaskLaterAsync(Runnable task, int ticks) {
+    public ECBungeeTask runTaskLaterAsync(Runnable task, int ticks) {
         return new ECBungeeTask(this.server.getHandle().getScheduler().schedule((Plugin) this.server.getPlugin().getHandle(), task, ticks * 50L, TimeUnit.MILLISECONDS));
     }
 
     @Override
-    public ECTask runTaskRepeat(Runnable task, int delay, int ticks) {
+    public ECBungeeTask runTaskRepeat(Runnable task, int delay, int ticks) {
         return this.runTaskRepeatAsync(task, delay, ticks);
     }
 
     @Override
-    public ECTask runTaskRepeatAsync(Runnable task, int delay, int ticks) {
+    public ECBungeeTask runTaskRepeatAsync(Runnable task, int delay, int ticks) {
         return new ECBungeeTask(this.server.getHandle().getScheduler().schedule((Plugin) this.server.getPlugin().getHandle(), task, delay * 50L, ticks * 50L, TimeUnit.MILLISECONDS));
     }
 }
