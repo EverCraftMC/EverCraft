@@ -1,7 +1,7 @@
 package io.github.evercraftmc.core.api.events;
 
 public abstract class ECCancelableReasonEvent extends ECCancelableEvent {
-    protected String cancelReason = null;
+    protected String cancelReason = "";
 
     public String getCancelReason() {
         return cancelReason;

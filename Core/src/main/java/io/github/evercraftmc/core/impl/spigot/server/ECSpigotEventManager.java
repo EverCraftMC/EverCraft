@@ -58,7 +58,7 @@ public class ECSpigotEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerLeave(AsyncChatEvent event) {
+        public void onPlayerChat(AsyncChatEvent event) {
             ECSpigotPlayer player = parent.server.getOnlinePlayer(event.getPlayer().getUniqueId());
 
             PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), ECSpigotComponentFormatter.componentToString(event.message()));

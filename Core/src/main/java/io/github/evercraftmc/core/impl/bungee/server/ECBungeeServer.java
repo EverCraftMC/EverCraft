@@ -128,7 +128,7 @@ public class ECBungeeServer implements ECServer {
 
     public ECBungeePlayer getOnlinePlayer(Connection connection) {
         for (ProxiedPlayer bungeePlayer : this.handle.getPlayers()) {
-            if (bungeePlayer.getPendingConnection().equals(connection)) {
+            if (bungeePlayer.getPendingConnection().getSocketAddress().equals(connection.getSocketAddress())) {
                 for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
                     if (player.uuid.equals(bungeePlayer.getUniqueId())) {
                         return new ECBungeePlayer(player, bungeePlayer);

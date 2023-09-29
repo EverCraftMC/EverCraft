@@ -57,7 +57,7 @@ public class ECBungeeEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerLeave(ChatEvent event) {
+        public void onPlayerChat(ChatEvent event) {
             ECBungeePlayer player = parent.server.getOnlinePlayer(event.getSender());
 
             PlayerChatEvent newEvent = new PlayerChatEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), event.getMessage());
