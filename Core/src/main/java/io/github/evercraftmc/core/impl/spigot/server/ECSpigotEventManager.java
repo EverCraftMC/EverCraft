@@ -37,6 +37,7 @@ public class ECSpigotEventManager implements ECEventManager {
             parent.emit(newEvent);
 
             event.joinMessage(Component.empty());
+
             if (newEvent.isCancelled()) {
                 event.getPlayer().kick(ECSpigotComponentFormatter.stringToComponent(newEvent.getCancelReason()));
             } else if (!newEvent.getJoinMessage().isEmpty()) {
@@ -50,6 +51,7 @@ public class ECSpigotEventManager implements ECEventManager {
             parent.emit(newEvent);
 
             event.quitMessage(Component.empty());
+
             if (!newEvent.getLeaveMessage().isEmpty()) {
                 parent.server.broadcastMessage(newEvent.getLeaveMessage());
             }
@@ -62,10 +64,13 @@ public class ECSpigotEventManager implements ECEventManager {
             PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), ECSpigotComponentFormatter.componentToString(event.message()));
             parent.emit(newEvent);
 
+            event.message(Component.empty());
             event.setCancelled(true);
 
             if (newEvent.isCancelled()) {
-                player.sendMessage(newEvent.getCancelReason());
+                if (!newEvent.getCancelReason().isEmpty()) {
+                    player.sendMessage(newEvent.getCancelReason());
+                }
             } else if (!newEvent.getMessage().isEmpty()) {
                 parent.server.broadcastMessage(newEvent.getMessage());
             }

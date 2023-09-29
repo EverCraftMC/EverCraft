@@ -66,7 +66,9 @@ public class ECBungeeEventManager implements ECEventManager {
             event.setCancelled(true);
 
             if (newEvent.isCancelled()) {
-                player.sendMessage(newEvent.getCancelReason());
+                if (!newEvent.getCancelReason().isEmpty()) {
+                    player.sendMessage(newEvent.getCancelReason());
+                }
             } else if (!newEvent.getMessage().isEmpty()) {
                 parent.server.broadcastMessage(newEvent.getMessage());
             }
