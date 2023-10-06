@@ -29,4 +29,9 @@ public interface ECConsole extends ECPlayer {
     default InetAddress getAddress() {
         return null;
     }
+
+    @Override
+    default String getServer() {
+        throw new UnsupportedOperationException("Player is console");
+    }
 }

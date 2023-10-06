@@ -14,5 +14,7 @@ public interface ECPlayer {
 
     InetAddress getAddress();
 
+    String getServer();
+
     void sendMessage(String message);
 }

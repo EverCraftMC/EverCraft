@@ -62,6 +62,11 @@ public class ECSpigotPlayer implements ECPlayer {
     }
 
     @Override
+    public String getServer() {
+        throw new UnsupportedOperationException("Server is backend");
+    }
+
+    @Override
     public void sendMessage(String message) {
         this.handle.sendMessage(ECSpigotComponentFormatter.stringToComponent(message));
     }

@@ -59,6 +59,11 @@ public class ECBungeePlayer implements ECPlayer {
     }
 
     @Override
+    public String getServer() {
+        return this.handle.getServer() != null ? this.handle.getServer().getInfo().getName().toLowerCase() : null;
+    }
+
+    @Override
     public void sendMessage(String message) {
         this.handle.sendMessage(ECBungeeComponentFormatter.stringToComponent(message));
     }
