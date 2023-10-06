@@ -44,7 +44,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public String getName() {
+    public String getType() {
         return this.handle.getName() + " v" + this.handle.getVersion();
     }
 

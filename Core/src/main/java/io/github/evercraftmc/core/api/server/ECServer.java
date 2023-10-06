@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface ECServer {
     ECPlugin getPlugin();
 
-    String getName();
+    String getType();
 
     ECEnvironment getEnvironment();
 
