@@ -10,6 +10,7 @@ import io.github.evercraftmc.core.impl.ECEnvironment;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.core.messaging.ECMessager;
 import io.github.kale_ko.bjsl.BJSL;
+import io.github.kale_ko.bjsl.elements.ParsedObject;
 import io.github.kale_ko.bjsl.parsers.YamlParser;
 import io.github.kale_ko.bjsl.processor.ObjectProcessor;
 import io.github.kale_ko.ejcl.file.bjsl.YamlFileConfig;
@@ -21,6 +22,10 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
@@ -53,15 +58,15 @@ public class ECPlugin {
     protected File dataDirectory;
 
     protected ECEnvironment environment;
+    protected ECServer server;
 
     protected Logger logger;
     protected ClassLoader classLoader;
 
-    protected ECServer server;
-
+    protected StructuredMySQLConfig<ECPlayerData> data;
     protected ECMessager messager;
 
-    protected StructuredMySQLConfig<ECPlayerData> data;
+    protected ParsedObject translations;
 
     public ECPlugin(Object handle, File pluginFile, File dataDirectory, ECEnvironment environment, Logger logger, ClassLoader classLoader) {
         this.handle = handle;
@@ -86,6 +91,7 @@ public class ECPlugin {
             }
         } catch (Exception e) {
             this.logger.error("Failed to create data dir", e);
+            return;
         }
 
         try {
@@ -104,6 +110,7 @@ public class ECPlugin {
             this.logger.info("Connected to Messaging server");
         } catch (Exception e) {
             this.logger.error("Failed connecting to Messaging server", e);
+            return;
         }
 
         try {
@@ -124,6 +131,21 @@ public class ECPlugin {
             this.logger.info("Loaded plugin data");
         } catch (Exception e) {
             this.logger.error("Failed loading plugin data", e);
+            return;
+        }
+
+        try {
+            this.logger.info("Downloading minecraft translations..");
+
+            HttpClient httpClient = HttpClient.newBuilder().build();
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI("https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/" + this.getServer().getMinecraftVersion() + "/assets/minecraft/lang/en_us.json")).GET().build();
+            String response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString()).body();
+
+            this.translations = BJSL.parseJson(response).asObject();
+
+            this.logger.info("Downloaded minecraft translations for en_us.");
+        } catch (Exception e) {
+            this.logger.error("Failed downloading minecraft translations", e);
         }
 
         try {
@@ -148,21 +170,21 @@ public class ECPlugin {
         try {
             ECModuleInfo moduleInfo = null;
 
-            JarInputStream jar = new JarInputStream(new BufferedInputStream(new FileInputStream(file.toFile())));
-            ZipEntry entry;
-            while ((entry = jar.getNextEntry()) != null) {
-                if (entry.getName().equalsIgnoreCase("evercraft.yml")) {
-                    StringBuilder data = new StringBuilder();
+            try (JarInputStream jar = new JarInputStream(new BufferedInputStream(new FileInputStream(file.toFile())))) {
+                ZipEntry entry;
+                while ((entry = jar.getNextEntry()) != null) {
+                    if (entry.getName().equalsIgnoreCase("evercraft.yml")) {
+                        StringBuilder string = new StringBuilder();
 
-                    int read;
-                    while ((read = jar.read()) != -1) {
-                        data.appendCodePoint(read);
+                        int read;
+                        while ((read = jar.read()) != -1) {
+                            string.appendCodePoint(read);
+                        }
+
+                        moduleInfo = BJSL.parseYaml(string.toString(), ECModuleInfo.class);
                     }
-
-                    moduleInfo = BJSL.parseYaml(data.toString(), ECModuleInfo.class);
                 }
             }
-            jar.close();
 
             if (moduleInfo != null) {
                 try {
@@ -245,10 +267,6 @@ public class ECPlugin {
         return this.environment;
     }
 
-    public Logger getLogger() {
-        return this.logger;
-    }
-
     public ECServer getServer() {
         return this.server;
     }
@@ -275,6 +293,10 @@ public class ECPlugin {
         });
     }
 
+    public Logger getLogger() {
+        return this.logger;
+    }
+
     public ECMessager getMessager() {
         return this.messager;
     }
@@ -297,5 +319,9 @@ public class ECPlugin {
         } catch (IOException e) {
             this.logger.error("Failed to save player data", e);
         }
+    }
+
+    public ParsedObject getTranslations() {
+        return this.translations;
     }
 }

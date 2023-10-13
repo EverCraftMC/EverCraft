@@ -10,7 +10,9 @@ import java.util.UUID;
 public interface ECServer {
     ECPlugin getPlugin();
 
-    String getType();
+    String getMinecraftVersion();
+
+    String getSoftwareVersion();
 
     ECEnvironment getEnvironment();
 

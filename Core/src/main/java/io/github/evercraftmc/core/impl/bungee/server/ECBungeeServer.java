@@ -45,8 +45,14 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public String getType() {
-        return this.handle.getName() + " v" + this.handle.getVersion();
+    public String getSoftwareVersion() {
+        return this.handle.getName() + " " + this.handle.getVersion();
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public String getMinecraftVersion() {
+        return this.handle.getGameVersion().split("-")[1].trim().replace(".x", "");
     }
 
     @Override
@@ -119,11 +125,9 @@ public class ECBungeeServer implements ECServer {
                     return new ECBungeePlayer(player, this.handle.getPlayer(name));
                 }
             }
-
-            return null;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     public ECBungeePlayer getOnlinePlayer(Connection connection) {

@@ -44,8 +44,13 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public String getType() {
-        return this.handle.getName() + " v" + this.handle.getVersion();
+    public String getSoftwareVersion() {
+        return this.handle.getName() + " " + this.handle.getVersion();
+    }
+
+    @Override
+    public String getMinecraftVersion() {
+        return this.handle.getMinecraftVersion();
     }
 
     @Override
