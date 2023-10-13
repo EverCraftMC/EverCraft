@@ -38,10 +38,13 @@ tasks.register("upload") {
 
         servers.each() {
             def server = it
+            def modules = server.split(":")[1].split(",")
 
-            if ((System.getProperty("type") == null || System.getProperty("type").equalsIgnoreCase(server.split(":")[1])) && findProject(":" + server.split(":")[1]) != null) {
+            modules.each() {
+                def module = it
+
                 exec {
-                    commandLine "rsync", "-q", project(":" + server.split(":")[1]).tasks.fatJar.outputs.files[0].toPath(), path + server.split(":")[0] + server.split(":")[2] + "/EverCraft-" + server.split(":")[1] + ".jar"
+                    commandLine "rsync", "-q", project(":" + module).tasks.fatJar.outputs.files[0].toPath(), path + server.split(":")[0] + server.split(":")[2] + "/EverCraft-" + module + ".jar"
                 }
             }
         }
