@@ -67,7 +67,7 @@ public class ECBungeeEventManager implements ECEventManager {
             if (message.charAt(0) != '/') {
                 ECBungeePlayer player = parent.server.getOnlinePlayer(event.getSender());
 
-                PlayerChatEvent newEvent = new PlayerChatEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), message);
+                PlayerChatEvent newEvent = new PlayerChatEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), PlayerChatEvent.MessageType.CHAT, message);
                 parent.emit(newEvent);
 
                 event.setCancelled(true);

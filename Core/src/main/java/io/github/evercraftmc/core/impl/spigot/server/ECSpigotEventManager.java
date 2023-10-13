@@ -14,6 +14,8 @@ import java.util.*;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -68,7 +70,7 @@ public class ECSpigotEventManager implements ECEventManager {
             if (message.charAt(0) != '/') {
                 ECSpigotPlayer player = parent.server.getOnlinePlayer(event.getPlayer().getUniqueId());
 
-                PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), message);
+                PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), PlayerChatEvent.MessageType.CHAT, message);
                 parent.emit(newEvent);
 
                 event.message(Component.empty());
@@ -81,6 +83,54 @@ public class ECSpigotEventManager implements ECEventManager {
                 } else if (!newEvent.getMessage().isEmpty()) {
                     parent.server.broadcastMessage(newEvent.getMessage());
                 }
+            }
+        }
+
+        @EventHandler
+        public void onPlayerChat(PlayerDeathEvent event) {
+            Component component = event.deathMessage();
+            if (component == null) {
+                return;
+            }
+            String message = ECSpigotComponentFormatter.componentToString(component);
+
+            ECSpigotPlayer player = parent.server.getOnlinePlayer(event.getPlayer().getUniqueId());
+
+            PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), PlayerChatEvent.MessageType.DEATH, message);
+            parent.emit(newEvent);
+
+            event.deathMessage(Component.empty());
+
+            if (newEvent.isCancelled()) {
+                if (!newEvent.getCancelReason().isEmpty()) {
+                    player.sendMessage(newEvent.getCancelReason());
+                }
+            } else if (!newEvent.getMessage().isEmpty()) {
+                parent.server.broadcastMessage(newEvent.getMessage());
+            }
+        }
+
+        @EventHandler
+        public void onPlayerChat(PlayerAdvancementDoneEvent event) {
+            Component component = event.message();
+            if (component == null) {
+                return;
+            }
+            String message = ECSpigotComponentFormatter.componentToString(component);
+
+            ECSpigotPlayer player = parent.server.getOnlinePlayer(event.getPlayer().getUniqueId());
+
+            PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), PlayerChatEvent.MessageType.ADVANCEMENT, message);
+            parent.emit(newEvent);
+
+            event.message(Component.empty());
+
+            if (newEvent.isCancelled()) {
+                if (!newEvent.getCancelReason().isEmpty()) {
+                    player.sendMessage(newEvent.getCancelReason());
+                }
+            } else if (!newEvent.getMessage().isEmpty()) {
+                parent.server.broadcastMessage(newEvent.getMessage());
             }
         }
     }
