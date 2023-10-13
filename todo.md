@@ -2,7 +2,6 @@
 
 ## Both
 
-- Global chat
 - Staff chat
 - Moderation (kick/ban/mute)
 - Commandspy
@@ -25,6 +24,7 @@
 ## Spigot
 
 - [listeners/JoinListener](https://github.com/EverCraftMC/EverCraft/blob/main/Spigot/src/main/java/io/github/evercraftmc/evercraft/spigot/listeners/JoinListener.java)
+- Worldgaurd
 - Warps
 - Kits
 - Chest/Item Protection

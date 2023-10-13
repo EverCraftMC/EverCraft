@@ -5,6 +5,7 @@ plugins {
 version = project.core_version
 
 repositories {
+    mavenCentral()
     maven {
         url "https://papermc.io/repo/repository/maven-public/"
     }

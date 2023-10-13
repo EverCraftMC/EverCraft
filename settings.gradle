@@ -1,6 +1,8 @@
 rootProject.name = "EverCraft"
 
 include "Core"
-include "Messaging-Server"
 
 include "Global"
+include "Moderation"
+
+include "Messaging-Server"

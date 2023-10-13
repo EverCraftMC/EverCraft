@@ -1,0 +1,4 @@
+entry: io.github.evercraftmc.moderation.ModerationModule
+
+name: "Moderation"
+version: "${version}"

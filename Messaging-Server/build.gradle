@@ -5,6 +5,7 @@ plugins {
 version = project.messaging_version
 
 repositories {
+    mavenCentral()
     maven {
         url "https://jitpack.io"
     }
