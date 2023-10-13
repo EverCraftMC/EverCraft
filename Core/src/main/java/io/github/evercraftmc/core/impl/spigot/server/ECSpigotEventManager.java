@@ -113,7 +113,7 @@ public class ECSpigotEventManager implements ECEventManager {
         @EventHandler
         public void onPlayerChat(PlayerAdvancementDoneEvent event) {
             Component component = event.message();
-            if (component == null) {
+            if (component == null || event.getAdvancement().getDisplay() == null || !event.getAdvancement().getDisplay().doesAnnounceToChat()) {
                 return;
             }
             String message = ECSpigotComponentFormatter.componentToString(component);

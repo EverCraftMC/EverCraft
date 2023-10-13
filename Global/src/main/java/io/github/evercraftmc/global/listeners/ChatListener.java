@@ -23,11 +23,26 @@ public class ChatListener implements ECListener {
         if (parent.getPlugin().getEnvironment().getType() == ECEnvironmentType.PROXY) {
             event.setCancelled(true);
 
-            for (ECPlayer player : parent.getPlugin().getServer().getOnlinePlayers()) {
-                if (!event.getPlayer().getServer().equalsIgnoreCase(player.getName())) {
-                    player.sendMessage(ECTextFormatter.translateColors("&r[" + event.getPlayer().getServer().substring(0, 1).toUpperCase() + event.getPlayer().getServer().substring(1).toLowerCase() + "&r] " + event.getPlayer().getDisplayName() + " &r> " + ECTextFormatter.stripColors(event.getMessage())));
-                } else {
-                    player.sendMessage(ECTextFormatter.translateColors("&r" + event.getPlayer().getDisplayName() + " &r> " + ECTextFormatter.stripColors(event.getMessage())));
+            if (event.getType() == PlayerChatEvent.MessageType.CHAT) {
+                for (ECPlayer player : parent.getPlugin().getServer().getOnlinePlayers()) {
+                    if (!event.getPlayer().getServer().equalsIgnoreCase(player.getServer())) {
+                        player.sendMessage(ECTextFormatter.translateColors("&r[" + event.getPlayer().getServer().substring(0, 1).toUpperCase() + event.getPlayer().getServer().substring(1).toLowerCase() + "&r] " + event.getPlayer().getDisplayName() + " &r> " + ECTextFormatter.stripColors(event.getMessage())));
+                    } else {
+                        player.sendMessage(ECTextFormatter.translateColors("&r" + event.getPlayer().getDisplayName() + " &r> " + ECTextFormatter.stripColors(event.getMessage())));
+                    }
+                }
+            } else {
+                String message = event.getMessage();
+                for (ECPlayer player : parent.getPlugin().getServer().getOnlinePlayers()) {
+                    message = message.replace(player.getName(), player.getDisplayName());
+                }
+
+                for (ECPlayer player : parent.getPlugin().getServer().getOnlinePlayers()) {
+                    if (!event.getPlayer().getServer().equalsIgnoreCase(player.getServer())) {
+                        player.sendMessage(ECTextFormatter.translateColors("&r[" + event.getPlayer().getServer().substring(0, 1).toUpperCase() + event.getPlayer().getServer().substring(1).toLowerCase() + "&r] " + message));
+                    } else {
+                        player.sendMessage(ECTextFormatter.translateColors("&r" + message));
+                    }
                 }
             }
         } else {

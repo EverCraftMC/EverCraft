@@ -1,7 +1,9 @@
 package io.github.evercraftmc.core.impl.spigot.server.util;
 
+import io.github.evercraftmc.core.ECPluginManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -142,6 +144,13 @@ public class ECSpigotComponentFormatter {
 
         if (component instanceof TextComponent textComponent) {
             string.append(textComponent.content());
+        } else if (component instanceof TranslatableComponent textComponent) {
+            String key = ECPluginManager.getPlugin().getTranslations().get(textComponent.key()).asPrimitive().asString();
+            Object[] args = new String[textComponent.args().size()];
+            for (int i = 0; i < textComponent.args().size(); i++) {
+                args[i] = componentToString(textComponent.args().get(i));
+            }
+            string.append(String.format(key, args));
         }
 
         for (Component child : component.children()) {

@@ -1,9 +1,11 @@
 package io.github.evercraftmc.core.impl.bungee.server.util;
 
+import io.github.evercraftmc.core.ECPluginManager;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.TranslatableComponent;
 
 public class ECBungeeComponentFormatter {
     protected static final char COLOR_CHAR = '§';
@@ -138,8 +140,15 @@ public class ECBungeeComponentFormatter {
             }
         }
 
-        if (component instanceof net.kyori.adventure.text.TextComponent textComponent) {
-            string.append(textComponent.content());
+        if (component instanceof TextComponent textComponent) {
+            string.append(textComponent.getText());
+        } else if (component instanceof TranslatableComponent textComponent) {
+            String key = ECPluginManager.getPlugin().getTranslations().get(textComponent.getTranslate()).asPrimitive().asString();
+            Object[] args = new String[textComponent.getWith().size()];
+            for (int i = 0; i < textComponent.getWith().size(); i++) {
+                args[i] = componentToString(textComponent.getWith().get(i));
+            }
+            string.append(String.format(key, args));
         }
 
         for (BaseComponent child : component.getExtra()) {
