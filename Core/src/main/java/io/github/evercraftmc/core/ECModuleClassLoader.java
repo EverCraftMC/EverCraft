@@ -43,24 +43,22 @@ public class ECModuleClassLoader extends ClassLoader {
     }
 
     protected byte[] loadClassData(String name) throws ClassNotFoundException, IOException {
-        JarInputStream jar = new JarInputStream(new BufferedInputStream(new FileInputStream(this.file)));
-        ZipEntry entry;
-        while ((entry = jar.getNextEntry()) != null) {
-            if (entry.getName().equals(name.replace(".", "/") + ".class")) {
-                ByteBuffer data = ByteBuffer.allocate((int) entry.getSize());
+        try (JarInputStream jar = new JarInputStream(new BufferedInputStream(new FileInputStream(this.file)))) {
+            ZipEntry entry;
+            while ((entry = jar.getNextEntry()) != null) {
+                if (entry.getName().equals(name.replace(".", "/") + ".class")) {
+                    ByteBuffer data = ByteBuffer.allocate((int) entry.getSize());
 
-                byte[] buf = new byte[2048];
-                int read;
-                while ((read = jar.read(buf)) != -1) {
-                    data.put(buf, 0, read);
+                    byte[] buf = new byte[2048];
+                    int read;
+                    while ((read = jar.read(buf)) != -1) {
+                        data.put(buf, 0, read);
+                    }
+
+                    return data.array();
                 }
-
-                jar.close();
-
-                return data.array();
             }
         }
-        jar.close();
 
         throw new ClassNotFoundException(name);
     }

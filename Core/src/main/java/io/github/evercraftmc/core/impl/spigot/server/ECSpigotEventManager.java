@@ -35,7 +35,8 @@ public class ECSpigotEventManager implements ECEventManager {
 
         @EventHandler
         public void onPlayerJoin(PlayerJoinEvent event) {
-            io.github.evercraftmc.core.api.events.player.PlayerJoinEvent newEvent = new io.github.evercraftmc.core.api.events.player.PlayerJoinEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), ECSpigotComponentFormatter.componentToString(event.joinMessage()));
+            Component ogMessage = event.joinMessage();
+            io.github.evercraftmc.core.api.events.player.PlayerJoinEvent newEvent = new io.github.evercraftmc.core.api.events.player.PlayerJoinEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), ogMessage != null ? ECSpigotComponentFormatter.componentToString(ogMessage) : "");
             parent.emit(newEvent);
 
             event.joinMessage(Component.empty());
@@ -49,7 +50,8 @@ public class ECSpigotEventManager implements ECEventManager {
 
         @EventHandler
         public void onPlayerLeave(PlayerQuitEvent event) {
-            io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent newEvent = new io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), ECSpigotComponentFormatter.componentToString(event.quitMessage()));
+            Component ogMessage = event.quitMessage();
+            io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent newEvent = new io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), ogMessage != null ? ECSpigotComponentFormatter.componentToString(ogMessage) : "");
             parent.emit(newEvent);
 
             event.quitMessage(Component.empty());
