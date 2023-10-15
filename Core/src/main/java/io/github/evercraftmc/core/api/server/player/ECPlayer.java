@@ -17,4 +17,6 @@ public interface ECPlayer {
     String getServer();
 
     void sendMessage(String message);
+
+    void kick(String message);
 }

@@ -1,10 +1,11 @@
-package io.github.evercraftmc.global;
+package io.github.evercraftmc.moderation;
 
 import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.ECModule;
 import io.github.evercraftmc.core.api.ECModuleInfo;
 import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.events.ECListener;
+import io.github.evercraftmc.moderation.commands.KickCommand;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class ModerationModule implements ECModule {
     }
 
     public void load() {
-
+        this.getPlugin().getServer().getCommandManager().register(new KickCommand(this), false, false);
     }
 
     public void unload() {

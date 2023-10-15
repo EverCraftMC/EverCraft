@@ -34,4 +34,9 @@ public interface ECConsole extends ECPlayer {
     default String getServer() {
         throw new UnsupportedOperationException("Player is console");
     }
+
+    @Override
+    default void kick(String message) {
+        throw new UnsupportedOperationException("Player is console");
+    }
 }

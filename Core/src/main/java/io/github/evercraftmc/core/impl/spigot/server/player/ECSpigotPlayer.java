@@ -70,4 +70,9 @@ public class ECSpigotPlayer implements ECPlayer {
     public void sendMessage(String message) {
         this.handle.sendMessage(ECSpigotComponentFormatter.stringToComponent(message));
     }
+
+    @Override
+    public void kick(String message) {
+        this.handle.kick(ECSpigotComponentFormatter.stringToComponent(message));
+    }
 }

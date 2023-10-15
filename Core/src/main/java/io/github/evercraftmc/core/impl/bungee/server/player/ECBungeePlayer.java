@@ -67,4 +67,9 @@ public class ECBungeePlayer implements ECPlayer {
     public void sendMessage(String message) {
         this.handle.sendMessage(ECBungeeComponentFormatter.stringToComponent(message));
     }
+
+    @Override
+    public void kick(String message) {
+        this.handle.disconnect(ECBungeeComponentFormatter.stringToComponent(message));
+    }
 }
