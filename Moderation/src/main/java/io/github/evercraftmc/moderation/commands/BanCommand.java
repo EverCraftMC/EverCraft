@@ -53,7 +53,7 @@ public class BanCommand implements ECCommand {
 
                 if (sendFeedback) {
                     if (!reason.isEmpty()) {
-                        parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been banned by &r" + player.getDisplayName() + " &r&cuntil \"" + TimeUtil.stringifyFuture(until) + "\" for \"&r" + reason + "&r&c\"."));
+                        parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been banned by &r" + player.getDisplayName() + " &r&cuntil \"" + TimeUtil.stringifyTime(until) + "\" for \"&r" + reason + "&r&c\"."));
 
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).ban = new ECPlayerData.Player.Moderation();
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).ban.moderator = player.getUuid();
@@ -63,12 +63,12 @@ public class BanCommand implements ECCommand {
 
                         ECPlayer onlinePlayer2 = parent.getPlugin().getServer().getOnlinePlayer(player2.getUuid());
                         if (onlinePlayer2 != null) {
-                            onlinePlayer2.kick(ECTextFormatter.translateColors("&cYou have been banned by &r" + player.getDisplayName() + " &r&cuntil \"" + TimeUtil.stringifyFuture(until) + "\" for \"&r" + reason + "&r&c\"."));
+                            onlinePlayer2.kick(ECTextFormatter.translateColors("&cYou have been banned by &r" + player.getDisplayName() + " &r&cuntil \"" + TimeUtil.stringifyTime(until) + "\" for \"&r" + reason + "&r&c\"."));
                         }
 
-                        player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully banned player &r" + player.getDisplayName() + " &r&cuntil \"" + TimeUtil.stringifyFuture(until) + "\" for \"&r" + reason + "&r&c\"."));
+                        player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully banned player &r" + player.getDisplayName() + " &r&cuntil \"" + TimeUtil.stringifyTime(until) + "\" for \"&r" + reason + "&r&c\"."));
                     } else {
-                        parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been banned by &r" + player.getDisplayName() + " &r&auntil \"" + TimeUtil.stringifyFuture(until) + "\"."));
+                        parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been banned by &r" + player.getDisplayName() + " &r&auntil \"" + TimeUtil.stringifyTime(until) + "\"."));
 
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).ban = new ECPlayerData.Player.Moderation();
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).ban.moderator = player.getUuid();
@@ -78,10 +78,10 @@ public class BanCommand implements ECCommand {
 
                         ECPlayer onlinePlayer2 = parent.getPlugin().getServer().getOnlinePlayer(player2.getUuid());
                         if (onlinePlayer2 != null) {
-                            onlinePlayer2.kick(ECTextFormatter.translateColors("&cYou have been banned by &r" + player.getDisplayName() + " &r&cuntil \"" + TimeUtil.stringifyFuture(until) + "\"."));
+                            onlinePlayer2.kick(ECTextFormatter.translateColors("&cYou have been banned by &r" + player.getDisplayName() + " &r&cuntil \"" + TimeUtil.stringifyTime(until) + "\"."));
                         }
 
-                        player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully banned player &r" + player2.getDisplayName() + " &r&auntil \"" + TimeUtil.stringifyFuture(until) + "\"."));
+                        player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully banned player &r" + player2.getDisplayName() + " &r&auntil \"" + TimeUtil.stringifyTime(until) + "\"."));
                     }
                 }
             } else {
@@ -100,6 +100,8 @@ public class BanCommand implements ECCommand {
                 players.add(player2.getName());
             }
             return players;
+        } else if (args.length == 2) {
+            return List.of("forever", "5m", "30m", "1h", "6h", "1d", "3d", "1w");
         } else {
             return List.of();
         }
