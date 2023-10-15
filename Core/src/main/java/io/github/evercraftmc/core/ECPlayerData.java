@@ -22,6 +22,17 @@ public class ECPlayerData {
         public Instant lastJoin = null;
         public long playTime = 0;
 
+        public Moderation ban = null;
+        public Moderation mute = null;
+
+        public static class Moderation {
+            public UUID moderator;
+            public String reason;
+
+            public Instant date;
+            public Instant until;
+        }
+
         private Player() {
             this(null, null);
         }

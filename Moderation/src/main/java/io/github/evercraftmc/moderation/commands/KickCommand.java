@@ -4,6 +4,7 @@ import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.moderation.ModerationModule;
+import java.util.ArrayList;
 import java.util.List;
 
 public class KickCommand implements ECCommand {
@@ -49,27 +50,33 @@ public class KickCommand implements ECCommand {
                     if (!reason.isEmpty()) {
                         parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been kicked by &r" + player.getDisplayName() + " &r&afor \"&r" + reason + "&r&a\"."));
 
-                        player2.kick("&cYou have been kicked by &r" + player.getDisplayName() + " &r&cfor \"&r" + reason + "&r&c\".");
+                        player2.kick(ECTextFormatter.translateColors("&cYou have been kicked by &r" + player.getDisplayName() + " &r&cfor \"&r" + reason + "&r&c\"."));
 
                         player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully kicked player &r" + player2.getDisplayName() + " &r&afor \"&r" + reason + "&r&a\"."));
                     } else {
                         parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been kicked by &r" + player.getDisplayName() + "&r&a."));
 
-                        player2.kick("&cYou have been kicked by &r" + player.getDisplayName() + "&r&c.");
+                        player2.kick(ECTextFormatter.translateColors("&cYou have been kicked by &r" + player.getDisplayName() + "&r&c."));
 
                         player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully kicked player &r" + player2.getDisplayName() + "&r&a."));
                     }
                 }
+            } else {
+                player.sendMessage(ECTextFormatter.translateColors("&cPlayer \"" + args[0] + "\" could not be found."));
             }
         } else if (sendFeedback) {
-            player.sendMessage(ECTextFormatter.translateColors("&cMust pass a username."));
+            player.sendMessage(ECTextFormatter.translateColors("&cYou must pass a username."));
         }
     }
 
     @Override
     public List<String> tabComplete(ECPlayer player, String[] args) {
         if (args.length == 1) {
-            return List.of("reset");
+            List<String> players = new ArrayList<>();
+            for (ECPlayer player2 : parent.getPlugin().getServer().getOnlinePlayers()) {
+                players.add(player2.getName());
+            }
+            return players;
         } else {
             return List.of();
         }

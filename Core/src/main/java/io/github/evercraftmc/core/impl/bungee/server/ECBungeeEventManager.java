@@ -27,10 +27,9 @@ public class ECBungeeEventManager implements ECEventManager {
 
         @EventHandler
         public void onPlayerConnect(LoginEvent event) {
-            String uuid = event.getLoginResult().getId();
-            uuid = uuid.substring(0, 8) + "-" + uuid.substring(8, 12) + "-" + uuid.substring(12, 16) + "-" + uuid.substring(16, 20) + "-" + uuid.substring(20, 32);
+            String uuid = event.getConnection().getUniqueId().toString();
             if (!parent.server.getPlugin().getPlayerData().players.containsKey(uuid)) {
-                parent.server.getPlugin().getPlayerData().players.put(uuid, new ECPlayerData.Player(UUID.fromString(uuid), event.getLoginResult().getName()));
+                parent.server.getPlugin().getPlayerData().players.put(uuid, new ECPlayerData.Player(UUID.fromString(uuid), event.getConnection().getName()));
             }
         }
 
