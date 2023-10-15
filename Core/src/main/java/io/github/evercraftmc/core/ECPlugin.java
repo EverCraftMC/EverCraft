@@ -28,6 +28,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.UUID;
 import java.util.jar.JarInputStream;
 import java.util.stream.Stream;
@@ -236,7 +237,7 @@ public class ECPlugin {
     }
 
     public void unload() {
-        for (ECModule module : ECPluginManager.getModules()) {
+        for (ECModule module : List.copyOf(ECPluginManager.getModules())) {
             this.logger.info("Disabling module " + module.getInfo().getName() + " v" + module.getInfo().getVersion());
 
             module.unload();
