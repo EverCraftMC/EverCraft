@@ -8,8 +8,10 @@ import io.github.evercraftmc.core.api.events.player.PlayerChatEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
+import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeePlayer;
 import io.github.evercraftmc.core.impl.bungee.server.util.ECBungeeComponentFormatter;
+import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
@@ -100,7 +102,13 @@ public class ECBungeeEventManager implements ECEventManager {
                         player.sendMessage(newEvent.getCancelReason());
                     }
                 } else if (!newEvent.getMessage().isEmpty()) {
-                    parent.server.broadcastMessage(newEvent.getMessage());
+                    for (ECPlayer player2 : parent.getServer().getOnlinePlayers()) {
+                        if (!player.getServer().equalsIgnoreCase(player2.getServer())) {
+                            player2.sendMessage(ECTextFormatter.translateColors("&r[" + player.getServer().substring(0, 1).toUpperCase() + player.getServer().substring(1).toLowerCase() + "&r] " + newEvent.getMessage()));
+                        } else {
+                            player2.sendMessage(ECTextFormatter.translateColors("&r" + newEvent.getMessage()));
+                        }
+                    }
                 }
             }
         }

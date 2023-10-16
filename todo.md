@@ -3,6 +3,7 @@
 ## Both
 
 - Staff chat
+- /lockchat
 - Commandspy
 - Sudo
 - Data debugging
