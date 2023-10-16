@@ -3,6 +3,7 @@ package io.github.evercraftmc.core.impl.bungee.server.player;
 import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.bungee.server.util.ECBungeeComponentFormatter;
+import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.UUID;
@@ -14,9 +15,13 @@ public class ECBungeePlayer implements ECPlayer {
     protected UUID uuid;
     protected String name;
 
+    protected String displayName;
+
     public ECBungeePlayer(ECPlayerData.Player data) {
         this.uuid = data.uuid;
         this.name = data.name;
+
+        this.displayName = ECTextFormatter.translateColors((data.prefix != null ? data.prefix + "&r " : "&r") + data.displayName + "&r");
     }
 
     public ECBungeePlayer(ECPlayerData.Player data, ProxiedPlayer handle) {
@@ -41,6 +46,11 @@ public class ECBungeePlayer implements ECPlayer {
 
     @Override
     public String getDisplayName() {
+        return this.displayName;
+    }
+
+    @Override
+    public String getOnlineDisplayName() {
         return this.handle.getDisplayName();
     }
 

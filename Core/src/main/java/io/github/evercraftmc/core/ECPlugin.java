@@ -7,7 +7,6 @@ import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.server.ECServer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
-import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.core.messaging.ECMessager;
 import io.github.kale_ko.bjsl.BJSL;
 import io.github.kale_ko.bjsl.elements.ParsedObject;
@@ -289,7 +288,7 @@ public class ECPlugin {
 
                 parent.saveData();
 
-                event.getPlayer().setDisplayName(ECTextFormatter.translateColors((parent.getPlayerData().players.get(event.getPlayer().getUuid().toString()).prefix != null ? parent.getPlayerData().players.get(event.getPlayer().getUuid().toString()).prefix + "&r " : "&r") + parent.getPlayerData().players.get(event.getPlayer().getUuid().toString()).displayName + "&r"));
+                event.getPlayer().setDisplayName(event.getPlayer().getDisplayName());
             }
         });
     }

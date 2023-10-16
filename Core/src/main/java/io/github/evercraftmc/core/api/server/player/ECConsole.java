@@ -21,6 +21,11 @@ public interface ECConsole extends ECPlayer {
     }
 
     @Override
+    default String getOnlineDisplayName() {
+        return ECTextFormatter.translateColors("&l&4Console");
+    }
+
+    @Override
     default void setDisplayName(String displayName) {
         throw new UnsupportedOperationException("Player is console");
     }

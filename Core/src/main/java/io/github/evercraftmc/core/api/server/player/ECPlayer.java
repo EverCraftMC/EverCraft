@@ -10,6 +10,8 @@ public interface ECPlayer {
 
     String getDisplayName();
 
+    String getOnlineDisplayName();
+
     void setDisplayName(String displayName);
 
     InetAddress getAddress();
