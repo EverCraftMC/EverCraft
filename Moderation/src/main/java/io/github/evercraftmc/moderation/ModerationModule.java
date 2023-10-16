@@ -46,6 +46,8 @@ public class ModerationModule implements ECModule {
         this.getPlugin().getServer().getCommandManager().register(new MuteCommand(this), false, false);
         this.getPlugin().getServer().getCommandManager().register(new UnmuteCommand(this), false, false);
 
+        this.getPlugin().getServer().getCommandManager().register(new ClearChatCommand(this), false, false);
+
         this.getPlugin().getServer().getEventManager().register(new BanListener(this));
         this.getPlugin().getServer().getEventManager().register(new MuteListener(this));
     }
