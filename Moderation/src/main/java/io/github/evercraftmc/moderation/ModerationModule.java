@@ -7,6 +7,7 @@ import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.moderation.commands.*;
 import io.github.evercraftmc.moderation.listeners.BanListener;
+import io.github.evercraftmc.moderation.listeners.LockChatListener;
 import io.github.evercraftmc.moderation.listeners.MuteListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,8 @@ public class ModerationModule implements ECModule {
 
     protected List<ECCommand> commands = new ArrayList<>();
     protected List<ECListener> listeners = new ArrayList<>();
+
+    public boolean chatLocked = false;
 
     public String getName() {
         return this.getInfo().getName();
@@ -47,9 +50,11 @@ public class ModerationModule implements ECModule {
         this.getPlugin().getServer().getCommandManager().register(new UnmuteCommand(this), false, false);
 
         this.getPlugin().getServer().getCommandManager().register(new ClearChatCommand(this), false, false);
+        this.getPlugin().getServer().getCommandManager().register(new LockChatCommand(this), false, false);
 
         this.getPlugin().getServer().getEventManager().register(new BanListener(this));
         this.getPlugin().getServer().getEventManager().register(new MuteListener(this));
+        this.getPlugin().getServer().getEventManager().register(new LockChatListener(this));
     }
 
     public void unload() {

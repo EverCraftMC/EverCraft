@@ -2,6 +2,7 @@ package io.github.evercraftmc.moderation.commands;
 
 import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
+import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.moderation.ModerationModule;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class ClearChatCommand implements ECCommand {
                 if (!player2.hasPermission(this.getPermission())) {
                     player2.sendMessage("\n".repeat(1200));
                 } else {
-                    player2.sendMessage("&aThe chat has been cleared.");
+                    player2.sendMessage(ECTextFormatter.translateColors("&aThe chat has been cleared."));
                 }
             }
         }
