@@ -22,6 +22,12 @@ public class BanListener implements ECListener {
             String reason = parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).ban.reason;
             Instant until = parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).ban.until;
 
+            if (TimeUtil.isPast(parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).ban.until)) {
+                parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).ban = null;
+                parent.getPlugin().saveData();
+                return;
+            }
+
             event.setCancelled(true);
             if (!reason.isEmpty()) {
                 event.setCancelReason(ECTextFormatter.translateColors("&cYou have been banned by &r" + moderatorName + " &r&cfor \"" + TimeUtil.stringifyFuture(until, true) + "\" because \"&r" + reason + "&r&c\"."));

@@ -44,6 +44,7 @@ public class UnbanCommand implements ECCommand {
                     parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been unbanned by &r" + player.getDisplayName() + "&r&a."));
 
                     parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).ban = null;
+                    parent.getPlugin().saveData();
 
                     ECPlayer onlinePlayer2 = parent.getPlugin().getServer().getOnlinePlayer(player2.getUuid());
                     if (onlinePlayer2 != null) {

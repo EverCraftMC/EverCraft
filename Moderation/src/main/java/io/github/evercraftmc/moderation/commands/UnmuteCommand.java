@@ -44,6 +44,7 @@ public class UnmuteCommand implements ECCommand {
                     parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been unmuted by &r" + player.getDisplayName() + "&r&a."));
 
                     parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).mute = null;
+                    parent.getPlugin().saveData();
 
                     ECPlayer onlinePlayer2 = parent.getPlugin().getServer().getOnlinePlayer(player2.getUuid());
                     if (onlinePlayer2 != null) {

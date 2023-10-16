@@ -60,6 +60,7 @@ public class MuteCommand implements ECCommand {
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).mute.reason = reason;
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).mute.date = Instant.now();
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).mute.until = until;
+                        parent.getPlugin().saveData();
 
                         ECPlayer onlinePlayer2 = parent.getPlugin().getServer().getOnlinePlayer(player2.getUuid());
                         if (onlinePlayer2 != null) {
@@ -75,6 +76,7 @@ public class MuteCommand implements ECCommand {
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).mute.reason = reason;
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).mute.date = Instant.now();
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).mute.until = until;
+                        parent.getPlugin().saveData();
 
                         ECPlayer onlinePlayer2 = parent.getPlugin().getServer().getOnlinePlayer(player2.getUuid());
                         if (onlinePlayer2 != null) {

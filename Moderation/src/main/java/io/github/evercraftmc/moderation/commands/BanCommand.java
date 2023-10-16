@@ -60,6 +60,7 @@ public class BanCommand implements ECCommand {
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).ban.reason = reason;
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).ban.date = Instant.now();
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).ban.until = until;
+                        parent.getPlugin().saveData();
 
                         ECPlayer onlinePlayer2 = parent.getPlugin().getServer().getOnlinePlayer(player2.getUuid());
                         if (onlinePlayer2 != null) {
@@ -75,6 +76,7 @@ public class BanCommand implements ECCommand {
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).ban.reason = reason;
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).ban.date = Instant.now();
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).ban.until = until;
+                        parent.getPlugin().saveData();
 
                         ECPlayer onlinePlayer2 = parent.getPlugin().getServer().getOnlinePlayer(player2.getUuid());
                         if (onlinePlayer2 != null) {
