@@ -18,6 +18,8 @@ public interface ECPlayer {
 
     String getServer();
 
+    boolean hasPermission(String permission);
+
     void sendMessage(String message);
 
     void kick(String message);

@@ -16,6 +16,11 @@ public class ECBungeeConsole implements ECConsole {
     }
 
     @Override
+    public boolean hasPermission(String permission) {
+        return this.handle.hasPermission(permission);
+    }
+
+    @Override
     public void sendMessage(String message) {
         this.handle.sendMessage(ECBungeeComponentFormatter.stringToComponent(message));
     }
