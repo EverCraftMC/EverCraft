@@ -20,8 +20,6 @@ public class ModerationModule implements ECModule {
     protected List<ECCommand> commands = new ArrayList<>();
     protected List<ECListener> listeners = new ArrayList<>();
 
-    public boolean chatLocked = false;
-
     public String getName() {
         return this.getInfo().getName();
     }

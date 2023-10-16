@@ -7,6 +7,11 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ECPlayerData {
+    public boolean chatLocked = false;
+
+    public Map<String, Player> players = new HashMap<>();
+    public boolean maintenance = false;
+
     public static class Player {
         // Core
         public UUID uuid;
@@ -22,6 +27,7 @@ public class ECPlayerData {
         public Instant lastJoin = null;
         public long playTime = 0;
 
+        // Moderation
         public Moderation ban = null;
         public Moderation mute = null;
 
@@ -44,6 +50,4 @@ public class ECPlayerData {
             this.displayName = name;
         }
     }
-
-    public Map<String, Player> players = new HashMap<>();
 }
