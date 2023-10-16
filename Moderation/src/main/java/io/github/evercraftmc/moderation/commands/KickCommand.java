@@ -48,11 +48,11 @@ public class KickCommand implements ECCommand {
 
                 if (sendFeedback) {
                     if (!reason.isEmpty()) {
-                        parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been kicked by &r" + player.getDisplayName() + " &r&afor \"&r" + reason + "&r&a\"."));
+                        parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been kicked by &r" + player.getDisplayName() + " &r&abecause \"&r" + reason + "&r&a\"."));
 
-                        player2.kick(ECTextFormatter.translateColors("&cYou have been kicked by &r" + player.getDisplayName() + " &r&cfor \"&r" + reason + "&r&c\"."));
+                        player2.kick(ECTextFormatter.translateColors("&cYou have been kicked by &r" + player.getDisplayName() + " &r&cbecause \"&r" + reason + "&r&c\"."));
 
-                        player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully kicked player &r" + player2.getDisplayName() + " &r&afor \"&r" + reason + "&r&a\"."));
+                        player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully kicked player &r" + player2.getDisplayName() + " &r&abecause \"&r" + reason + "&r&a\"."));
                     } else {
                         parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been kicked by &r" + player.getDisplayName() + "&r&a."));
 

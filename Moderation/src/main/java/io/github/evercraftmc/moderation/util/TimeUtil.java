@@ -42,6 +42,10 @@ public class TimeUtil {
     }
 
     public static Instant parseTime(String string) {
+        if (string.equalsIgnoreCase("forever") || string.equalsIgnoreCase("infinity")) {
+            return Instant.ofEpochMilli(0);
+        }
+
         try {
             return timeFormat.parse(string).toInstant();
         } catch (ParseException e) {
@@ -70,6 +74,10 @@ public class TimeUtil {
     }
 
     public static String stringifyTime(Instant instant) {
+        if (instant.toEpochMilli() == 0) {
+            return "forever";
+        }
+
         return timeFormat.format(Date.from(instant));
     }
 

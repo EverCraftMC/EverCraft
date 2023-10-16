@@ -6,6 +6,8 @@ import io.github.evercraftmc.core.api.ECModuleInfo;
 import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.moderation.commands.*;
+import io.github.evercraftmc.moderation.listeners.BanListener;
+import io.github.evercraftmc.moderation.listeners.MuteListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,9 @@ public class ModerationModule implements ECModule {
         this.getPlugin().getServer().getCommandManager().register(new UnbanCommand(this), false, false);
         this.getPlugin().getServer().getCommandManager().register(new MuteCommand(this), false, false);
         this.getPlugin().getServer().getCommandManager().register(new UnmuteCommand(this), false, false);
+
+        this.getPlugin().getServer().getEventManager().register(new BanListener(this));
+        this.getPlugin().getServer().getEventManager().register(new MuteListener(this));
     }
 
     public void unload() {
