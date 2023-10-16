@@ -10,12 +10,13 @@ import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeePlayer;
 import io.github.evercraftmc.core.impl.bungee.server.util.ECBungeeComponentFormatter;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.nio.file.Files;
 import java.util.*;
-import net.md_5.bungee.api.event.ChatEvent;
-import net.md_5.bungee.api.event.LoginEvent;
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
@@ -24,6 +25,29 @@ import net.md_5.bungee.event.EventHandler;
 public class ECBungeeEventManager implements ECEventManager {
     protected class BungeeListeners implements Listener {
         protected final ECBungeeEventManager parent = ECBungeeEventManager.this;
+
+        @EventHandler
+        public void onPlayerPreConnect(PreLoginEvent event) {
+            if (event.getConnection().getName().startsWith("Tester_")) {
+                try {
+                    boolean allowedIp = false;
+                    InetAddress ip = ((InetSocketAddress) event.getConnection().getSocketAddress()).getAddress();
+
+                    List<String> lines = Files.readAllLines(parent.getServer().getPlugin().getDataDirectory().toPath().resolve("allowedIps.txt"));
+                    for (String line : lines) {
+                        line = line.trim();
+                        if (!line.isEmpty() && ip.equals(InetAddress.getByName(line))) {
+                            allowedIp = true;
+                        }
+                    }
+
+                    if (allowedIp) {
+                        event.getConnection().setOnlineMode(false);
+                    }
+                } catch (ClassCastException | IOException ignored) {
+                }
+            }
+        }
 
         @EventHandler
         public void onPlayerConnect(LoginEvent event) {

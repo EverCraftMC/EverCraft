@@ -3,7 +3,6 @@
 ## Both
 
 - Staff chat
-- Moderation (kick/ban/mute)
 - Commandspy
 - Sudo
 - Data debugging
