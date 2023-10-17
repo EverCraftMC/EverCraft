@@ -2,7 +2,6 @@
 
 ## Both
 
-- Staff chat
 - Commandspy
 - Sudo
 - Data debugging

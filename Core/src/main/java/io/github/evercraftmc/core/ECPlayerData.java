@@ -28,6 +28,9 @@ public class ECPlayerData {
         public long playTime = 0;
 
         // Moderation
+        public boolean staffchat = false;
+        public boolean commandSpy = false;
+
         public Moderation ban = null;
         public Moderation mute = null;
 
