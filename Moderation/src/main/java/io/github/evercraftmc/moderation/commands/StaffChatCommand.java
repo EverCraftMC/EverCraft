@@ -37,11 +37,14 @@ public class StaffChatCommand implements ECCommand {
     public void run(ECPlayer player, String[] args, boolean sendFeedback) {
         if (args.length == 0) {
             parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).staffchat = !parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).staffchat;
+            parent.getPlugin().saveData();
         } else {
             if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("true")) {
                 parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).staffchat = true;
+                parent.getPlugin().saveData();
             } else if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("false")) {
                 parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).staffchat = false;
+                parent.getPlugin().saveData();
             } else {
                 if (sendFeedback) {
                     StringBuilder message = new StringBuilder();

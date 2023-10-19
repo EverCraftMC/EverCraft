@@ -37,11 +37,14 @@ public class LockChatCommand implements ECCommand {
     public void run(ECPlayer player, String[] args, boolean sendFeedback) {
         if (args.length == 0) {
             parent.getPlugin().getPlayerData().chatLocked = !parent.getPlugin().getPlayerData().chatLocked;
+            parent.getPlugin().saveData();
         } else {
             if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("true")) {
                 parent.getPlugin().getPlayerData().chatLocked = true;
+                parent.getPlugin().saveData();
             } else if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("false")) {
                 parent.getPlugin().getPlayerData().chatLocked = false;
+                parent.getPlugin().saveData();
             } else {
                 if (sendFeedback) {
                     player.sendMessage(ECTextFormatter.translateColors("&cWas expecting \"on\" or \"off\""));
