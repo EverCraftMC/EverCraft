@@ -31,6 +31,14 @@ public class ECSpigotEventManager implements ECEventManager {
             if (!parent.server.getPlugin().getPlayerData().players.containsKey(event.getPlayer().getUniqueId().toString())) {
                 parent.server.getPlugin().getPlayerData().players.put(event.getPlayer().getUniqueId().toString(), new ECPlayerData.Player(event.getPlayer().getUniqueId(), event.getPlayer().getName()));
             }
+
+            io.github.evercraftmc.core.api.events.player.PlayerLoginEvent newEvent = new io.github.evercraftmc.core.api.events.player.PlayerLoginEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString())));
+            parent.emit(newEvent);
+
+            if (newEvent.isCancelled()) {
+                event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
+                event.getPlayer().kick(ECSpigotComponentFormatter.stringToComponent(newEvent.getCancelReason()));
+            }
         }
 
         @EventHandler

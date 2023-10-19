@@ -57,6 +57,14 @@ public class ECBungeeEventManager implements ECEventManager {
             if (!parent.server.getPlugin().getPlayerData().players.containsKey(uuid)) {
                 parent.server.getPlugin().getPlayerData().players.put(uuid, new ECPlayerData.Player(UUID.fromString(uuid), event.getConnection().getName()));
             }
+
+            io.github.evercraftmc.core.api.events.player.PlayerLoginEvent newEvent = new io.github.evercraftmc.core.api.events.player.PlayerLoginEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(uuid)));
+            parent.emit(newEvent);
+
+            if (newEvent.isCancelled()) {
+                event.setCancelled(true);
+                event.setCancelReason(ECBungeeComponentFormatter.stringToComponent(newEvent.getCancelReason()));
+            }
         }
 
         @EventHandler
