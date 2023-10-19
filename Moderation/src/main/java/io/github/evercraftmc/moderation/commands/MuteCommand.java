@@ -53,7 +53,7 @@ public class MuteCommand implements ECCommand {
 
                 if (sendFeedback) {
                     if (!reason.isEmpty()) {
-                        parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been muted by &r" + player.getDisplayName() + " &r&cfor \"" + TimeUtil.stringifyFuture(until, true) + "\" because \"&r" + reason + "&r&c\"."));
+                        parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been muted by &r" + player.getDisplayName() + " &r&afor \"" + TimeUtil.stringifyFuture(until, true) + "\" because \"&r" + reason + "&r&a\"."));
 
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).mute = new ECPlayerData.Player.Moderation();
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).mute.moderator = player.getUuid();
@@ -67,7 +67,7 @@ public class MuteCommand implements ECCommand {
                             onlinePlayer2.sendMessage(ECTextFormatter.translateColors("&cYou have been muted by &r" + player.getDisplayName() + " &r&cfor \"" + TimeUtil.stringifyFuture(until, true) + "\" because \"&r" + reason + "&r&c\"."));
                         }
 
-                        player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully muted player &r" + player.getDisplayName() + " &r&cfor \"" + TimeUtil.stringifyFuture(until, true) + "\" because \"&r" + reason + "&r&c\"."));
+                        player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully muted player &r" + player.getDisplayName() + " &r&afor \"" + TimeUtil.stringifyFuture(until, true) + "\" because \"&r" + reason + "&r&a\"."));
                     } else {
                         parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been muted by &r" + player.getDisplayName() + " &r&afor \"" + TimeUtil.stringifyFuture(until, true) + "\"."));
 

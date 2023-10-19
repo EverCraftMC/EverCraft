@@ -53,7 +53,7 @@ public class BanCommand implements ECCommand {
 
                 if (sendFeedback) {
                     if (!reason.isEmpty()) {
-                        parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been banned by &r" + player.getDisplayName() + " &r&cfor \"" + TimeUtil.stringifyFuture(until, true) + "\" because \"&r" + reason + "&r&c\"."));
+                        parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been banned by &r" + player.getDisplayName() + " &r&afor \"" + TimeUtil.stringifyFuture(until, true) + "\" because \"&r" + reason + "&r&a\"."));
 
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).ban = new ECPlayerData.Player.Moderation();
                         parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).ban.moderator = player.getUuid();
@@ -67,7 +67,7 @@ public class BanCommand implements ECCommand {
                             onlinePlayer2.kick(ECTextFormatter.translateColors("&cYou have been banned by &r" + player.getDisplayName() + " &r&cfor \"" + TimeUtil.stringifyFuture(until, true) + "\" because \"&r" + reason + "&r&c\"."));
                         }
 
-                        player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully banned player &r" + player.getDisplayName() + " &r&cfor \"" + TimeUtil.stringifyFuture(until, true) + "\" because \"&r" + reason + "&r&c\"."));
+                        player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully banned player &r" + player.getDisplayName() + " &r&afor \"" + TimeUtil.stringifyFuture(until, true) + "\" because \"&r" + reason + "&r&a\"."));
                     } else {
                         parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&r" + player2.getDisplayName() + " &r&ahas been banned by &r" + player.getDisplayName() + " &r&afor \"" + TimeUtil.stringifyFuture(until, true) + "\"."));
 
