@@ -57,6 +57,12 @@ public class MaintenanceCommand implements ECCommand {
         if (sendFeedback) {
             if (parent.getPlugin().getPlayerData().maintenance) {
                 parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&aMaintenance mode has been enabled"));
+
+                for (ECPlayer player2 : parent.getPlugin().getServer().getOnlinePlayers()) {
+                    if (!player2.hasPermission("evercraft.moderation.commands.maintenance.bypass")) {
+                        player2.kick(ECTextFormatter.translateColors("&cThe server is currently in maintenance mode\nCheck back later!"));
+                    }
+                }
             } else {
                 parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&aMaintenance mode has been disabled"));
             }
