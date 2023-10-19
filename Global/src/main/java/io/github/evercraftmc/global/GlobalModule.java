@@ -44,8 +44,8 @@ public class GlobalModule implements ECModule {
         this.commands.add(this.plugin.getServer().getCommandManager().register(new NickCommand(this), false, true));
         this.commands.add(this.plugin.getServer().getCommandManager().register(new PrefixCommand(this), false, true));
 
-        this.listeners.add(this.plugin.getServer().getEventManager().register(new JoinListener()));
-        this.listeners.add(this.plugin.getServer().getEventManager().register(new ChatListener()));
+        this.listeners.add(this.plugin.getServer().getEventManager().register(new JoinListener(this)));
+        this.listeners.add(this.plugin.getServer().getEventManager().register(new ChatListener(this)));
     }
 
     public void unload() {

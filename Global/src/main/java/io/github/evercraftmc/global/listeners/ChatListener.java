@@ -1,7 +1,7 @@
 package io.github.evercraftmc.global.listeners;
 
-import io.github.evercraftmc.core.ECPluginManager;
 import io.github.evercraftmc.core.api.events.ECHandler;
+import io.github.evercraftmc.core.api.events.ECHandlerOrder;
 import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.core.api.events.messaging.MessageEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerChatEvent;
@@ -16,9 +16,13 @@ import java.io.*;
 import java.util.UUID;
 
 public class ChatListener implements ECListener {
-    private final GlobalModule parent = ECPluginManager.getModule(GlobalModule.class);
+    protected final GlobalModule parent;
 
-    @ECHandler
+    public ChatListener(GlobalModule parent) {
+        this.parent = parent;
+    }
+
+    @ECHandler(order=ECHandlerOrder.BEFORE)
     public void onPlayerChat(PlayerChatEvent event) {
         if (parent.getPlugin().getEnvironment().getType() == ECEnvironmentType.PROXY) {
             if (event.getType() == PlayerChatEvent.MessageType.CHAT) {
@@ -52,7 +56,7 @@ public class ChatListener implements ECListener {
         }
     }
 
-    @ECHandler
+    @ECHandler(order=ECHandlerOrder.BEFORE)
     public void onGlobalChat(MessageEvent event) {
         ECMessage message = event.getMessage();
 

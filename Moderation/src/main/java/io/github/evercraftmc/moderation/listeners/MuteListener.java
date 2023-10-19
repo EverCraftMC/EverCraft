@@ -1,6 +1,7 @@
 package io.github.evercraftmc.moderation.listeners;
 
 import io.github.evercraftmc.core.api.events.ECHandler;
+import io.github.evercraftmc.core.api.events.ECHandlerOrder;
 import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.core.api.events.player.PlayerChatEvent;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
@@ -15,7 +16,7 @@ public class MuteListener implements ECListener {
         this.parent = parent;
     }
 
-    @ECHandler
+    @ECHandler(order=ECHandlerOrder.FIRST)
     public void onPlayerChat(PlayerChatEvent event) {
         if (parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).mute != null) {
             String moderatorName = parent.getPlugin().getServer().getPlayer(parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).mute.moderator).getDisplayName();
