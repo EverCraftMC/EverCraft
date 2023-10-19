@@ -1,25 +1,19 @@
 package io.github.evercraftmc.core.api.events;
 
 public enum ECHandlerOrder {
-    FIRST(1, true),
-    BEFORE(2, false),
-    DONTCARE(3, false),
-    AFTER(4, false),
-    LAST(5, true);
+    FIRST(1),
+    BEFORE(2),
+    DONTCARE(3),
+    AFTER(4),
+    LAST(5);
 
-    final int order;
-    final boolean exclusive;
+    final int value;
 
-    ECHandlerOrder(int order, boolean exclusive) {
-        this.order = order;
-        this.exclusive = exclusive;
+    ECHandlerOrder(int value) {
+        this.value = value;
     }
 
-    public int getOrder() {
-        return this.order;
-    }
-
-    public boolean isExclusive() {
-        return this.exclusive;
+    public int getValue() {
+        return this.value;
     }
 }
