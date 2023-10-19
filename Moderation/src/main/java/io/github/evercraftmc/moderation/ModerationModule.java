@@ -6,10 +6,7 @@ import io.github.evercraftmc.core.api.ECModuleInfo;
 import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.moderation.commands.*;
-import io.github.evercraftmc.moderation.listeners.BanListener;
-import io.github.evercraftmc.moderation.listeners.LockChatListener;
-import io.github.evercraftmc.moderation.listeners.MuteListener;
-import io.github.evercraftmc.moderation.listeners.StaffChatListener;
+import io.github.evercraftmc.moderation.listeners.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +45,7 @@ public class ModerationModule implements ECModule {
         this.getPlugin().getServer().getCommandManager().register(new MuteCommand(this), false, false);
         this.getPlugin().getServer().getCommandManager().register(new UnmuteCommand(this), false, false);
 
+        this.getPlugin().getServer().getCommandManager().register(new MaintenanceCommand(this), false, false);
         this.getPlugin().getServer().getCommandManager().register(new ClearChatCommand(this), false, false);
         this.getPlugin().getServer().getCommandManager().register(new LockChatCommand(this), false, false);
 
@@ -55,6 +53,7 @@ public class ModerationModule implements ECModule {
 
         this.getPlugin().getServer().getEventManager().register(new BanListener(this));
         this.getPlugin().getServer().getEventManager().register(new MuteListener(this));
+        this.getPlugin().getServer().getEventManager().register(new MaintenanceListener(this));
         this.getPlugin().getServer().getEventManager().register(new LockChatListener(this));
         this.getPlugin().getServer().getEventManager().register(new StaffChatListener(this));
     }
