@@ -18,8 +18,6 @@ public class MaintenanceListener implements ECListener {
     @ECHandler(order=ECHandlerOrder.BEFORE)
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (parent.getPlugin().getEnvironment().getType() != ECEnvironmentType.PROXY) {
-            // FIXME Not the root issue (Data isn't propagating to backend?)
-
             return;
         }
 
