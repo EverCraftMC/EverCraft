@@ -93,7 +93,7 @@ public class ECBungeeEventManager implements ECEventManager {
         @EventHandler
         public void onPlayerChat(ChatEvent event) {
             String message = event.getMessage();
-            if (message.isEmpty()) {
+            if (message.isEmpty() || message.equalsIgnoreCase("/")) {
                 event.setCancelled(true);
                 return;
             }

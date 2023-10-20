@@ -95,7 +95,7 @@ public class ECSpigotEventManager implements ECEventManager {
         @EventHandler
         public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
             String message = event.getMessage();
-            if (message.isEmpty()) {
+            if (message.isEmpty() || message.equalsIgnoreCase("/")) {
                 event.setCancelled(true);
                 return;
             }
