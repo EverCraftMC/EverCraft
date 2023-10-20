@@ -50,12 +50,14 @@ public class ModerationModule implements ECModule {
         this.getPlugin().getServer().getCommandManager().register(new LockChatCommand(this), false, false);
 
         this.getPlugin().getServer().getCommandManager().register(new StaffChatCommand(this), false, false);
+        this.getPlugin().getServer().getCommandManager().register(new CommandSpyCommand(this), false, false);
 
         this.getPlugin().getServer().getEventManager().register(new BanListener(this));
         this.getPlugin().getServer().getEventManager().register(new MuteListener(this));
         this.getPlugin().getServer().getEventManager().register(new MaintenanceListener(this));
         this.getPlugin().getServer().getEventManager().register(new LockChatListener(this));
         this.getPlugin().getServer().getEventManager().register(new StaffChatListener(this));
+        this.getPlugin().getServer().getEventManager().register(new CommandSpyListener(this));
     }
 
     public void unload() {

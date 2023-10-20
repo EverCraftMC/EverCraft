@@ -26,7 +26,7 @@ public class ChatListener implements ECListener {
     public void onPlayerChat(PlayerChatEvent event) {
         if (parent.getPlugin().getEnvironment().getType() == ECEnvironmentType.PROXY) {
             if (event.getType() == PlayerChatEvent.MessageType.CHAT) {
-                event.setMessage(ECTextFormatter.translateColors("&r" + event.getPlayer().getDisplayName() + " &r> " + ECTextFormatter.stripColors(event.getMessage())));
+                event.setMessage(ECTextFormatter.translateColors("&r" + event.getPlayer().getDisplayName() + " &r> ") + ECTextFormatter.stripColors(event.getMessage()));
             } else {
                 String message = event.getMessage();
                 for (ECPlayer player : parent.getPlugin().getServer().getOnlinePlayers()) {
