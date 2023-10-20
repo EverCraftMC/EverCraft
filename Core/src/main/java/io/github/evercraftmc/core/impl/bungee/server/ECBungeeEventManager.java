@@ -5,6 +5,7 @@ import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.api.events.ECHandler;
 import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.core.api.events.player.PlayerChatEvent;
+import io.github.evercraftmc.core.api.events.player.PlayerCommandEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
@@ -116,6 +117,19 @@ public class ECBungeeEventManager implements ECEventManager {
                         } else {
                             player2.sendMessage(ECTextFormatter.translateColors("&r" + newEvent.getMessage()));
                         }
+                    }
+                }
+            } else {
+                ECBungeePlayer player = parent.server.getOnlinePlayer(event.getSender());
+
+                PlayerCommandEvent newEvent = new PlayerCommandEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), message);
+                parent.emit(newEvent);
+
+                if (newEvent.isCancelled()) {
+                    event.setCancelled(true);
+
+                    if (!newEvent.getCancelReason().isEmpty()) {
+                        player.sendMessage(newEvent.getCancelReason());
                     }
                 }
             }

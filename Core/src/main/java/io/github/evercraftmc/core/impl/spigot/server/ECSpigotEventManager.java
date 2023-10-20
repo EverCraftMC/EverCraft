@@ -5,6 +5,7 @@ import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.api.events.ECHandler;
 import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.core.api.events.player.PlayerChatEvent;
+import io.github.evercraftmc.core.api.events.player.PlayerCommandEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
 import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotPlayer;
 import io.github.evercraftmc.core.impl.spigot.server.util.ECSpigotComponentFormatter;
@@ -15,10 +16,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerAdvancementDoneEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.plugin.Plugin;
 
 @SuppressWarnings("unchecked")
@@ -77,21 +75,41 @@ public class ECSpigotEventManager implements ECEventManager {
                 return;
             }
 
-            if (message.charAt(0) != '/') {
-                ECSpigotPlayer player = parent.server.getOnlinePlayer(event.getPlayer().getUniqueId());
+            ECSpigotPlayer player = parent.server.getOnlinePlayer(event.getPlayer().getUniqueId());
 
-                PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), PlayerChatEvent.MessageType.CHAT, message);
-                parent.emit(newEvent);
+            PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), PlayerChatEvent.MessageType.CHAT, message);
+            parent.emit(newEvent);
 
-                event.message(Component.empty());
+            event.message(Component.empty());
+            event.setCancelled(true);
+
+            if (newEvent.isCancelled()) {
+                if (!newEvent.getCancelReason().isEmpty()) {
+                    player.sendMessage(newEvent.getCancelReason());
+                }
+            } else if (!newEvent.getMessage().isEmpty()) {
+                parent.server.broadcastMessage(newEvent.getMessage());
+            }
+        }
+
+        @EventHandler
+        public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
+            String message = event.getMessage();
+            if (message.isEmpty()) {
+                event.setCancelled(true);
+                return;
+            }
+
+            ECSpigotPlayer player = parent.server.getOnlinePlayer(event.getPlayer().getUniqueId());
+
+            PlayerCommandEvent newEvent = new PlayerCommandEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), message);
+            parent.emit(newEvent);
+
+            if (newEvent.isCancelled()) {
                 event.setCancelled(true);
 
-                if (newEvent.isCancelled()) {
-                    if (!newEvent.getCancelReason().isEmpty()) {
-                        player.sendMessage(newEvent.getCancelReason());
-                    }
-                } else if (!newEvent.getMessage().isEmpty()) {
-                    parent.server.broadcastMessage(newEvent.getMessage());
+                if (!newEvent.getCancelReason().isEmpty()) {
+                    player.sendMessage(newEvent.getCancelReason());
                 }
             }
         }

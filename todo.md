@@ -2,7 +2,6 @@
 
 ## Both
 
-- Commandspy
 - Sudo
 - Data debugging
 
