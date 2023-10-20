@@ -2,3 +2,5 @@ entry: io.github.evercraftmc.global.GlobalModule
 
 name: "Global"
 version: "${version}"
+
+depends: [ "Core" ]

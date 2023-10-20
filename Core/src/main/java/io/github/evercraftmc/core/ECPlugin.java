@@ -27,7 +27,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.jar.JarInputStream;
 import java.util.stream.Stream;
@@ -82,7 +84,13 @@ public class ECPlugin {
         ECPluginManager.registerPlugin(this);
     }
 
+    private final Map<Path, ECModuleInfo> moduleInfoMap = new HashMap<>();
+    private final Map<String, Path> fileMap = new HashMap<>();
+    private final Map<String, Boolean> loadedMap = new HashMap<>();
+
     public void load() {
+        this.logger.info("Loading plugin EverCraft-Core..");
+
         ECPluginManager.registerPlugin(this);
 
         try {
@@ -154,98 +162,131 @@ public class ECPlugin {
                 Files.createDirectories(modulesDirectory);
             }
 
-            try (Stream<Path> files = Files.list(modulesDirectory)) {
-                for (Path file : files.toList()) {
-                    if (file.getFileName().toString().toLowerCase().endsWith(".jar")) {
-                        this.loadModule(file);
+            try (Stream<Path> stream = Files.list(modulesDirectory).filter(a -> a.getFileName().toString().toLowerCase().endsWith(".jar"))) {
+                List<Path> files = stream.toList();
+
+                for (Path file : files) {
+                    ECModuleInfo moduleInfo = null;
+
+                    try (JarInputStream jar = new JarInputStream(new BufferedInputStream(new FileInputStream(file.toFile())))) {
+                        ZipEntry entry;
+                        while ((entry = jar.getNextEntry()) != null) {
+                            if (entry.getName().equalsIgnoreCase("evercraft.yml")) {
+                                StringBuilder string = new StringBuilder();
+
+                                int read;
+                                while ((read = jar.read()) != -1) {
+                                    string.appendCodePoint(read);
+                                }
+
+                                moduleInfo = BJSL.parseYaml(string.toString(), ECModuleInfo.class);
+                            }
+                        }
                     }
+
+                    if (moduleInfo != null) {
+                        moduleInfoMap.put(file, moduleInfo);
+                        fileMap.put(moduleInfo.getName().toLowerCase(), file);
+                    } else {
+                        this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Jar does not contain a module file (evercraft.yml)");
+                    }
+                }
+
+                for (Path file : files) {
+                    ECModuleInfo moduleInfo = moduleInfoMap.get(file);
+                    loadModule(file, moduleInfo);
                 }
             }
         } catch (IOException e) {
             this.logger.error("Failed loading modules", e);
         }
+
+        this.logger.info("Finished loading.");
     }
 
-    protected void loadModule(Path file) {
-        try {
-            ECModuleInfo moduleInfo = null;
+    protected void loadModule(Path file, ECModuleInfo moduleInfo) {
+        if (loadedMap.containsKey(moduleInfo.getName().toLowerCase())) {
+            return;
+        }
+        loadedMap.put(moduleInfo.getName().toLowerCase(), true);
 
-            try (JarInputStream jar = new JarInputStream(new BufferedInputStream(new FileInputStream(file.toFile())))) {
-                ZipEntry entry;
-                while ((entry = jar.getNextEntry()) != null) {
-                    if (entry.getName().equalsIgnoreCase("evercraft.yml")) {
-                        StringBuilder string = new StringBuilder();
-
-                        int read;
-                        while ((read = jar.read()) != -1) {
-                            string.appendCodePoint(read);
-                        }
-
-                        moduleInfo = BJSL.parseYaml(string.toString(), ECModuleInfo.class);
-                    }
-                }
+        for (String depend : moduleInfo.getDepends()) {
+            if (depend.equalsIgnoreCase("Core")) {
+                continue;
             }
 
-            if (moduleInfo != null) {
-                try {
-                    ECModuleClassLoader moduleClassLoader = new ECModuleClassLoader(this.classLoader, file.toFile());
-                    Class<?> moduleClass = moduleClassLoader.loadClass(moduleInfo.getEntry());
+            Path file2 = fileMap.get(depend.toLowerCase());
+            ECModuleInfo moduleInfo2 = moduleInfoMap.get(file2);
+            loadModule(file2, moduleInfo2);
+        }
 
-                    if (ECModule.class.isAssignableFrom(moduleClass)) {
-                        ECModule module = null;
-                        for (Constructor<?> constructor : moduleClass.getConstructors()) {
-                            if (constructor.getParameterCount() == 0) {
-                                try {
-                                    module = (ECModule) constructor.newInstance();
-                                    module.setPlugin(this);
-                                    module.setInfo(moduleInfo);
+        try {
+            ECModuleClassLoader moduleClassLoader = new ECModuleClassLoader(this.classLoader, file.toFile());
+            Class<?> moduleClass = moduleClassLoader.loadClass(moduleInfo.getEntry());
 
-                                    break;
-                                } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException ignored) {
-                                }
-                            }
+            if (ECModule.class.isAssignableFrom(moduleClass)) {
+                ECModule module = null;
+                for (Constructor<?> constructor : moduleClass.getConstructors()) {
+                    if (constructor.getParameterCount() == 0) {
+                        try {
+                            module = (ECModule) constructor.newInstance();
+                            module.setPlugin(this);
+                            module.setInfo(moduleInfo);
+
+                            break;
+                        } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException ignored) {
                         }
-
-                        if (module != null) {
-                            this.logger.info("Enabling module " + module.getInfo().getName() + " v" + module.getInfo().getVersion() + "..");
-
-                            ECPluginManager.registerModule(module);
-
-                            try {
-                                module.load();
-
-                                this.logger.info("Enabled module " + module.getInfo().getName());
-                            } catch (Exception e) {
-                                this.logger.error("Error loading module \"" + file.getFileName() + "\"", e);
-                            }
-                        } else {
-                            this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Entry class has no 0 args constructor");
-                        }
-                    } else {
-                        this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Entry class does not implement ECModule");
                     }
-                } catch (ClassNotFoundException e) {
-                    this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Entry class could not be found (\"" + moduleInfo.getEntry() + "\")");
+                }
+
+                if (module != null) {
+                    try {
+                        this.logger.info("Enabling module " + module.getInfo().getName() + " v" + module.getInfo().getVersion() + "..");
+
+                        ECPluginManager.registerModule(module);
+
+                        module.load();
+
+                        this.logger.info("Enabled module " + module.getInfo().getName());
+                    } catch (Exception e) {
+                        this.logger.error("Error loading module \"" + file.getFileName() + "\"", e);
+                    }
+                } else {
+                    this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Entry class has no 0 args constructor");
                 }
             } else {
-                this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Jar does not contain a module file (evercraft.yml)");
+                this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Entry class does not implement ECModule");
             }
-        } catch (IOException e) {
-            this.logger.error("Error loading module \"" + file.getFileName() + "\"", e);
+        } catch (ClassNotFoundException e) {
+            this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Entry class could not be found (\"" + moduleInfo.getEntry() + "\")");
         }
     }
 
     public void unload() {
         for (ECModule module : List.copyOf(ECPluginManager.getModules())) {
-            this.logger.info("Disabling module " + module.getInfo().getName() + " v" + module.getInfo().getVersion());
+            try {
+                this.logger.info("Disabling module " + module.getInfo().getName() + " v" + module.getInfo().getVersion());
 
-            module.unload();
+                module.unload();
 
-            ECPluginManager.unregisterModule(module);
+                ECPluginManager.unregisterModule(module);
+
+                this.logger.info("Disabled module " + module.getInfo().getName());
+            } catch (Exception e) {
+                this.logger.error("Error unloading module \"" + module.getName() + "\"", e);
+            }
         }
 
-        if (this.messager != null) {
-            this.messager.close();
+        try {
+            if (this.data != null) {
+                this.data.close();
+            }
+
+            if (this.messager != null) {
+                this.messager.close();
+            }
+        } catch (IOException e) {
+            this.logger.error("Error unloading", e);
         }
 
         ECPluginManager.unregisterPlugin();

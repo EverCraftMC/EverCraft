@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     compileOnly project(":Core")
+    compileOnly project(":Global")
     compileOnly "org.slf4j:slf4j-api:2.0.9"
 
     implementation "com.github.Kale-Ko:EJCL:${project.ejcl_version}"
