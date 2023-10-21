@@ -101,7 +101,7 @@ public class ECBungeeEventManager implements ECEventManager {
             if (message.charAt(0) != '/') {
                 ECBungeePlayer player = parent.server.getOnlinePlayer(event.getSender());
 
-                PlayerChatEvent newEvent = new PlayerChatEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), PlayerChatEvent.MessageType.CHAT, message);
+                PlayerChatEvent newEvent = new PlayerChatEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), message, PlayerChatEvent.MessageType.CHAT, new ArrayList<>());
                 parent.emit(newEvent);
 
                 event.setCancelled(true);
@@ -111,7 +111,7 @@ public class ECBungeeEventManager implements ECEventManager {
                         player.sendMessage(newEvent.getCancelReason());
                     }
                 } else if (!newEvent.getMessage().isEmpty()) {
-                    for (ECPlayer player2 : parent.getServer().getOnlinePlayers()) {
+                    for (ECPlayer player2 : (!newEvent.getRecipients().isEmpty() ? newEvent.getRecipients() : parent.getServer().getOnlinePlayers())) {
                         if (!player.getServer().equalsIgnoreCase(player2.getServer())) {
                             player2.sendMessage(ECTextFormatter.translateColors("&r[" + player.getServer().substring(0, 1).toUpperCase() + player.getServer().substring(1).toLowerCase() + "&r] " + newEvent.getMessage()));
                         } else {

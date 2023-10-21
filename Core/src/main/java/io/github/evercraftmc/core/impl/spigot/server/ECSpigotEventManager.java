@@ -7,8 +7,10 @@ import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.core.api.events.player.PlayerChatEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerCommandEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
+import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotPlayer;
 import io.github.evercraftmc.core.impl.spigot.server.util.ECSpigotComponentFormatter;
+import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -77,7 +79,7 @@ public class ECSpigotEventManager implements ECEventManager {
 
             ECSpigotPlayer player = parent.server.getOnlinePlayer(event.getPlayer().getUniqueId());
 
-            PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), PlayerChatEvent.MessageType.CHAT, message);
+            PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), message, PlayerChatEvent.MessageType.CHAT, new ArrayList<>(parent.getServer().getOnlinePlayers()));
             parent.emit(newEvent);
 
             event.message(Component.empty());
@@ -88,7 +90,9 @@ public class ECSpigotEventManager implements ECEventManager {
                     player.sendMessage(newEvent.getCancelReason());
                 }
             } else if (!newEvent.getMessage().isEmpty()) {
-                parent.server.broadcastMessage(newEvent.getMessage());
+                for (ECPlayer player2 : (!newEvent.getRecipients().isEmpty() ? newEvent.getRecipients() : parent.getServer().getOnlinePlayers())) {
+                    player2.sendMessage(ECTextFormatter.translateColors("&r" + newEvent.getMessage()));
+                }
             }
         }
 
@@ -124,7 +128,7 @@ public class ECSpigotEventManager implements ECEventManager {
 
             ECSpigotPlayer player = parent.server.getOnlinePlayer(event.getPlayer().getUniqueId());
 
-            PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), PlayerChatEvent.MessageType.DEATH, message);
+            PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), message, PlayerChatEvent.MessageType.DEATH, new ArrayList<>(parent.getServer().getOnlinePlayers()));
             parent.emit(newEvent);
 
             event.deathMessage(Component.empty());
@@ -134,7 +138,9 @@ public class ECSpigotEventManager implements ECEventManager {
                     player.sendMessage(newEvent.getCancelReason());
                 }
             } else if (!newEvent.getMessage().isEmpty()) {
-                parent.server.broadcastMessage(newEvent.getMessage());
+                for (ECPlayer player2 : (!newEvent.getRecipients().isEmpty() ? newEvent.getRecipients() : parent.getServer().getOnlinePlayers())) {
+                    player2.sendMessage(ECTextFormatter.translateColors("&r" + newEvent.getMessage()));
+                }
             }
         }
 
@@ -148,7 +154,7 @@ public class ECSpigotEventManager implements ECEventManager {
 
             ECSpigotPlayer player = parent.server.getOnlinePlayer(event.getPlayer().getUniqueId());
 
-            PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), PlayerChatEvent.MessageType.ADVANCEMENT, message);
+            PlayerChatEvent newEvent = new PlayerChatEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), message, PlayerChatEvent.MessageType.ADVANCEMENT, new ArrayList<>(parent.getServer().getOnlinePlayers()));
             parent.emit(newEvent);
 
             event.message(Component.empty());
@@ -158,7 +164,9 @@ public class ECSpigotEventManager implements ECEventManager {
                     player.sendMessage(newEvent.getCancelReason());
                 }
             } else if (!newEvent.getMessage().isEmpty()) {
-                parent.server.broadcastMessage(newEvent.getMessage());
+                for (ECPlayer player2 : (!newEvent.getRecipients().isEmpty() ? newEvent.getRecipients() : parent.getServer().getOnlinePlayers())) {
+                    player2.sendMessage(ECTextFormatter.translateColors("&r" + newEvent.getMessage()));
+                }
             }
         }
     }

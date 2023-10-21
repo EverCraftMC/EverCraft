@@ -13,6 +13,8 @@ import io.github.evercraftmc.core.messaging.ECMessageType;
 import io.github.evercraftmc.core.messaging.ECRecipient;
 import io.github.evercraftmc.global.GlobalModule;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class ChatListener implements ECListener {
@@ -36,14 +38,20 @@ public class ChatListener implements ECListener {
                 event.setMessage(ECTextFormatter.translateColors("&r" + message));
             }
         } else {
+            event.setCancelled(true);
+
             if (event.getType() != PlayerChatEvent.MessageType.CHAT) {
                 try {
                     ByteArrayOutputStream chatMessageData = new ByteArrayOutputStream();
                     DataOutputStream chatMessage = new DataOutputStream(chatMessageData);
                     chatMessage.writeInt(ECMessageType.GLOBAL_CHAT);
                     chatMessage.writeUTF(event.getPlayer().getUuid().toString());
-                    chatMessage.writeUTF(event.getType().name());
+                    chatMessage.writeInt(event.getType());
                     chatMessage.writeUTF(event.getMessage());
+                    chatMessage.writeInt(event.getRecipients().size());
+                    for (ECPlayer recipient : event.getRecipients()) {
+                        chatMessage.writeUTF(recipient.getUuid().toString());
+                    }
                     chatMessage.close();
 
                     parent.getPlugin().getMessager().send(ECRecipient.fromEnvironmentType(ECEnvironmentType.PROXY), chatMessageData.toByteArray());
@@ -51,8 +59,6 @@ public class ChatListener implements ECListener {
                     parent.getPlugin().getLogger().error("[Messager] Failed to send message", e);
                 }
             }
-
-            event.setCancelled(true);
         }
     }
 
@@ -68,12 +74,32 @@ public class ChatListener implements ECListener {
                 int type = commandMessage.readInt();
                 if (type == ECMessageType.GLOBAL_CHAT) {
                     UUID uuid = UUID.fromString(commandMessage.readUTF());
-                    String chatType = commandMessage.readUTF();
+                    int chatType = commandMessage.readInt();
                     String chat = commandMessage.readUTF();
+                    List<ECPlayer> recipients = new ArrayList<>();
+                    int recipientCount = commandMessage.readInt();
+                    for (int i = 0; i < recipientCount; i++) {
+                        recipients.add(parent.getPlugin().getServer().getOnlinePlayer(UUID.fromString(commandMessage.readUTF())));
+                    }
 
                     ECPlayer player = parent.getPlugin().getServer().getOnlinePlayer(uuid);
 
-                    onPlayerChat(new PlayerChatEvent(player, PlayerChatEvent.MessageType.valueOf(chatType), chat));
+                    PlayerChatEvent newEvent = new PlayerChatEvent(player, chat, chatType, recipients);
+                    parent.getPlugin().getServer().getEventManager().emit(newEvent);
+
+                    if (newEvent.isCancelled()) {
+                        if (!newEvent.getCancelReason().isEmpty()) {
+                            player.sendMessage(newEvent.getCancelReason());
+                        }
+                    } else if (!newEvent.getMessage().isEmpty()) {
+                        for (ECPlayer player2 : (!newEvent.getRecipients().isEmpty() ? newEvent.getRecipients() : parent.getPlugin().getServer().getOnlinePlayers())) {
+                            if (!player.getServer().equalsIgnoreCase(player2.getServer())) {
+                                player2.sendMessage(ECTextFormatter.translateColors("&r[" + player.getServer().substring(0, 1).toUpperCase() + player.getServer().substring(1).toLowerCase() + "&r] " + newEvent.getMessage()));
+                            } else {
+                                player2.sendMessage(ECTextFormatter.translateColors("&r" + newEvent.getMessage()));
+                            }
+                        }
+                    }
                 }
 
                 commandMessage.close();

@@ -27,7 +27,7 @@ public class CommandSpyListener implements ECListener {
         }
 
         for (ECPlayer player2 : parent.getPlugin().getServer().getOnlinePlayers()) {
-            if (event.getPlayer() != player2 && parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).commandSpy && player2.hasPermission("evercraft.moderation.commands.commandSpy")) {
+            if (!event.getPlayer().getName().equals(player2.getName()) && parent.getPlugin().getPlayerData().players.get(player2.getUuid().toString()).commandSpy && player2.hasPermission("evercraft.moderation.commands.commandSpy")) {
                 player2.sendMessage(ECTextFormatter.translateColors("&d&l[CommandSpy] &r" + event.getPlayer().getDisplayName() + " &r> ") + event.getCommand().trim());
             }
         }

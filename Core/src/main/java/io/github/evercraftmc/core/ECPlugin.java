@@ -346,6 +346,10 @@ public class ECPlugin {
         return this.data.get();
     }
 
+    public void setPlayerData(ECPlayerData value) {
+        this.data.set(value);
+    }
+
     public void loadData() {
         try {
             this.data.load(false);
