@@ -23,7 +23,9 @@ public class LockChatListener implements ECListener {
 
         if (parent.getPlugin().getPlayerData().chatLocked && !event.getPlayer().hasPermission("evercraft.moderation.commands.lockChat.bypass")) {
             event.setCancelled(true);
-            event.setCancelReason(ECTextFormatter.translateColors("&cThe chat is locked"));
+            if (event.getType() != PlayerChatEvent.MessageType.ADVANCEMENT && event.getType() != PlayerChatEvent.MessageType.DEATH) {
+                event.setCancelReason(ECTextFormatter.translateColors("&cThe chat is locked"));
+            }
         }
     }
 }

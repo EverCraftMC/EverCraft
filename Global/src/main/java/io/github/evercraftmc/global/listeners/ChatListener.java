@@ -29,9 +29,10 @@ public class ChatListener implements ECListener {
         if (parent.getPlugin().getEnvironment().getType() == ECEnvironmentType.PROXY) {
             if (event.getType() == PlayerChatEvent.MessageType.CHAT) {
                 event.setMessage(ECTextFormatter.translateColors("&r" + event.getPlayer().getDisplayName() + " &r> ") + ECTextFormatter.stripColors(event.getMessage()));
-            } else {
+            } else if (event.getType() == PlayerChatEvent.MessageType.DEATH || event.getType() == PlayerChatEvent.MessageType.ADVANCEMENT) {
                 String message = event.getMessage();
                 for (ECPlayer player : parent.getPlugin().getServer().getOnlinePlayers()) {
+                    // FIXME Impartial matched Kale matches Kale_Ko
                     message = message.replace(player.getName(), player.getDisplayName());
                 }
 

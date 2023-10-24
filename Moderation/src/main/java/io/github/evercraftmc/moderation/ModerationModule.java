@@ -39,25 +39,25 @@ public class ModerationModule implements ECModule {
     }
 
     public void load() {
-        this.getPlugin().getServer().getCommandManager().register(new KickCommand(this), false, false);
-        this.getPlugin().getServer().getCommandManager().register(new BanCommand(this), false, false);
-        this.getPlugin().getServer().getCommandManager().register(new UnbanCommand(this), false, false);
-        this.getPlugin().getServer().getCommandManager().register(new MuteCommand(this), false, false);
-        this.getPlugin().getServer().getCommandManager().register(new UnmuteCommand(this), false, false);
+        this.commands.add(this.getPlugin().getServer().getCommandManager().register(new KickCommand(this), false, false));
+        this.commands.add(this.getPlugin().getServer().getCommandManager().register(new BanCommand(this), false, false));
+        this.commands.add(this.getPlugin().getServer().getCommandManager().register(new UnbanCommand(this), false, false));
+        this.commands.add(this.getPlugin().getServer().getCommandManager().register(new MuteCommand(this), false, false));
+        this.commands.add(this.getPlugin().getServer().getCommandManager().register(new UnmuteCommand(this), false, false));
 
-        this.getPlugin().getServer().getCommandManager().register(new MaintenanceCommand(this), false, false);
-        this.getPlugin().getServer().getCommandManager().register(new ClearChatCommand(this), false, false);
-        this.getPlugin().getServer().getCommandManager().register(new LockChatCommand(this), false, false);
+        this.commands.add(this.getPlugin().getServer().getCommandManager().register(new MaintenanceCommand(this), false, false));
+        this.commands.add(this.getPlugin().getServer().getCommandManager().register(new ClearChatCommand(this), false, false));
+        this.commands.add(this.getPlugin().getServer().getCommandManager().register(new LockChatCommand(this), false, false));
 
-        this.getPlugin().getServer().getCommandManager().register(new StaffChatCommand(this), false, false);
-        this.getPlugin().getServer().getCommandManager().register(new CommandSpyCommand(this), false, false);
+        this.commands.add(this.getPlugin().getServer().getCommandManager().register(new StaffChatCommand(this), false, false));
+        this.commands.add(this.getPlugin().getServer().getCommandManager().register(new CommandSpyCommand(this), false, false));
 
-        this.getPlugin().getServer().getEventManager().register(new BanListener(this));
-        this.getPlugin().getServer().getEventManager().register(new MuteListener(this));
-        this.getPlugin().getServer().getEventManager().register(new MaintenanceListener(this));
-        this.getPlugin().getServer().getEventManager().register(new LockChatListener(this));
-        this.getPlugin().getServer().getEventManager().register(new StaffChatListener(this));
-        this.getPlugin().getServer().getEventManager().register(new CommandSpyListener(this));
+        this.listeners.add(this.getPlugin().getServer().getEventManager().register(new BanListener(this)));
+        this.listeners.add(this.getPlugin().getServer().getEventManager().register(new MuteListener(this)));
+        this.listeners.add(this.getPlugin().getServer().getEventManager().register(new MaintenanceListener(this)));
+        this.listeners.add(this.getPlugin().getServer().getEventManager().register(new LockChatListener(this)));
+        this.listeners.add(this.getPlugin().getServer().getEventManager().register(new StaffChatListener(this)));
+        this.listeners.add(this.getPlugin().getServer().getEventManager().register(new CommandSpyListener(this)));
     }
 
     public void unload() {

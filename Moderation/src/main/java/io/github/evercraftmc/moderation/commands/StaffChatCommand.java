@@ -1,9 +1,11 @@
 package io.github.evercraftmc.moderation.commands;
 
 import io.github.evercraftmc.core.api.commands.ECCommand;
+import io.github.evercraftmc.core.api.events.player.PlayerChatEvent;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.moderation.ModerationModule;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StaffChatCommand implements ECCommand {
@@ -53,9 +55,22 @@ public class StaffChatCommand implements ECCommand {
                         message.append(args[i]).append(" ");
                     }
 
+                    List<ECPlayer> recipients = new ArrayList<>();
                     for (ECPlayer player2 : parent.getPlugin().getServer().getOnlinePlayers()) {
                         if (player2.hasPermission(this.getPermission())) {
-                            player2.sendMessage(ECTextFormatter.translateColors("&d&l[Staffchat] &r" + player.getDisplayName() + " &r> " + ECTextFormatter.stripColors(message.toString().trim())));
+                            recipients.add(player2);
+                        }
+                    }
+                    PlayerChatEvent newEvent = new PlayerChatEvent(player, "&d&l[Staffchat] &r" + player.getDisplayName() + " &r> " + ECTextFormatter.stripColors(message.toString().trim()), 20, recipients);
+                    parent.getPlugin().getServer().getEventManager().emit(newEvent);
+
+                    if (newEvent.isCancelled()) {
+                        if (!newEvent.getCancelReason().isEmpty()) {
+                            player.sendMessage(newEvent.getCancelReason());
+                        }
+                    } else if (!newEvent.getMessage().isEmpty()) {
+                        for (ECPlayer player2 : newEvent.getRecipients()) {
+                            player2.sendMessage(ECTextFormatter.translateColors("&r" + newEvent.getMessage()));
                         }
                     }
                 }

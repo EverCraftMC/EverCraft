@@ -30,10 +30,12 @@ public class MuteListener implements ECListener {
             }
 
             event.setCancelled(true);
-            if (!reason.isEmpty()) {
-                event.setCancelReason(ECTextFormatter.translateColors("&cYou have been muted by &r" + moderatorName + " &r&cfor \"" + TimeUtil.stringifyFuture(until, true) + "\" because \"&r" + reason + "&r&c\"."));
-            } else {
-                event.setCancelReason(ECTextFormatter.translateColors("&cYou have been muted by &r" + moderatorName + " &r&cfor \"" + TimeUtil.stringifyFuture(until, true) + "\"."));
+            if (event.getType() != PlayerChatEvent.MessageType.ADVANCEMENT && event.getType() != PlayerChatEvent.MessageType.DEATH) {
+                if (!reason.isEmpty()) {
+                    event.setCancelReason(ECTextFormatter.translateColors("&cYou have been muted by &r" + moderatorName + " &r&cfor \"" + TimeUtil.stringifyFuture(until, true) + "\" because \"&r" + reason + "&r&c\"."));
+                } else {
+                    event.setCancelReason(ECTextFormatter.translateColors("&cYou have been muted by &r" + moderatorName + " &r&cfor \"" + TimeUtil.stringifyFuture(until, true) + "\"."));
+                }
             }
         }
     }
