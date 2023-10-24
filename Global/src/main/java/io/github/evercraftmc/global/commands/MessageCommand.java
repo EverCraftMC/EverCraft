@@ -5,11 +5,12 @@ import io.github.evercraftmc.core.api.events.player.PlayerChatEvent;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.global.GlobalModule;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class MessageCommand implements ECCommand {
     protected final GlobalModule parent;
+
+    public static Map<ECPlayer, UUID> lastMessaged = new HashMap<>();
 
     public MessageCommand(GlobalModule parent) {
         this.parent = parent;
@@ -57,6 +58,11 @@ public class MessageCommand implements ECCommand {
                             player.sendMessage(newEvent.getCancelReason());
                         }
                     } else if (!newEvent.getMessage().isEmpty()) {
+                        lastMessaged.remove(player);
+                        lastMessaged.put(player, player2.getUuid());
+                        lastMessaged.remove(player2);
+                        lastMessaged.put(player2, player.getUuid());
+
                         player2.sendMessage(ECTextFormatter.translateColors("&b&l[DM] &r" + player.getDisplayName() + " &r&8-> &4You &r> " + ECTextFormatter.stripColors(message.trim())));
                         player.sendMessage(ECTextFormatter.translateColors("&b&l[DM] &r&4You &r&8-> &r" + player.getDisplayName() + " &r> " + ECTextFormatter.stripColors(message.trim())));
                     }
