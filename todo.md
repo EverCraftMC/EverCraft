@@ -8,7 +8,6 @@
 
 - Info commands
 - Scoreboards
-- /message
 - /friend
 - Playtime
 

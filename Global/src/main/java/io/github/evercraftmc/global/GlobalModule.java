@@ -6,6 +6,7 @@ import io.github.evercraftmc.core.api.ECModuleInfo;
 import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.global.commands.DebugCommand;
+import io.github.evercraftmc.global.commands.MessageCommand;
 import io.github.evercraftmc.global.commands.NickCommand;
 import io.github.evercraftmc.global.commands.PrefixCommand;
 import io.github.evercraftmc.global.listeners.ChatListener;
@@ -44,6 +45,8 @@ public class GlobalModule implements ECModule {
     public void load() {
         this.commands.add(this.plugin.getServer().getCommandManager().register(new NickCommand(this), false, true));
         this.commands.add(this.plugin.getServer().getCommandManager().register(new PrefixCommand(this), false, true));
+
+        this.commands.add(this.plugin.getServer().getCommandManager().register(new MessageCommand(this), false, false));
 
         this.commands.add(this.plugin.getServer().getCommandManager().register(new DebugCommand(this), true, false));
 

@@ -47,7 +47,8 @@ public class PlayerChatEvent extends ECCancelableReasonEvent {
 
     public static class MessageType {
         public static final int CHAT = 1;
-        public static final int STAFFCHAT = 20;
+        public static final int DM = 11;
+        public static final int STAFFCHAT = 21;
 
         public static final int DEATH = 2;
         public static final int ADVANCEMENT = 3;
