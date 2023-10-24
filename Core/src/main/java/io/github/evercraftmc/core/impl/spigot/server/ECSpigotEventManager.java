@@ -15,6 +15,7 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 import java.lang.reflect.Method;
 import java.util.*;
 import net.kyori.adventure.text.Component;
+import org.bukkit.GameRule;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -147,7 +148,7 @@ public class ECSpigotEventManager implements ECEventManager {
         @EventHandler
         public void onPlayerChat(PlayerAdvancementDoneEvent event) {
             Component component = event.message();
-            if (component == null || event.getAdvancement().getDisplay() == null || !event.getAdvancement().getDisplay().doesAnnounceToChat()) {
+            if (component == null || event.getAdvancement().getDisplay() == null || !event.getAdvancement().getDisplay().doesAnnounceToChat() || Boolean.FALSE.equals(event.getPlayer().getWorld().getGameRuleValue(GameRule.ANNOUNCE_ADVANCEMENTS))) {
                 return;
             }
             String message = ECSpigotComponentFormatter.componentToString(component);
