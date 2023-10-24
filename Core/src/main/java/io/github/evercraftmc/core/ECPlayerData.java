@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ECPlayerData {
-    public boolean chatLocked = false;
-
     public Map<String, Player> players = new HashMap<>();
+
+    public boolean chatLocked = false;
     public boolean maintenance = false;
 
     public static class Player {

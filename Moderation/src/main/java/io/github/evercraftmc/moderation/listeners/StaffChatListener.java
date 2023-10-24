@@ -28,7 +28,7 @@ public class StaffChatListener implements ECListener {
                     recipients.add(player2);
                 }
             }
-            PlayerChatEvent newEvent = new PlayerChatEvent(event.getPlayer(), "&d&l[Staffchat] &r" + event.getMessage(), 20, recipients);
+            PlayerChatEvent newEvent = new PlayerChatEvent(event.getPlayer(), "&d&l[Staffchat] &r" + event.getMessage(), PlayerChatEvent.MessageType.STAFFCHAT, recipients);
             parent.getPlugin().getServer().getEventManager().emit(newEvent);
 
             if (newEvent.isCancelled()) {

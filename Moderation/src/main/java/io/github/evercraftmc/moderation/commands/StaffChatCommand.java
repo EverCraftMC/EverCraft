@@ -61,7 +61,7 @@ public class StaffChatCommand implements ECCommand {
                             recipients.add(player2);
                         }
                     }
-                    PlayerChatEvent newEvent = new PlayerChatEvent(player, "&d&l[Staffchat] &r" + player.getDisplayName() + " &r> " + ECTextFormatter.stripColors(message.toString().trim()), 20, recipients);
+                    PlayerChatEvent newEvent = new PlayerChatEvent(player, "&d&l[Staffchat] &r" + player.getDisplayName() + " &r> " + ECTextFormatter.stripColors(message.toString().trim()), PlayerChatEvent.MessageType.STAFFCHAT, recipients);
                     parent.getPlugin().getServer().getEventManager().emit(newEvent);
 
                     if (newEvent.isCancelled()) {
