@@ -50,12 +50,19 @@ public class ECBungeePlayer implements ECPlayer {
     }
 
     @Override
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    @Override
     public String getOnlineDisplayName() {
         return this.handle.getDisplayName();
     }
 
     @Override
-    public void setDisplayName(String displayName) {
+    public void setOnlineDisplayName(String displayName) {
+        this.setDisplayName(displayName);
+
         this.handle.setDisplayName(displayName);
     }
 

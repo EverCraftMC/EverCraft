@@ -46,7 +46,12 @@ public class ECSpigotPlayer implements ECPlayer {
 
     @Override
     public String getDisplayName() {
-        return this.name;
+        return this.displayName;
+    }
+
+    @Override
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     @Override
@@ -55,7 +60,9 @@ public class ECSpigotPlayer implements ECPlayer {
     }
 
     @Override
-    public void setDisplayName(String displayName) {
+    public void setOnlineDisplayName(String displayName) {
+        this.setDisplayName(displayName);
+
         this.handle.customName(ECSpigotComponentFormatter.stringToComponent(displayName));
         this.handle.displayName(ECSpigotComponentFormatter.stringToComponent(displayName));
         this.handle.playerListName(ECSpigotComponentFormatter.stringToComponent(displayName));

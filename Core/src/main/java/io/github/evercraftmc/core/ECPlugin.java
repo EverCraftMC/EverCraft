@@ -329,7 +329,7 @@ public class ECPlugin {
 
                 parent.saveData();
 
-                event.getPlayer().setDisplayName(event.getPlayer().getDisplayName());
+                event.getPlayer().setOnlineDisplayName(event.getPlayer().getDisplayName());
             }
         });
     }
