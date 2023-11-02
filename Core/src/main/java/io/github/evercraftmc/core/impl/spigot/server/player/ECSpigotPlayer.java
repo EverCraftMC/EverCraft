@@ -79,6 +79,11 @@ public class ECSpigotPlayer implements ECPlayer {
     }
 
     @Override
+    public InetSocketAddress getServerAddress() {
+        return this.handle.getVirtualHost();
+    }
+
+    @Override
     public String getServer() {
         throw new UnsupportedOperationException("Server is backend");
     }

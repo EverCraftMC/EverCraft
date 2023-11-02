@@ -1,6 +1,7 @@
 package io.github.evercraftmc.core.api.server.player;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.UUID;
 
 public interface ECPlayer {
@@ -17,6 +18,8 @@ public interface ECPlayer {
     void setOnlineDisplayName(String displayName);
 
     InetAddress getAddress();
+
+    InetSocketAddress getServerAddress();
 
     String getServer();
 

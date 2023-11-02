@@ -68,11 +68,16 @@ public class ECBungeePlayer implements ECPlayer {
 
     @Override
     public InetAddress getAddress() {
-        if (this.handle.getSocketAddress() instanceof InetSocketAddress address) {
+        if (this.handle.getPendingConnection().getSocketAddress() instanceof InetSocketAddress address) {
             return address.getAddress();
         } else {
             return null;
         }
+    }
+
+    @Override
+    public InetSocketAddress getServerAddress() {
+        return this.handle.getPendingConnection().getVirtualHost();
     }
 
     @Override

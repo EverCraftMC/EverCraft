@@ -2,6 +2,7 @@ package io.github.evercraftmc.core.api.server.player;
 
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.UUID;
 
 public interface ECConsole extends ECPlayer {
@@ -37,6 +38,11 @@ public interface ECConsole extends ECPlayer {
 
     @Override
     default InetAddress getAddress() {
+        return null;
+    }
+
+    @Override
+    default InetSocketAddress getServerAddress() {
         return null;
     }
 
