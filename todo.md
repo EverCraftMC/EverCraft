@@ -8,18 +8,18 @@
 
 - Info commands
 - Scoreboards
+- Tablist
 - /friend
 - Playtime
 
 ## Bungee
 
-- [listeners/JoinListener](https://github.com/EverCraftMC/EverCraft/blob/main/Bungee/src/main/java/io/github/evercraftmc/evercraft/bungee/listeners/JoinListener.java)
 - Custom ping responses
 - Server warps
+- Fallback server
 
 ## Spigot
 
-- [listeners/JoinListener](https://github.com/EverCraftMC/EverCraft/blob/main/Spigot/src/main/java/io/github/evercraftmc/evercraft/spigot/listeners/JoinListener.java)
 - Worldgaurd
 - Warps
 - Kits

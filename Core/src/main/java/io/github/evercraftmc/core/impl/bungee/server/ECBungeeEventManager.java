@@ -8,6 +8,9 @@ import io.github.evercraftmc.core.api.events.player.PlayerChatEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerCommandEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
+import io.github.evercraftmc.core.api.events.proxy.player.PlayerProxyJoinEvent;
+import io.github.evercraftmc.core.api.events.proxy.player.PlayerServerConnectEvent;
+import io.github.evercraftmc.core.api.events.proxy.player.PlayerServerConnectedEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeePlayer;
@@ -87,6 +90,43 @@ public class ECBungeeEventManager implements ECEventManager {
 
             if (!newEvent.getLeaveMessage().isEmpty()) {
                 parent.server.broadcastMessage(newEvent.getLeaveMessage());
+            }
+        }
+
+        @EventHandler
+        public void onPlayerServerConnect(ServerConnectEvent event) {
+            if (event.getReason() == ServerConnectEvent.Reason.JOIN_PROXY) {
+                PlayerProxyJoinEvent newEvent = new PlayerProxyJoinEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), "", event.getTarget().getName());
+                parent.emit(newEvent);
+
+                if (newEvent.isCancelled()) {
+                    event.setCancelled(true);
+
+                    event.getPlayer().disconnect(ECBungeeComponentFormatter.stringToComponent(newEvent.getCancelReason()));
+                } else {
+                    event.setTarget(parent.server.getHandle().getServerInfo(newEvent.getTargetServer()));
+                }
+            } else {
+                PlayerServerConnectEvent newEvent = new PlayerServerConnectEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), event.getTarget().getName());
+                parent.emit(newEvent);
+
+                if (newEvent.isCancelled()) {
+                    event.setCancelled(true);
+
+                    event.getPlayer().sendMessage(ECBungeeComponentFormatter.stringToComponent(newEvent.getCancelReason()));
+                } else {
+                    event.setTarget(parent.server.getHandle().getServerInfo(newEvent.getTargetServer()));
+                }
+            }
+        }
+
+        @EventHandler
+        public void onPlayerServerConnect(ServerConnectedEvent event) {
+            PlayerServerConnectedEvent newEvent = new PlayerServerConnectedEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), event.getServer().getInfo().getName(), "");
+            parent.emit(newEvent);
+
+            if (!newEvent.getConnectMessage().isEmpty()) {
+                parent.server.broadcastMessage(newEvent.getConnectMessage());
             }
         }
 
