@@ -1,7 +1,7 @@
 package io.github.evercraftmc.core.impl.bungee.server.player;
 
 import io.github.evercraftmc.core.api.server.player.ECConsole;
-import io.github.evercraftmc.core.impl.bungee.server.util.ECBungeeComponentFormatter;
+import io.github.evercraftmc.core.impl.bungee.util.ECBungeeComponentFormatter;
 import net.md_5.bungee.api.CommandSender;
 
 public class ECBungeeConsole implements ECConsole {

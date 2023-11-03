@@ -1,4 +1,4 @@
-package io.github.evercraftmc.core.impl.bungee.server.util;
+package io.github.evercraftmc.core.impl.bungee.util;
 
 import io.github.evercraftmc.core.ECPluginManager;
 import net.md_5.bungee.api.ChatColor;
@@ -151,8 +151,10 @@ public class ECBungeeComponentFormatter {
             string.append(String.format(key, args));
         }
 
-        for (BaseComponent child : component.getExtra()) {
-            string.append(componentToString(child));
+        if (component.getExtra() != null) {
+            for (BaseComponent child : component.getExtra()) {
+                string.append(componentToString(child));
+            }
         }
 
         return string.toString();

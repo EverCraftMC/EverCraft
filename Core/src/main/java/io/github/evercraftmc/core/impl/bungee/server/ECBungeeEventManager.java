@@ -15,7 +15,7 @@ import io.github.evercraftmc.core.api.events.proxy.player.PlayerServerConnectedE
 import io.github.evercraftmc.core.api.server.ECEventManager;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeePlayer;
-import io.github.evercraftmc.core.impl.bungee.server.util.ECBungeeComponentFormatter;
+import io.github.evercraftmc.core.impl.bungee.util.ECBungeeComponentFormatter;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import java.io.IOException;
 import java.lang.reflect.Method;

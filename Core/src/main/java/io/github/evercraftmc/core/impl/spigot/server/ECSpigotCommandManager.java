@@ -7,7 +7,7 @@ import io.github.evercraftmc.core.api.events.messaging.MessageEvent;
 import io.github.evercraftmc.core.api.server.ECCommandManager;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.ECEnvironmentType;
-import io.github.evercraftmc.core.impl.spigot.server.util.ECSpigotComponentFormatter;
+import io.github.evercraftmc.core.impl.spigot.util.ECSpigotComponentFormatter;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.core.messaging.ECMessage;
 import io.github.evercraftmc.core.messaging.ECMessageType;

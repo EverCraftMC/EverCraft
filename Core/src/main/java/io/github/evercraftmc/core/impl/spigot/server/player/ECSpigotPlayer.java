@@ -2,7 +2,7 @@ package io.github.evercraftmc.core.impl.spigot.server.player;
 
 import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
-import io.github.evercraftmc.core.impl.spigot.server.util.ECSpigotComponentFormatter;
+import io.github.evercraftmc.core.impl.spigot.util.ECSpigotComponentFormatter;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;

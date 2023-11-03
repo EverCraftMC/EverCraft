@@ -9,7 +9,7 @@ import io.github.evercraftmc.core.api.events.player.PlayerCommandEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotPlayer;
-import io.github.evercraftmc.core.impl.spigot.server.util.ECSpigotComponentFormatter;
+import io.github.evercraftmc.core.impl.spigot.util.ECSpigotComponentFormatter;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.lang.reflect.Method;

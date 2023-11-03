@@ -1,4 +1,4 @@
-package io.github.evercraftmc.core.impl.spigot.server.util;
+package io.github.evercraftmc.core.impl.spigot.util;
 
 import io.github.evercraftmc.core.ECPluginManager;
 import net.kyori.adventure.text.Component;
@@ -153,8 +153,10 @@ public class ECSpigotComponentFormatter {
             string.append(String.format(key, args));
         }
 
-        for (Component child : component.children()) {
-            string.append(componentToString(child));
+        if (component.children() != null) {
+            for (Component child : component.children()) {
+                string.append(componentToString(child));
+            }
         }
 
         return string.toString();
