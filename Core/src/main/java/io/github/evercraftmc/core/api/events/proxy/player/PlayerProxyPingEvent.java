@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public class PlayerProxyPingEvent extends ECEvent {
     protected String motd;
+    protected boolean centerMotd = true;
 
     protected int onlinePlayers;
     protected int maxPlayers;
@@ -33,6 +34,14 @@ public class PlayerProxyPingEvent extends ECEvent {
 
     public void setMotd(String motd) {
         this.motd = motd;
+    }
+
+    public boolean getCenterMotd() {
+        return this.centerMotd;
+    }
+
+    public void setCenterMotd(boolean centerMotd) {
+        this.centerMotd = centerMotd;
     }
 
     public int getOnlinePlayers() {

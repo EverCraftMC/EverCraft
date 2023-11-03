@@ -5,6 +5,7 @@ import io.github.evercraftmc.core.api.events.ECHandlerOrder;
 import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.core.api.events.proxy.player.PlayerProxyPingEvent;
 import io.github.evercraftmc.core.impl.bungee.server.ECBungeeServer;
+import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.global.GlobalModule;
 
 public class ServerPingListener implements ECListener {
@@ -23,8 +24,9 @@ public class ServerPingListener implements ECListener {
             server = address[0].toLowerCase();
         }
 
-        String[] motd = new String[] { ((ECBungeeServer) parent.getPlugin().getServer()).getDefaultMotd().split("\n")[0], "" };
-        motd[1] = server;
+        String[] motd = new String[2];
+        motd[0] = ECTextFormatter.translateColors("&r&6--------[ &3&lEverCraft &r&7" + ((ECBungeeServer) parent.getPlugin().getServer()).getAllMinecraftVersions() + " &r&6]--------");
+        motd[1] = ECTextFormatter.translateColors("&r" + server);
         event.setMotd(String.join("\n", motd));
     }
 }

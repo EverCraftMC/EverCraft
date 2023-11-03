@@ -143,13 +143,21 @@ public class ECBungeeEventManager implements ECEventManager {
             PlayerProxyPingEvent newEvent = new PlayerProxyPingEvent(ECBungeeComponentFormatter.componentToString(event.getResponse().getDescriptionComponent()), event.getResponse().getPlayers().getOnline(), event.getResponse().getPlayers().getMax(), players, event.getConnection().getSocketAddress() instanceof InetSocketAddress socketAddress ? socketAddress.getAddress() : null, event.getConnection().getVirtualHost());
             parent.emit(newEvent);
 
+            String[] motd = newEvent.getMotd().split("\n");
+            for (int i = 0; i < motd.length; i++) {
+                if (newEvent.getCenterMotd()) {
+                    String padding = " ".repeat((48 - ECTextFormatter.stripColors(motd[i]).length()) / 2);
+                    motd[i] = padding + motd[i] + padding;
+                }
+            }
+            event.getResponse().setDescriptionComponent(ECBungeeComponentFormatter.stringToComponent(String.join("\n", motd)));
+
             List<ServerPing.PlayerInfo> newPlayers = new ArrayList<>();
             if (newEvent.getPlayers() != null) {
                 for (Map.Entry<UUID, String> entry : newEvent.getPlayers().entrySet()) {
                     newPlayers.add(new ServerPing.PlayerInfo(entry.getValue(), entry.getKey()));
                 }
             }
-            event.getResponse().setDescriptionComponent(ECBungeeComponentFormatter.stringToComponent(newEvent.getMotd()));
             event.getResponse().setPlayers(new ServerPing.Players(newEvent.getMaxPlayers(), newEvent.getOnlinePlayers(), newPlayers.toArray(new ServerPing.PlayerInfo[] { })));
         }
 
