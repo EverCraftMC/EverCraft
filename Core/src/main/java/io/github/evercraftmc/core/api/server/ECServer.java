@@ -4,6 +4,7 @@ import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.server.player.ECConsole;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
+import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -15,6 +16,8 @@ public interface ECServer {
     String getSoftwareVersion();
 
     ECEnvironment getEnvironment();
+
+    ECEnvironmentType getEnvironmentType();
 
     Collection<? extends ECPlayer> getPlayers();
 

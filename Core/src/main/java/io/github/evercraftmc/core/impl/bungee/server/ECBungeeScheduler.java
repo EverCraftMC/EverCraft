@@ -34,7 +34,7 @@ public class ECBungeeScheduler implements ECScheduler {
 
     @Override
     public ECBungeeTask runTask(Runnable task) {
-        return this.runTaskLater(task, 0);
+        return this.runTaskAsync(task);
     }
 
     @Override

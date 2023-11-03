@@ -4,6 +4,7 @@ import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.server.ECServer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
+import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotConsole;
 import io.github.evercraftmc.core.impl.spigot.server.player.ECSpigotPlayer;
 import java.util.ArrayList;
@@ -56,6 +57,11 @@ public class ECSpigotServer implements ECServer {
     @Override
     public ECEnvironment getEnvironment() {
         return ECEnvironment.SPIGOT;
+    }
+
+    @Override
+    public ECEnvironmentType getEnvironmentType() {
+        return ECEnvironmentType.BACKEND;
     }
 
     @Override

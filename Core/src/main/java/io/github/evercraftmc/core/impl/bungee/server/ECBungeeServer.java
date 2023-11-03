@@ -4,6 +4,7 @@ import io.github.evercraftmc.core.ECPlayerData;
 import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.server.ECServer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
+import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeeConsole;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeePlayer;
 import java.util.ArrayList;
@@ -52,12 +53,18 @@ public class ECBungeeServer implements ECServer {
     @SuppressWarnings("deprecation")
     @Override
     public String getMinecraftVersion() {
-        return this.handle.getGameVersion().split("-")[1].trim().replace(".x", "");
+        String[] versions = this.handle.getGameVersion().split("-");
+        return versions[versions.length - 1].trim().replace(".x", "");
     }
 
     @Override
     public ECEnvironment getEnvironment() {
         return ECEnvironment.BUNGEE;
+    }
+
+    @Override
+    public ECEnvironmentType getEnvironmentType() {
+        return ECEnvironmentType.PROXY;
     }
 
     @Override
