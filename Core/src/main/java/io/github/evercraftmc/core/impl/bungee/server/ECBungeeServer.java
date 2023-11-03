@@ -47,11 +47,14 @@ public class ECBungeeServer implements ECServer {
         return this.handle.getName() + " " + this.handle.getVersion();
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public String getMinecraftVersion() {
-        String[] versions = this.handle.getGameVersion().split("-");
+        String[] versions = this.handle.getConfig().getGameVersion().split("-");
         return versions[versions.length - 1].trim().replace(".x", "");
+    }
+
+    public String getAllMinecraftVersions() {
+        return this.handle.getConfig().getGameVersion();
     }
 
     @Override
