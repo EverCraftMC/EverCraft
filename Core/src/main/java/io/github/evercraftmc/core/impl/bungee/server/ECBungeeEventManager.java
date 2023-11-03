@@ -9,6 +9,7 @@ import io.github.evercraftmc.core.api.events.player.PlayerCommandEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent;
 import io.github.evercraftmc.core.api.events.proxy.player.PlayerProxyJoinEvent;
+import io.github.evercraftmc.core.api.events.proxy.player.PlayerProxyPingEvent;
 import io.github.evercraftmc.core.api.events.proxy.player.PlayerServerConnectEvent;
 import io.github.evercraftmc.core.api.events.proxy.player.PlayerServerConnectedEvent;
 import io.github.evercraftmc.core.api.server.ECEventManager;
@@ -22,6 +23,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.util.*;
+import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -128,6 +130,27 @@ public class ECBungeeEventManager implements ECEventManager {
             if (!newEvent.getConnectMessage().isEmpty()) {
                 parent.server.broadcastMessage(newEvent.getConnectMessage());
             }
+        }
+
+        @EventHandler
+        public void onPlayerServerConnect(ProxyPingEvent event) {
+            Map<UUID, String> players = new HashMap<>();
+            if (event.getResponse().getPlayers().getSample() != null) {
+                for (ServerPing.PlayerInfo player : event.getResponse().getPlayers().getSample()) {
+                    players.put(player.getUniqueId(), player.getName());
+                }
+            }
+            PlayerProxyPingEvent newEvent = new PlayerProxyPingEvent(ECBungeeComponentFormatter.componentToString(event.getResponse().getDescriptionComponent()), event.getResponse().getPlayers().getOnline(), event.getResponse().getPlayers().getMax(), players, event.getConnection().getSocketAddress() instanceof InetSocketAddress socketAddress ? socketAddress.getAddress() : null, event.getConnection().getVirtualHost());
+            parent.emit(newEvent);
+
+            List<ServerPing.PlayerInfo> newPlayers = new ArrayList<>();
+            if (newEvent.getPlayers() != null) {
+                for (Map.Entry<UUID, String> entry : newEvent.getPlayers().entrySet()) {
+                    newPlayers.add(new ServerPing.PlayerInfo(entry.getValue(), entry.getKey()));
+                }
+            }
+            event.getResponse().setDescriptionComponent(ECBungeeComponentFormatter.stringToComponent(newEvent.getMotd()));
+            event.getResponse().setPlayers(new ServerPing.Players(newEvent.getMaxPlayers(), newEvent.getOnlinePlayers(), newPlayers.toArray(new ServerPing.PlayerInfo[] { })));
         }
 
         @EventHandler
