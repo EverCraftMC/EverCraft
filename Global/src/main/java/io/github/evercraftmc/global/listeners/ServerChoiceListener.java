@@ -18,10 +18,10 @@ public class ServerChoiceListener implements ECListener {
 
     @ECHandler(order=ECHandlerOrder.BEFORE)
     public void onPlayerJoin(PlayerProxyJoinEvent event) {
-        String server = GlobalModule.DEFAULT_SERVER;
+        String server = ((ECBungeeServer) parent.getPlugin().getServer()).getDefaultServer();
 
         String[] address = event.getPlayer().getServerAddress().getHostString().split("\\.");
-        if (address.length > 2 && !address[0].equalsIgnoreCase(GlobalModule.FALLBACK_SERVER) && ((ECBungeeServer) parent.getPlugin().getServer()).getServer(address[0].toLowerCase())) {
+        if (address.length > 2 && !address[0].equalsIgnoreCase(((ECBungeeServer) parent.getPlugin().getServer()).getFallbackServer()) && ((ECBungeeServer) parent.getPlugin().getServer()).getServer(address[0].toLowerCase())) {
             server = address[0].toLowerCase();
         }
 

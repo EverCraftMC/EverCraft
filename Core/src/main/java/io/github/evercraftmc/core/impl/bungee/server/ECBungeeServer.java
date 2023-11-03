@@ -7,10 +7,7 @@ import io.github.evercraftmc.core.impl.ECEnvironment;
 import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeeConsole;
 import io.github.evercraftmc.core.impl.bungee.server.player.ECBungeePlayer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.Connection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -153,8 +150,25 @@ public class ECBungeeServer implements ECServer {
         return null;
     }
 
+    public String getDefaultServer() {
+        List<String> servers = this.handle.getConfig().getListeners().stream().toList().get(0).getServerPriority();
+        return servers.get(0);
+    }
+
+    public String getFallbackServer() {
+        List<String> servers = this.handle.getConfig().getListeners().stream().toList().get(0).getServerPriority();
+        return servers.get(servers.size() - 1);
+    }
+
     public boolean getServer(String name) {
         return this.handle.getServerInfo(name) != null;
+    }
+
+    public String getServerMotd(String name) {
+        if (!getServer(name)) {
+            return null;
+        }
+        return this.handle.getServerInfo(name).getMotd();
     }
 
     @Override
