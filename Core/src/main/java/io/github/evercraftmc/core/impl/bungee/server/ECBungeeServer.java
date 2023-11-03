@@ -153,6 +153,10 @@ public class ECBungeeServer implements ECServer {
         return null;
     }
 
+    public boolean getServer(String name) {
+        return this.handle.getServerInfo(name) != null;
+    }
+
     @Override
     public ECBungeeConsole getConsole() {
         return new ECBungeeConsole(this.handle.getConsole());
