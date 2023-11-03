@@ -14,7 +14,6 @@
 
 ## Bungee
 
-- Custom ping responses
 - Server warps
 - Fallback server
 

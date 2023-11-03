@@ -164,6 +164,10 @@ public class ECBungeeServer implements ECServer {
         return this.handle.getServerInfo(name) != null;
     }
 
+    public String getDefaultMotd() {
+        return this.handle.getConfig().getListeners().stream().toList().get(0).getMotd();
+    }
+
     public String getServerMotd(String name) {
         if (!getServer(name)) {
             return null;

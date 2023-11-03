@@ -9,6 +9,7 @@ import io.github.evercraftmc.global.commands.*;
 import io.github.evercraftmc.global.listeners.ChatListener;
 import io.github.evercraftmc.global.listeners.JoinListener;
 import io.github.evercraftmc.global.listeners.ServerChoiceListener;
+import io.github.evercraftmc.global.listeners.ServerPingListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +20,6 @@ public class GlobalModule implements ECModule {
 
     protected List<ECCommand> commands = new ArrayList<>();
     protected List<ECListener> listeners = new ArrayList<>();
-
-    public static final String DEFAULT_SERVER = "main";
-    public static final String FALLBACK_SERVER = "fallback";
 
     public String getName() {
         return this.getInfo().getName();
@@ -55,6 +53,7 @@ public class GlobalModule implements ECModule {
         this.listeners.add(this.plugin.getServer().getEventManager().register(new JoinListener(this)));
         this.listeners.add(this.plugin.getServer().getEventManager().register(new ChatListener(this)));
         this.listeners.add(this.plugin.getServer().getEventManager().register(new ServerChoiceListener(this)));
+        this.listeners.add(this.plugin.getServer().getEventManager().register(new ServerPingListener(this)));
     }
 
     public void unload() {
