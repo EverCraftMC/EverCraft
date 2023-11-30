@@ -4,5 +4,6 @@ include "Core"
 
 include "Global"
 include "Moderation"
+include "WorldGuard"
 
 include "Messaging-Server"

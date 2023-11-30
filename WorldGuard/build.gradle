@@ -1,0 +1,42 @@
+plugins {
+    id "java"
+}
+
+version = project.worldguard_version
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://jitpack.io"
+    }
+}
+
+dependencies {
+    compileOnly project(":Core")
+    compileOnly project(":Global")
+    compileOnly "org.slf4j:slf4j-api:2.0.9"
+
+    implementation "com.github.Kale-Ko:EJCL:${project.ejcl_version}"
+}
+
+tasks.register("fatJar", Jar) {
+    archiveClassifier = "fat"
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(sourceSets.main.output)
+    from(configurations.runtimeClasspath.collect {
+        it.isDirectory() ? null : zipTree(it)
+    })
+}
+
+build {
+    finalizedBy tasks.fatJar
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("evercraft.yml") {
+        expand "version": project.version
+    }
+}

@@ -19,7 +19,6 @@
 
 ## Spigot
 
-- Worldgaurd
 - Warps
 - Kits
 - Chest/Item Protection

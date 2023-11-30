@@ -1,0 +1,6 @@
+entry: io.github.evercraftmc.worldguard.WorldGuardModule
+
+name: "WorldGuard"
+version: "${version}"
+
+depends: [ "Core", "Global" ]
