@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.event.*;
@@ -34,26 +35,30 @@ public class ECBungeeEventManager implements ECEventManager {
     protected class BungeeListeners implements Listener {
         protected final ECBungeeEventManager parent = ECBungeeEventManager.this;
 
+        protected final Map<InetAddress, Boolean> allowedIps = new HashMap<>();
+
+        public BungeeListeners() {
+            try {
+                Path path = parent.getServer().getPlugin().getDataDirectory().toPath().resolve("allowedIps.txt");
+                if (Files.exists(path)) {
+                    List<String> lines = Files.readAllLines(path);
+                    for (String line : lines) {
+                        String ip = line.split("/")[0];
+                        boolean allowAny = Boolean.parseBoolean(line.split("/")[1]);
+
+                        allowedIps.put(InetAddress.getByName(ip), allowAny);
+                    }
+                }
+            } catch (ClassCastException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         @EventHandler
         public void onPlayerPreConnect(PreLoginEvent event) {
-            if (event.getConnection().getName().startsWith("Tester_")) {
-                try {
-                    boolean allowedIp = false;
-                    InetAddress ip = ((InetSocketAddress) event.getConnection().getSocketAddress()).getAddress();
-
-                    List<String> lines = Files.readAllLines(parent.getServer().getPlugin().getDataDirectory().toPath().resolve("allowedIps.txt"));
-                    for (String line : lines) {
-                        line = line.trim();
-                        if (!line.isEmpty() && ip.equals(InetAddress.getByName(line))) {
-                            allowedIp = true;
-                        }
-                    }
-
-                    if (allowedIp) {
-                        event.getConnection().setOnlineMode(false);
-                    }
-                } catch (ClassCastException | IOException ignored) {
-                }
+            InetAddress ip = ((InetSocketAddress) event.getConnection().getSocketAddress()).getAddress();
+            if (allowedIps.containsKey(ip) && (allowedIps.get(ip) || event.getConnection().getName().startsWith("Tester_"))) {
+                event.getConnection().setOnlineMode(false);
             }
         }
 
