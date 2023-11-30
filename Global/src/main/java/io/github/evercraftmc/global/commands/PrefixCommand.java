@@ -50,8 +50,8 @@ public class PrefixCommand implements ECCommand {
                             player.sendMessage(ECTextFormatter.translateColors("&a" + otherPlayer.getDisplayName() + "&r&a's prefix has been reset."));
                         }
                     } else if (args.length == 2) {
-                        if (ECTextFormatter.stripColors(args[0]).length() <= 16 && args[0].length() <= 32) {
-                            if (args[0].equalsIgnoreCase("reset")) {
+                        if (ECTextFormatter.stripColors(args[1]).length() <= 16 && args[1].length() <= 32) {
+                            if (args[1].equalsIgnoreCase("reset")) {
                                 this.parent.getPlugin().getPlayerData().players.get(otherPlayer.getUuid().toString()).prefix = otherPlayer.getName();
                                 this.parent.getPlugin().saveData();
 
@@ -59,11 +59,11 @@ public class PrefixCommand implements ECCommand {
                                     player.sendMessage(ECTextFormatter.translateColors("&a" + otherPlayer.getDisplayName() + "&r&a's prefix has been reset."));
                                 }
                             } else {
-                                this.parent.getPlugin().getPlayerData().players.get(otherPlayer.getUuid().toString()).prefix = args[0];
+                                this.parent.getPlugin().getPlayerData().players.get(otherPlayer.getUuid().toString()).prefix = args[1];
                                 this.parent.getPlugin().saveData();
 
                                 if (sendFeedback) {
-                                    player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set " + otherPlayer.getDisplayName() + "&r&a's prefix to &r" + args[0] + "&r&a."));
+                                    player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set " + otherPlayer.getDisplayName() + "&r&a's prefix to &r" + args[1] + "&r&a."));
                                 }
                             }
                         } else if (sendFeedback) {

@@ -50,8 +50,8 @@ public class NickCommand implements ECCommand {
                             player.sendMessage(ECTextFormatter.translateColors("&a" + otherPlayer.getDisplayName() + "&r&a's nickname has been reset."));
                         }
                     } else if (args.length == 2) {
-                        if (ECTextFormatter.stripColors(args[0]).length() <= 16 && args[0].length() <= 32) {
-                            if (args[0].equalsIgnoreCase("reset")) {
+                        if (ECTextFormatter.stripColors(args[1]).length() <= 16 && args[1].length() <= 32) {
+                            if (args[1].equalsIgnoreCase("reset")) {
                                 this.parent.getPlugin().getPlayerData().players.get(otherPlayer.getUuid().toString()).displayName = otherPlayer.getName();
                                 this.parent.getPlugin().saveData();
 
@@ -59,11 +59,11 @@ public class NickCommand implements ECCommand {
                                     player.sendMessage(ECTextFormatter.translateColors("&a" + otherPlayer.getDisplayName() + "&r&a's nickname has been reset."));
                                 }
                             } else {
-                                this.parent.getPlugin().getPlayerData().players.get(otherPlayer.getUuid().toString()).displayName = args[0];
+                                this.parent.getPlugin().getPlayerData().players.get(otherPlayer.getUuid().toString()).displayName = args[1];
                                 this.parent.getPlugin().saveData();
 
                                 if (sendFeedback) {
-                                    player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set " + otherPlayer.getDisplayName() + "&r&a's nickname to &r" + args[0] + "&r&a."));
+                                    player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set " + otherPlayer.getDisplayName() + "&r&a's nickname to &r" + args[1] + "&r&a."));
                                 }
                             }
                         } else if (sendFeedback) {
