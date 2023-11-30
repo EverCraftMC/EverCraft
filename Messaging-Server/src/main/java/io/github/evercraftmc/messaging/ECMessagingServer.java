@@ -70,15 +70,15 @@ public class ECMessagingServer {
                 this.socket = ServerSocketFactory.getDefault().createServerSocket(this.address.getPort(), -1, this.address.getAddress());
 
                 while (this.open) {
-                    Socket socket = this.socket.accept();
+                    Socket client = this.socket.accept();
 
-                    socket.setTcpNoDelay(true);
-                    socket.setKeepAlive(true);
-                    socket.setSoTimeout(3000);
+                    client.setTcpNoDelay(true);
+                    client.setKeepAlive(true);
+                    client.setSoTimeout(3000);
 
                     Connection connection;
                     synchronized (WRITE_LOCK) {
-                        connection = new Connection(socket);
+                        connection = new Connection(client);
                         connections.add(connection);
                     }
 
@@ -91,7 +91,10 @@ public class ECMessagingServer {
 
                                     int size = connection.getInputStream().readInt();
                                     byte[] buf = new byte[size];
-                                    connection.getInputStream().read(buf, 0, size);
+                                    int read = connection.getInputStream().read(buf, 0, size);
+                                    if (size != read) {
+                                        throw new IOException("Mismatched read");
+                                    }
 
                                     synchronized (WRITE_LOCK) {
                                         for (Connection connection2 : this.connections) {

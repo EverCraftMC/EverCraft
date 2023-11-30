@@ -10,7 +10,7 @@ import java.util.*;
 public class MessageCommand implements ECCommand {
     protected final GlobalModule parent;
 
-    public static Map<ECPlayer, UUID> lastMessaged = new HashMap<>();
+    public static final Map<ECPlayer, UUID> lastMessaged = new HashMap<>();
 
     public MessageCommand(GlobalModule parent) {
         this.parent = parent;
