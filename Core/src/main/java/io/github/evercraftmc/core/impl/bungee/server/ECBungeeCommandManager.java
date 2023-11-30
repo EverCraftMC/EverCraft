@@ -53,9 +53,9 @@ public class ECBungeeCommandManager implements ECCommandManager {
                             }
                             commandMessage.close();
 
-                            parent.server.getPlugin().getMessager().send(ECRecipient.fromEnvironmentType(ECEnvironmentType.BACKEND), commandMessageData.toByteArray());
+                            parent.server.getPlugin().getMessenger().send(ECRecipient.fromEnvironmentType(ECEnvironmentType.BACKEND), commandMessageData.toByteArray());
                         } catch (IOException e) {
-                            parent.server.getPlugin().getLogger().error("[Messager] Failed to send message", e);
+                            parent.server.getPlugin().getLogger().error("[Messenger] Failed to send message", e);
                         }
                     }
                 } else {
@@ -130,7 +130,7 @@ public class ECBungeeCommandManager implements ECCommandManager {
 
                         commandMessage.close();
                     } catch (IOException e) {
-                        parent.server.getPlugin().getLogger().error("[Messager] Failed to read message", e);
+                        parent.server.getPlugin().getLogger().error("[Messenger] Failed to read message", e);
                     }
                 }
             }

@@ -63,7 +63,7 @@ public abstract class ECRecipient {
             return true;
         }
 
-        if (this instanceof ECRecipient.Server && this.toString().equalsIgnoreCase(server.getPlugin().getMessager().id.toString())) {
+        if (this instanceof ECRecipient.Server && this.toString().equalsIgnoreCase(server.getPlugin().getMessenger().id.toString())) {
             return true;
         }
 

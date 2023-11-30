@@ -7,7 +7,7 @@ import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.core.api.events.player.PlayerJoinEvent;
 import io.github.evercraftmc.core.api.server.ECServer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
-import io.github.evercraftmc.core.messaging.ECMessager;
+import io.github.evercraftmc.core.messaging.ECMessenger;
 import io.github.kale_ko.bjsl.BJSL;
 import io.github.kale_ko.bjsl.elements.ParsedObject;
 import io.github.kale_ko.bjsl.parsers.YamlParser;
@@ -66,7 +66,7 @@ public class ECPlugin {
     protected ClassLoader classLoader;
 
     protected StructuredMySQLConfig<ECPlayerData> data;
-    protected ECMessager messager;
+    protected ECMessenger messenger;
 
     protected ParsedObject translations;
 
@@ -112,8 +112,8 @@ public class ECPlugin {
                 messagingDetails.save();
             }
 
-            this.messager = new ECMessager(this, new InetSocketAddress(messagingDetails.get().host, messagingDetails.get().port), messagingDetails.get().id);
-            this.messager.connect();
+            this.messenger = new ECMessenger(this, new InetSocketAddress(messagingDetails.get().host, messagingDetails.get().port), messagingDetails.get().id);
+            this.messenger.connect();
 
             this.logger.info("Connected to Messaging server");
         } catch (Exception e) {
@@ -282,8 +282,8 @@ public class ECPlugin {
                 this.data.close();
             }
 
-            if (this.messager != null) {
-                this.messager.close();
+            if (this.messenger != null) {
+                this.messenger.close();
             }
         } catch (IOException e) {
             this.logger.error("Error unloading", e);
@@ -338,8 +338,8 @@ public class ECPlugin {
         return this.logger;
     }
 
-    public ECMessager getMessager() {
-        return this.messager;
+    public ECMessenger getMessenger() {
+        return this.messenger;
     }
 
     public ECPlayerData getPlayerData() {

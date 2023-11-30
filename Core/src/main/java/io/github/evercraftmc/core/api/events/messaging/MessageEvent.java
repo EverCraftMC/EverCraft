@@ -2,21 +2,21 @@ package io.github.evercraftmc.core.api.events.messaging;
 
 import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.messaging.ECMessage;
-import io.github.evercraftmc.core.messaging.ECMessager;
+import io.github.evercraftmc.core.messaging.ECMessenger;
 
 public class MessageEvent extends ECEvent {
-    protected ECMessager messager;
+    protected ECMessenger messenger;
 
     protected ECMessage message;
 
-    public MessageEvent(ECMessager messager, ECMessage message) {
-        this.messager = messager;
+    public MessageEvent(ECMessenger messenger, ECMessage message) {
+        this.messenger = messenger;
 
         this.message = message;
     }
 
-    public ECMessager getMessager() {
-        return this.messager;
+    public ECMessenger getMessenger() {
+        return this.messenger;
     }
 
     public ECMessage getMessage() {

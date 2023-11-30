@@ -9,7 +9,7 @@ import java.net.SocketTimeoutException;
 import java.util.UUID;
 import javax.net.SocketFactory;
 
-public class ECMessager {
+public class ECMessenger {
     protected final ECPlugin parent;
 
     protected InetSocketAddress address;
@@ -27,7 +27,7 @@ public class ECMessager {
     protected final Object READ_LOCK = new Object();
     protected final Object WRITE_LOCK = new Object();
 
-    public ECMessager(ECPlugin parent, InetSocketAddress address, UUID id) {
+    public ECMessenger(ECPlugin parent, InetSocketAddress address, UUID id) {
         this.parent = parent;
 
         this.address = address;
@@ -62,7 +62,7 @@ public class ECMessager {
                         } catch (EOFException e) {
                             break;
                         } catch (IOException e) {
-                            parent.getLogger().error("[Messager] Error reading message", e);
+                            parent.getLogger().error("[Messenger] Error reading message", e);
 
                             break;
                         }
@@ -73,13 +73,13 @@ public class ECMessager {
                     this.connection.close();
 
                     if (this.open) {
-                        parent.getLogger().warn("[Messager] Reconnecting");
+                        parent.getLogger().warn("[Messenger] Reconnecting");
                     }
                 }
             } catch (Exception e) {
-                parent.getLogger().error("[Messager] Error", e);
+                parent.getLogger().error("[Messenger] Error", e);
             }
-        }, "ECMessager");
+        }, "ECMessenger");
         this.connectionThread.start();
     }
 
@@ -96,7 +96,7 @@ public class ECMessager {
             ECMessage message = new ECMessage(ECSender.fromServer(this.id), recipient, data, size);
             this.writeMessage(message);
         } catch (IOException e) {
-            parent.getLogger().error("[Messager] Error writing message", e);
+            parent.getLogger().error("[Messenger] Error writing message", e);
         }
     }
 

@@ -21,7 +21,7 @@ public abstract class ECSender {
     public abstract String toString();
 
     public boolean matches(ECServer server) {
-        return this instanceof Server && this.toString().equalsIgnoreCase(server.getPlugin().getMessager().id.toString());
+        return this instanceof Server && this.toString().equalsIgnoreCase(server.getPlugin().getMessenger().id.toString());
     }
 
     public static ECSender parse(String string) {

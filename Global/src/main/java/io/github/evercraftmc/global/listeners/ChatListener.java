@@ -32,7 +32,7 @@ public class ChatListener implements ECListener {
             } else if (event.getType() == PlayerChatEvent.MessageType.DEATH || event.getType() == PlayerChatEvent.MessageType.ADVANCEMENT) {
                 String message = event.getMessage();
                 for (ECPlayer player : parent.getPlugin().getServer().getOnlinePlayers()) {
-                    // FIXME Impartial matched Kale matches Kale_Ko
+                    // FIXME Impartial matches. Kale matches Kale_Ko
                     message = message.replace(player.getName(), player.getDisplayName());
                 }
 
@@ -55,9 +55,9 @@ public class ChatListener implements ECListener {
                     }
                     chatMessage.close();
 
-                    parent.getPlugin().getMessager().send(ECRecipient.fromEnvironmentType(ECEnvironmentType.PROXY), chatMessageData.toByteArray());
+                    parent.getPlugin().getMessenger().send(ECRecipient.fromEnvironmentType(ECEnvironmentType.PROXY), chatMessageData.toByteArray());
                 } catch (IOException e) {
-                    parent.getPlugin().getLogger().error("[Messager] Failed to send message", e);
+                    parent.getPlugin().getLogger().error("[Messenger] Failed to send message", e);
                 }
             }
         }
@@ -105,7 +105,7 @@ public class ChatListener implements ECListener {
 
                 commandMessage.close();
             } catch (IOException e) {
-                parent.getPlugin().getLogger().error("[Messager] Failed to read message", e);
+                parent.getPlugin().getLogger().error("[Messenger] Failed to read message", e);
             }
         }
     }
