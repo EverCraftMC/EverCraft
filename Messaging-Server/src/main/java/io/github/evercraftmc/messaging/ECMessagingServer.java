@@ -63,11 +63,15 @@ public class ECMessagingServer {
     public void start() {
         this.open = true;
 
+        System.out.println("Starting Messaging server");
+
         this.executor = Executors.newCachedThreadPool();
 
         this.socketThread = new Thread(() -> {
             try {
                 this.socket = ServerSocketFactory.getDefault().createServerSocket(this.address.getPort(), -1, this.address.getAddress());
+
+                System.out.println("Started Messaging server on " + this.address.toString());
 
                 while (this.open) {
                     Socket client = this.socket.accept();
