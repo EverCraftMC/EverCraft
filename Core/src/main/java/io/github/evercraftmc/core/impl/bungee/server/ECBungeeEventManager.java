@@ -29,13 +29,13 @@ import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("unchecked")
 public class ECBungeeEventManager implements ECEventManager {
     protected class BungeeListeners implements Listener {
-        protected final ECBungeeEventManager parent = ECBungeeEventManager.this;
+        protected final @NotNull ECBungeeEventManager parent = ECBungeeEventManager.this;
 
-        protected final Map<InetAddress, Boolean> allowedIps = new HashMap<>();
+        protected final @NotNull Map<InetAddress, Boolean> allowedIps = new HashMap<>();
 
         public BungeeListeners() {
             try {
@@ -55,7 +55,7 @@ public class ECBungeeEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerPreConnect(PreLoginEvent event) {
+        public void onPlayerPreConnect(@NotNull PreLoginEvent event) {
             InetAddress ip = ((InetSocketAddress) event.getConnection().getSocketAddress()).getAddress();
             if (allowedIps.containsKey(ip) && (allowedIps.get(ip) || event.getConnection().getName().startsWith("Tester_"))) {
                 event.getConnection().setOnlineMode(false);
@@ -63,7 +63,7 @@ public class ECBungeeEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerConnect(LoginEvent event) {
+        public void onPlayerConnect(@NotNull LoginEvent event) {
             String uuid = event.getConnection().getUniqueId().toString();
             if (!parent.server.getPlugin().getPlayerData().players.containsKey(uuid)) {
                 parent.server.getPlugin().getPlayerData().players.put(uuid, new ECPlayerData.Player(UUID.fromString(uuid), event.getConnection().getName()));
@@ -74,12 +74,12 @@ public class ECBungeeEventManager implements ECEventManager {
 
             if (newEvent.isCancelled()) {
                 event.setCancelled(true);
-                event.setCancelReason(ECBungeeComponentFormatter.stringToComponent(newEvent.getCancelReason()));
+                event.setReason(ECBungeeComponentFormatter.stringToComponent(newEvent.getCancelReason()));
             }
         }
 
         @EventHandler
-        public void onPlayerJoin(PostLoginEvent event) {
+        public void onPlayerJoin(@NotNull PostLoginEvent event) {
             PlayerJoinEvent newEvent = new PlayerJoinEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), "");
             parent.emit(newEvent);
 
@@ -91,7 +91,7 @@ public class ECBungeeEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerLeave(PlayerDisconnectEvent event) {
+        public void onPlayerLeave(@NotNull PlayerDisconnectEvent event) {
             PlayerLeaveEvent newEvent = new PlayerLeaveEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), "");
             parent.emit(newEvent);
 
@@ -101,7 +101,7 @@ public class ECBungeeEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerServerConnect(ServerConnectEvent event) {
+        public void onPlayerServerConnect(@NotNull ServerConnectEvent event) {
             if (event.getReason() == ServerConnectEvent.Reason.JOIN_PROXY) {
                 PlayerProxyJoinEvent newEvent = new PlayerProxyJoinEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), "", event.getTarget().getName());
                 parent.emit(newEvent);
@@ -128,7 +128,7 @@ public class ECBungeeEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerServerConnect(ServerConnectedEvent event) {
+        public void onPlayerServerConnect(@NotNull ServerConnectedEvent event) {
             PlayerServerConnectedEvent newEvent = new PlayerServerConnectedEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), event.getServer().getInfo().getName(), "");
             parent.emit(newEvent);
 
@@ -138,7 +138,7 @@ public class ECBungeeEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerServerConnect(ProxyPingEvent event) {
+        public void onPlayerServerConnect(@NotNull ProxyPingEvent event) {
             Map<UUID, String> players = new HashMap<>();
             if (event.getResponse().getPlayers().getSample() != null) {
                 for (ServerPing.PlayerInfo player : event.getResponse().getPlayers().getSample()) {
@@ -158,25 +158,23 @@ public class ECBungeeEventManager implements ECEventManager {
             event.getResponse().setDescriptionComponent(ECBungeeComponentFormatter.stringToComponent(String.join("\n", motd)));
 
             List<ServerPing.PlayerInfo> newPlayers = new ArrayList<>();
-            if (newEvent.getPlayers() != null) {
-                for (Map.Entry<UUID, String> entry : newEvent.getPlayers().entrySet()) {
-                    newPlayers.add(new ServerPing.PlayerInfo(entry.getValue(), entry.getKey()));
-                }
+            for (Map.Entry<UUID, String> entry : newEvent.getPlayers().entrySet()) {
+                newPlayers.add(new ServerPing.PlayerInfo(entry.getValue(), entry.getKey()));
             }
             event.getResponse().setPlayers(new ServerPing.Players(newEvent.getMaxPlayers(), newEvent.getOnlinePlayers(), newPlayers.toArray(new ServerPing.PlayerInfo[] { })));
         }
 
         @EventHandler
-        public void onPlayerChat(ChatEvent event) {
+        public void onPlayerChat(@NotNull ChatEvent event) {
             String message = event.getMessage();
             if (message.isEmpty() || message.equalsIgnoreCase("/")) {
                 event.setCancelled(true);
                 return;
             }
 
-            if (message.charAt(0) != '/') {
-                ECBungeePlayer player = parent.server.getOnlinePlayer(event.getSender());
+            ECBungeePlayer player = parent.server.getOnlinePlayer(event.getSender());
 
+            if (message.charAt(0) != '/') {
                 PlayerChatEvent newEvent = new PlayerChatEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), message, PlayerChatEvent.MessageType.CHAT, new ArrayList<>());
                 parent.emit(newEvent);
 
@@ -188,7 +186,7 @@ public class ECBungeeEventManager implements ECEventManager {
                     }
                 } else if (!newEvent.getMessage().isEmpty()) {
                     for (ECPlayer player2 : (!newEvent.getRecipients().isEmpty() ? newEvent.getRecipients() : parent.getServer().getOnlinePlayers())) {
-                        if (!player.getServer().equalsIgnoreCase(player2.getServer())) {
+                        if (player.getServer() == null || !player.getServer().equalsIgnoreCase(player2.getServer())) {
                             player2.sendMessage(ECTextFormatter.translateColors("&r[" + player.getServer().substring(0, 1).toUpperCase() + player.getServer().substring(1).toLowerCase() + "&r] " + newEvent.getMessage()));
                         } else {
                             player2.sendMessage(ECTextFormatter.translateColors("&r" + newEvent.getMessage()));
@@ -196,8 +194,6 @@ public class ECBungeeEventManager implements ECEventManager {
                     }
                 }
             } else {
-                ECBungeePlayer player = parent.server.getOnlinePlayer(event.getSender());
-
                 PlayerCommandEvent newEvent = new PlayerCommandEvent(new ECBungeePlayer(parent.server.getPlugin().getPlayerData().players.get(player.getUuid().toString()), player.getHandle()), message);
                 parent.emit(newEvent);
 
@@ -212,22 +208,22 @@ public class ECBungeeEventManager implements ECEventManager {
         }
     }
 
-    protected ECBungeeServer server;
+    protected @NotNull ECBungeeServer server;
 
-    protected Map<Class<? extends ECEvent>, List<Map.Entry<ECListener, Method>>> listeners = new HashMap<>();
+    protected @NotNull Map<Class<? extends ECEvent>, List<Map.Entry<ECListener, Method>>> listeners = new HashMap<>();
 
-    public ECBungeeEventManager(ECBungeeServer server) {
+    public ECBungeeEventManager(@NotNull ECBungeeServer server) {
         this.server = server;
 
         this.server.getHandle().getPluginManager().registerListener((Plugin) this.server.getPlugin().getHandle(), new BungeeListeners());
     }
 
-    public ECBungeeServer getServer() {
+    public @NotNull ECBungeeServer getServer() {
         return this.server;
     }
 
     @Override
-    public void emit(ECEvent event) {
+    public void emit(@NotNull ECEvent event) {
         if (this.listeners.containsKey(event.getClass())) {
             for (Map.Entry<ECListener, Method> entry : this.listeners.get(event.getClass())) {
                 try {
@@ -240,8 +236,9 @@ public class ECBungeeEventManager implements ECEventManager {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public ECListener register(ECListener listener) {
+    public @NotNull ECListener register(@NotNull ECListener listener) {
         for (Method method : listener.getClass().getDeclaredMethods()) {
             if (method.getParameterCount() == 1 && ECEvent.class.isAssignableFrom(method.getParameterTypes()[0]) && method.getDeclaredAnnotationsByType(ECHandler.class).length > 0) {
                 if (!this.listeners.containsKey((Class<? extends ECEvent>) method.getParameterTypes()[0])) {
@@ -256,8 +253,9 @@ public class ECBungeeEventManager implements ECEventManager {
         return listener;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public ECListener unregister(ECListener listener) {
+    public @NotNull ECListener unregister(@NotNull ECListener listener) {
         for (Method method : listener.getClass().getDeclaredMethods()) {
             if (method.getParameterCount() == 1 && ECEvent.class.isAssignableFrom(method.getParameterTypes()[0]) && method.getDeclaredAnnotationsByType(ECHandler.class).length > 0 && this.listeners.containsKey((Class<? extends ECEvent>) method.getParameterTypes()[0])) {
                 this.listeners.get((Class<? extends ECEvent>) method.getParameterTypes()[0]).remove(new AbstractMap.SimpleEntry<>(listener, method));

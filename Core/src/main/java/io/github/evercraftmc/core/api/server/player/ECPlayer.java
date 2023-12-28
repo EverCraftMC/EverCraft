@@ -3,29 +3,31 @@ package io.github.evercraftmc.core.api.server.player;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface ECPlayer {
-    UUID getUuid();
+    @NotNull UUID getUuid();
 
-    String getName();
+    @NotNull String getName();
 
-    String getDisplayName();
+    @NotNull String getDisplayName();
 
-    void setDisplayName(String displayName);
+    void setDisplayName(@NotNull String displayName);
 
-    String getOnlineDisplayName();
+    @NotNull String getOnlineDisplayName();
 
-    void setOnlineDisplayName(String displayName);
+    void setOnlineDisplayName(@NotNull String displayName);
 
-    InetAddress getAddress();
+    @Nullable InetAddress getAddress();
 
-    InetSocketAddress getServerAddress();
+    @Nullable InetSocketAddress getServerAddress();
 
-    String getServer();
+    @Nullable String getServer();
 
-    boolean hasPermission(String permission);
+    boolean hasPermission(@NotNull String permission);
 
-    void sendMessage(String message);
+    void sendMessage(@NotNull String message);
 
-    void kick(String message);
+    void kick(@NotNull String message);
 }

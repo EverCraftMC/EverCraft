@@ -3,16 +3,17 @@ package io.github.evercraftmc.core.impl.spigot.server;
 import io.github.evercraftmc.core.api.server.ECScheduler;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 public class ECSpigotScheduler implements ECScheduler {
     public static class ECSpigotTask implements ECTask {
-        protected BukkitTask handle;
+        protected @NotNull BukkitTask handle;
 
-        public ECSpigotTask(BukkitTask handle) {
+        public ECSpigotTask(@NotNull BukkitTask handle) {
             this.handle = handle;
         }
 
-        public BukkitTask getHandle() {
+        public @NotNull BukkitTask getHandle() {
             return this.handle;
         }
 
@@ -21,43 +22,43 @@ public class ECSpigotScheduler implements ECScheduler {
         }
     }
 
-    protected ECSpigotServer server;
+    protected @NotNull ECSpigotServer server;
 
-    public ECSpigotScheduler(ECSpigotServer server) {
+    public ECSpigotScheduler(@NotNull ECSpigotServer server) {
         this.server = server;
     }
 
-    public ECSpigotServer getServer() {
+    public @NotNull ECSpigotServer getServer() {
         return this.server;
     }
 
     @Override
-    public ECSpigotTask runTask(Runnable task) {
+    public @NotNull ECSpigotTask runTask(@NotNull Runnable task) {
         return new ECSpigotTask(this.server.getHandle().getScheduler().runTask((JavaPlugin) this.server.getPlugin().getHandle(), task));
     }
 
     @Override
-    public ECSpigotTask runTaskAsync(Runnable task) {
+    public @NotNull ECSpigotTask runTaskAsync(@NotNull Runnable task) {
         return new ECSpigotTask(this.server.getHandle().getScheduler().runTaskAsynchronously((JavaPlugin) this.server.getPlugin().getHandle(), task));
     }
 
     @Override
-    public ECSpigotTask runTaskLater(Runnable task, int ticks) {
+    public @NotNull ECSpigotTask runTaskLater(@NotNull Runnable task, int ticks) {
         return new ECSpigotTask(this.server.getHandle().getScheduler().runTaskLater((JavaPlugin) this.server.getPlugin().getHandle(), task, ticks));
     }
 
     @Override
-    public ECSpigotTask runTaskLaterAsync(Runnable task, int ticks) {
+    public @NotNull ECSpigotTask runTaskLaterAsync(@NotNull Runnable task, int ticks) {
         return new ECSpigotTask(this.server.getHandle().getScheduler().runTaskLaterAsynchronously((JavaPlugin) this.server.getPlugin().getHandle(), task, ticks));
     }
 
     @Override
-    public ECSpigotTask runTaskRepeat(Runnable task, int delay, int ticks) {
+    public @NotNull ECSpigotTask runTaskRepeat(@NotNull Runnable task, int delay, int ticks) {
         return new ECSpigotTask(this.server.getHandle().getScheduler().runTaskTimer((JavaPlugin) this.server.getPlugin().getHandle(), task, delay, ticks));
     }
 
     @Override
-    public ECSpigotTask runTaskRepeatAsync(Runnable task, int delay, int ticks) {
+    public @NotNull ECSpigotTask runTaskRepeatAsync(@NotNull Runnable task, int delay, int ticks) {
         return new ECSpigotTask(this.server.getHandle().getScheduler().runTaskTimerAsynchronously((JavaPlugin) this.server.getPlugin().getHandle(), task, delay, ticks));
     }
 }

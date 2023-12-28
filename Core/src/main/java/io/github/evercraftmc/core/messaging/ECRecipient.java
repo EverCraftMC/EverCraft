@@ -4,6 +4,7 @@ import io.github.evercraftmc.core.api.server.ECServer;
 import io.github.evercraftmc.core.impl.ECEnvironment;
 import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class ECRecipient {
     public static class All extends ECRecipient {
@@ -11,54 +12,54 @@ public abstract class ECRecipient {
         }
 
         @Override
-        public String toString() {
+        public @NotNull String toString() {
             return "ALL";
         }
     }
 
     public static class Server extends ECRecipient {
-        protected UUID server;
+        protected @NotNull UUID server;
 
-        public Server(UUID server) {
+        public Server(@NotNull UUID server) {
             this.server = server;
         }
 
         @Override
-        public String toString() {
+        public @NotNull String toString() {
             return this.server.toString().toUpperCase();
         }
     }
 
     public static class Environment extends ECRecipient {
-        protected ECEnvironment environment;
+        protected @NotNull ECEnvironment environment;
 
-        public Environment(ECEnvironment environment) {
+        public Environment(@NotNull ECEnvironment environment) {
             this.environment = environment;
         }
 
         @Override
-        public String toString() {
+        public @NotNull String toString() {
             return this.environment.toString().toUpperCase();
         }
     }
 
     public static class EnvironmentType extends ECRecipient {
-        protected ECEnvironmentType environmentType;
+        protected @NotNull ECEnvironmentType environmentType;
 
-        public EnvironmentType(ECEnvironmentType environmentType) {
+        public EnvironmentType(@NotNull ECEnvironmentType environmentType) {
             this.environmentType = environmentType;
         }
 
         @Override
-        public String toString() {
+        public @NotNull String toString() {
             return this.environmentType.toString().toUpperCase();
         }
     }
 
     @Override
-    public abstract String toString();
+    public abstract @NotNull String toString();
 
-    public boolean matches(ECServer server) {
+    public boolean matches(@NotNull ECServer server) {
         if (this instanceof ECRecipient.All) {
             return true;
         }
@@ -74,7 +75,7 @@ public abstract class ECRecipient {
         return this instanceof EnvironmentType && this.toString().equalsIgnoreCase(server.getEnvironment().getType().toString());
     }
 
-    public static ECRecipient parse(String string) {
+    public static @NotNull ECRecipient parse(@NotNull String string) {
         if (string.equalsIgnoreCase("ALL")) {
             return ECRecipient.fromAll();
         } else if (string.length() == 36) {
@@ -88,19 +89,19 @@ public abstract class ECRecipient {
         }
     }
 
-    public static ECRecipient fromAll() {
+    public static @NotNull ECRecipient fromAll() {
         return new ECRecipient.All();
     }
 
-    public static ECRecipient fromServer(UUID server) {
+    public static @NotNull ECRecipient fromServer(@NotNull UUID server) {
         return new ECRecipient.Server(server);
     }
 
-    public static ECRecipient fromEnvironment(ECEnvironment environment) {
+    public static @NotNull ECRecipient fromEnvironment(@NotNull ECEnvironment environment) {
         return new ECRecipient.Environment(environment);
     }
 
-    public static ECRecipient fromEnvironmentType(ECEnvironmentType environmentType) {
+    public static @NotNull ECRecipient fromEnvironmentType(@NotNull ECEnvironmentType environmentType) {
         return new ECRecipient.EnvironmentType(environmentType);
     }
 }

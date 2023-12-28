@@ -1,17 +1,18 @@
 package io.github.evercraftmc.core.api;
 
 import io.github.evercraftmc.core.ECPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public interface ECModule {
-    String getName();
+    @NotNull String getName();
 
-    ECModuleInfo getInfo();
+    @NotNull ECModuleInfo getInfo();
 
-    void setInfo(ECModuleInfo info);
+    void setInfo(@NotNull ECModuleInfo info);
 
-    ECPlugin getPlugin();
+    @NotNull ECPlugin getPlugin();
 
-    void setPlugin(ECPlugin plugin);
+    void setPlugin(@NotNull ECPlugin plugin);
 
     void load();
 

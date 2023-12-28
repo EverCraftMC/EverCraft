@@ -3,16 +3,17 @@ package io.github.evercraftmc.core.api.events.player;
 import io.github.evercraftmc.core.api.events.ECCancelableReasonEvent;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerChatEvent extends ECCancelableReasonEvent {
+    protected @NotNull ECPlayer player;
+
     protected int type;
 
-    protected ECPlayer player;
+    protected @NotNull String message;
+    protected @NotNull List<ECPlayer> recipients;
 
-    protected String message;
-    protected List<ECPlayer> recipients;
-
-    public PlayerChatEvent(ECPlayer player, String message, int type, List<ECPlayer> recipients) {
+    public PlayerChatEvent(@NotNull ECPlayer player, @NotNull String message, int type, @NotNull List<ECPlayer> recipients) {
         this.player = player;
 
         this.message = message;
@@ -21,27 +22,27 @@ public class PlayerChatEvent extends ECCancelableReasonEvent {
         this.recipients = recipients;
     }
 
+    public @NotNull ECPlayer getPlayer() {
+        return this.player;
+    }
+
     public int getType() {
         return this.type;
     }
 
-    public ECPlayer getPlayer() {
-        return this.player;
-    }
-
-    public String getMessage() {
+    public @NotNull String getMessage() {
         return this.message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(@NotNull String message) {
         this.message = message;
     }
 
-    public List<ECPlayer> getRecipients() {
+    public @NotNull List<ECPlayer> getRecipients() {
         return this.recipients;
     }
 
-    public void setRecipients(List<ECPlayer> recipients) {
+    public void setRecipients(@NotNull List<ECPlayer> recipients) {
         this.recipients = recipients;
     }
 

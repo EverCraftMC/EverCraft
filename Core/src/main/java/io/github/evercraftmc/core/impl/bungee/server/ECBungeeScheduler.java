@@ -4,16 +4,17 @@ import io.github.evercraftmc.core.api.server.ECScheduler;
 import java.util.concurrent.TimeUnit;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
+import org.jetbrains.annotations.NotNull;
 
 public class ECBungeeScheduler implements ECScheduler {
     public static class ECBungeeTask implements ECTask {
-        protected ScheduledTask handle;
+        protected @NotNull ScheduledTask handle;
 
-        public ECBungeeTask(ScheduledTask handle) {
+        public ECBungeeTask(@NotNull ScheduledTask handle) {
             this.handle = handle;
         }
 
-        public ScheduledTask getHandle() {
+        public @NotNull ScheduledTask getHandle() {
             return this.handle;
         }
 
@@ -22,43 +23,43 @@ public class ECBungeeScheduler implements ECScheduler {
         }
     }
 
-    protected ECBungeeServer server;
+    protected @NotNull ECBungeeServer server;
 
-    public ECBungeeScheduler(ECBungeeServer server) {
+    public ECBungeeScheduler(@NotNull ECBungeeServer server) {
         this.server = server;
     }
 
-    public ECBungeeServer getServer() {
+    public @NotNull ECBungeeServer getServer() {
         return this.server;
     }
 
     @Override
-    public ECBungeeTask runTask(Runnable task) {
+    public @NotNull ECBungeeTask runTask(@NotNull Runnable task) {
         return this.runTaskAsync(task);
     }
 
     @Override
-    public ECBungeeTask runTaskAsync(Runnable task) {
+    public @NotNull ECBungeeTask runTaskAsync(@NotNull Runnable task) {
         return new ECBungeeTask(this.server.getHandle().getScheduler().runAsync((Plugin) this.server.getPlugin().getHandle(), task));
     }
 
     @Override
-    public ECBungeeTask runTaskLater(Runnable task, int ticks) {
+    public @NotNull ECBungeeTask runTaskLater(@NotNull Runnable task, int ticks) {
         return this.runTaskLaterAsync(task, ticks);
     }
 
     @Override
-    public ECBungeeTask runTaskLaterAsync(Runnable task, int ticks) {
+    public @NotNull ECBungeeTask runTaskLaterAsync(@NotNull Runnable task, int ticks) {
         return new ECBungeeTask(this.server.getHandle().getScheduler().schedule((Plugin) this.server.getPlugin().getHandle(), task, ticks * 50L, TimeUnit.MILLISECONDS));
     }
 
     @Override
-    public ECBungeeTask runTaskRepeat(Runnable task, int delay, int ticks) {
+    public @NotNull ECBungeeTask runTaskRepeat(@NotNull Runnable task, int delay, int ticks) {
         return this.runTaskRepeatAsync(task, delay, ticks);
     }
 
     @Override
-    public ECBungeeTask runTaskRepeatAsync(Runnable task, int delay, int ticks) {
+    public @NotNull ECBungeeTask runTaskRepeatAsync(@NotNull Runnable task, int delay, int ticks) {
         return new ECBungeeTask(this.server.getHandle().getScheduler().schedule((Plugin) this.server.getPlugin().getHandle(), task, delay * 50L, ticks * 50L, TimeUnit.MILLISECONDS));
     }
 }

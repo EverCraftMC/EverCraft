@@ -1,21 +1,24 @@
 package io.github.evercraftmc.core.impl.spigot.util;
 
 import io.github.evercraftmc.core.ECPluginManager;
+import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.jetbrains.annotations.NotNull;
 
 public class ECSpigotComponentFormatter {
-    protected static final char COLOR_CHAR = '§';
-    protected static final String ALL_CODES = "0123456789AaBbCcDdEeFfKkLlMmNnOoRr";
+    protected static final char COLOR_CHAR = ECTextFormatter.TO_COLOR_CHAR;
+
+    protected static final @NotNull String ALL_CODES = "0123456789AaBbCcDdEeFfKkLlMmNnOoRr";
 
     private ECSpigotComponentFormatter() {
     }
 
-    public static Component stringToComponent(String string) {
+    public static @NotNull Component stringToComponent(@NotNull String string) {
         String[] parts = (COLOR_CHAR + "r" + string).split(String.valueOf(COLOR_CHAR));
 
         TextComponent component = Component.empty();
@@ -83,7 +86,7 @@ public class ECSpigotComponentFormatter {
         return component;
     }
 
-    public static String componentToString(Component component) {
+    public static @NotNull String componentToString(@NotNull Component component) {
         StringBuilder string = new StringBuilder();
 
         Style style = component.style();
@@ -146,9 +149,9 @@ public class ECSpigotComponentFormatter {
             string.append(textComponent.content());
         } else if (component instanceof TranslatableComponent textComponent) {
             String key = ECPluginManager.getPlugin().getTranslations().get(textComponent.key()).asPrimitive().asString();
-            Object[] args = new String[textComponent.args().size()];
-            for (int i = 0; i < textComponent.args().size(); i++) {
-                args[i] = componentToString(textComponent.args().get(i));
+            Object[] args = new String[textComponent.arguments().size()];
+            for (int i = 0; i < textComponent.arguments().size(); i++) {
+                args[i] = componentToString(textComponent.arguments().get(i).asComponent());
             }
             string.append(String.format(key, args));
         }

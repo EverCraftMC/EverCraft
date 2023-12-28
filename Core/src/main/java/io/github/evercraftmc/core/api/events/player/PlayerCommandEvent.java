@@ -2,27 +2,28 @@ package io.github.evercraftmc.core.api.events.player;
 
 import io.github.evercraftmc.core.api.events.ECCancelableReasonEvent;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerCommandEvent extends ECCancelableReasonEvent {
-    protected ECPlayer player;
+    protected @NotNull ECPlayer player;
 
-    protected String command;
+    protected @NotNull String command;
 
-    public PlayerCommandEvent(ECPlayer player, String command) {
+    public PlayerCommandEvent(@NotNull ECPlayer player, @NotNull String command) {
         this.player = player;
 
         this.command = command;
     }
 
-    public ECPlayer getPlayer() {
+    public @NotNull ECPlayer getPlayer() {
         return this.player;
     }
 
-    public String getCommand() {
+    public @NotNull String getCommand() {
         return this.command;
     }
 
-    public void setCommand(String command) {
+    public void setCommand(@NotNull String command) {
         this.command = command;
     }
 }

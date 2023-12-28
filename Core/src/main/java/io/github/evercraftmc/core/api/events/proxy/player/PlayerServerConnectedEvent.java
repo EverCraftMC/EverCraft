@@ -2,35 +2,36 @@ package io.github.evercraftmc.core.api.events.proxy.player;
 
 import io.github.evercraftmc.core.api.events.ECEvent;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerServerConnectedEvent extends ECEvent {
-    protected ECPlayer player;
+    protected @NotNull ECPlayer player;
 
-    protected String server;
+    protected @NotNull String targetServer;
 
-    protected String connectMessage;
+    protected @NotNull String connectMessage;
 
-    public PlayerServerConnectedEvent(ECPlayer player, String server, String connectMessage) {
+    public PlayerServerConnectedEvent(@NotNull ECPlayer player, @NotNull String targetServer, @NotNull String connectMessage) {
         this.player = player;
 
-        this.server = server;
+        this.targetServer = targetServer;
 
         this.connectMessage = connectMessage;
     }
 
-    public ECPlayer getPlayer() {
+    public @NotNull ECPlayer getPlayer() {
         return this.player;
     }
 
-    public String getServer() {
-        return this.server;
+    public @NotNull String getTargetServer() {
+        return this.targetServer;
     }
 
-    public String getConnectMessage() {
+    public @NotNull String getConnectMessage() {
         return this.connectMessage;
     }
 
-    public void setConnectMessage(String connectMessage) {
+    public void setConnectMessage(@NotNull String connectMessage) {
         this.connectMessage = connectMessage;
     }
 }

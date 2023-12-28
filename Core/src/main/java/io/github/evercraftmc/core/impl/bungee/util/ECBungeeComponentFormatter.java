@@ -1,20 +1,23 @@
 package io.github.evercraftmc.core.impl.bungee.util;
 
 import io.github.evercraftmc.core.ECPluginManager;
+import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
+import org.jetbrains.annotations.NotNull;
 
 public class ECBungeeComponentFormatter {
-    protected static final char COLOR_CHAR = '§';
-    protected static final String ALL_CODES = "0123456789AaBbCcDdEeFfKkLlMmNnOoRr";
+    protected static final char COLOR_CHAR = ECTextFormatter.TO_COLOR_CHAR;
+
+    protected static final @NotNull String ALL_CODES = "0123456789AaBbCcDdEeFfKkLlMmNnOoRr";
 
     private ECBungeeComponentFormatter() {
     }
 
-    public static BaseComponent stringToComponent(String string) {
+    public static @NotNull BaseComponent stringToComponent(@NotNull String string) {
         String[] parts = (COLOR_CHAR + "r" + string).split(String.valueOf(COLOR_CHAR));
 
         TextComponent component = new TextComponent();
@@ -83,7 +86,7 @@ public class ECBungeeComponentFormatter {
         return component;
     }
 
-    public static String componentToString(BaseComponent component) {
+    public static @NotNull String componentToString(@NotNull BaseComponent component) {
         StringBuilder string = new StringBuilder();
 
         if (component.isReset()) {

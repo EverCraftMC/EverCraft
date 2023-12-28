@@ -2,27 +2,28 @@ package io.github.evercraftmc.core.api.events.player;
 
 import io.github.evercraftmc.core.api.events.ECCancelableReasonEvent;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerJoinEvent extends ECCancelableReasonEvent {
-    protected ECPlayer player;
+    protected @NotNull ECPlayer player;
 
-    protected String joinMessage;
+    protected @NotNull String joinMessage;
 
-    public PlayerJoinEvent(ECPlayer player, String joinMessage) {
+    public PlayerJoinEvent(@NotNull ECPlayer player, @NotNull String joinMessage) {
         this.player = player;
 
         this.joinMessage = joinMessage;
     }
 
-    public ECPlayer getPlayer() {
+    public @NotNull ECPlayer getPlayer() {
         return this.player;
     }
 
-    public String getJoinMessage() {
+    public @NotNull String getJoinMessage() {
         return this.joinMessage;
     }
 
-    public void setJoinMessage(String joinMessage) {
+    public void setJoinMessage(@NotNull String joinMessage) {
         this.joinMessage = joinMessage;
     }
 }

@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ECPlayerData {
+    // Core
     public Map<String, Player> players = new HashMap<>();
 
+    // Moderation
     public boolean chatLocked = false;
     public boolean maintenance = false;
 

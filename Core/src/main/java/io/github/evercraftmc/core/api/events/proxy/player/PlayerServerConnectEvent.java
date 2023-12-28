@@ -2,27 +2,28 @@ package io.github.evercraftmc.core.api.events.proxy.player;
 
 import io.github.evercraftmc.core.api.events.ECCancelableReasonEvent;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerServerConnectEvent extends ECCancelableReasonEvent {
-    protected ECPlayer player;
+    protected @NotNull ECPlayer player;
 
-    protected String targetServer;
+    protected @NotNull String targetServer;
 
-    public PlayerServerConnectEvent(ECPlayer player, String targetServer) {
+    public PlayerServerConnectEvent(@NotNull ECPlayer player, @NotNull String targetServer) {
         this.player = player;
 
         this.targetServer = targetServer;
     }
 
-    public ECPlayer getPlayer() {
+    public @NotNull ECPlayer getPlayer() {
         return this.player;
     }
 
-    public String getTargetServer() {
+    public @NotNull String getTargetServer() {
         return this.targetServer;
     }
 
-    public void setTargetServer(String targetServer) {
+    public void setTargetServer(@NotNull String targetServer) {
         this.targetServer = targetServer;
     }
 }

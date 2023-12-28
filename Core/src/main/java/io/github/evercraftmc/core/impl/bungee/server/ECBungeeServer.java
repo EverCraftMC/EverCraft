@@ -11,18 +11,20 @@ import java.util.*;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.Connection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ECBungeeServer implements ECServer {
-    protected ECPlugin plugin;
+    protected @NotNull ECPlugin plugin;
 
-    protected ProxyServer handle;
+    protected @NotNull ProxyServer handle;
 
-    protected ECBungeeCommandManager commandManager;
-    protected ECBungeeEventManager eventManager;
+    protected @NotNull ECBungeeCommandManager commandManager;
+    protected @NotNull ECBungeeEventManager eventManager;
 
-    protected ECBungeeScheduler scheduler;
+    protected @NotNull ECBungeeScheduler scheduler;
 
-    public ECBungeeServer(ECPlugin plugin, ProxyServer handle) {
+    public ECBungeeServer(@NotNull ECPlugin plugin, @NotNull ProxyServer handle) {
         this.plugin = plugin;
 
         this.handle = handle;
@@ -34,41 +36,41 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public ECPlugin getPlugin() {
+    public @NotNull ECPlugin getPlugin() {
         return this.plugin;
     }
 
-    public ProxyServer getHandle() {
+    public @NotNull ProxyServer getHandle() {
         return this.handle;
     }
 
     @Override
-    public String getSoftwareVersion() {
+    public @NotNull String getSoftwareVersion() {
         return this.handle.getName() + " " + this.handle.getVersion();
     }
 
     @Override
-    public String getMinecraftVersion() {
+    public @NotNull String getMinecraftVersion() {
         String[] versions = this.handle.getConfig().getGameVersion().split("-");
         return versions[versions.length - 1].trim().replace(".x", "");
     }
 
-    public String getAllMinecraftVersions() {
+    public @NotNull String getAllMinecraftVersions() {
         return this.handle.getConfig().getGameVersion();
     }
 
     @Override
-    public ECEnvironment getEnvironment() {
+    public @NotNull ECEnvironment getEnvironment() {
         return ECEnvironment.BUNGEE;
     }
 
     @Override
-    public ECEnvironmentType getEnvironmentType() {
+    public @NotNull ECEnvironmentType getEnvironmentType() {
         return ECEnvironmentType.PROXY;
     }
 
     @Override
-    public Collection<ECBungeePlayer> getPlayers() {
+    public @NotNull Collection<ECBungeePlayer> getPlayers() {
         ArrayList<ECBungeePlayer> players = new ArrayList<>();
 
         for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
@@ -79,7 +81,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public ECBungeePlayer getPlayer(UUID uuid) {
+    public @Nullable ECBungeePlayer getPlayer(@NotNull UUID uuid) {
         if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
             return new ECBungeePlayer(this.plugin.getPlayerData().players.get(uuid.toString()));
         } else {
@@ -88,7 +90,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public ECBungeePlayer getPlayer(String name) {
+    public @Nullable ECBungeePlayer getPlayer(@NotNull String name) {
         for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
             if (player.name.equalsIgnoreCase(name)) {
                 return new ECBungeePlayer(player);
@@ -99,7 +101,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public Collection<ECBungeePlayer> getOnlinePlayers() {
+    public @NotNull Collection<ECBungeePlayer> getOnlinePlayers() {
         ArrayList<ECBungeePlayer> players = new ArrayList<>();
 
         for (ProxiedPlayer bungeePlayer : this.handle.getPlayers()) {
@@ -112,7 +114,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public ECBungeePlayer getOnlinePlayer(UUID uuid) {
+    public @Nullable ECBungeePlayer getOnlinePlayer(@NotNull UUID uuid) {
         if (this.handle.getPlayer(uuid) != null) {
             if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
                 return new ECBungeePlayer(this.plugin.getPlayerData().players.get(uuid.toString()), this.handle.getPlayer(uuid));
@@ -125,7 +127,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public ECBungeePlayer getOnlinePlayer(String name) {
+    public @Nullable ECBungeePlayer getOnlinePlayer(@NotNull String name) {
         if (this.handle.getPlayer(name) != null) {
             for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
                 if (player.name.equalsIgnoreCase(name)) {
@@ -137,7 +139,7 @@ public class ECBungeeServer implements ECServer {
         return null;
     }
 
-    public ECBungeePlayer getOnlinePlayer(Connection connection) {
+    public @Nullable ECBungeePlayer getOnlinePlayer(@NotNull Connection connection) {
         for (ProxiedPlayer bungeePlayer : this.handle.getPlayers()) {
             if (bungeePlayer.getPendingConnection().getSocketAddress().equals(connection.getSocketAddress())) {
                 for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
@@ -153,25 +155,25 @@ public class ECBungeeServer implements ECServer {
         return null;
     }
 
-    public String getDefaultServer() {
+    public @NotNull String getDefaultServer() {
         List<String> servers = this.handle.getConfig().getListeners().stream().toList().get(0).getServerPriority();
         return servers.get(0);
     }
 
-    public String getFallbackServer() {
+    public @NotNull String getFallbackServer() {
         List<String> servers = this.handle.getConfig().getListeners().stream().toList().get(0).getServerPriority();
         return servers.get(servers.size() - 1);
     }
 
-    public boolean getServer(String name) {
+    public boolean getServer(@NotNull String name) {
         return this.handle.getServerInfo(name) != null;
     }
 
-    public String getDefaultMotd() {
+    public @Nullable String getDefaultMotd() {
         return this.handle.getConfig().getListeners().stream().toList().get(0).getMotd();
     }
 
-    public String getServerMotd(String name) {
+    public @Nullable String getServerMotd(@NotNull String name) {
         if (!getServer(name)) {
             return null;
         }
@@ -179,22 +181,22 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public ECBungeeConsole getConsole() {
+    public @NotNull ECBungeeConsole getConsole() {
         return new ECBungeeConsole(this.handle.getConsole());
     }
 
     @Override
-    public ECBungeeCommandManager getCommandManager() {
+    public @NotNull ECBungeeCommandManager getCommandManager() {
         return this.commandManager;
     }
 
     @Override
-    public ECBungeeEventManager getEventManager() {
+    public @NotNull ECBungeeEventManager getEventManager() {
         return this.eventManager;
     }
 
     @Override
-    public ECBungeeScheduler getScheduler() {
+    public @NotNull ECBungeeScheduler getScheduler() {
         return this.scheduler;
     }
 }

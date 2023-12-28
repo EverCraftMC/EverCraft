@@ -7,28 +7,30 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ECModuleClassLoader extends ClassLoader {
-    protected final ClassLoader parent;
+    protected final @NotNull ClassLoader parent;
 
-    protected File file;
+    protected @NotNull File file;
 
-    public ECModuleClassLoader(ClassLoader parent, File file) {
+    public ECModuleClassLoader(@NotNull ClassLoader parent, @NotNull File file) {
         this.parent = parent;
 
         this.file = file;
     }
 
-    public final ClassLoader getParentClassLoader() {
+    public final @NotNull ClassLoader getParentClassLoader() {
         return this.parent;
     }
 
-    public File getFile() {
+    public @NotNull File getFile() {
         return this.file;
     }
 
     @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
+    protected @Nullable Class<?> findClass(@NotNull String name) throws ClassNotFoundException {
         try {
             try {
                 return this.parent.loadClass(name);
@@ -42,7 +44,7 @@ public class ECModuleClassLoader extends ClassLoader {
         }
     }
 
-    protected byte[] loadClassData(String name) throws ClassNotFoundException, IOException {
+    protected byte[] loadClassData(@NotNull String name) throws ClassNotFoundException, IOException {
         try (JarInputStream jar = new JarInputStream(new BufferedInputStream(new FileInputStream(this.file)))) {
             ZipEntry entry;
             while ((entry = jar.getNextEntry()) != null) {

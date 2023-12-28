@@ -5,19 +5,21 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class PlayerProxyPingEvent extends ECEvent {
-    protected String motd;
+    protected @NotNull String motd;
     protected boolean centerMotd = true;
 
     protected int onlinePlayers;
     protected int maxPlayers;
-    protected Map<UUID, String> players;
+    protected @NotNull Map<UUID, String> players;
 
-    protected InetAddress address;
-    protected InetSocketAddress serverAddress;
+    protected @Nullable InetAddress address;
+    protected @Nullable InetSocketAddress serverAddress;
 
-    public PlayerProxyPingEvent(String motd, int onlinePlayers, int maxPlayers, Map<UUID, String> players, InetAddress address, InetSocketAddress serverAddress) {
+    public PlayerProxyPingEvent(@NotNull String motd, int onlinePlayers, int maxPlayers, @NotNull Map<UUID, String> players, @Nullable InetAddress address, @Nullable InetSocketAddress serverAddress) {
         this.motd = motd;
 
         this.onlinePlayers = onlinePlayers;
@@ -28,11 +30,11 @@ public class PlayerProxyPingEvent extends ECEvent {
         this.serverAddress = serverAddress;
     }
 
-    public String getMotd() {
+    public @NotNull String getMotd() {
         return this.motd;
     }
 
-    public void setMotd(String motd) {
+    public void setMotd(@NotNull String motd) {
         this.motd = motd;
     }
 
@@ -60,19 +62,19 @@ public class PlayerProxyPingEvent extends ECEvent {
         this.maxPlayers = maxPlayers;
     }
 
-    public Map<UUID, String> getPlayers() {
+    public @NotNull Map<UUID, String> getPlayers() {
         return this.players;
     }
 
-    public void setPlayers(Map<UUID, String> players) {
+    public void setPlayers(@NotNull Map<UUID, String> players) {
         this.players = players;
     }
 
-    public InetAddress getAddress() {
+    public @Nullable InetAddress getAddress() {
         return this.address;
     }
 
-    public InetSocketAddress getServerAddress() {
+    public @Nullable InetSocketAddress getServerAddress() {
         return this.serverAddress;
     }
 }

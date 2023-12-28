@@ -1,8 +1,0 @@
-main: io.github.evercraftmc.core.impl.limbo.ECLimboPluginLoader
-
-name: "EverCraft-Core"
-description: "EverCraft-Core"
-version: "${version}"
-
-authors: [ "Kale-Ko" ]
-website: "https://github.com/EverCraftMC/EverCraft"

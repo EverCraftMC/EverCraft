@@ -8,13 +8,14 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.UUID;
 import javax.net.SocketFactory;
+import org.jetbrains.annotations.NotNull;
 
 public class ECMessenger {
-    protected final ECPlugin parent;
+    protected final @NotNull ECPlugin parent;
 
-    protected InetSocketAddress address;
+    protected @NotNull InetSocketAddress address;
 
-    protected UUID id;
+    protected @NotNull UUID id;
 
     protected boolean open;
 
@@ -24,10 +25,10 @@ public class ECMessenger {
     protected DataInputStream inputStream;
     protected DataOutputStream outputStream;
 
-    protected final Object READ_LOCK = new Object();
-    protected final Object WRITE_LOCK = new Object();
+    protected final @NotNull Object READ_LOCK = new Object();
+    protected final @NotNull Object WRITE_LOCK = new Object();
 
-    public ECMessenger(ECPlugin parent, InetSocketAddress address, UUID id) {
+    public ECMessenger(@NotNull ECPlugin parent, @NotNull InetSocketAddress address, @NotNull UUID id) {
         this.parent = parent;
 
         this.address = address;
@@ -87,11 +88,11 @@ public class ECMessenger {
         this.open = false;
     }
 
-    public void send(ECRecipient recipient, byte[] data) {
+    public void send(@NotNull ECRecipient recipient, byte @NotNull [] data) {
         this.send(recipient, data, data.length);
     }
 
-    public void send(ECRecipient recipient, byte[] data, int size) {
+    public void send(@NotNull ECRecipient recipient, byte[] data, int size) {
         try {
             ECMessage message = new ECMessage(ECSender.fromServer(this.id), recipient, data, size);
             this.writeMessage(message);
@@ -100,7 +101,7 @@ public class ECMessenger {
         }
     }
 
-    protected ECMessage readMessage() throws IOException {
+    protected @NotNull ECMessage readMessage() throws IOException {
         synchronized (READ_LOCK) {
             String sender = this.inputStream.readUTF();
             String recipient = this.inputStream.readUTF();
@@ -113,7 +114,7 @@ public class ECMessenger {
         }
     }
 
-    protected void writeMessage(ECMessage message) throws IOException {
+    protected void writeMessage(@NotNull ECMessage message) throws IOException {
         synchronized (WRITE_LOCK) {
             this.outputStream.writeUTF(message.getSender().toString());
             this.outputStream.writeUTF(message.getRecipient().toString());

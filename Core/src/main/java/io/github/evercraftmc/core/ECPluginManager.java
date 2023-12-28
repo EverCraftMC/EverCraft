@@ -5,11 +5,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 
 public class ECPluginManager {
     protected static ECPlugin plugin;
 
-    protected static Map<Class<? extends ECModule>, ECModule> modules = new HashMap<>();
+    protected static @NotNull Map<Class<? extends ECModule>, ECModule> modules = new HashMap<>();
 
     private ECPluginManager() {
     }
@@ -18,7 +19,7 @@ public class ECPluginManager {
         return ECPluginManager.plugin;
     }
 
-    public static ECPlugin registerPlugin(ECPlugin plugin) {
+    public static @NotNull ECPlugin registerPlugin(@NotNull ECPlugin plugin) {
         ECPluginManager.plugin = plugin;
         return plugin;
     }
@@ -29,12 +30,12 @@ public class ECPluginManager {
         return oldPlugin;
     }
 
-    public static Collection<ECModule> getModules() {
+    public static @NotNull Collection<ECModule> getModules() {
         return Collections.unmodifiableCollection(ECPluginManager.modules.values());
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends ECModule> T getModule(Class<T> clazz) {
+    public static <T extends ECModule> T getModule(@NotNull Class<T> clazz) {
         if (ECPluginManager.modules.containsKey(clazz)) {
             return (T) ECPluginManager.modules.get(clazz);
         } else {
@@ -42,7 +43,7 @@ public class ECPluginManager {
         }
     }
 
-    public static <T extends ECModule> T registerModule(T module) {
+    public static <T extends ECModule> @NotNull T registerModule(@NotNull T module) {
         if (!ECPluginManager.modules.containsKey(module.getClass())) {
             ECPluginManager.modules.put(module.getClass(), module);
 
@@ -52,7 +53,7 @@ public class ECPluginManager {
         }
     }
 
-    public static <T extends ECModule> T unregisterModule(T module) {
+    public static <T extends ECModule> @NotNull T unregisterModule(@NotNull T module) {
         if (ECPluginManager.modules.containsKey(module.getClass())) {
             ECPluginManager.modules.remove(module.getClass());
 

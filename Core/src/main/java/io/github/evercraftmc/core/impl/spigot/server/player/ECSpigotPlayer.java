@@ -8,23 +8,25 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.UUID;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ECSpigotPlayer implements ECPlayer {
     protected Player handle;
 
-    protected UUID uuid;
-    protected String name;
+    protected @NotNull UUID uuid;
+    protected @NotNull String name;
 
-    protected String displayName;
+    protected @NotNull String displayName;
 
-    public ECSpigotPlayer(ECPlayerData.Player data) {
+    public ECSpigotPlayer(@NotNull ECPlayerData.Player data) {
         this.uuid = data.uuid;
         this.name = data.name;
 
         this.displayName = ECTextFormatter.translateColors((data.prefix != null ? data.prefix + "&r " : "&r") + data.displayName + "&r");
     }
 
-    public ECSpigotPlayer(ECPlayerData.Player data, Player handle) {
+    public ECSpigotPlayer(@NotNull ECPlayerData.Player data, @NotNull Player handle) {
         this(data);
 
         this.handle = handle;
@@ -35,32 +37,32 @@ public class ECSpigotPlayer implements ECPlayer {
     }
 
     @Override
-    public UUID getUuid() {
+    public @NotNull UUID getUuid() {
         return this.uuid;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return this.name;
     }
 
     @Override
-    public String getDisplayName() {
+    public @NotNull String getDisplayName() {
         return this.displayName;
     }
 
     @Override
-    public void setDisplayName(String displayName) {
+    public void setDisplayName(@NotNull String displayName) {
         this.displayName = displayName;
     }
 
     @Override
-    public String getOnlineDisplayName() {
+    public @NotNull String getOnlineDisplayName() {
         return ECSpigotComponentFormatter.componentToString(this.handle.displayName());
     }
 
     @Override
-    public void setOnlineDisplayName(String displayName) {
+    public void setOnlineDisplayName(@NotNull String displayName) {
         this.setDisplayName(displayName);
 
         this.handle.customName(ECSpigotComponentFormatter.stringToComponent(displayName));
@@ -69,8 +71,9 @@ public class ECSpigotPlayer implements ECPlayer {
     }
 
     @Override
-    public InetAddress getAddress() {
+    public @Nullable InetAddress getAddress() {
         InetSocketAddress socketAddress = this.handle.getAddress();
+
         if (socketAddress != null) {
             return socketAddress.getAddress();
         } else {
@@ -79,27 +82,27 @@ public class ECSpigotPlayer implements ECPlayer {
     }
 
     @Override
-    public InetSocketAddress getServerAddress() {
+    public @Nullable InetSocketAddress getServerAddress() {
         return this.handle.getVirtualHost();
     }
 
     @Override
-    public String getServer() {
+    public @Nullable String getServer() {
         throw new UnsupportedOperationException("Server is backend");
     }
 
     @Override
-    public boolean hasPermission(String permission) {
+    public boolean hasPermission(@NotNull String permission) {
         return this.handle.hasPermission(permission);
     }
 
     @Override
-    public void sendMessage(String message) {
+    public void sendMessage(@NotNull String message) {
         this.handle.sendMessage(ECSpigotComponentFormatter.stringToComponent(message));
     }
 
     @Override
-    public void kick(String message) {
+    public void kick(@NotNull String message) {
         this.handle.kick(ECSpigotComponentFormatter.stringToComponent(message));
     }
 }

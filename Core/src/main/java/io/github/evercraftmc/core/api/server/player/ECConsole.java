@@ -4,55 +4,57 @@ import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface ECConsole extends ECPlayer {
     @Override
-    default UUID getUuid() {
-        return UUID.fromString("00000000-0000-0000-0000-000000000000");
+    default @NotNull UUID getUuid() {
+        return new UUID(0, 0);
     }
 
     @Override
-    default String getName() {
+    default @NotNull String getName() {
         return "Console";
     }
 
     @Override
-    default String getDisplayName() {
+    default @NotNull String getDisplayName() {
         return ECTextFormatter.translateColors("&l&4Console");
     }
 
     @Override
-    default void setDisplayName(String displayName) {
+    default void setDisplayName(@NotNull String displayName) {
         throw new UnsupportedOperationException("Player is console");
     }
 
     @Override
-    default String getOnlineDisplayName() {
+    default @NotNull String getOnlineDisplayName() {
         return ECTextFormatter.translateColors("&l&4Console");
     }
 
     @Override
-    default void setOnlineDisplayName(String displayName) {
+    default void setOnlineDisplayName(@NotNull String displayName) {
         throw new UnsupportedOperationException("Player is console");
     }
 
     @Override
-    default InetAddress getAddress() {
+    default @Nullable InetAddress getAddress() {
         return null;
     }
 
     @Override
-    default InetSocketAddress getServerAddress() {
+    default @Nullable InetSocketAddress getServerAddress() {
         return null;
     }
 
     @Override
-    default String getServer() {
+    default @Nullable String getServer() {
         throw new UnsupportedOperationException("Player is console");
     }
 
     @Override
-    default void kick(String message) {
+    default void kick(@NotNull String message) {
         throw new UnsupportedOperationException("Player is console");
     }
 }

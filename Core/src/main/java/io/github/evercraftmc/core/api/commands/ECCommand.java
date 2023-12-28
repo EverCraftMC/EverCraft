@@ -2,17 +2,24 @@ package io.github.evercraftmc.core.api.commands;
 
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public interface ECCommand {
-    String getName();
+    @NotNull String getName();
 
-    String getDescription();
+    @NotNull List<String> getAlias();
 
-    List<String> getAlias();
+    @NotNull String getDescription();
 
-    String getPermission();
+    @NotNull String getUsage();
 
-    void run(ECPlayer player, String[] args, boolean sendFeedback);
+    @NotNull String getUsage(@NotNull ECPlayer player);
 
-    List<String> tabComplete(ECPlayer player, String[] args);
+    @NotNull String getPermission();
+
+    @NotNull List<String> getExtraPermissions();
+
+    void run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback);
+
+    @NotNull List<String> tabComplete(@NotNull ECPlayer player, @NotNull List<String> args);
 }

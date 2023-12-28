@@ -2,6 +2,7 @@ package io.github.evercraftmc.core.api;
 
 import java.util.Collections;
 import java.util.List;
+import org.jetbrains.annotations.Nullable;
 
 public class ECModuleInfo {
     protected String name;
@@ -36,7 +37,7 @@ public class ECModuleInfo {
         return this.entry;
     }
 
-    public List<String> getDepends() {
-        return Collections.unmodifiableList(this.depends);
+    public @Nullable List<String> getDepends() {
+        return this.depends != null ? Collections.unmodifiableList(this.depends) : null;
     }
 }

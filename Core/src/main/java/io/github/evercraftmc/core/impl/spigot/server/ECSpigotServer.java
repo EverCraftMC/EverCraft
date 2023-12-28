@@ -13,18 +13,20 @@ import java.util.Collections;
 import java.util.UUID;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ECSpigotServer implements ECServer {
-    protected ECPlugin plugin;
+    protected @NotNull ECPlugin plugin;
 
-    protected Server handle;
+    protected @NotNull Server handle;
 
-    protected ECSpigotCommandManager commandManager;
-    protected ECSpigotEventManager eventManager;
+    protected @NotNull ECSpigotCommandManager commandManager;
+    protected @NotNull ECSpigotEventManager eventManager;
 
-    protected ECSpigotScheduler scheduler;
+    protected @NotNull ECSpigotScheduler scheduler;
 
-    public ECSpigotServer(ECPlugin plugin, Server handle) {
+    public ECSpigotServer(@NotNull ECPlugin plugin, @NotNull Server handle) {
         this.plugin = plugin;
 
         this.handle = handle;
@@ -36,36 +38,36 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public ECPlugin getPlugin() {
+    public @NotNull ECPlugin getPlugin() {
         return this.plugin;
     }
 
-    public Server getHandle() {
+    public @NotNull Server getHandle() {
         return this.handle;
     }
 
     @Override
-    public String getSoftwareVersion() {
+    public @NotNull String getSoftwareVersion() {
         return this.handle.getName() + " " + this.handle.getVersion();
     }
 
     @Override
-    public String getMinecraftVersion() {
+    public @NotNull String getMinecraftVersion() {
         return this.handle.getMinecraftVersion();
     }
 
     @Override
-    public ECEnvironment getEnvironment() {
+    public @NotNull ECEnvironment getEnvironment() {
         return ECEnvironment.SPIGOT;
     }
 
     @Override
-    public ECEnvironmentType getEnvironmentType() {
+    public @NotNull ECEnvironmentType getEnvironmentType() {
         return ECEnvironmentType.BACKEND;
     }
 
     @Override
-    public Collection<ECSpigotPlayer> getPlayers() {
+    public @NotNull Collection<ECSpigotPlayer> getPlayers() {
         ArrayList<ECSpigotPlayer> players = new ArrayList<>();
 
         for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
@@ -76,7 +78,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public ECSpigotPlayer getPlayer(UUID uuid) {
+    public @Nullable ECSpigotPlayer getPlayer(@NotNull UUID uuid) {
         if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
             return new ECSpigotPlayer(this.plugin.getPlayerData().players.get(uuid.toString()));
         } else {
@@ -85,7 +87,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public ECSpigotPlayer getPlayer(String name) {
+    public @Nullable ECSpigotPlayer getPlayer(@NotNull String name) {
         for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
             if (player.name.equalsIgnoreCase(name)) {
                 return new ECSpigotPlayer(player);
@@ -96,7 +98,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public Collection<ECSpigotPlayer> getOnlinePlayers() {
+    public @NotNull Collection<ECSpigotPlayer> getOnlinePlayers() {
         ArrayList<ECSpigotPlayer> players = new ArrayList<>();
 
         for (Player spigotPlayer : this.handle.getOnlinePlayers()) {
@@ -109,7 +111,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public ECSpigotPlayer getOnlinePlayer(UUID uuid) {
+    public @Nullable ECSpigotPlayer getOnlinePlayer(@NotNull UUID uuid) {
         if (this.handle.getPlayer(uuid) != null) {
             if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
                 return new ECSpigotPlayer(this.plugin.getPlayerData().players.get(uuid.toString()), this.handle.getPlayer(uuid));
@@ -122,7 +124,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public ECSpigotPlayer getOnlinePlayer(String name) {
+    public @Nullable ECSpigotPlayer getOnlinePlayer(@NotNull String name) {
         if (this.handle.getPlayer(name) != null) {
             for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
                 if (player.name.equalsIgnoreCase(name)) {
@@ -137,22 +139,22 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public ECSpigotConsole getConsole() {
+    public @NotNull ECSpigotConsole getConsole() {
         return new ECSpigotConsole(this.handle.getConsoleSender());
     }
 
     @Override
-    public ECSpigotCommandManager getCommandManager() {
+    public @NotNull ECSpigotCommandManager getCommandManager() {
         return this.commandManager;
     }
 
     @Override
-    public ECSpigotEventManager getEventManager() {
+    public @NotNull ECSpigotEventManager getEventManager() {
         return this.eventManager;
     }
 
     @Override
-    public ECSpigotScheduler getScheduler() {
+    public @NotNull ECSpigotScheduler getScheduler() {
         return this.scheduler;
     }
 }

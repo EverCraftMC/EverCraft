@@ -12,7 +12,7 @@ import io.github.kale_ko.bjsl.BJSL;
 import io.github.kale_ko.bjsl.elements.ParsedObject;
 import io.github.kale_ko.bjsl.parsers.YamlParser;
 import io.github.kale_ko.bjsl.processor.ObjectProcessor;
-import io.github.kale_ko.ejcl.file.bjsl.YamlFileConfig;
+import io.github.kale_ko.ejcl.file.bjsl.StructuredYamlFileConfig;
 import io.github.kale_ko.ejcl.mysql.StructuredMySQLConfig;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -34,6 +34,7 @@ import java.util.UUID;
 import java.util.jar.JarInputStream;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 public class ECPlugin {
@@ -54,23 +55,23 @@ public class ECPlugin {
         public String database;
     }
 
-    protected Object handle;
+    protected @NotNull Object handle;
 
-    protected File pluginFile;
-    protected File dataDirectory;
+    protected @NotNull File pluginFile;
+    protected @NotNull File dataDirectory;
 
-    protected ECEnvironment environment;
+    protected @NotNull ECEnvironment environment;
     protected ECServer server;
 
-    protected Logger logger;
-    protected ClassLoader classLoader;
+    protected @NotNull Logger logger;
+    protected @NotNull ClassLoader classLoader;
 
     protected StructuredMySQLConfig<ECPlayerData> data;
     protected ECMessenger messenger;
 
     protected ParsedObject translations;
 
-    public ECPlugin(Object handle, File pluginFile, File dataDirectory, ECEnvironment environment, Logger logger, ClassLoader classLoader) {
+    public ECPlugin(@NotNull Object handle, @NotNull File pluginFile, @NotNull File dataDirectory, @NotNull ECEnvironment environment, @NotNull Logger logger, @NotNull ClassLoader classLoader) {
         this.handle = handle;
 
         this.pluginFile = pluginFile;
@@ -84,9 +85,9 @@ public class ECPlugin {
         ECPluginManager.registerPlugin(this);
     }
 
-    private final Map<Path, ECModuleInfo> moduleInfoMap = new HashMap<>();
-    private final Map<String, Path> fileMap = new HashMap<>();
-    private final Map<String, Boolean> loadedMap = new HashMap<>();
+    private final @NotNull Map<Path, ECModuleInfo> moduleInfoMap = new HashMap<>();
+    private final @NotNull Map<String, Path> fileMap = new HashMap<>();
+    private final @NotNull Map<String, Boolean> loadedMap = new HashMap<>();
 
     public void load() {
         this.logger.info("Loading plugin EverCraft-Core..");
@@ -105,7 +106,7 @@ public class ECPlugin {
         try {
             this.logger.info("Connecting to Messaging server..");
 
-            YamlFileConfig<MessagingDetails> messagingDetails = new YamlFileConfig<>(MessagingDetails.class, dataDirectory.toPath().resolve("messaging.yml").toFile(), new YamlParser.Builder().build());
+            StructuredYamlFileConfig<MessagingDetails> messagingDetails = new StructuredYamlFileConfig<>(MessagingDetails.class, dataDirectory.toPath().resolve("messaging.yml").toFile(), new YamlParser.Builder().build());
             messagingDetails.load(true);
             if (messagingDetails.get().id == null) {
                 messagingDetails.get().id = UUID.randomUUID();
@@ -122,7 +123,7 @@ public class ECPlugin {
         }
 
         try {
-            YamlFileConfig<MySQLDetails> mySqlDetails = new YamlFileConfig<>(MySQLDetails.class, dataDirectory.toPath().resolve("mysql.yml").toFile(), new YamlParser.Builder().build());
+            StructuredYamlFileConfig<MySQLDetails> mySqlDetails = new StructuredYamlFileConfig<>(MySQLDetails.class, dataDirectory.toPath().resolve("mysql.yml").toFile(), new YamlParser.Builder().build());
             mySqlDetails.load(true);
 
             this.logger.info("Connecting to MySQL server..");
@@ -204,20 +205,27 @@ public class ECPlugin {
         this.logger.info("Finished loading.");
     }
 
-    protected void loadModule(Path file, ECModuleInfo moduleInfo) {
+    protected void loadModule(@NotNull Path file, @NotNull ECModuleInfo moduleInfo) {
         if (loadedMap.containsKey(moduleInfo.getName().toLowerCase())) {
             return;
         }
         loadedMap.put(moduleInfo.getName().toLowerCase(), true);
 
-        for (String depend : moduleInfo.getDepends()) {
-            if (depend.equalsIgnoreCase("Core")) {
-                continue;
-            }
+        if (moduleInfo.getName() == null || moduleInfo.getVersion() == null || moduleInfo.getEntry() == null) {
+            this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Module info is missing fields");
+            return;
+        }
 
-            Path file2 = fileMap.get(depend.toLowerCase());
-            ECModuleInfo moduleInfo2 = moduleInfoMap.get(file2);
-            loadModule(file2, moduleInfo2);
+        if (moduleInfo.getDepends() != null) {
+            for (String depend : moduleInfo.getDepends()) {
+                if (depend.equalsIgnoreCase("Core")) {
+                    continue;
+                }
+
+                Path file2 = fileMap.get(depend.toLowerCase());
+                ECModuleInfo moduleInfo2 = moduleInfoMap.get(file2);
+                loadModule(file2, moduleInfo2);
+            }
         }
 
         try {
@@ -292,19 +300,19 @@ public class ECPlugin {
         ECPluginManager.unregisterPlugin();
     }
 
-    public Object getHandle() {
+    public @NotNull Object getHandle() {
         return this.handle;
     }
 
-    public File getPluginFile() {
+    public @NotNull File getPluginFile() {
         return this.pluginFile;
     }
 
-    public File getDataDirectory() {
+    public @NotNull File getDataDirectory() {
         return this.dataDirectory;
     }
 
-    public ECEnvironment getEnvironment() {
+    public @NotNull ECEnvironment getEnvironment() {
         return this.environment;
     }
 
@@ -312,14 +320,14 @@ public class ECPlugin {
         return this.server;
     }
 
-    public void setServer(ECServer server) {
+    public void setServer(@NotNull ECServer server) {
         this.server = server;
 
         this.server.getEventManager().register(new ECListener() {
-            private final ECPlugin parent = ECPlugin.this;
+            private final @NotNull ECPlugin parent = ECPlugin.this;
 
             @ECHandler
-            public void onPlayerJoin(PlayerJoinEvent event) {
+            public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
                 parent.getPlayerData().players.get(event.getPlayer().getUuid().toString()).uuid = event.getPlayer().getUuid();
                 parent.getPlayerData().players.get(event.getPlayer().getUuid().toString()).name = event.getPlayer().getName();
 
@@ -334,7 +342,7 @@ public class ECPlugin {
         });
     }
 
-    public Logger getLogger() {
+    public @NotNull Logger getLogger() {
         return this.logger;
     }
 
@@ -342,11 +350,11 @@ public class ECPlugin {
         return this.messenger;
     }
 
-    public ECPlayerData getPlayerData() {
+    public @NotNull ECPlayerData getPlayerData() {
         return this.data.get();
     }
 
-    public void setPlayerData(ECPlayerData value) {
+    public void setPlayerData(@NotNull ECPlayerData value) {
         this.data.set(value);
     }
 

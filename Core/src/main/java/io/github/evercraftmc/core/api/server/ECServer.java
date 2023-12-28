@@ -7,41 +7,43 @@ import io.github.evercraftmc.core.impl.ECEnvironment;
 import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import java.util.Collection;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface ECServer {
-    ECPlugin getPlugin();
+    @NotNull ECPlugin getPlugin();
 
-    String getMinecraftVersion();
+    @NotNull String getMinecraftVersion();
 
-    String getSoftwareVersion();
+    @NotNull String getSoftwareVersion();
 
-    ECEnvironment getEnvironment();
+    @NotNull ECEnvironment getEnvironment();
 
-    ECEnvironmentType getEnvironmentType();
+    @NotNull ECEnvironmentType getEnvironmentType();
 
-    Collection<? extends ECPlayer> getPlayers();
+    @NotNull Collection<? extends ECPlayer> getPlayers();
 
-    ECPlayer getPlayer(UUID uuid);
+    @Nullable ECPlayer getPlayer(@NotNull UUID uuid);
 
-    ECPlayer getPlayer(String name);
+    @Nullable ECPlayer getPlayer(@NotNull String name);
 
-    Collection<? extends ECPlayer> getOnlinePlayers();
+    @NotNull Collection<? extends ECPlayer> getOnlinePlayers();
 
-    ECPlayer getOnlinePlayer(UUID uuid);
+    @Nullable ECPlayer getOnlinePlayer(@NotNull UUID uuid);
 
-    ECPlayer getOnlinePlayer(String name);
+    @Nullable ECPlayer getOnlinePlayer(@NotNull String name);
 
-    ECConsole getConsole();
+    @NotNull ECConsole getConsole();
 
-    default void broadcastMessage(String message) {
+    default void broadcastMessage(@NotNull String message) {
         for (ECPlayer player : this.getOnlinePlayers()) {
             player.sendMessage(message);
         }
     }
 
-    ECCommandManager getCommandManager();
+    @NotNull ECCommandManager getCommandManager();
 
-    ECEventManager getEventManager();
+    @NotNull ECEventManager getEventManager();
 
-    ECScheduler getScheduler();
+    @NotNull ECScheduler getScheduler();
 }

@@ -21,14 +21,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("unchecked")
 public class ECSpigotEventManager implements ECEventManager {
     protected class SpigotListeners implements Listener {
-        protected final ECSpigotEventManager parent = ECSpigotEventManager.this;
+        protected final @NotNull ECSpigotEventManager parent = ECSpigotEventManager.this;
 
         @EventHandler
-        public void onPlayerJoin(PlayerLoginEvent event) {
+        public void onPlayerJoin(@NotNull PlayerLoginEvent event) {
             if (!parent.server.getPlugin().getPlayerData().players.containsKey(event.getPlayer().getUniqueId().toString())) {
                 parent.server.getPlugin().getPlayerData().players.put(event.getPlayer().getUniqueId().toString(), new ECPlayerData.Player(event.getPlayer().getUniqueId(), event.getPlayer().getName()));
             }
@@ -43,7 +43,7 @@ public class ECSpigotEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerJoin(PlayerJoinEvent event) {
+        public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
             Component ogMessage = event.joinMessage();
             io.github.evercraftmc.core.api.events.player.PlayerJoinEvent newEvent = new io.github.evercraftmc.core.api.events.player.PlayerJoinEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), ogMessage != null ? ECSpigotComponentFormatter.componentToString(ogMessage) : "");
             parent.emit(newEvent);
@@ -58,7 +58,7 @@ public class ECSpigotEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerLeave(PlayerQuitEvent event) {
+        public void onPlayerLeave(@NotNull PlayerQuitEvent event) {
             Component ogMessage = event.quitMessage();
             io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent newEvent = new io.github.evercraftmc.core.api.events.player.PlayerLeaveEvent(new ECSpigotPlayer(parent.server.getPlugin().getPlayerData().players.get(event.getPlayer().getUniqueId().toString()), event.getPlayer()), ogMessage != null ? ECSpigotComponentFormatter.componentToString(ogMessage) : "");
             parent.emit(newEvent);
@@ -71,7 +71,7 @@ public class ECSpigotEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerChat(AsyncChatEvent event) {
+        public void onPlayerChat(@NotNull AsyncChatEvent event) {
             String message = ECSpigotComponentFormatter.componentToString(event.message());
             if (message.isEmpty()) {
                 event.setCancelled(true);
@@ -98,7 +98,7 @@ public class ECSpigotEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
+        public void onPlayerCommand(@NotNull PlayerCommandPreprocessEvent event) {
             String message = event.getMessage();
             if (message.isEmpty() || message.equalsIgnoreCase("/")) {
                 event.setCancelled(true);
@@ -120,7 +120,7 @@ public class ECSpigotEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerChat(PlayerDeathEvent event) {
+        public void onPlayerChat(@NotNull PlayerDeathEvent event) {
             Component component = event.deathMessage();
             if (component == null) {
                 return;
@@ -146,7 +146,7 @@ public class ECSpigotEventManager implements ECEventManager {
         }
 
         @EventHandler
-        public void onPlayerChat(PlayerAdvancementDoneEvent event) {
+        public void onPlayerChat(@NotNull PlayerAdvancementDoneEvent event) {
             Component component = event.message();
             if (component == null || event.getAdvancement().getDisplay() == null || !event.getAdvancement().getDisplay().doesAnnounceToChat() || Boolean.FALSE.equals(event.getPlayer().getWorld().getGameRuleValue(GameRule.ANNOUNCE_ADVANCEMENTS))) {
                 return;
@@ -172,22 +172,22 @@ public class ECSpigotEventManager implements ECEventManager {
         }
     }
 
-    protected ECSpigotServer server;
+    protected @NotNull ECSpigotServer server;
 
-    protected Map<Class<? extends ECEvent>, List<Map.Entry<ECListener, Method>>> listeners = new HashMap<>();
+    protected @NotNull Map<Class<? extends ECEvent>, List<Map.Entry<ECListener, Method>>> listeners = new HashMap<>();
 
-    public ECSpigotEventManager(ECSpigotServer server) {
+    public ECSpigotEventManager(@NotNull ECSpigotServer server) {
         this.server = server;
 
         this.server.getHandle().getPluginManager().registerEvents(new SpigotListeners(), (Plugin) this.server.getPlugin().getHandle());
     }
 
-    public ECSpigotServer getServer() {
+    public @NotNull ECSpigotServer getServer() {
         return this.server;
     }
 
     @Override
-    public void emit(ECEvent event) {
+    public void emit(@NotNull ECEvent event) {
         if (this.listeners.containsKey(event.getClass())) {
             for (Map.Entry<ECListener, Method> entry : this.listeners.get(event.getClass())) {
                 try {
@@ -200,8 +200,9 @@ public class ECSpigotEventManager implements ECEventManager {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public ECListener register(ECListener listener) {
+    public @NotNull ECListener register(@NotNull ECListener listener) {
         for (Method method : listener.getClass().getDeclaredMethods()) {
             if (method.getParameterCount() == 1 && ECEvent.class.isAssignableFrom(method.getParameterTypes()[0]) && method.getDeclaredAnnotationsByType(ECHandler.class).length > 0) {
                 if (!this.listeners.containsKey((Class<? extends ECEvent>) method.getParameterTypes()[0])) {
@@ -216,8 +217,9 @@ public class ECSpigotEventManager implements ECEventManager {
         return listener;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public ECListener unregister(ECListener listener) {
+    public @NotNull ECListener unregister(@NotNull ECListener listener) {
         for (Method method : listener.getClass().getDeclaredMethods()) {
             if (method.getParameterCount() == 1 && ECEvent.class.isAssignableFrom(method.getParameterTypes()[0]) && method.getDeclaredAnnotationsByType(ECHandler.class).length > 0 && this.listeners.containsKey((Class<? extends ECEvent>) method.getParameterTypes()[0])) {
                 this.listeners.get((Class<? extends ECEvent>) method.getParameterTypes()[0]).remove(new AbstractMap.SimpleEntry<>(listener, method));

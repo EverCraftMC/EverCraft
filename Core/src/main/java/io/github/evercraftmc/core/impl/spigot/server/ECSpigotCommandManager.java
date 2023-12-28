@@ -17,15 +17,18 @@ import java.util.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 public class ECSpigotCommandManager implements ECCommandManager {
     protected class CommandInter extends Command {
-        protected final ECSpigotCommandManager parent = ECSpigotCommandManager.this;
+        protected final @NotNull ECSpigotCommandManager parent = ECSpigotCommandManager.this;
 
-        protected ECCommand command;
+        protected @NotNull ECCommand command;
         protected boolean forwardToOther;
 
-        public CommandInter(ECCommand command, boolean distinguishServer, boolean forwardToOther) {
+        public CommandInter(@NotNull ECCommand command, boolean distinguishServer, boolean forwardToOther) {
             super((distinguishServer ? "s" : "") + command.getName());
 
             this.setName((distinguishServer ? "s" : "") + command.getName().toLowerCase());
@@ -38,10 +41,10 @@ public class ECSpigotCommandManager implements ECCommandManager {
         }
 
         @Override
-        public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+        public boolean execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String @NotNull [] args) {
             if (sender instanceof Player spigotPlayer) {
                 if (sender.hasPermission(Objects.requireNonNull(this.getPermission())) || sender.isOp()) {
-                    this.command.run(parent.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args, true);
+                    this.command.run(parent.server.getOnlinePlayer(spigotPlayer.getUniqueId()), Arrays.asList(args), true);
 
                     if (this.forwardToOther) {
                         try {
@@ -65,26 +68,26 @@ public class ECSpigotCommandManager implements ECCommandManager {
                     sender.sendMessage(ECSpigotComponentFormatter.stringToComponent(ECTextFormatter.translateColors("&cYou do not have permission to run that command")));
                 }
             } else {
-                this.command.run(parent.server.getConsole(), args, true);
+                this.command.run(parent.server.getConsole(), Arrays.asList(args), true);
             }
 
             return true;
         }
 
         @Override
-        public List<String> tabComplete(CommandSender sender, String commandLabel, String[] args) {
+        public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
             if (sender instanceof Player spigotPlayer) {
                 if (sender.hasPermission(Objects.requireNonNull(this.getPermission())) || sender.isOp()) {
-                    return this.command.tabComplete(parent.server.getOnlinePlayer(spigotPlayer.getUniqueId()), args);
+                    return this.command.tabComplete(parent.server.getOnlinePlayer(spigotPlayer.getUniqueId()), Arrays.asList(args));
                 } else {
                     return List.of();
                 }
             } else {
-                return this.command.tabComplete(parent.server.getConsole(), args);
+                return this.command.tabComplete(parent.server.getConsole(), Arrays.asList(args));
             }
         }
 
-        private static List<String> alias(String uName, List<String> uAliases, boolean distinguishServer) {
+        private static @NotNull List<String> alias(@NotNull String uName, @NotNull List<String> uAliases, boolean distinguishServer) {
             ArrayList<String> aliases = new ArrayList<>();
 
             aliases.add("evercraft:" + (distinguishServer ? "s" : "") + uName.toLowerCase());
@@ -98,19 +101,19 @@ public class ECSpigotCommandManager implements ECCommandManager {
         }
     }
 
-    protected ECSpigotServer server;
+    protected @NotNull ECSpigotServer server;
 
-    protected Map<String, ECCommand> commands = new HashMap<>();
-    protected Map<String, CommandInter> interCommands = new HashMap<>();
+    protected @NotNull Map<String, ECCommand> commands = new HashMap<>();
+    protected @NotNull Map<String, CommandInter> interCommands = new HashMap<>();
 
-    public ECSpigotCommandManager(ECSpigotServer server) {
+    public ECSpigotCommandManager(@NotNull ECSpigotServer server) {
         this.server = server;
 
         this.server.getEventManager().register(new ECListener() {
             private final ECSpigotCommandManager parent = ECSpigotCommandManager.this;
 
             @ECHandler
-            public void onMessage(MessageEvent event) {
+            public void onMessage(@NotNull MessageEvent event) {
                 ECMessage message = event.getMessage();
 
                 if (!message.getSender().matches(parent.server) && message.getRecipient().matches(parent.server)) {
@@ -130,7 +133,7 @@ public class ECSpigotCommandManager implements ECCommandManager {
 
                             ECPlayer player = parent.server.getOnlinePlayer(uuid);
 
-                            parent.server.getCommandManager().get(command).run(player, args.toArray(new String[] { }), false);
+                            parent.server.getCommandManager().get(command).run(player, args, false);
                         }
 
                         commandMessage.close();
@@ -142,27 +145,27 @@ public class ECSpigotCommandManager implements ECCommandManager {
         });
     }
 
-    public ECSpigotServer getServer() {
+    public @NotNull ECSpigotServer getServer() {
         return this.server;
     }
 
     @Override
-    public ECCommand get(String name) {
+    public @NotNull ECCommand get(@NotNull String name) {
         return this.commands.get(name.toLowerCase());
     }
 
     @Override
-    public ECCommand register(ECCommand command) {
+    public @NotNull ECCommand register(@NotNull ECCommand command) {
         return this.register(command, false);
     }
 
     @Override
-    public ECCommand register(ECCommand command, boolean distinguishServer) {
+    public @NotNull ECCommand register(@NotNull ECCommand command, boolean distinguishServer) {
         return this.register(command, distinguishServer, !distinguishServer);
     }
 
     @Override
-    public ECCommand register(ECCommand command, boolean distinguishServer, boolean forwardToOther) {
+    public @NotNull ECCommand register(@NotNull ECCommand command, boolean distinguishServer, boolean forwardToOther) {
         if (!this.commands.containsKey(command.getName().toLowerCase())) {
             CommandInter interCommand = new CommandInter(command, distinguishServer, forwardToOther);
 
@@ -172,6 +175,10 @@ public class ECSpigotCommandManager implements ECCommandManager {
             this.server.getHandle().getCommandMap().register("evercraft", interCommand);
             this.interCommands.get(command.getName().toLowerCase()).register(this.server.getHandle().getCommandMap());
 
+            for (String permission : command.getExtraPermissions()) {
+                this.server.getHandle().getPluginManager().addPermission(new Permission(permission, PermissionDefault.OP));
+            }
+
             return command;
         } else {
             throw new RuntimeException("Command /" + command.getName() + " is already registered");
@@ -179,7 +186,7 @@ public class ECSpigotCommandManager implements ECCommandManager {
     }
 
     @Override
-    public ECCommand unregister(ECCommand command) {
+    public @NotNull ECCommand unregister(@NotNull ECCommand command) {
         if (this.commands.containsKey(command.getName().toLowerCase())) {
             this.interCommands.get(command.getName().toLowerCase()).unregister(this.server.getHandle().getCommandMap());
 

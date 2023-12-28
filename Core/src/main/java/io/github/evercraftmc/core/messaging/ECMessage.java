@@ -1,17 +1,19 @@
 package io.github.evercraftmc.core.messaging;
 
-public class ECMessage {
-    protected ECSender sender;
-    protected ECRecipient recipient;
+import org.jetbrains.annotations.NotNull;
 
-    protected byte[] data;
+public class ECMessage {
+    protected @NotNull ECSender sender;
+    protected @NotNull ECRecipient recipient;
+
+    protected byte @NotNull [] data;
     protected int size;
 
-    public ECMessage(ECSender sender, ECRecipient recipient, byte[] data) {
+    public ECMessage(@NotNull ECSender sender, @NotNull ECRecipient recipient, byte @NotNull [] data) {
         this(sender, recipient, data, data.length);
     }
 
-    public ECMessage(ECSender sender, ECRecipient recipient, byte[] data, int size) {
+    public ECMessage(@NotNull ECSender sender, @NotNull ECRecipient recipient, byte @NotNull [] data, int size) {
         this.sender = sender;
         this.recipient = recipient;
 
@@ -19,11 +21,11 @@ public class ECMessage {
         this.size = size;
     }
 
-    public ECSender getSender() {
+    public @NotNull ECSender getSender() {
         return this.sender;
     }
 
-    public ECRecipient getRecipient() {
+    public @NotNull ECRecipient getRecipient() {
         return this.recipient;
     }
 

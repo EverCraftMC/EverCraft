@@ -19,15 +19,16 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.TabExecutor;
+import org.jetbrains.annotations.NotNull;
 
 public class ECBungeeCommandManager implements ECCommandManager {
     protected class CommandInter extends Command implements TabExecutor {
-        protected final ECBungeeCommandManager parent = ECBungeeCommandManager.this;
+        protected final @NotNull ECBungeeCommandManager parent = ECBungeeCommandManager.this;
 
-        protected ECCommand command;
+        protected @NotNull ECCommand command;
         protected boolean forwardToOther;
 
-        public CommandInter(ECCommand command, boolean distinguishServer, boolean forwardToOther) {
+        public CommandInter(@NotNull ECCommand command, boolean distinguishServer, boolean forwardToOther) {
             super((distinguishServer ? "b" : "") + command.getName().toLowerCase(), command.getPermission(), CommandInter.alias(command.getName(), command.getAlias(), distinguishServer).toArray(new String[] { }));
 
             this.command = command;
@@ -35,10 +36,10 @@ public class ECBungeeCommandManager implements ECCommandManager {
         }
 
         @Override
-        public void execute(CommandSender sender, String[] args) {
+        public void execute(@NotNull CommandSender sender, @NotNull String @NotNull [] args) {
             if (sender instanceof ProxiedPlayer bungeePlayer) {
                 if (sender.hasPermission(this.getPermission())) {
-                    this.command.run(parent.server.getOnlinePlayer(bungeePlayer.getUniqueId()), args, true);
+                    this.command.run(parent.server.getOnlinePlayer(bungeePlayer.getUniqueId()), Arrays.asList(args), true);
 
                     if (this.forwardToOther) {
                         try {
@@ -62,24 +63,24 @@ public class ECBungeeCommandManager implements ECCommandManager {
                     sender.sendMessage(ECBungeeComponentFormatter.stringToComponent(ECTextFormatter.translateColors("&cYou do not have permission to run that command")));
                 }
             } else {
-                this.command.run(parent.server.getConsole(), args, true);
+                this.command.run(parent.server.getConsole(), Arrays.asList(args), true);
             }
         }
 
         @Override
-        public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+        public @NotNull Iterable<String> onTabComplete(@NotNull CommandSender sender, @NotNull String[] args) {
             if (sender instanceof ProxiedPlayer bungeePlayer) {
                 if (sender.hasPermission(this.getPermission())) {
-                    return this.command.tabComplete(parent.server.getOnlinePlayer(bungeePlayer.getUniqueId()), args);
+                    return this.command.tabComplete(parent.server.getOnlinePlayer(bungeePlayer.getUniqueId()), Arrays.asList(args));
                 } else {
                     return List.of();
                 }
             } else {
-                return this.command.tabComplete(parent.server.getConsole(), args);
+                return this.command.tabComplete(parent.server.getConsole(), Arrays.asList(args));
             }
         }
 
-        private static List<String> alias(String uName, List<String> uAliases, boolean distinguishServer) {
+        private static @NotNull List<String> alias(@NotNull String uName, @NotNull List<String> uAliases, boolean distinguishServer) {
             ArrayList<String> aliases = new ArrayList<>();
 
             aliases.add("evercraft:" + (distinguishServer ? "b" : "") + uName.toLowerCase());
@@ -93,19 +94,19 @@ public class ECBungeeCommandManager implements ECCommandManager {
         }
     }
 
-    protected ECBungeeServer server;
+    protected @NotNull ECBungeeServer server;
 
-    protected Map<String, ECCommand> commands = new HashMap<>();
-    protected Map<String, CommandInter> interCommands = new HashMap<>();
+    protected @NotNull Map<String, ECCommand> commands = new HashMap<>();
+    protected @NotNull Map<String, CommandInter> interCommands = new HashMap<>();
 
-    public ECBungeeCommandManager(ECBungeeServer server) {
+    public ECBungeeCommandManager(@NotNull ECBungeeServer server) {
         this.server = server;
 
         this.server.getEventManager().register(new ECListener() {
             private final ECBungeeCommandManager parent = ECBungeeCommandManager.this;
 
             @ECHandler
-            public void onMessage(MessageEvent event) {
+            public void onMessage(@NotNull MessageEvent event) {
                 ECMessage message = event.getMessage();
 
                 if (!message.getSender().matches(parent.server) && message.getRecipient().matches(parent.server)) {
@@ -125,7 +126,7 @@ public class ECBungeeCommandManager implements ECCommandManager {
 
                             ECPlayer player = parent.server.getOnlinePlayer(uuid);
 
-                            parent.server.getCommandManager().get(command).run(player, args.toArray(new String[] { }), false);
+                            parent.server.getCommandManager().get(command).run(player, args, false);
                         }
 
                         commandMessage.close();
@@ -137,27 +138,27 @@ public class ECBungeeCommandManager implements ECCommandManager {
         });
     }
 
-    public ECBungeeServer getServer() {
+    public @NotNull ECBungeeServer getServer() {
         return this.server;
     }
 
     @Override
-    public ECCommand get(String name) {
+    public @NotNull ECCommand get(@NotNull String name) {
         return this.commands.get(name.toLowerCase());
     }
 
     @Override
-    public ECCommand register(ECCommand command) {
+    public @NotNull ECCommand register(@NotNull ECCommand command) {
         return this.register(command, false);
     }
 
     @Override
-    public ECCommand register(ECCommand command, boolean distinguishServer) {
+    public @NotNull ECCommand register(@NotNull ECCommand command, boolean distinguishServer) {
         return this.register(command, distinguishServer, !distinguishServer);
     }
 
     @Override
-    public ECCommand register(ECCommand command, boolean distinguishServer, boolean forwardToOther) {
+    public @NotNull ECCommand register(@NotNull ECCommand command, boolean distinguishServer, boolean forwardToOther) {
         if (!this.commands.containsKey(command.getName().toLowerCase())) {
             CommandInter interCommand = new CommandInter(command, distinguishServer, forwardToOther);
 
@@ -173,7 +174,7 @@ public class ECBungeeCommandManager implements ECCommandManager {
     }
 
     @Override
-    public ECCommand unregister(ECCommand command) {
+    public @NotNull ECCommand unregister(@NotNull ECCommand command) {
         if (this.commands.containsKey(command.getName().toLowerCase())) {
             this.server.getHandle().getPluginManager().unregisterCommand(this.interCommands.get(command.getName().toLowerCase()));
 
