@@ -5,14 +5,14 @@ plugins {
 version = project.messaging_version
 
 repositories {
-    mavenCentral()
     maven {
-        url "https://jitpack.io"
+        url "https://maven.kaleko.dev/public-snapshot/"
     }
+    mavenCentral()
 }
 
 dependencies {
-    implementation "com.github.Kale-Ko:EJCL:${project.ejcl_version}"
+    implementation "io.github.kale_ko:ejcl:${project.ejcl_version}"
 }
 
 tasks.register("fatJar", Jar) {

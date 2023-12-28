@@ -5,17 +5,17 @@ plugins {
 version = project.global_version
 
 repositories {
-    mavenCentral()
     maven {
-        url "https://jitpack.io"
+        url "https://maven.kaleko.dev/public-snapshot/"
     }
+    mavenCentral()
 }
 
 dependencies {
     compileOnly project(":Core")
     compileOnly "org.slf4j:slf4j-api:2.0.9"
 
-    implementation "com.github.Kale-Ko:EJCL:${project.ejcl_version}"
+    implementation "io.github.kale_ko:ejcl:${project.ejcl_version}"
 }
 
 tasks.register("fatJar", Jar) {
