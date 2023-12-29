@@ -10,30 +10,31 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.net.ServerSocketFactory;
+import org.jetbrains.annotations.NotNull;
 
 public class ECMessagingServer {
     protected static class Connection {
-        protected Socket socket;
+        protected @NotNull Socket socket;
 
-        protected DataInputStream inputStream;
-        protected DataOutputStream outputStream;
+        protected @NotNull DataInputStream inputStream;
+        protected @NotNull DataOutputStream outputStream;
 
-        public Connection(Socket socket) throws IOException {
+        public Connection(@NotNull Socket socket) throws IOException {
             this.socket = socket;
 
             this.inputStream = new DataInputStream(socket.getInputStream());
             this.outputStream = new DataOutputStream(socket.getOutputStream());
         }
 
-        public Socket getSocket() {
+        public @NotNull Socket getSocket() {
             return this.socket;
         }
 
-        public DataInputStream getInputStream() {
+        public @NotNull DataInputStream getInputStream() {
             return this.inputStream;
         }
 
-        public DataOutputStream getOutputStream() {
+        public @NotNull DataOutputStream getOutputStream() {
             return this.outputStream;
         }
 
@@ -44,7 +45,7 @@ public class ECMessagingServer {
         }
     }
 
-    protected InetSocketAddress address;
+    protected @NotNull InetSocketAddress address;
 
     protected Thread socketThread;
     protected ServerSocket socket = null;
@@ -52,11 +53,11 @@ public class ECMessagingServer {
 
     protected ExecutorService executor = null;
 
-    protected List<Connection> connections = new ArrayList<>();
+    protected @NotNull List<Connection> connections = new ArrayList<>();
 
-    protected final Object WRITE_LOCK = new Object();
+    protected final @NotNull Object WRITE_LOCK = new Object();
 
-    public ECMessagingServer(InetSocketAddress address) {
+    public ECMessagingServer(@NotNull InetSocketAddress address) {
         this.address = address;
     }
 
@@ -71,7 +72,7 @@ public class ECMessagingServer {
             try {
                 this.socket = ServerSocketFactory.getDefault().createServerSocket(this.address.getPort(), -1, this.address.getAddress());
 
-                System.out.println("Started Messaging server on " + this.address.toString());
+                System.out.println("Started Messaging server on " + this.address);
 
                 while (this.open) {
                     Socket client = this.socket.accept();
@@ -145,7 +146,7 @@ public class ECMessagingServer {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, "ECMessagingServer[" + this.address.toString() + "]");
+        }, "ECMessagingServer[" + this.address + "]");
         this.socketThread.start();
     }
 

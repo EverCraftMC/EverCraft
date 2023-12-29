@@ -1,9 +1,10 @@
 package io.github.evercraftmc.messaging;
 
 import io.github.kale_ko.bjsl.parsers.YamlParser;
-import io.github.kale_ko.ejcl.file.bjsl.YamlFileConfig;
+import io.github.kale_ko.ejcl.file.bjsl.StructuredYamlFileConfig;
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
+import org.jetbrains.annotations.NotNull;
 
 public class ECMessagingMain {
     private static class MessagingDetails {
@@ -11,11 +12,11 @@ public class ECMessagingMain {
         public int port = 3000;
     }
 
-    public static void main(String[] args) {
+    public static void main(String @NotNull [] args) {
         try {
             System.out.println("Loading config");
 
-            YamlFileConfig<MessagingDetails> messagingDetails = new YamlFileConfig<>(MessagingDetails.class, Path.of("messaging.yml").toFile(), new YamlParser.Builder().build());
+            StructuredYamlFileConfig<MessagingDetails> messagingDetails = new StructuredYamlFileConfig<>(MessagingDetails.class, Path.of("messaging.yml").toFile(), new YamlParser.Builder().build());
             messagingDetails.load(true);
 
             ECMessagingServer server = new ECMessagingServer(new InetSocketAddress(messagingDetails.get().host, messagingDetails.get().port));
