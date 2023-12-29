@@ -9,16 +9,17 @@ import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.global.GlobalModule;
 import java.time.Instant;
+import org.jetbrains.annotations.NotNull;
 
 public class JoinListener implements ECListener {
-    protected final GlobalModule parent;
+    protected final @NotNull GlobalModule parent;
 
-    public JoinListener(GlobalModule parent) {
+    public JoinListener(@NotNull GlobalModule parent) {
         this.parent = parent;
     }
 
     @ECHandler(order=ECHandlerOrder.BEFORE)
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
         if (parent.getPlugin().getEnvironment().getType() == ECEnvironmentType.PROXY) {
             if (parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).firstJoin == null) {
                 parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).firstJoin = Instant.now();
@@ -41,7 +42,7 @@ public class JoinListener implements ECListener {
     }
 
     @ECHandler(order=ECHandlerOrder.BEFORE)
-    public void onPlayerLeave(PlayerLeaveEvent event) {
+    public void onPlayerLeave(@NotNull PlayerLeaveEvent event) {
         if (parent.getPlugin().getEnvironment().getType() == ECEnvironmentType.PROXY) {
             parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).lastJoin = Instant.now();
         }

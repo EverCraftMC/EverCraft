@@ -5,53 +5,74 @@ import io.github.evercraftmc.core.api.server.player.ECConsole;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.global.GlobalModule;
+import io.github.evercraftmc.global.events.player.PlayerDisplayNameChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class PrefixCommand implements ECCommand {
-    protected final GlobalModule parent;
+    protected final @NotNull GlobalModule parent;
 
-    public PrefixCommand(GlobalModule parent) {
+    public PrefixCommand(@NotNull GlobalModule parent) {
         this.parent = parent;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "prefix";
     }
 
     @Override
-    public String getDescription() {
-        return "Change your prefix";
-    }
-
-    @Override
-    public List<String> getAlias() {
+    public @NotNull List<String> getAlias() {
         return List.of("setPrefix");
     }
 
     @Override
-    public String getPermission() {
+    public @NotNull String getDescription() {
+        return "Change your prefix";
+    }
+
+    @Override
+    public @NotNull String getUsage() {
+        return "/prefix {prefix}";
+    }
+
+    @Override
+    public @NotNull String getUsage(@NotNull ECPlayer player) {
+        if (player.hasPermission("evercraft.global.commands.prefix.other")) {
+            return "/prefix [{user}] {prefix}";
+        } else {
+            return this.getUsage();
+        }
+    }
+
+    @Override
+    public @NotNull String getPermission() {
         return "evercraft.global.commands.prefix";
     }
 
     @Override
-    public void run(ECPlayer player, String[] args, boolean sendFeedback) {
+    public @NotNull List<String> getExtraPermissions() {
+        return List.of(this.getPermission(), "evercraft.global.commands.prefix.other");
+    }
+
+    @Override
+    public void run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
         if (!(player instanceof ECConsole)) {
-            if (args.length > 0) {
-                ECPlayer otherPlayer = parent.getPlugin().getServer().getOnlinePlayer(args[0]);
+            if (args.size() > 0) {
+                ECPlayer otherPlayer = parent.getPlugin().getServer().getOnlinePlayer(args.get(0));
 
                 if (otherPlayer != null && player.hasPermission("evercraft.global.commands.prefix.other")) {
-                    if (args.length == 1) {
+                    if (args.size() == 1) {
                         this.parent.getPlugin().getPlayerData().players.get(otherPlayer.getUuid().toString()).prefix = otherPlayer.getName();
                         this.parent.getPlugin().saveData();
 
                         if (sendFeedback) {
                             player.sendMessage(ECTextFormatter.translateColors("&a" + otherPlayer.getDisplayName() + "&r&a's prefix has been reset."));
                         }
-                    } else if (args.length == 2) {
-                        if (ECTextFormatter.stripColors(args[1]).length() <= 16 && args[1].length() <= 32) {
-                            if (args[1].equalsIgnoreCase("reset")) {
+                    } else if (args.size() == 2) {
+                        if (ECTextFormatter.stripColors(args.get(1)).length() <= 16 && args.get(1).length() <= 32) {
+                            if (args.get(1).equalsIgnoreCase("reset")) {
                                 this.parent.getPlugin().getPlayerData().players.get(otherPlayer.getUuid().toString()).prefix = otherPlayer.getName();
                                 this.parent.getPlugin().saveData();
 
@@ -59,11 +80,11 @@ public class PrefixCommand implements ECCommand {
                                     player.sendMessage(ECTextFormatter.translateColors("&a" + otherPlayer.getDisplayName() + "&r&a's prefix has been reset."));
                                 }
                             } else {
-                                this.parent.getPlugin().getPlayerData().players.get(otherPlayer.getUuid().toString()).prefix = args[1];
+                                this.parent.getPlugin().getPlayerData().players.get(otherPlayer.getUuid().toString()).prefix = args.get(1);
                                 this.parent.getPlugin().saveData();
 
                                 if (sendFeedback) {
-                                    player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set " + otherPlayer.getDisplayName() + "&r&a's prefix to &r" + args[1] + "&r&a."));
+                                    player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set " + otherPlayer.getDisplayName() + "&r&a's prefix to &r" + args.get(1) + "&r&a."));
                                 }
                             }
                         } else if (sendFeedback) {
@@ -73,9 +94,9 @@ public class PrefixCommand implements ECCommand {
                         player.sendMessage(ECTextFormatter.translateColors("&cYour prefix can't contain spaces."));
                     }
                 } else {
-                    if (args.length == 1) {
-                        if (ECTextFormatter.stripColors(args[0]).length() <= 16 && args[0].length() <= 32) {
-                            if (args[0].equalsIgnoreCase("reset")) {
+                    if (args.size() == 1) {
+                        if (ECTextFormatter.stripColors(args.get(0)).length() <= 16 && args.get(0).length() <= 32) {
+                            if (args.get(0).equalsIgnoreCase("reset")) {
                                 this.parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).prefix = null;
                                 this.parent.getPlugin().saveData();
 
@@ -83,11 +104,11 @@ public class PrefixCommand implements ECCommand {
                                     player.sendMessage(ECTextFormatter.translateColors("&aYour prefix has been reset."));
                                 }
                             } else {
-                                this.parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).prefix = args[0];
+                                this.parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).prefix = args.get(0);
                                 this.parent.getPlugin().saveData();
 
                                 if (sendFeedback) {
-                                    player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set your prefix to &r" + args[0] + "&r&a."));
+                                    player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully set your prefix to &r" + args.get(0) + "&r&a."));
                                 }
                             }
                         } else if (sendFeedback) {
@@ -107,14 +128,17 @@ public class PrefixCommand implements ECCommand {
             }
 
             player.setOnlineDisplayName(ECTextFormatter.translateColors((parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).prefix != null ? parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).prefix + "&r " : "&r") + parent.getPlugin().getPlayerData().players.get(player.getUuid().toString()).displayName + "&r"));
+
+            PlayerDisplayNameChangeEvent newEvent = new PlayerDisplayNameChangeEvent(player);
+            parent.getPlugin().getServer().getEventManager().emit(newEvent);
         } else if (sendFeedback) {
             player.sendMessage(ECTextFormatter.translateColors("&cYou can't do that from the console."));
         }
     }
 
     @Override
-    public List<String> tabComplete(ECPlayer player, String[] args) {
-        if (args.length == 1) {
+    public @NotNull List<String> tabComplete(@NotNull ECPlayer player, @NotNull List<String> args) {
+        if (args.size() == 1) {
             if (player.hasPermission("evercraft.global.commands.prefix.other")) {
                 List<String> players = new ArrayList<>();
                 players.add("reset");
@@ -125,7 +149,7 @@ public class PrefixCommand implements ECCommand {
             }
 
             return List.of("reset");
-        } else if (args.length == 2 && player.hasPermission("evercraft.global.commands.prefix.other")) {
+        } else if (args.size() == 2 && player.hasPermission("evercraft.global.commands.prefix.other")) {
             return List.of("reset");
         } else {
             return List.of();

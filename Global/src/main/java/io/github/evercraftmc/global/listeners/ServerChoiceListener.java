@@ -8,16 +8,17 @@ import io.github.evercraftmc.core.api.events.proxy.player.PlayerServerConnectedE
 import io.github.evercraftmc.core.impl.bungee.server.ECBungeeServer;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.global.GlobalModule;
+import org.jetbrains.annotations.NotNull;
 
 public class ServerChoiceListener implements ECListener {
-    protected final GlobalModule parent;
+    protected final @NotNull GlobalModule parent;
 
-    public ServerChoiceListener(GlobalModule parent) {
+    public ServerChoiceListener(@NotNull GlobalModule parent) {
         this.parent = parent;
     }
 
     @ECHandler(order=ECHandlerOrder.BEFORE)
-    public void onPlayerJoin(PlayerProxyJoinEvent event) {
+    public void onPlayerJoin(@NotNull PlayerProxyJoinEvent event) {
         String server = ((ECBungeeServer) parent.getPlugin().getServer()).getDefaultServer();
 
         if (event.getPlayer().getServerAddress() != null) {
@@ -31,7 +32,7 @@ public class ServerChoiceListener implements ECListener {
     }
 
     @ECHandler(order=ECHandlerOrder.BEFORE)
-    public void onPlayerConnect(PlayerServerConnectedEvent event) {
-        event.setConnectMessage(ECTextFormatter.translateColors("&e" + event.getPlayer().getDisplayName() + " &r&emoved to " + event.getServer()));
+    public void onPlayerConnect(@NotNull PlayerServerConnectedEvent event) {
+        event.setConnectMessage(ECTextFormatter.translateColors("&e" + event.getPlayer().getDisplayName() + " &r&emoved to " + event.getTargetServer()));
     }
 }

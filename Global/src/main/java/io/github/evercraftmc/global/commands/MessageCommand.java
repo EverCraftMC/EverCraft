@@ -6,45 +6,61 @@ import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.global.GlobalModule;
 import java.util.*;
+import org.jetbrains.annotations.NotNull;
 
 public class MessageCommand implements ECCommand {
-    protected final GlobalModule parent;
+    protected final @NotNull GlobalModule parent;
 
-    public static final Map<ECPlayer, UUID> lastMessaged = new HashMap<>();
+    public static final @NotNull Map<ECPlayer, UUID> lastMessaged = new HashMap<>();
 
-    public MessageCommand(GlobalModule parent) {
+    public MessageCommand(@NotNull GlobalModule parent) {
         this.parent = parent;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "message";
     }
 
     @Override
-    public String getDescription() {
-        return "Message another player";
-    }
-
-    @Override
-    public List<String> getAlias() {
+    public @NotNull List<String> getAlias() {
         return List.of("msg", "whisper", "w");
     }
 
     @Override
-    public String getPermission() {
+    public @NotNull String getDescription() {
+        return "Message another player";
+    }
+
+    @Override
+    public @NotNull String getUsage() {
+        return "/message {player} {message}";
+    }
+
+    @Override
+    public @NotNull String getUsage(@NotNull ECPlayer player) {
+        return this.getUsage();
+    }
+
+    @Override
+    public @NotNull String getPermission() {
         return "evercraft.global.commands.message";
     }
 
     @Override
-    public void run(ECPlayer player, String[] args, boolean sendFeedback) {
-        if (args.length > 0) {
-            ECPlayer player2 = parent.getPlugin().getServer().getOnlinePlayer(args[0]);
+    public @NotNull List<String> getExtraPermissions() {
+        return List.of(this.getPermission());
+    }
+
+    @Override
+    public void run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
+        if (args.size() > 0) {
+            ECPlayer player2 = parent.getPlugin().getServer().getOnlinePlayer(args.get(0));
 
             if (player2 != null) {
                 StringBuilder messageBuilder = new StringBuilder();
-                for (int i = 1; i < args.length; i++) {
-                    messageBuilder.append(args[i]).append(" ");
+                for (int i = 1; i < args.size(); i++) {
+                    messageBuilder.append(args.get(i)).append(" ");
                 }
                 String message = messageBuilder.toString().trim();
 
@@ -68,7 +84,7 @@ public class MessageCommand implements ECCommand {
                     }
                 }
             } else {
-                player.sendMessage(ECTextFormatter.translateColors("&cPlayer \"" + args[0] + "\" could not be found."));
+                player.sendMessage(ECTextFormatter.translateColors("&cPlayer \"" + args.get(0) + "\" could not be found."));
             }
         } else if (sendFeedback) {
             player.sendMessage(ECTextFormatter.translateColors("&cYou must pass a username."));
@@ -76,8 +92,8 @@ public class MessageCommand implements ECCommand {
     }
 
     @Override
-    public List<String> tabComplete(ECPlayer player, String[] args) {
-        if (args.length == 1) {
+    public @NotNull List<String> tabComplete(@NotNull ECPlayer player, @NotNull List<String> args) {
+        if (args.size() == 1) {
             List<String> players = new ArrayList<>();
             for (ECPlayer player2 : parent.getPlugin().getServer().getOnlinePlayers()) {
                 players.add(player2.getName());

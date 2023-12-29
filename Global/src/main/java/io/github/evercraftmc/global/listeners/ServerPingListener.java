@@ -7,16 +7,17 @@ import io.github.evercraftmc.core.api.events.proxy.player.PlayerProxyPingEvent;
 import io.github.evercraftmc.core.impl.bungee.server.ECBungeeServer;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.global.GlobalModule;
+import org.jetbrains.annotations.NotNull;
 
 public class ServerPingListener implements ECListener {
-    protected final GlobalModule parent;
+    protected final @NotNull GlobalModule parent;
 
-    public ServerPingListener(GlobalModule parent) {
+    public ServerPingListener(@NotNull GlobalModule parent) {
         this.parent = parent;
     }
 
     @ECHandler(order=ECHandlerOrder.BEFORE)
-    public void onPlayerPing(PlayerProxyPingEvent event) {
+    public void onPlayerPing(@NotNull PlayerProxyPingEvent event) {
         String server = ((ECBungeeServer) parent.getPlugin().getServer()).getDefaultServer();
         boolean isDefault = true;
 

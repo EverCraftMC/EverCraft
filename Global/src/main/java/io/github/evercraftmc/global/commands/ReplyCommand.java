@@ -4,46 +4,61 @@ import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.global.GlobalModule;
+import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class ReplyCommand implements ECCommand {
-    protected final GlobalModule parent;
+    protected final @NotNull GlobalModule parent;
 
-    public ReplyCommand(GlobalModule parent) {
+    public ReplyCommand(@NotNull GlobalModule parent) {
         this.parent = parent;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "reply";
     }
 
     @Override
-    public String getDescription() {
-        return "Reply to the last player";
-    }
-
-    @Override
-    public List<String> getAlias() {
+    public @NotNull List<String> getAlias() {
         return List.of("r");
     }
 
     @Override
-    public String getPermission() {
+    public @NotNull String getDescription() {
+        return "Reply to the last player you messaged";
+    }
+
+    @Override
+    public @NotNull String getUsage() {
+        return "/reply {message}";
+    }
+
+    @Override
+    public @NotNull String getUsage(@NotNull ECPlayer player) {
+        return this.getUsage();
+    }
+
+    @Override
+    public @NotNull String getPermission() {
         return "evercraft.global.commands.message";
     }
 
     @Override
-    public void run(ECPlayer player, String[] args, boolean sendFeedback) {
-        if (args.length > 0) {
+    public @NotNull List<String> getExtraPermissions() {
+        return List.of(this.getPermission());
+    }
+
+    @Override
+    public void run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
+        if (args.size() > 0) {
             ECPlayer player2 = parent.getPlugin().getServer().getOnlinePlayer(MessageCommand.lastMessaged.get(player));
 
             if (player2 != null) {
-                String[] args2 = new String[args.length + 1];
-                args2[0] = player2.getName();
-                for (int i = 0; i < args.length; i++) {
-                    args2[i + 1] = args[i];
-                }
+                List<String> args2 = new ArrayList<>();
+                args2.add(player2.getName());
+                args2.addAll(args);
 
                 parent.getPlugin().getServer().getCommandManager().get("message").run(player, args2, sendFeedback);
             } else {
@@ -55,7 +70,7 @@ public class ReplyCommand implements ECCommand {
     }
 
     @Override
-    public List<String> tabComplete(ECPlayer player, String[] args) {
+    public @NotNull List<String> tabComplete(@NotNull ECPlayer player, @NotNull List<String> args) {
         return List.of();
     }
 }

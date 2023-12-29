@@ -16,16 +16,17 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 
 public class ChatListener implements ECListener {
-    protected final GlobalModule parent;
+    protected final @NotNull GlobalModule parent;
 
-    public ChatListener(GlobalModule parent) {
+    public ChatListener(@NotNull GlobalModule parent) {
         this.parent = parent;
     }
 
     @ECHandler(order=ECHandlerOrder.BEFORE)
-    public void onPlayerChat(PlayerChatEvent event) {
+    public void onPlayerChat(@NotNull PlayerChatEvent event) {
         if (parent.getPlugin().getEnvironment().getType() == ECEnvironmentType.PROXY) {
             if (event.getType() == PlayerChatEvent.MessageType.CHAT) {
                 event.setMessage(ECTextFormatter.translateColors("&r" + event.getPlayer().getDisplayName() + " &r> ") + ECTextFormatter.stripColors(event.getMessage()));
@@ -64,7 +65,7 @@ public class ChatListener implements ECListener {
     }
 
     @ECHandler(order=ECHandlerOrder.BEFORE)
-    public void onGlobalChat(MessageEvent event) {
+    public void onGlobalChat(@NotNull MessageEvent event) {
         ECMessage message = event.getMessage();
 
         if (!message.getSender().matches(parent.getPlugin().getServer()) && message.getRecipient().matches(parent.getPlugin().getServer())) {
