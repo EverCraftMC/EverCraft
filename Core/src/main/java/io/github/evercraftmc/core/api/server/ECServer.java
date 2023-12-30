@@ -8,7 +8,6 @@ import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import java.util.Collection;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public interface ECServer {
     @NotNull ECPlugin getPlugin();
@@ -23,15 +22,15 @@ public interface ECServer {
 
     @NotNull Collection<? extends ECPlayer> getPlayers();
 
-    @Nullable ECPlayer getPlayer(@NotNull UUID uuid);
+    ECPlayer getPlayer(@NotNull UUID uuid);
 
-    @Nullable ECPlayer getPlayer(@NotNull String name);
+    ECPlayer getPlayer(@NotNull String name);
 
     @NotNull Collection<? extends ECPlayer> getOnlinePlayers();
 
-    @Nullable ECPlayer getOnlinePlayer(@NotNull UUID uuid);
+    ECPlayer getOnlinePlayer(@NotNull UUID uuid);
 
-    @Nullable ECPlayer getOnlinePlayer(@NotNull String name);
+    ECPlayer getOnlinePlayer(@NotNull String name);
 
     @NotNull ECConsole getConsole();
 

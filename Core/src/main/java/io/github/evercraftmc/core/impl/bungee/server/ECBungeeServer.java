@@ -81,7 +81,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public @Nullable ECBungeePlayer getPlayer(@NotNull UUID uuid) {
+    public ECBungeePlayer getPlayer(@NotNull UUID uuid) {
         if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
             return new ECBungeePlayer(this.plugin.getPlayerData().players.get(uuid.toString()));
         } else {
@@ -90,7 +90,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public @Nullable ECBungeePlayer getPlayer(@NotNull String name) {
+    public ECBungeePlayer getPlayer(@NotNull String name) {
         for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
             if (player.name.equalsIgnoreCase(name)) {
                 return new ECBungeePlayer(player);
@@ -114,7 +114,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public @Nullable ECBungeePlayer getOnlinePlayer(@NotNull UUID uuid) {
+    public ECBungeePlayer getOnlinePlayer(@NotNull UUID uuid) {
         if (this.handle.getPlayer(uuid) != null) {
             if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
                 return new ECBungeePlayer(this.plugin.getPlayerData().players.get(uuid.toString()), this.handle.getPlayer(uuid));
@@ -127,7 +127,7 @@ public class ECBungeeServer implements ECServer {
     }
 
     @Override
-    public @Nullable ECBungeePlayer getOnlinePlayer(@NotNull String name) {
+    public ECBungeePlayer getOnlinePlayer(@NotNull String name) {
         if (this.handle.getPlayer(name) != null) {
             for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
                 if (player.name.equalsIgnoreCase(name)) {
@@ -139,7 +139,7 @@ public class ECBungeeServer implements ECServer {
         return null;
     }
 
-    public @Nullable ECBungeePlayer getOnlinePlayer(@NotNull Connection connection) {
+    public ECBungeePlayer getOnlinePlayer(@NotNull Connection connection) {
         for (ProxiedPlayer bungeePlayer : this.handle.getPlayers()) {
             if (bungeePlayer.getPendingConnection().getSocketAddress().equals(connection.getSocketAddress())) {
                 for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {

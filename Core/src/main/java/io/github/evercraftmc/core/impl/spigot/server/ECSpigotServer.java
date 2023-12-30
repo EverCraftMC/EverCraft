@@ -14,7 +14,6 @@ import java.util.UUID;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ECSpigotServer implements ECServer {
     protected @NotNull ECPlugin plugin;
@@ -78,7 +77,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public @Nullable ECSpigotPlayer getPlayer(@NotNull UUID uuid) {
+    public ECSpigotPlayer getPlayer(@NotNull UUID uuid) {
         if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
             return new ECSpigotPlayer(this.plugin.getPlayerData().players.get(uuid.toString()));
         } else {
@@ -87,7 +86,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public @Nullable ECSpigotPlayer getPlayer(@NotNull String name) {
+    public ECSpigotPlayer getPlayer(@NotNull String name) {
         for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
             if (player.name.equalsIgnoreCase(name)) {
                 return new ECSpigotPlayer(player);
@@ -111,7 +110,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public @Nullable ECSpigotPlayer getOnlinePlayer(@NotNull UUID uuid) {
+    public ECSpigotPlayer getOnlinePlayer(@NotNull UUID uuid) {
         if (this.handle.getPlayer(uuid) != null) {
             if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
                 return new ECSpigotPlayer(this.plugin.getPlayerData().players.get(uuid.toString()), this.handle.getPlayer(uuid));
@@ -124,7 +123,7 @@ public class ECSpigotServer implements ECServer {
     }
 
     @Override
-    public @Nullable ECSpigotPlayer getOnlinePlayer(@NotNull String name) {
+    public ECSpigotPlayer getOnlinePlayer(@NotNull String name) {
         if (this.handle.getPlayer(name) != null) {
             for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
                 if (player.name.equalsIgnoreCase(name)) {

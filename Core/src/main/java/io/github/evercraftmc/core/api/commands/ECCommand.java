@@ -19,7 +19,7 @@ public interface ECCommand {
 
     @NotNull List<String> getExtraPermissions();
 
-    void run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback);
+    boolean run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback);
 
     @NotNull List<String> tabComplete(@NotNull ECPlayer player, @NotNull List<String> args);
 }
