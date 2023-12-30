@@ -95,7 +95,7 @@ public class ChatListener implements ECListener {
                         }
                     } else if (!newEvent.getMessage().isEmpty()) {
                         for (ECPlayer player2 : (!newEvent.getRecipients().isEmpty() ? newEvent.getRecipients() : parent.getPlugin().getServer().getOnlinePlayers())) {
-                            if (!player.getServer().equalsIgnoreCase(player2.getServer())) {
+                            if (player.getServer() == null || !player.getServer().equalsIgnoreCase(player2.getServer())) {
                                 player2.sendMessage(ECTextFormatter.translateColors("&r[" + player.getServer().substring(0, 1).toUpperCase() + player.getServer().substring(1).toLowerCase() + "&r] " + newEvent.getMessage()));
                             } else {
                                 player2.sendMessage(ECTextFormatter.translateColors("&r" + newEvent.getMessage()));

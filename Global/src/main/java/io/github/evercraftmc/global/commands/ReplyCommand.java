@@ -32,7 +32,7 @@ public class ReplyCommand implements ECCommand {
 
     @Override
     public @NotNull String getUsage() {
-        return "/reply {message}";
+        return "/reply <message>";
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ReplyCommand implements ECCommand {
     }
 
     @Override
-    public void run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
+    public boolean run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
         if (args.size() > 0) {
             ECPlayer player2 = parent.getPlugin().getServer().getOnlinePlayer(MessageCommand.lastMessaged.get(player));
 
@@ -60,13 +60,17 @@ public class ReplyCommand implements ECCommand {
                 args2.add(player2.getName());
                 args2.addAll(args);
 
-                parent.getPlugin().getServer().getCommandManager().get("message").run(player, args2, sendFeedback);
+                return parent.getPlugin().getServer().getCommandManager().get("message").run(player, args2, sendFeedback);
             } else {
                 player.sendMessage(ECTextFormatter.translateColors("&cYou have not messaged anyone."));
+                return false;
             }
         } else if (sendFeedback) {
             player.sendMessage(ECTextFormatter.translateColors("&cYou must pass a username."));
+            return false;
         }
+
+        return false;
     }
 
     @Override

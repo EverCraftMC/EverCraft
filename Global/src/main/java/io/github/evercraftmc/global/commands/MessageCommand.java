@@ -34,7 +34,7 @@ public class MessageCommand implements ECCommand {
 
     @Override
     public @NotNull String getUsage() {
-        return "/message {player} {message}";
+        return "/message <player> <message>";
     }
 
     @Override
@@ -53,7 +53,7 @@ public class MessageCommand implements ECCommand {
     }
 
     @Override
-    public void run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
+    public boolean run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
         if (args.size() > 0) {
             ECPlayer player2 = parent.getPlugin().getServer().getOnlinePlayer(args.get(0));
 
@@ -73,6 +73,7 @@ public class MessageCommand implements ECCommand {
                         if (!newEvent.getCancelReason().isEmpty()) {
                             player.sendMessage(newEvent.getCancelReason());
                         }
+                        return false;
                     } else if (!newEvent.getMessage().isEmpty()) {
                         lastMessaged.remove(player);
                         lastMessaged.put(player, player2.getUuid());
@@ -81,14 +82,19 @@ public class MessageCommand implements ECCommand {
 
                         player2.sendMessage(ECTextFormatter.translateColors("&b&l[DM] &r" + player.getDisplayName() + " &r&8-> &4You &r> " + ECTextFormatter.stripColors(message.trim())));
                         player.sendMessage(ECTextFormatter.translateColors("&b&l[DM] &r&4You &r&8-> &r" + player.getDisplayName() + " &r> " + ECTextFormatter.stripColors(message.trim())));
+                        return true;
                     }
                 }
             } else {
                 player.sendMessage(ECTextFormatter.translateColors("&cPlayer \"" + args.get(0) + "\" could not be found."));
+                return false;
             }
         } else if (sendFeedback) {
             player.sendMessage(ECTextFormatter.translateColors("&cYou must pass a username."));
+            return false;
         }
+
+        return false;
     }
 
     @Override

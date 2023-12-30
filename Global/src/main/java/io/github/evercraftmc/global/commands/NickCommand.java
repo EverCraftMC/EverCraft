@@ -34,13 +34,13 @@ public class NickCommand implements ECCommand {
 
     @Override
     public @NotNull String getUsage() {
-        return "/nickname {nickname}";
+        return "/nickname <nickname>";
     }
 
     @Override
     public @NotNull String getUsage(@NotNull ECPlayer player) {
         if (player.hasPermission("evercraft.global.commands.nickname.other")) {
-            return "/nickname [{user}] {nickname}";
+            return "/nickname [<user>] <nickname>";
         } else {
             return this.getUsage();
         }
@@ -57,7 +57,7 @@ public class NickCommand implements ECCommand {
     }
 
     @Override
-    public void run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
+    public boolean run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
         if (!(player instanceof ECConsole)) {
             if (args.size() > 0) {
                 ECPlayer otherPlayer = parent.getPlugin().getServer().getOnlinePlayer(args.get(0));
@@ -89,9 +89,11 @@ public class NickCommand implements ECCommand {
                             }
                         } else if (sendFeedback) {
                             player.sendMessage(ECTextFormatter.translateColors("&cThat nickname is too long."));
+                            return false;
                         }
                     } else if (sendFeedback) {
                         player.sendMessage(ECTextFormatter.translateColors("&cYour nickname can't contain spaces."));
+                        return false;
                     }
                 } else {
                     if (args.size() == 1) {
@@ -113,9 +115,11 @@ public class NickCommand implements ECCommand {
                             }
                         } else if (sendFeedback) {
                             player.sendMessage(ECTextFormatter.translateColors("&cThat nickname is too long."));
+                            return false;
                         }
                     } else if (sendFeedback) {
                         player.sendMessage(ECTextFormatter.translateColors("&cYour nickname can't contain spaces."));
+                        return false;
                     }
                 }
             } else {
@@ -131,9 +135,14 @@ public class NickCommand implements ECCommand {
 
             PlayerDisplayNameChangeEvent newEvent = new PlayerDisplayNameChangeEvent(player);
             parent.getPlugin().getServer().getEventManager().emit(newEvent);
+
+            return true;
         } else if (sendFeedback) {
             player.sendMessage(ECTextFormatter.translateColors("&cYou can't do that from the console."));
+            return false;
         }
+
+        return false;
     }
 
     @Override

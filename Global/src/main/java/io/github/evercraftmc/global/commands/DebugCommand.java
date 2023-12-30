@@ -37,7 +37,7 @@ public class DebugCommand implements ECCommand {
 
     @Override
     public @NotNull String getUsage() {
-        return "/debug (get,set) {path} [{value}]";
+        return "/debug (get|set) <path> [<value>]";
     }
 
     @Override
@@ -55,7 +55,7 @@ public class DebugCommand implements ECCommand {
     }
 
     @Override
-    public void run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
+    public boolean run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
         if (args.size() > 1) {
             if (args.get(0).equalsIgnoreCase("get")) {
                 StringBuilder pathBuilder = new StringBuilder();
@@ -71,6 +71,7 @@ public class DebugCommand implements ECCommand {
                 ParsedElement resolvedElement = PathResolver.resolveElement(dataElement, path);
 
                 player.sendMessage(ECTextFormatter.translateColors("&aGot " + path + ":&r\n") + (resolvedElement != null ? BJSL.stringifyJson(resolvedElement) : "undefined"));
+                return true;
             } else if (args.get(0).equalsIgnoreCase("set")) {
                 StringBuilder pathBuilder = new StringBuilder();
                 for (int i = 1; i < args.size() - 1; i++) {
@@ -89,12 +90,17 @@ public class DebugCommand implements ECCommand {
                 parent.getPlugin().saveData();
 
                 player.sendMessage(ECTextFormatter.translateColors("&aSet " + path + ":&r\n") + BJSL.stringifyJson(valueElement));
+                return true;
             } else if (sendFeedback) {
                 player.sendMessage(ECTextFormatter.translateColors("&cExpected \"get\" or \"set\"."));
+                return false;
             }
         } else if (sendFeedback) {
             player.sendMessage(ECTextFormatter.translateColors("&cYou must pass a command and path."));
+            return false;
         }
+
+        return false;
     }
 
     @Override
