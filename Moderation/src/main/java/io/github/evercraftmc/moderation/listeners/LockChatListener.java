@@ -7,16 +7,17 @@ import io.github.evercraftmc.core.api.events.player.PlayerChatEvent;
 import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.moderation.ModerationModule;
+import org.jetbrains.annotations.NotNull;
 
 public class LockChatListener implements ECListener {
-    protected final ModerationModule parent;
+    protected final @NotNull ModerationModule parent;
 
-    public LockChatListener(ModerationModule parent) {
+    public LockChatListener(@NotNull ModerationModule parent) {
         this.parent = parent;
     }
 
     @ECHandler(order=ECHandlerOrder.BEFORE)
-    public void onPlayerChat(PlayerChatEvent event) {
+    public void onPlayerChat(@NotNull PlayerChatEvent event) {
         if (parent.getPlugin().getEnvironment().getType() != ECEnvironmentType.PROXY) {
             return;
         }

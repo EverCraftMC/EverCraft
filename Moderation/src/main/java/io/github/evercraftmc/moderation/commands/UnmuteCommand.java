@@ -6,38 +6,54 @@ import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.moderation.ModerationModule;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class UnmuteCommand implements ECCommand {
-    protected final ModerationModule parent;
+    protected final @NotNull ModerationModule parent;
 
-    public UnmuteCommand(ModerationModule parent) {
+    public UnmuteCommand(@NotNull ModerationModule parent) {
         this.parent = parent;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "unmute";
     }
 
     @Override
-    public String getDescription() {
-        return "Unmute a player";
-    }
-
-    @Override
-    public List<String> getAlias() {
+    public @NotNull List<String> getAlias() {
         return List.of();
     }
 
     @Override
-    public String getPermission() {
+    public @NotNull String getDescription() {
+        return "Unmute a player";
+    }
+
+    @Override
+    public @NotNull String getUsage() {
+        return "/unmute <player>";
+    }
+
+    @Override
+    public @NotNull String getUsage(@NotNull ECPlayer player) {
+        return this.getUsage();
+    }
+
+    @Override
+    public @NotNull String getPermission() {
         return "evercraft.moderation.commands.mute";
     }
 
     @Override
-    public void run(ECPlayer player, String[] args, boolean sendFeedback) {
-        if (args.length > 0) {
-            ECPlayer player2 = parent.getPlugin().getServer().getPlayer(args[0]);
+    public @NotNull List<String> getExtraPermissions() {
+        return List.of(this.getPermission());
+    }
+
+    @Override
+    public boolean run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
+        if (args.size() > 0) {
+            ECPlayer player2 = parent.getPlugin().getServer().getPlayer(args.get(0));
 
             if (player2 != null) {
                 if (sendFeedback) {
@@ -53,17 +69,23 @@ public class UnmuteCommand implements ECCommand {
 
                     player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully unmuted player &r" + player2.getDisplayName() + "&r&a."));
                 }
-            } else {
-                player.sendMessage(ECTextFormatter.translateColors("&cPlayer \"" + args[0] + "\" could not be found."));
+
+                return true;
+            } else if (sendFeedback) {
+                player.sendMessage(ECTextFormatter.translateColors("&cPlayer \"" + args.get(0) + "\" could not be found."));
+                return false;
             }
         } else if (sendFeedback) {
             player.sendMessage(ECTextFormatter.translateColors("&cYou must pass a username."));
+            return false;
         }
+
+        return false;
     }
 
     @Override
-    public List<String> tabComplete(ECPlayer player, String[] args) {
-        if (args.length == 1) {
+    public @NotNull List<String> tabComplete(@NotNull ECPlayer player, @NotNull List<String> args) {
+        if (args.size() == 1) {
             List<String> players = new ArrayList<>();
             for (ECPlayer player2 : parent.getPlugin().getServer().getOnlinePlayers()) {
                 players.add(player2.getName());

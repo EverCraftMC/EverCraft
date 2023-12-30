@@ -7,16 +7,17 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 
 public class TimeUtil {
     private TimeUtil() {
     }
 
-    private static final Map<String, Long> longUnits = new LinkedHashMap<>();
-    private static final Map<String, Long> shortUnits = new LinkedHashMap<>();
+    private static final @NotNull Map<String, Long> longUnits = new LinkedHashMap<>();
+    private static final @NotNull Map<String, Long> shortUnits = new LinkedHashMap<>();
 
-    private static final Map<String, Long> allUnits = new LinkedHashMap<>();
-    private static final DateFormat timeFormat = DateFormat.getDateTimeInstance();
+    private static final @NotNull Map<String, Long> allUnits = new LinkedHashMap<>();
+    private static final @NotNull DateFormat timeFormat = DateFormat.getDateTimeInstance();
 
     static {
         shortUnits.put("y", 60L * 60L * 24L * 365L);
@@ -41,7 +42,7 @@ public class TimeUtil {
         allUnits.put("sec", 1L);
     }
 
-    public static Instant parseTime(String string) {
+    public static @NotNull Instant parseTime(@NotNull String string) {
         if (string.equalsIgnoreCase("forever") || string.equalsIgnoreCase("infinity")) {
             return Instant.ofEpochMilli(0);
         }
@@ -53,7 +54,7 @@ public class TimeUtil {
         }
     }
 
-    public static Instant parseFuture(String string) {
+    public static @NotNull Instant parseFuture(@NotNull String string) {
         if (string.equalsIgnoreCase("forever") || string.equalsIgnoreCase("infinity")) {
             return Instant.ofEpochMilli(0);
         }
@@ -73,7 +74,7 @@ public class TimeUtil {
         return Instant.now().plus(total, ChronoUnit.SECONDS);
     }
 
-    public static String stringifyTime(Instant instant) {
+    public static @NotNull String stringifyTime(@NotNull Instant instant) {
         if (instant.toEpochMilli() == 0) {
             return "forever";
         }
@@ -81,11 +82,11 @@ public class TimeUtil {
         return timeFormat.format(Date.from(instant));
     }
 
-    public static String stringifyFuture(Instant instant) {
+    public static @NotNull String stringifyFuture(@NotNull Instant instant) {
         return stringifyFuture(instant, false);
     }
 
-    public static String stringifyFuture(Instant instant, boolean useLong) {
+    public static @NotNull String stringifyFuture(@NotNull Instant instant, boolean useLong) {
         if (instant.toEpochMilli() == 0) {
             return "forever";
         }
@@ -110,11 +111,11 @@ public class TimeUtil {
         return string.toString().trim();
     }
 
-    public static boolean isPast(Instant instant) {
+    public static boolean isPast(@NotNull Instant instant) {
         return isPast(Instant.now(), instant);
     }
 
-    public static boolean isPast(Instant now, Instant instant) {
+    public static boolean isPast(@NotNull Instant now, @NotNull Instant instant) {
         if (instant.toEpochMilli() == 0) {
             return false;
         }

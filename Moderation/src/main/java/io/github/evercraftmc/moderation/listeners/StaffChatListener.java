@@ -9,16 +9,17 @@ import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.moderation.ModerationModule;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class StaffChatListener implements ECListener {
-    protected final ModerationModule parent;
+    protected final @NotNull ModerationModule parent;
 
-    public StaffChatListener(ModerationModule parent) {
+    public StaffChatListener(@NotNull ModerationModule parent) {
         this.parent = parent;
     }
 
     @ECHandler(order=ECHandlerOrder.AFTER)
-    public void onPlayerChat(PlayerChatEvent event) {
+    public void onPlayerChat(@NotNull PlayerChatEvent event) {
         if (event.getType() == PlayerChatEvent.MessageType.CHAT && parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).staffchat && event.getPlayer().hasPermission("evercraft.moderation.commands.staffChat")) {
             event.setCancelled(true);
 

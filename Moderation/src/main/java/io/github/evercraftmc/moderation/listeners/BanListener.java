@@ -8,16 +8,17 @@ import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.moderation.ModerationModule;
 import io.github.evercraftmc.moderation.util.TimeUtil;
 import java.time.Instant;
+import org.jetbrains.annotations.NotNull;
 
 public class BanListener implements ECListener {
-    protected final ModerationModule parent;
+    protected final @NotNull ModerationModule parent;
 
-    public BanListener(ModerationModule parent) {
+    public BanListener(@NotNull ModerationModule parent) {
         this.parent = parent;
     }
 
     @ECHandler(order=ECHandlerOrder.FIRST)
-    public void onPlayerJoin(PlayerLoginEvent event) {
+    public void onPlayerJoin(@NotNull PlayerLoginEvent event) {
         if (parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).ban != null) {
             String moderatorName = parent.getPlugin().getServer().getPlayer(parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).ban.moderator).getDisplayName();
             String reason = parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).ban.reason;

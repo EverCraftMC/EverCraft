@@ -6,36 +6,52 @@ import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.moderation.ModerationModule;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class ClearChatCommand implements ECCommand {
-    protected final ModerationModule parent;
+    protected final @NotNull ModerationModule parent;
 
-    public ClearChatCommand(ModerationModule parent) {
+    public ClearChatCommand(@NotNull ModerationModule parent) {
         this.parent = parent;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "clearChat";
     }
 
     @Override
-    public String getDescription() {
-        return "Clear the chat";
-    }
-
-    @Override
-    public List<String> getAlias() {
+    public @NotNull List<String> getAlias() {
         return List.of("cleanChat");
     }
 
     @Override
-    public String getPermission() {
+    public @NotNull String getDescription() {
+        return "Clear the chat";
+    }
+
+    @Override
+    public @NotNull String getUsage() {
+        return "/clearChat";
+    }
+
+    @Override
+    public @NotNull String getUsage(@NotNull ECPlayer player) {
+        return this.getUsage();
+    }
+
+    @Override
+    public @NotNull String getPermission() {
         return "evercraft.moderation.commands.clearChat";
     }
 
     @Override
-    public void run(ECPlayer player, String[] args, boolean sendFeedback) {
+    public @NotNull List<String> getExtraPermissions() {
+        return List.of(this.getPermission());
+    }
+
+    @Override
+    public boolean run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
         if (sendFeedback) {
             for (ECPlayer player2 : parent.getPlugin().getServer().getOnlinePlayers()) {
                 if (!player2.hasPermission(this.getPermission())) {
@@ -45,11 +61,13 @@ public class ClearChatCommand implements ECCommand {
                 }
             }
         }
+
+        return true;
     }
 
     @Override
-    public List<String> tabComplete(ECPlayer player, String[] args) {
-        if (args.length == 1) {
+    public @NotNull List<String> tabComplete(@NotNull ECPlayer player, @NotNull List<String> args) {
+        if (args.size() == 1) {
             List<String> players = new ArrayList<>();
             for (ECPlayer player2 : parent.getPlugin().getServer().getOnlinePlayers()) {
                 players.add(player2.getName());

@@ -5,44 +5,60 @@ import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.moderation.ModerationModule;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class LockChatCommand implements ECCommand {
-    protected final ModerationModule parent;
+    protected final @NotNull ModerationModule parent;
 
-    public LockChatCommand(ModerationModule parent) {
+    public LockChatCommand(@NotNull ModerationModule parent) {
         this.parent = parent;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "lockChat";
     }
 
     @Override
-    public String getDescription() {
-        return "Lock/unlock the chat";
-    }
-
-    @Override
-    public List<String> getAlias() {
+    public @NotNull List<String> getAlias() {
         return List.of();
     }
 
     @Override
-    public String getPermission() {
+    public @NotNull String getDescription() {
+        return "Lock/unlock the chat";
+    }
+
+    @Override
+    public @NotNull String getUsage() {
+        return "/lockChat [(on|off)]";
+    }
+
+    @Override
+    public @NotNull String getUsage(@NotNull ECPlayer player) {
+        return this.getUsage();
+    }
+
+    @Override
+    public @NotNull String getPermission() {
         return "evercraft.moderation.commands.lockChat";
     }
 
     @Override
-    public void run(ECPlayer player, String[] args, boolean sendFeedback) {
-        if (args.length == 0) {
+    public @NotNull List<String> getExtraPermissions() {
+        return List.of(this.getPermission(), "evercraft.moderation.commands.lockChat.bypass");
+    }
+
+    @Override
+    public boolean run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
+        if (args.size() == 0) {
             parent.getPlugin().getPlayerData().chatLocked = !parent.getPlugin().getPlayerData().chatLocked;
             parent.getPlugin().saveData();
         } else {
-            if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("true")) {
+            if (args.get(0).equalsIgnoreCase("on") || args.get(0).equalsIgnoreCase("true")) {
                 parent.getPlugin().getPlayerData().chatLocked = true;
                 parent.getPlugin().saveData();
-            } else if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("false")) {
+            } else if (args.get(0).equalsIgnoreCase("off") || args.get(0).equalsIgnoreCase("false")) {
                 parent.getPlugin().getPlayerData().chatLocked = false;
                 parent.getPlugin().saveData();
             } else {
@@ -50,7 +66,7 @@ public class LockChatCommand implements ECCommand {
                     player.sendMessage(ECTextFormatter.translateColors("&cWas expecting \"on\" or \"off\""));
                 }
 
-                return;
+                return false;
             }
         }
 
@@ -61,11 +77,13 @@ public class LockChatCommand implements ECCommand {
                 parent.getPlugin().getServer().broadcastMessage(ECTextFormatter.translateColors("&aThe chat has been unlocked"));
             }
         }
+
+        return true;
     }
 
     @Override
-    public List<String> tabComplete(ECPlayer player, String[] args) {
-        if (args.length == 1) {
+    public @NotNull List<String> tabComplete(@NotNull ECPlayer player, @NotNull List<String> args) {
+        if (args.size() == 1) {
             return List.of("on", "off");
         } else {
             return List.of();

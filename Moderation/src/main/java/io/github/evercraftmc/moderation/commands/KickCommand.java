@@ -6,43 +6,59 @@ import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.moderation.ModerationModule;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class KickCommand implements ECCommand {
-    protected final ModerationModule parent;
+    protected final @NotNull ModerationModule parent;
 
-    public KickCommand(ModerationModule parent) {
+    public KickCommand(@NotNull ModerationModule parent) {
         this.parent = parent;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "kick";
     }
 
     @Override
-    public String getDescription() {
-        return "Kick a player";
-    }
-
-    @Override
-    public List<String> getAlias() {
+    public @NotNull List<String> getAlias() {
         return List.of();
     }
 
     @Override
-    public String getPermission() {
+    public @NotNull String getUsage() {
+        return "/kick <player> <reason>";
+    }
+
+    @Override
+    public @NotNull String getUsage(@NotNull ECPlayer player) {
+        return this.getUsage();
+    }
+
+    @Override
+    public @NotNull String getDescription() {
+        return "Kick a player";
+    }
+
+    @Override
+    public @NotNull String getPermission() {
         return "evercraft.moderation.commands.kick";
     }
 
     @Override
-    public void run(ECPlayer player, String[] args, boolean sendFeedback) {
-        if (args.length > 0) {
-            ECPlayer player2 = parent.getPlugin().getServer().getOnlinePlayer(args[0]);
+    public @NotNull List<String> getExtraPermissions() {
+        return List.of(this.getPermission());
+    }
+
+    @Override
+    public boolean run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
+        if (args.size() > 0) {
+            ECPlayer player2 = parent.getPlugin().getServer().getOnlinePlayer(args.get(0));
 
             if (player2 != null) {
                 StringBuilder reasonBuilder = new StringBuilder();
-                for (int i = 1; i < args.length; i++) {
-                    reasonBuilder.append(args[i]).append(" ");
+                for (int i = 1; i < args.size(); i++) {
+                    reasonBuilder.append(args.get(i)).append(" ");
                 }
                 String reason = reasonBuilder.toString().trim();
 
@@ -61,17 +77,23 @@ public class KickCommand implements ECCommand {
                         player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully kicked player &r" + player2.getDisplayName() + "&r&a."));
                     }
                 }
-            } else {
-                player.sendMessage(ECTextFormatter.translateColors("&cPlayer \"" + args[0] + "\" could not be found."));
+
+                return true;
+            } else if (sendFeedback) {
+                player.sendMessage(ECTextFormatter.translateColors("&cPlayer \"" + args.get(0) + "\" could not be found."));
+                return false;
             }
         } else if (sendFeedback) {
             player.sendMessage(ECTextFormatter.translateColors("&cYou must pass a username."));
+            return false;
         }
+
+        return false;
     }
 
     @Override
-    public List<String> tabComplete(ECPlayer player, String[] args) {
-        if (args.length == 1) {
+    public @NotNull List<String> tabComplete(@NotNull ECPlayer player, @NotNull List<String> args) {
+        if (args.size() == 1) {
             List<String> players = new ArrayList<>();
             for (ECPlayer player2 : parent.getPlugin().getServer().getOnlinePlayers()) {
                 players.add(player2.getName());

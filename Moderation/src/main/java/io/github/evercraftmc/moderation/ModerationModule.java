@@ -9,32 +9,33 @@ import io.github.evercraftmc.moderation.commands.*;
 import io.github.evercraftmc.moderation.listeners.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class ModerationModule implements ECModule {
     protected ECModuleInfo info;
 
     protected ECPlugin plugin;
 
-    protected List<ECCommand> commands = new ArrayList<>();
-    protected List<ECListener> listeners = new ArrayList<>();
+    protected @NotNull List<ECCommand> commands = new ArrayList<>();
+    protected @NotNull List<ECListener> listeners = new ArrayList<>();
 
-    public String getName() {
+    public @NotNull String getName() {
         return this.getInfo().getName();
     }
 
-    public ECModuleInfo getInfo() {
+    public @NotNull ECModuleInfo getInfo() {
         return this.info;
     }
 
-    public void setInfo(ECModuleInfo info) {
+    public void setInfo(@NotNull ECModuleInfo info) {
         this.info = info;
     }
 
-    public ECPlugin getPlugin() {
+    public @NotNull ECPlugin getPlugin() {
         return this.plugin;
     }
 
-    public void setPlugin(ECPlugin plugin) {
+    public void setPlugin(@NotNull ECPlugin plugin) {
         this.plugin = plugin;
     }
 

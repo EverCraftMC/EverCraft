@@ -9,45 +9,61 @@ import io.github.evercraftmc.moderation.util.TimeUtil;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class BanCommand implements ECCommand {
-    protected final ModerationModule parent;
+    protected final @NotNull ModerationModule parent;
 
-    public BanCommand(ModerationModule parent) {
+    public BanCommand(@NotNull ModerationModule parent) {
         this.parent = parent;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "ban";
     }
 
     @Override
-    public String getDescription() {
-        return "Ban a player";
-    }
-
-    @Override
-    public List<String> getAlias() {
+    public @NotNull List<String> getAlias() {
         return List.of();
     }
 
     @Override
-    public String getPermission() {
+    public @NotNull String getDescription() {
+        return "Ban a player";
+    }
+
+    @Override
+    public @NotNull String getUsage() {
+        return "/ban <player> <time> [<reason>]";
+    }
+
+    @Override
+    public @NotNull String getUsage(@NotNull ECPlayer player) {
+        return this.getUsage();
+    }
+
+    @Override
+    public @NotNull String getPermission() {
         return "evercraft.moderation.commands.ban";
     }
 
     @Override
-    public void run(ECPlayer player, String[] args, boolean sendFeedback) {
-        if (args.length > 0) {
-            ECPlayer player2 = parent.getPlugin().getServer().getPlayer(args[0]);
+    public @NotNull List<String> getExtraPermissions() {
+        return List.of(this.getPermission());
+    }
+
+    @Override
+    public boolean run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
+        if (args.size() > 0) {
+            ECPlayer player2 = parent.getPlugin().getServer().getPlayer(args.get(0));
 
             if (player2 != null) {
-                Instant until = TimeUtil.parseFuture(args[1]);
+                Instant until = TimeUtil.parseFuture(args.get(1));
 
                 StringBuilder reasonBuilder = new StringBuilder();
-                for (int i = 2; i < args.length; i++) {
-                    reasonBuilder.append(args[i]).append(" ");
+                for (int i = 2; i < args.size(); i++) {
+                    reasonBuilder.append(args.get(i)).append(" ");
                 }
                 String reason = reasonBuilder.toString().trim();
 
@@ -86,23 +102,29 @@ public class BanCommand implements ECCommand {
                         player.sendMessage(ECTextFormatter.translateColors("&aSuccessfully banned player &r" + player2.getDisplayName() + " &r&afor \"" + TimeUtil.stringifyFuture(until, true) + "\"."));
                     }
                 }
-            } else {
-                player.sendMessage(ECTextFormatter.translateColors("&cPlayer \"" + args[0] + "\" could not be found."));
+
+                return true;
+            } else if (sendFeedback) {
+                player.sendMessage(ECTextFormatter.translateColors("&cPlayer \"" + args.get(0) + "\" could not be found."));
+                return false;
             }
         } else if (sendFeedback) {
             player.sendMessage(ECTextFormatter.translateColors("&cYou must pass a username."));
+            return false;
         }
+
+        return false;
     }
 
     @Override
-    public List<String> tabComplete(ECPlayer player, String[] args) {
-        if (args.length == 1) {
+    public @NotNull List<String> tabComplete(@NotNull ECPlayer player, @NotNull List<String> args) {
+        if (args.size() == 1) {
             List<String> players = new ArrayList<>();
             for (ECPlayer player2 : parent.getPlugin().getServer().getOnlinePlayers()) {
                 players.add(player2.getName());
             }
             return players;
-        } else if (args.length == 2) {
+        } else if (args.size() == 2) {
             return List.of("forever", "5m", "30m", "1h", "6h", "1d", "3d", "1w");
         } else {
             return List.of();

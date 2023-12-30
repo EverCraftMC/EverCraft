@@ -8,16 +8,17 @@ import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.ECEnvironmentType;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.moderation.ModerationModule;
+import org.jetbrains.annotations.NotNull;
 
 public class CommandSpyListener implements ECListener {
-    protected final ModerationModule parent;
+    protected final @NotNull ModerationModule parent;
 
-    public CommandSpyListener(ModerationModule parent) {
+    public CommandSpyListener(@NotNull ModerationModule parent) {
         this.parent = parent;
     }
 
     @ECHandler(order=ECHandlerOrder.BEFORE)
-    public void onPlayerChat(PlayerCommandEvent event) {
+    public void onPlayerChat(@NotNull PlayerCommandEvent event) {
         if (parent.getPlugin().getEnvironment().getType() != ECEnvironmentType.PROXY) {
             return;
         }

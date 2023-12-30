@@ -8,16 +8,17 @@ import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.moderation.ModerationModule;
 import io.github.evercraftmc.moderation.util.TimeUtil;
 import java.time.Instant;
+import org.jetbrains.annotations.NotNull;
 
 public class MuteListener implements ECListener {
-    protected final ModerationModule parent;
+    protected final @NotNull ModerationModule parent;
 
-    public MuteListener(ModerationModule parent) {
+    public MuteListener(@NotNull ModerationModule parent) {
         this.parent = parent;
     }
 
     @ECHandler(order=ECHandlerOrder.FIRST)
-    public void onPlayerChat(PlayerChatEvent event) {
+    public void onPlayerChat(@NotNull PlayerChatEvent event) {
         if (parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).mute != null) {
             String moderatorName = parent.getPlugin().getServer().getPlayer(parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).mute.moderator).getDisplayName();
             String reason = parent.getPlugin().getPlayerData().players.get(event.getPlayer().getUuid().toString()).mute.reason;

@@ -3,6 +3,8 @@
 ## Both
 
 - Sudo
+- Server ping version info
+- Server ping online players
 
 ## Either
 
