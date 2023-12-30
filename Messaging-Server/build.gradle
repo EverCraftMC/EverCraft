@@ -2,7 +2,7 @@ plugins {
     id "java"
 }
 
-version = project.messaging_version
+version = messaging_version
 
 repositories {
     maven {
@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation "io.github.kale_ko:ejcl:${project.ejcl_version}"
+    implementation "io.github.kale_ko:ejcl:${ejcl_version}"
 }
 
 tasks.register("fatJar", Jar) {

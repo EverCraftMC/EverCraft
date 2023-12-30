@@ -2,7 +2,7 @@ plugins {
     id "java"
 }
 
-version = project.global_version
+version = global_version
 
 repositories {
     maven {
@@ -15,7 +15,7 @@ dependencies {
     compileOnly project(":Core")
     compileOnly "org.slf4j:slf4j-api:2.0.9"
 
-    implementation "io.github.kale_ko:ejcl:${project.ejcl_version}"
+    implementation "io.github.kale_ko:ejcl:${ejcl_version}"
 }
 
 tasks.register("fatJar", Jar) {
@@ -33,9 +33,9 @@ build {
 }
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property "version", global_version
 
     filesMatching("evercraft.yml") {
-        expand "version": project.version
+        expand "version": global_version
     }
 }

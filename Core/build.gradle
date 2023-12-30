@@ -2,7 +2,7 @@ plugins {
     id "java"
 }
 
-version = project.core_version
+version = core_version
 
 repositories {
     maven {
@@ -15,10 +15,10 @@ repositories {
 }
 
 dependencies {
-    implementation "io.github.kale_ko:ejcl:${project.ejcl_version}"
+    implementation "io.github.kale_ko:ejcl:${ejcl_version}"
 
-    compileOnly "io.github.waterfallmc:waterfall-api:${project.waterfall_version}"
-    compileOnly "io.papermc.paper:paper-api:${project.paper_version}"
+    compileOnly "io.github.waterfallmc:waterfall-api:${waterfall_version}"
+    compileOnly "io.papermc.paper:paper-api:${paper_version}"
 
     compileOnly "org.slf4j:slf4j-api:2.0.9"
 }
@@ -38,9 +38,9 @@ build {
 }
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property "version", core_version
 
-    filesMatching(["bungee.yml", "plugin.yml", "limbo.yml"]) {
-        expand "version": project.version
+    filesMatching(["bungee.yml", "plugin.yml"]) {
+        expand "version": core_version
     }
 }
