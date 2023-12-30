@@ -108,7 +108,10 @@ public class ECMessenger {
 
             int size = this.inputStream.readInt();
             byte[] data = new byte[size];
-            this.inputStream.read(data, 0, size);
+            int read = this.inputStream.read(data, 0, size);
+            if (size != read) {
+                throw new IOException("Mismatched read");
+            }
 
             return new ECMessage(ECSender.parse(sender), ECRecipient.parse(recipient), data, size);
         }
