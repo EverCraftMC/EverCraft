@@ -43,6 +43,8 @@ public class GlobalModule implements ECModule {
     }
 
     public void load() {
+        this.commands.add(this.plugin.getServer().getCommandManager().register(new HelpCommand(this), false, false));
+
         this.commands.add(this.plugin.getServer().getCommandManager().register(new NickCommand(this), false, true));
         this.commands.add(this.plugin.getServer().getCommandManager().register(new PrefixCommand(this), false, true));
 

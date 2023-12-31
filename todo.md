@@ -26,7 +26,6 @@
 - Chest/Item Protection
 - Passive mode
 - Games
-- Server idler
 - [listeners/CreativeItemListener](https://github.com/EverCraftMC/EverCraft/blob/main/Spigot/src/main/java/io/github/evercraftmc/evercraft/spigot/listeners/CreativeItemListener.java)
 - Gamemode shorthands
 - Invisee/Endersee
