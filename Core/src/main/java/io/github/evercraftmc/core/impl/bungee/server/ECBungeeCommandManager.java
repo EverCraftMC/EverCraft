@@ -1,5 +1,6 @@
 package io.github.evercraftmc.core.impl.bungee.server;
 
+import com.google.common.collect.Multimap;
 import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.events.ECHandler;
 import io.github.evercraftmc.core.api.events.ECListener;
@@ -13,6 +14,7 @@ import io.github.evercraftmc.core.messaging.ECMessage;
 import io.github.evercraftmc.core.messaging.ECMessageType;
 import io.github.evercraftmc.core.messaging.ECRecipient;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -140,6 +142,84 @@ public class ECBungeeCommandManager implements ECCommandManager {
 
     public @NotNull ECBungeeServer getServer() {
         return this.server;
+    }
+
+    @Override
+    public @NotNull List<ECCommand> getAll() {
+        return new ArrayList<>(this.commands.values());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NotNull Map<String, List<ECCommand>> getAllNative() {
+        Map<String, List<ECCommand>> allCommands = new HashMap<>();
+
+        Map<Plugin, Collection<Command>> nativeCommands;
+        try {
+            Field field = this.server.getHandle().getPluginManager().getClass().getDeclaredField("commandsByPlugin");
+            field.setAccessible(true);
+            nativeCommands = ((Multimap<Plugin, Command>) field.get(this.server.getHandle().getPluginManager())).asMap();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        assert nativeCommands != null;
+
+        for (Plugin plugin : nativeCommands.keySet()) {
+            List<ECCommand> outCommands = new ArrayList<>();
+
+            for (Command command : nativeCommands.get(plugin)) {
+                outCommands.add(new ECCommand() {
+                    @Override
+                    public @NotNull String getName() {
+                        return command.getName();
+                    }
+
+                    @Override
+                    public @NotNull List<String> getAlias() {
+                        return Arrays.asList(command.getAliases());
+                    }
+
+                    @Override
+                    public @NotNull String getDescription() {
+                        return "";
+                    }
+
+                    @Override
+                    public @NotNull String getUsage() {
+                        return "/" + command.getName() + " {unknown}";
+                    }
+
+                    @Override
+                    public @NotNull String getUsage(@NotNull ECPlayer player) {
+                        return this.getUsage();
+                    }
+
+                    @Override
+                    public String getPermission() {
+                        return command.getPermission();
+                    }
+
+                    @Override
+                    public @NotNull List<String> getExtraPermissions() {
+                        return List.of(this.getPermission());
+                    }
+
+                    @Override
+                    public boolean run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
+                        throw new UnsupportedOperationException();
+                    }
+
+                    @Override
+                    public @NotNull List<String> tabComplete(@NotNull ECPlayer player, @NotNull List<String> args) {
+                        throw new UnsupportedOperationException();
+                    }
+                });
+            }
+
+            allCommands.put(plugin != null ? plugin.getDescription().getName() : "bungee", outCommands);
+        }
+
+        return allCommands;
     }
 
     @Override

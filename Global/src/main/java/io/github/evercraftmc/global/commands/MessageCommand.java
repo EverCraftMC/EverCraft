@@ -43,7 +43,7 @@ public class MessageCommand implements ECCommand {
     }
 
     @Override
-    public @NotNull String getPermission() {
+    public String getPermission() {
         return "evercraft.global.commands.message";
     }
 

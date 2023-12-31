@@ -41,7 +41,7 @@ public class UnmuteCommand implements ECCommand {
     }
 
     @Override
-    public @NotNull String getPermission() {
+    public String getPermission() {
         return "evercraft.moderation.commands.mute";
     }
 

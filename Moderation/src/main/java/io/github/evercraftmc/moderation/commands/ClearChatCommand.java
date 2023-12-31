@@ -41,7 +41,7 @@ public class ClearChatCommand implements ECCommand {
     }
 
     @Override
-    public @NotNull String getPermission() {
+    public String getPermission() {
         return "evercraft.moderation.commands.clearChat";
     }
 

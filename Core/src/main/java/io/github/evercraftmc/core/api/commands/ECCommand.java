@@ -15,7 +15,7 @@ public interface ECCommand {
 
     @NotNull String getUsage(@NotNull ECPlayer player);
 
-    @NotNull String getPermission();
+    String getPermission();
 
     @NotNull List<String> getExtraPermissions();
 
