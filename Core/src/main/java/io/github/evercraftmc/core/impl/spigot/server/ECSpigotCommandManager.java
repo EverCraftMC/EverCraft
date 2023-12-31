@@ -18,7 +18,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -175,16 +174,17 @@ public class ECSpigotCommandManager implements ECCommandManager {
         if (!this.commands.containsKey(command.getName().toLowerCase())) {
             CommandInter interCommand = new CommandInter(command, distinguishServer, forwardToOther);
 
-            // Add permissions with defaults before registering command
-            for (String permission : command.getExtraPermissions()) {
-                this.server.getHandle().getPluginManager().addPermission(new Permission(permission, PermissionDefault.OP));
-            }
-
             this.commands.put(command.getName().toLowerCase(), command);
             this.interCommands.put(command.getName().toLowerCase(), interCommand);
 
             this.server.getHandle().getCommandMap().register("evercraft", interCommand);
             this.interCommands.get(command.getName().toLowerCase()).register(this.server.getHandle().getCommandMap());
+
+            for (String permission : command.getExtraPermissions()) {
+                if (this.server.getHandle().getPluginManager().getPermission(permission) == null) {
+                    this.server.getHandle().getPluginManager().addPermission(new Permission(permission));
+                }
+            }
 
             return command;
         } else {
