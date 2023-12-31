@@ -19,8 +19,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ECSpigotCommandManager implements ECCommandManager {
     protected class CommandInter extends Command {
@@ -152,75 +152,11 @@ public class ECSpigotCommandManager implements ECCommandManager {
 
     @Override
     public @NotNull List<ECCommand> getAll() {
-        return new ArrayList<>(this.commands.values());
+        return List.copyOf(this.commands.values());
     }
 
     @Override
-    public @NotNull Map<String, List<ECCommand>> getAllNative() {
-        Map<String, List<ECCommand>> allCommands = new HashMap<>();
-
-        Collection<Command> nativeCommands = this.server.getHandle().getCommandMap().getKnownCommands().values();
-
-        for (Plugin plugin : this.server.getHandle().getPluginManager().getPlugins()) {
-            List<ECCommand> outCommands = new ArrayList<>();
-
-            for (Command command : nativeCommands) {
-                outCommands.add(new ECCommand() {
-                    @Override
-                    public @NotNull String getName() {
-                        return command.getName();
-                    }
-
-                    @Override
-                    public @NotNull List<String> getAlias() {
-                        return command.getAliases();
-                    }
-
-                    @Override
-                    public @NotNull String getDescription() {
-                        return command.getDescription();
-                    }
-
-                    @Override
-                    public @NotNull String getUsage() {
-                        return "/" + command.getUsage();
-                    }
-
-                    @Override
-                    public @NotNull String getUsage(@NotNull ECPlayer player) {
-                        return this.getUsage();
-                    }
-
-                    @Override
-                    public String getPermission() {
-                        return command.getPermission();
-                    }
-
-                    @Override
-                    public @NotNull List<String> getExtraPermissions() {
-                        return List.of(this.getPermission());
-                    }
-
-                    @Override
-                    public boolean run(@NotNull ECPlayer player, @NotNull List<String> args, boolean sendFeedback) {
-                        throw new UnsupportedOperationException();
-                    }
-
-                    @Override
-                    public @NotNull List<String> tabComplete(@NotNull ECPlayer player, @NotNull List<String> args) {
-                        throw new UnsupportedOperationException();
-                    }
-                });
-            }
-
-            allCommands.put(plugin != null ? plugin.getName() : "spigot", outCommands);
-        }
-
-        return allCommands;
-    }
-
-    @Override
-    public @NotNull ECCommand get(@NotNull String name) {
+    public @Nullable ECCommand get(@NotNull String name) {
         return this.commands.get(name.toLowerCase());
     }
 
