@@ -1,7 +1,7 @@
 main: io.github.evercraftmc.core.impl.spigot.ECSpigotPluginLoader
 
-name: "EverCraft-Core"
-description: "EverCraft-Core"
+name: "EverCraft"
+description: "The EverCraft plugin"
 version: "${version}"
 
 authors: [ "Kale-Ko" ]
