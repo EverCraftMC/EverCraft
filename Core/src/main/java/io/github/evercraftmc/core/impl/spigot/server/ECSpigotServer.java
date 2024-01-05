@@ -80,9 +80,9 @@ public class ECSpigotServer implements ECServer {
     public ECSpigotPlayer getPlayer(@NotNull UUID uuid) {
         if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
             return new ECSpigotPlayer(this.plugin.getPlayerData().players.get(uuid.toString()));
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     @Override
@@ -111,30 +111,26 @@ public class ECSpigotServer implements ECServer {
 
     @Override
     public ECSpigotPlayer getOnlinePlayer(@NotNull UUID uuid) {
-        if (this.handle.getPlayer(uuid) != null) {
-            if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
-                return new ECSpigotPlayer(this.plugin.getPlayerData().players.get(uuid.toString()), this.handle.getPlayer(uuid));
-            } else {
-                return null;
-            }
-        } else {
-            return null;
+        Player spigotPlayer = this.handle.getPlayer(uuid);
+        if (spigotPlayer != null && this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
+            return new ECSpigotPlayer(this.plugin.getPlayerData().players.get(uuid.toString()), spigotPlayer);
         }
+
+        return null;
     }
 
     @Override
     public ECSpigotPlayer getOnlinePlayer(@NotNull String name) {
-        if (this.handle.getPlayer(name) != null) {
+        Player spigotPlayer = this.handle.getPlayer(name);
+        if (spigotPlayer != null) {
             for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
                 if (player.name.equalsIgnoreCase(name)) {
-                    return new ECSpigotPlayer(player, this.handle.getPlayer(name));
+                    return new ECSpigotPlayer(player, spigotPlayer);
                 }
             }
-
-            return null;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     @Override

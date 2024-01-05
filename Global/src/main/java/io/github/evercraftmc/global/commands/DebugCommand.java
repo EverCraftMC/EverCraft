@@ -86,7 +86,12 @@ public class DebugCommand implements ECCommand {
                 ParsedObject dataElement = BJSL.elementify(parent.getPlugin().getPlayerData()).asObject();
                 ParsedElement valueElement = BJSL.parseJson(value);
                 PathResolver.updateElement(dataElement, path, valueElement, true);
-                parent.getPlugin().setPlayerData(BJSL.parse(dataElement, ECPlayerData.class));
+                ECPlayerData data = BJSL.parse(dataElement, ECPlayerData.class);
+                if (data == null) {
+                    player.sendMessage(ECTextFormatter.translateColors("&cError updating data."));
+                    return false;
+                }
+                parent.getPlugin().setPlayerData(data);
                 parent.getPlugin().saveData();
 
                 player.sendMessage(ECTextFormatter.translateColors("&aSet " + path + ":&r\n") + BJSL.stringifyJson(valueElement));

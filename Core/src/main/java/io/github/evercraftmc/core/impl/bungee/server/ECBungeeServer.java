@@ -84,9 +84,9 @@ public class ECBungeeServer implements ECServer {
     public ECBungeePlayer getPlayer(@NotNull UUID uuid) {
         if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
             return new ECBungeePlayer(this.plugin.getPlayerData().players.get(uuid.toString()));
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     @Override
@@ -115,23 +115,21 @@ public class ECBungeeServer implements ECServer {
 
     @Override
     public ECBungeePlayer getOnlinePlayer(@NotNull UUID uuid) {
-        if (this.handle.getPlayer(uuid) != null) {
-            if (this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
-                return new ECBungeePlayer(this.plugin.getPlayerData().players.get(uuid.toString()), this.handle.getPlayer(uuid));
-            } else {
-                return null;
-            }
-        } else {
-            return null;
+        ProxiedPlayer bungeePlayer = this.handle.getPlayer(uuid);
+        if (bungeePlayer != null && this.plugin.getPlayerData().players.containsKey(uuid.toString())) {
+            return new ECBungeePlayer(this.plugin.getPlayerData().players.get(uuid.toString()), bungeePlayer);
         }
+
+        return null;
     }
 
     @Override
     public ECBungeePlayer getOnlinePlayer(@NotNull String name) {
-        if (this.handle.getPlayer(name) != null) {
+        ProxiedPlayer bungeePlayer = this.handle.getPlayer(name);
+        if (bungeePlayer != null) {
             for (ECPlayerData.Player player : this.plugin.getPlayerData().players.values()) {
                 if (player.name.equalsIgnoreCase(name)) {
-                    return new ECBungeePlayer(player, this.handle.getPlayer(name));
+                    return new ECBungeePlayer(player, bungeePlayer);
                 }
             }
         }

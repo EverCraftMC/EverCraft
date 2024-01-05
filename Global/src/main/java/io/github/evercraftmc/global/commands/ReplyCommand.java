@@ -6,6 +6,7 @@ import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.global.GlobalModule;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 public class ReplyCommand implements ECCommand {
@@ -60,7 +61,7 @@ public class ReplyCommand implements ECCommand {
                 args2.add(player2.getName());
                 args2.addAll(args);
 
-                return parent.getPlugin().getServer().getCommandManager().get("message").run(player, args2, sendFeedback);
+                return Objects.requireNonNull(parent.getPlugin().getServer().getCommandManager().get("message")).run(player, args2, sendFeedback);
             } else {
                 player.sendMessage(ECTextFormatter.translateColors("&cYou have not messaged anyone."));
                 return false;

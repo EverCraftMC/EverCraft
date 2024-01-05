@@ -127,7 +127,10 @@ public class ECBungeeCommandManager implements ECCommandManager {
 
                             ECPlayer player = parent.server.getOnlinePlayer(uuid);
 
-                            parent.server.getCommandManager().get(command).run(player, args, false);
+                            ECCommand ecCommand = parent.server.getCommandManager().get(command);
+                            if (ecCommand != null) {
+                                ecCommand.run(player, args, false);
+                            }
                         }
 
                         commandMessage.close();

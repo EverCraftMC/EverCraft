@@ -5,7 +5,6 @@ import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import io.github.evercraftmc.core.impl.util.ECTextFormatter;
 import io.github.evercraftmc.global.GlobalModule;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
 public class HelpCommand implements ECCommand {
@@ -69,8 +68,6 @@ public class HelpCommand implements ECCommand {
             out.append("&r&a").append(command.getDescription());
 
             player.sendMessage(ECTextFormatter.translateColors(out.toString().trim()));
-
-            return true;
         } else {
             StringBuilder out = new StringBuilder();
 
@@ -81,15 +78,15 @@ public class HelpCommand implements ECCommand {
             }
 
             player.sendMessage(ECTextFormatter.translateColors(out.toString().trim()));
-
-            return true;
         }
+
+        return true;
     }
 
     @Override
     public @NotNull List<String> tabComplete(@NotNull ECPlayer player, @NotNull List<String> args) {
         if (args.size() == 1) {
-            return List.copyOf(parent.getPlugin().getServer().getCommandManager().getAll().stream().map((command) -> command.getName()).collect(Collectors.toList()));
+            return List.copyOf(parent.getPlugin().getServer().getCommandManager().getAll().stream().map(ECCommand::getName).toList());
         } else {
             return List.of();
         }
