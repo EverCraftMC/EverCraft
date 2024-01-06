@@ -3,18 +3,32 @@ package io.github.evercraftmc.core.api;
 import io.github.evercraftmc.core.ECPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public interface ECModule {
-    @NotNull String getName();
+public abstract class ECModule {
+    protected ECModuleInfo info;
 
-    @NotNull ECModuleInfo getInfo();
+    protected ECPlugin plugin;
 
-    void setInfo(@NotNull ECModuleInfo info);
+    public @NotNull String getName() {
+        return this.getInfo().getName();
+    }
 
-    @NotNull ECPlugin getPlugin();
+    public @NotNull ECModuleInfo getInfo() {
+        return this.info;
+    }
 
-    void setPlugin(@NotNull ECPlugin plugin);
+    public void setInfo(@NotNull ECModuleInfo info) {
+        this.info = info;
+    }
 
-    void load();
+    public @NotNull ECPlugin getPlugin() {
+        return this.plugin;
+    }
 
-    void unload();
+    public void setPlugin(@NotNull ECPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public abstract void load();
+
+    public abstract void unload();
 }

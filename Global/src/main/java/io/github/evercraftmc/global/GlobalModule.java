@@ -1,8 +1,6 @@
 package io.github.evercraftmc.global;
 
-import io.github.evercraftmc.core.ECPlugin;
 import io.github.evercraftmc.core.api.ECModule;
-import io.github.evercraftmc.core.api.ECModuleInfo;
 import io.github.evercraftmc.core.api.commands.ECCommand;
 import io.github.evercraftmc.core.api.events.ECListener;
 import io.github.evercraftmc.global.commands.*;
@@ -14,33 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
-public class GlobalModule implements ECModule {
-    protected ECModuleInfo info;
-
-    protected ECPlugin plugin;
-
+public class GlobalModule extends ECModule {
     protected @NotNull List<ECCommand> commands = new ArrayList<>();
     protected @NotNull List<ECListener> listeners = new ArrayList<>();
-
-    public @NotNull String getName() {
-        return this.getInfo().getName();
-    }
-
-    public @NotNull ECModuleInfo getInfo() {
-        return this.info;
-    }
-
-    public void setInfo(@NotNull ECModuleInfo info) {
-        this.info = info;
-    }
-
-    public @NotNull ECPlugin getPlugin() {
-        return this.plugin;
-    }
-
-    public void setPlugin(@NotNull ECPlugin plugin) {
-        this.plugin = plugin;
-    }
 
     public void load() {
         this.commands.add(this.plugin.getServer().getCommandManager().register(new HelpCommand(this), false, false));
