@@ -4,3 +4,4 @@ name: "WorldGuard"
 version: "${version}"
 
 depends: [ "Core", "Global" ]
+environment: SPIGOT

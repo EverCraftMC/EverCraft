@@ -8,6 +8,9 @@ repositories {
     maven {
         url "https://maven.kaleko.dev/public-snapshot/"
     }
+    maven {
+        url "https://papermc.io/repo/repository/maven-public/"
+    }
     mavenCentral()
 }
 
@@ -15,6 +18,8 @@ dependencies {
     compileOnly project(":Core")
     compileOnly project(":Global")
     compileOnly "org.slf4j:slf4j-api:2.0.9"
+
+    compileOnly "io.papermc.paper:paper-api:${paper_version}"
 
     implementation "io.github.kale_ko:ejcl:${ejcl_version}"
 }
