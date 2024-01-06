@@ -186,16 +186,16 @@ public class ECPlugin {
                     }
 
                     if (moduleInfo != null) {
-                        moduleInfoMap.put(file, moduleInfo);
-                        fileMap.put(moduleInfo.getName().toLowerCase(), file);
+                        this.moduleInfoMap.put(file, moduleInfo);
+                        this.fileMap.put(moduleInfo.getName().toLowerCase(), file);
                     } else {
                         this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Jar does not contain a module file (evercraft.yml)");
                     }
                 }
 
                 for (Path file : files) {
-                    ECModuleInfo moduleInfo = moduleInfoMap.get(file);
-                    loadModule(file, moduleInfo);
+                    ECModuleInfo moduleInfo = this.moduleInfoMap.get(file);
+                    this.loadModule(file, moduleInfo);
                 }
             }
         } catch (IOException e) {
@@ -205,15 +205,16 @@ public class ECPlugin {
         this.logger.info("Finished loading.");
     }
 
-    protected void loadModule(@NotNull Path file, @NotNull ECModuleInfo moduleInfo) {
-        if (loadedMap.containsKey(moduleInfo.getName().toLowerCase())) {
-            return;
+    protected boolean loadModule(@NotNull Path file, @NotNull ECModuleInfo moduleInfo) {
+        if (this.loadedMap.containsKey(moduleInfo.getName().toLowerCase())) {
+            return this.loadedMap.get(moduleInfo.getName().toLowerCase());
         }
-        loadedMap.put(moduleInfo.getName().toLowerCase(), true);
 
         if (moduleInfo.getName() == null || moduleInfo.getVersion() == null || moduleInfo.getEntry() == null) {
             this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Module info is missing fields");
-            return;
+
+            this.loadedMap.put(moduleInfo.getName().toLowerCase(), false);
+            return false;
         }
 
         if (moduleInfo.getDepends() != null) {
@@ -222,9 +223,16 @@ public class ECPlugin {
                     continue;
                 }
 
-                Path file2 = fileMap.get(depend.toLowerCase());
-                ECModuleInfo moduleInfo2 = moduleInfoMap.get(file2);
-                loadModule(file2, moduleInfo2);
+                Path file2 = this.fileMap.get(depend.toLowerCase());
+                ECModuleInfo moduleInfo2 = this.moduleInfoMap.get(file2);
+
+                boolean loaded = this.loadModule(file2, moduleInfo2);
+                if (!loaded) {
+                    this.logger.error("Error loading module \"" + file.getFileName() + "\"\n, Dependency \"" + moduleInfo2.getName() + "\" failed to load");
+
+                    this.loadedMap.put(moduleInfo.getName().toLowerCase(), false);
+                    return false;
+                }
             }
         }
 
@@ -256,6 +264,9 @@ public class ECPlugin {
                         module.load();
 
                         this.logger.info("Enabled module " + module.getInfo().getName());
+
+                        this.loadedMap.put(moduleInfo.getName().toLowerCase(), true);
+                        return true;
                     } catch (Exception e) {
                         this.logger.error("Error loading module \"" + file.getFileName() + "\"", e);
                     }
@@ -263,11 +274,14 @@ public class ECPlugin {
                     this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Entry class has no 0 args constructor");
                 }
             } else {
-                this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Entry class does not implement ECModule");
+                this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Entry class does not extend ECModule");
             }
         } catch (ClassNotFoundException e) {
             this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Entry class could not be found (\"" + moduleInfo.getEntry() + "\")");
         }
+
+        this.loadedMap.put(moduleInfo.getName().toLowerCase(), false);
+        return false;
     }
 
     public void unload() {
