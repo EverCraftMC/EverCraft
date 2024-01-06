@@ -10,19 +10,21 @@ public class ECModuleInfo {
 
     protected String entry;
 
-    protected List<String> depends;
+    protected @Nullable List<String> depends;
+    protected @Nullable String environment;
 
     public ECModuleInfo() {
-        this(null, null, null, null);
+        this(null, null, null, null, null);
     }
 
-    public ECModuleInfo(String name, String version, String entry, List<String> depends) {
+    public ECModuleInfo(String name, String version, String entry, @Nullable List<String> depends, @Nullable String environment) {
         this.name = name;
         this.version = version;
 
         this.entry = entry;
 
         this.depends = depends;
+        this.environment = environment;
     }
 
     public String getName() {
@@ -39,5 +41,9 @@ public class ECModuleInfo {
 
     public @Nullable List<String> getDepends() {
         return this.depends != null ? Collections.unmodifiableList(this.depends) : null;
+    }
+
+    public @Nullable String getEnvironment() {
+        return this.environment;
     }
 }

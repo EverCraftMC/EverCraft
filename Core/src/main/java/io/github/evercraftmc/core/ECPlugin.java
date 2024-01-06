@@ -217,6 +217,13 @@ public class ECPlugin {
             return false;
         }
 
+        if (moduleInfo.getEnvironment() != null && !(moduleInfo.getEnvironment().equalsIgnoreCase(this.getEnvironment().toString()) || moduleInfo.getEnvironment().equalsIgnoreCase(this.getEnvironment().getType().toString()))) {
+            this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Module is in incorrect environment");
+
+            this.loadedMap.put(moduleInfo.getName().toLowerCase(), false);
+            return false;
+        }
+
         if (moduleInfo.getDepends() != null) {
             for (String depend : moduleInfo.getDepends()) {
                 if (depend.equalsIgnoreCase("Core")) {
@@ -228,7 +235,7 @@ public class ECPlugin {
 
                 boolean loaded = this.loadModule(file2, moduleInfo2);
                 if (!loaded) {
-                    this.logger.error("Error loading module \"" + file.getFileName() + "\"\n, Dependency \"" + moduleInfo2.getName() + "\" failed to load");
+                    this.logger.error("Error loading module \"" + file.getFileName() + "\"\n  Dependency \"" + moduleInfo2.getName() + "\" failed to load");
 
                     this.loadedMap.put(moduleInfo.getName().toLowerCase(), false);
                     return false;
