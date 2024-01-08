@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PlayerProxyPingEvent extends ECEvent {
     protected @NotNull String motd;
-    protected boolean centerMotd = true;
+    protected boolean centerMotd = false;
 
     protected int onlinePlayers;
     protected int maxPlayers;
