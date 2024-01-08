@@ -39,7 +39,7 @@ public class ECBungeeCommandManager implements ECCommandManager {
         @Override
         public void execute(@NotNull CommandSender sender, @NotNull String @NotNull [] args) {
             if (sender instanceof ProxiedPlayer bungeePlayer) {
-                if (sender.hasPermission(this.getPermission())) {
+                if (this.getPermission() == null || sender.hasPermission(this.getPermission())) {
                     this.command.run(parent.server.getOnlinePlayer(bungeePlayer.getUniqueId()), Arrays.asList(args), true);
 
                     if (this.forwardToOther) {
@@ -71,7 +71,7 @@ public class ECBungeeCommandManager implements ECCommandManager {
         @Override
         public @NotNull Iterable<String> onTabComplete(@NotNull CommandSender sender, @NotNull String[] args) {
             if (sender instanceof ProxiedPlayer bungeePlayer) {
-                if (sender.hasPermission(this.getPermission())) {
+                if (this.getPermission() == null || sender.hasPermission(this.getPermission())) {
                     return this.command.tabComplete(parent.server.getOnlinePlayer(bungeePlayer.getUniqueId()), Arrays.asList(args));
                 } else {
                     return List.of();

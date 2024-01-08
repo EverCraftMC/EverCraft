@@ -43,7 +43,7 @@ public class ECSpigotCommandManager implements ECCommandManager {
         @Override
         public boolean execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String @NotNull [] args) {
             if (sender instanceof Player spigotPlayer) {
-                if (sender.hasPermission(Objects.requireNonNull(this.getPermission())) || sender.isOp()) {
+                if (this.getPermission() == null || sender.hasPermission(this.getPermission()) || sender.isOp()) {
                     this.command.run(parent.server.getOnlinePlayer(spigotPlayer.getUniqueId()), Arrays.asList(args), true);
 
                     if (this.forwardToOther) {
@@ -77,7 +77,7 @@ public class ECSpigotCommandManager implements ECCommandManager {
         @Override
         public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
             if (sender instanceof Player spigotPlayer) {
-                if (sender.hasPermission(Objects.requireNonNull(this.getPermission())) || sender.isOp()) {
+                if (this.getPermission() == null || sender.hasPermission(this.getPermission()) || sender.isOp()) {
                     return this.command.tabComplete(parent.server.getOnlinePlayer(spigotPlayer.getUniqueId()), Arrays.asList(args));
                 } else {
                     return List.of();
