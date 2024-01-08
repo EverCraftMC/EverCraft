@@ -5,9 +5,9 @@ import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerServerConnectedEvent extends ECEvent {
-    protected @NotNull ECPlayer player;
+    protected final @NotNull ECPlayer player;
 
-    protected @NotNull String targetServer;
+    protected final @NotNull String targetServer;
 
     protected @NotNull String connectMessage;
 

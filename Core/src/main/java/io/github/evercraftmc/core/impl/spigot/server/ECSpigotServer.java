@@ -16,14 +16,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class ECSpigotServer implements ECServer {
-    protected @NotNull ECPlugin plugin;
+    protected final @NotNull ECPlugin plugin;
 
-    protected @NotNull Server handle;
+    protected final @NotNull Server handle;
 
-    protected @NotNull ECSpigotCommandManager commandManager;
-    protected @NotNull ECSpigotEventManager eventManager;
+    protected final @NotNull ECSpigotCommandManager commandManager;
+    protected final @NotNull ECSpigotEventManager eventManager;
 
-    protected @NotNull ECSpigotScheduler scheduler;
+    protected final @NotNull ECSpigotScheduler scheduler;
 
     public ECSpigotServer(@NotNull ECPlugin plugin, @NotNull Server handle) {
         this.plugin = plugin;

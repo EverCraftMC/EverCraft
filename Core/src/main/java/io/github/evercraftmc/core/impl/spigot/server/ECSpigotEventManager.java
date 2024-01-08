@@ -172,9 +172,9 @@ public class ECSpigotEventManager implements ECEventManager {
         }
     }
 
-    protected @NotNull ECSpigotServer server;
+    protected final @NotNull ECSpigotServer server;
 
-    protected @NotNull Map<Class<? extends ECEvent>, List<Map.Entry<ECListener, Method>>> listeners = new HashMap<>();
+    protected final @NotNull Map<Class<? extends ECEvent>, List<Map.Entry<ECListener, Method>>> listeners = new HashMap<>();
 
     public ECSpigotEventManager(@NotNull ECSpigotServer server) {
         this.server = server;

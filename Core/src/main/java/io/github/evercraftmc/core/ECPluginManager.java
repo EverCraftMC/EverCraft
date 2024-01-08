@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class ECPluginManager {
     protected static ECPlugin plugin;
 
-    protected static @NotNull Map<Class<? extends ECModule>, ECModule> modules = new HashMap<>();
+    protected static final @NotNull Map<Class<? extends ECModule>, ECModule> modules = new HashMap<>();
 
     private ECPluginManager() {
     }

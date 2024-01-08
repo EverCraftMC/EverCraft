@@ -26,8 +26,8 @@ public class ECBungeeCommandManager implements ECCommandManager {
     protected class CommandInter extends Command implements TabExecutor {
         protected final @NotNull ECBungeeCommandManager parent = ECBungeeCommandManager.this;
 
-        protected @NotNull ECCommand command;
-        protected boolean forwardToOther;
+        protected final @NotNull ECCommand command;
+        protected final boolean forwardToOther;
 
         public CommandInter(@NotNull ECCommand command, boolean distinguishServer, boolean forwardToOther) {
             super((distinguishServer ? "b" : "") + command.getName().toLowerCase(), command.getPermission(), CommandInter.alias(command.getName(), command.getAlias(), distinguishServer).toArray(new String[] { }));
@@ -95,10 +95,10 @@ public class ECBungeeCommandManager implements ECCommandManager {
         }
     }
 
-    protected @NotNull ECBungeeServer server;
+    protected final @NotNull ECBungeeServer server;
 
-    protected @NotNull Map<String, ECCommand> commands = new HashMap<>();
-    protected @NotNull Map<String, CommandInter> interCommands = new HashMap<>();
+    protected final @NotNull Map<String, ECCommand> commands = new HashMap<>();
+    protected final @NotNull Map<String, CommandInter> interCommands = new HashMap<>();
 
     public ECBungeeCommandManager(@NotNull ECBungeeServer server) {
         this.server = server;

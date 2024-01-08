@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class ECSender {
     public static class Server extends ECSender {
-        protected @NotNull UUID server;
+        protected final @NotNull UUID server;
 
         public Server(@NotNull UUID server) {
             this.server = server;

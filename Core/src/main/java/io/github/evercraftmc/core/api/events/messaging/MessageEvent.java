@@ -6,9 +6,9 @@ import io.github.evercraftmc.core.messaging.ECMessenger;
 import org.jetbrains.annotations.NotNull;
 
 public class MessageEvent extends ECEvent {
-    protected @NotNull ECMessenger messenger;
+    protected final @NotNull ECMessenger messenger;
 
-    protected @NotNull ECMessage message;
+    protected final @NotNull ECMessage message;
 
     public MessageEvent(@NotNull ECMessenger messenger, @NotNull ECMessage message) {
         this.messenger = messenger;

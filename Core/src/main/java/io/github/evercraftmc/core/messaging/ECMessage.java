@@ -3,11 +3,11 @@ package io.github.evercraftmc.core.messaging;
 import org.jetbrains.annotations.NotNull;
 
 public class ECMessage {
-    protected @NotNull ECSender sender;
-    protected @NotNull ECRecipient recipient;
+    protected final @NotNull ECSender sender;
+    protected final @NotNull ECRecipient recipient;
 
-    protected byte @NotNull [] data;
-    protected int size;
+    protected final byte @NotNull [] data;
+    protected final int size;
 
     public ECMessage(@NotNull ECSender sender, @NotNull ECRecipient recipient, byte @NotNull [] data) {
         this(sender, recipient, data, data.length);

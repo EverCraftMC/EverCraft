@@ -60,7 +60,7 @@ public class HelpCommand implements ECCommand {
             StringBuilder out = new StringBuilder();
 
             out.append("&r&l&a").append(command.getName());
-            if (command.getAlias().size() > 0) {
+            if (!command.getAlias().isEmpty()) {
                 out.append(" ").append("(").append(String.join(", ", command.getAlias())).append(")");
             }
             out.append("\n");

@@ -6,13 +6,13 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 public class ECSpigotConsole implements ECConsole {
-    protected CommandSender handle;
+    protected final @NotNull CommandSender handle;
 
     public ECSpigotConsole(@NotNull CommandSender handle) {
         this.handle = handle;
     }
 
-    public CommandSender getHandle() {
+    public @NotNull CommandSender getHandle() {
         return this.handle;
     }
 

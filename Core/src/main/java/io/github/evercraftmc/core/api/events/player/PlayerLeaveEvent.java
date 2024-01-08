@@ -5,7 +5,7 @@ import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerLeaveEvent extends ECEvent {
-    protected @NotNull ECPlayer player;
+    protected final @NotNull ECPlayer player;
 
     protected @NotNull String leaveMessage;
 

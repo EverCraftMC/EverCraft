@@ -25,8 +25,8 @@ public class ECSpigotCommandManager implements ECCommandManager {
     protected class CommandInter extends Command {
         protected final @NotNull ECSpigotCommandManager parent = ECSpigotCommandManager.this;
 
-        protected @NotNull ECCommand command;
-        protected boolean forwardToOther;
+        protected final @NotNull ECCommand command;
+        protected final boolean forwardToOther;
 
         public CommandInter(@NotNull ECCommand command, boolean distinguishServer, boolean forwardToOther) {
             super((distinguishServer ? "s" : "") + command.getName());
@@ -101,10 +101,10 @@ public class ECSpigotCommandManager implements ECCommandManager {
         }
     }
 
-    protected @NotNull ECSpigotServer server;
+    protected final @NotNull ECSpigotServer server;
 
-    protected @NotNull Map<String, ECCommand> commands = new HashMap<>();
-    protected @NotNull Map<String, CommandInter> interCommands = new HashMap<>();
+    protected final @NotNull Map<String, ECCommand> commands = new HashMap<>();
+    protected final @NotNull Map<String, CommandInter> interCommands = new HashMap<>();
 
     public ECSpigotCommandManager(@NotNull ECSpigotServer server) {
         this.server = server;

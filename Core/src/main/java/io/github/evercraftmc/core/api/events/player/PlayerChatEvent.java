@@ -6,7 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerChatEvent extends ECCancelableReasonEvent {
-    protected @NotNull ECPlayer player;
+    protected final @NotNull ECPlayer player;
 
     protected int type;
 

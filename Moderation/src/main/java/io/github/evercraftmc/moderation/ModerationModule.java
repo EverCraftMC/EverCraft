@@ -10,8 +10,8 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 public class ModerationModule extends ECModule {
-    protected @NotNull List<ECCommand> commands = new ArrayList<>();
-    protected @NotNull List<ECListener> listeners = new ArrayList<>();
+    protected final @NotNull List<ECCommand> commands = new ArrayList<>();
+    protected final @NotNull List<ECListener> listeners = new ArrayList<>();
 
     public void load() {
         this.commands.add(this.getPlugin().getServer().getCommandManager().register(new KickCommand(this), false, false));

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ECBungeeScheduler implements ECScheduler {
     public static class ECBungeeTask implements ECTask {
-        protected @NotNull ScheduledTask handle;
+        protected final @NotNull ScheduledTask handle;
 
         public ECBungeeTask(@NotNull ScheduledTask handle) {
             this.handle = handle;
@@ -23,7 +23,7 @@ public class ECBungeeScheduler implements ECScheduler {
         }
     }
 
-    protected @NotNull ECBungeeServer server;
+    protected final @NotNull ECBungeeServer server;
 
     public ECBungeeScheduler(@NotNull ECBungeeServer server) {
         this.server = server;

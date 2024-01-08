@@ -55,16 +55,16 @@ public class ECPlugin {
         public String database;
     }
 
-    protected @NotNull Object handle;
+    protected final @NotNull Object handle;
 
-    protected @NotNull File pluginFile;
-    protected @NotNull File dataDirectory;
+    protected final @NotNull File pluginFile;
+    protected final @NotNull File dataDirectory;
 
-    protected @NotNull ECEnvironment environment;
+    protected final @NotNull ECEnvironment environment;
     protected ECServer server;
 
-    protected @NotNull Logger logger;
-    protected @NotNull ClassLoader classLoader;
+    protected final @NotNull Logger logger;
+    protected final @NotNull ClassLoader classLoader;
 
     protected StructuredMySQLConfig<ECPlayerData> data;
     protected ECMessenger messenger;

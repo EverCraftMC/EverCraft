@@ -12,10 +12,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ECSpigotPlayer implements ECPlayer {
-    protected Player handle;
+    protected final Player handle;
 
-    protected @NotNull UUID uuid;
-    protected @NotNull String name;
+    protected final @NotNull UUID uuid;
+    protected final @NotNull String name;
 
     protected @NotNull String displayName;
 
@@ -24,10 +24,15 @@ public class ECSpigotPlayer implements ECPlayer {
         this.name = data.name;
 
         this.displayName = ECTextFormatter.translateColors((data.prefix != null ? data.prefix + "&r " : "&r") + data.displayName + "&r");
+
+        this.handle = null;
     }
 
     public ECSpigotPlayer(@NotNull ECPlayerData.Player data, @NotNull Player handle) {
-        this(data);
+        this.uuid = data.uuid;
+        this.name = data.name;
+
+        this.displayName = ECTextFormatter.translateColors((data.prefix != null ? data.prefix + "&r " : "&r") + data.displayName + "&r");
 
         this.handle = handle;
     }

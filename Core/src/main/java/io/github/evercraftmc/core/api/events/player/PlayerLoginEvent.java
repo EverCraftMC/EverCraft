@@ -5,7 +5,7 @@ import io.github.evercraftmc.core.api.server.player.ECPlayer;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerLoginEvent extends ECCancelableReasonEvent {
-    protected @NotNull ECPlayer player;
+    protected final @NotNull ECPlayer player;
 
     public PlayerLoginEvent(@NotNull ECPlayer player) {
         this.player = player;

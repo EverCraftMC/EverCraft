@@ -18,7 +18,7 @@ public abstract class ECRecipient {
     }
 
     public static class Server extends ECRecipient {
-        protected @NotNull UUID server;
+        protected final @NotNull UUID server;
 
         public Server(@NotNull UUID server) {
             this.server = server;
@@ -31,7 +31,7 @@ public abstract class ECRecipient {
     }
 
     public static class Environment extends ECRecipient {
-        protected @NotNull ECEnvironment environment;
+        protected final @NotNull ECEnvironment environment;
 
         public Environment(@NotNull ECEnvironment environment) {
             this.environment = environment;
@@ -44,7 +44,7 @@ public abstract class ECRecipient {
     }
 
     public static class EnvironmentType extends ECRecipient {
-        protected @NotNull ECEnvironmentType environmentType;
+        protected final @NotNull ECEnvironmentType environmentType;
 
         public EnvironmentType(@NotNull ECEnvironmentType environmentType) {
             this.environmentType = environmentType;

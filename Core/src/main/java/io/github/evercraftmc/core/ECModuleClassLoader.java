@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class ECModuleClassLoader extends ClassLoader {
     protected final @NotNull ClassLoader parent;
 
-    protected @NotNull File file;
+    protected final @NotNull File file;
 
     public ECModuleClassLoader(@NotNull ClassLoader parent, @NotNull File file) {
         this.parent = parent;

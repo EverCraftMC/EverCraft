@@ -15,14 +15,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ECBungeeServer implements ECServer {
-    protected @NotNull ECPlugin plugin;
+    protected final @NotNull ECPlugin plugin;
 
-    protected @NotNull ProxyServer handle;
+    protected final @NotNull ProxyServer handle;
 
-    protected @NotNull ECBungeeCommandManager commandManager;
-    protected @NotNull ECBungeeEventManager eventManager;
+    protected final @NotNull ECBungeeCommandManager commandManager;
+    protected final @NotNull ECBungeeEventManager eventManager;
 
-    protected @NotNull ECBungeeScheduler scheduler;
+    protected final @NotNull ECBungeeScheduler scheduler;
 
     public ECBungeeServer(@NotNull ECPlugin plugin, @NotNull ProxyServer handle) {
         this.plugin = plugin;

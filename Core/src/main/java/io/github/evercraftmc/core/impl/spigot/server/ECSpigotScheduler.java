@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ECSpigotScheduler implements ECScheduler {
     public static class ECSpigotTask implements ECTask {
-        protected @NotNull BukkitTask handle;
+        protected final @NotNull BukkitTask handle;
 
         public ECSpigotTask(@NotNull BukkitTask handle) {
             this.handle = handle;
@@ -22,7 +22,7 @@ public class ECSpigotScheduler implements ECScheduler {
         }
     }
 
-    protected @NotNull ECSpigotServer server;
+    protected final @NotNull ECSpigotServer server;
 
     public ECSpigotScheduler(@NotNull ECSpigotServer server) {
         this.server = server;

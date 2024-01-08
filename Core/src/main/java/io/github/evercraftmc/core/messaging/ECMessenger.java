@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 public class ECMessenger {
     protected final @NotNull ECPlugin parent;
 
-    protected @NotNull InetSocketAddress address;
+    protected final @NotNull InetSocketAddress address;
 
-    protected @NotNull UUID id;
+    protected final @NotNull UUID id;
 
     protected boolean open;
 

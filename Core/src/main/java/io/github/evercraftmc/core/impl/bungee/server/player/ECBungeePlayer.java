@@ -13,10 +13,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ECBungeePlayer implements ECPlayer {
-    protected ProxiedPlayer handle;
+    protected final ProxiedPlayer handle;
 
-    protected @NotNull UUID uuid;
-    protected @NotNull String name;
+    protected final @NotNull UUID uuid;
+    protected final @NotNull String name;
 
     protected @NotNull String displayName;
 
@@ -25,10 +25,15 @@ public class ECBungeePlayer implements ECPlayer {
         this.name = data.name;
 
         this.displayName = ECTextFormatter.translateColors((data.prefix != null ? data.prefix + "&r " : "&r") + data.displayName + "&r");
+
+        this.handle = null;
     }
 
     public ECBungeePlayer(@NotNull ECPlayerData.Player data, @NotNull ProxiedPlayer handle) {
-        this(data);
+        this.uuid = data.uuid;
+        this.name = data.name;
+
+        this.displayName = ECTextFormatter.translateColors((data.prefix != null ? data.prefix + "&r " : "&r") + data.displayName + "&r");
 
         this.handle = handle;
     }
