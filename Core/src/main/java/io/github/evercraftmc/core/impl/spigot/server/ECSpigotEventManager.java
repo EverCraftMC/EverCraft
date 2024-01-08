@@ -203,8 +203,12 @@ public class ECSpigotEventManager implements ECEventManager {
     @SuppressWarnings("unchecked")
     @Override
     public @NotNull ECListener register(@NotNull ECListener listener) {
+        if (listener instanceof org.bukkit.event.Listener spigotListener) {
+            this.server.getHandle().getPluginManager().registerEvents(spigotListener, (Plugin) this.server.getPlugin().getHandle());
+        }
+
         for (Method method : listener.getClass().getDeclaredMethods()) {
-            if (method.getParameterCount() == 1 && ECEvent.class.isAssignableFrom(method.getParameterTypes()[0]) && method.getDeclaredAnnotationsByType(ECHandler.class).length > 0) {
+            if (method.isAnnotationPresent(ECHandler.class) && method.getParameterCount() == 1 && ECEvent.class.isAssignableFrom(method.getParameterTypes()[0])) {
                 if (!this.listeners.containsKey((Class<? extends ECEvent>) method.getParameterTypes()[0])) {
                     this.listeners.put((Class<? extends ECEvent>) method.getParameterTypes()[0], new ArrayList<>());
                 }
