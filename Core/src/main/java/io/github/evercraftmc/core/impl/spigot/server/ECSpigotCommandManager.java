@@ -132,10 +132,11 @@ public class ECSpigotCommandManager implements ECCommandManager {
                             }
 
                             ECPlayer player = parent.server.getOnlinePlayer(uuid);
-
-                            ECCommand ecCommand = parent.server.getCommandManager().get(command);
-                            if (ecCommand != null) {
-                                ecCommand.run(player, args, false);
+                            if (player != null) {
+                                ECCommand ecCommand = parent.server.getCommandManager().get(command);
+                                if (ecCommand != null) {
+                                    ecCommand.run(player, args, false);
+                                }
                             }
                         }
 
